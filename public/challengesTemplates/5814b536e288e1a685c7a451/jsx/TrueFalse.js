@@ -121,7 +121,7 @@ Meteor.TrueFalse = React.createClass({
                     { className: 'col-md-12' },
                     React.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'form-group the-question' },
                         function () {
                             if (_this4.state['statement'] && _this4.state['statement'] !== "") {
                                 return React.createElement(
@@ -147,19 +147,19 @@ Meteor.TrueFalse = React.createClass({
                             { className: 'md-col-12' },
                             React.createElement(
                                 'div',
-                                { className: 'col-md-1 col-md-offset-3' },
+                                { className: 'col-md-1 col-md-offset-4' },
                                 React.createElement(
                                     'button',
-                                    { className: 'btn btn-md' + (_this.state && _this.state.state.validity == this.state['1st Button Score'] && this.state.state.clicks > 0 ? ' btn-primary' : ' btn-default'), onClick: this.onClick(this.state['1st Button Score']) },
+                                    { className: 'btn btn-md' + (_this.state && _this.state.state.validity == this.state['1st Button Score'] && this.state.state.clicks > 0 ? ' btn-success' : ' btn-basic'), onClick: this.onClick(this.state['1st Button Score']) },
                                     this.state['1st Button Text']
                                 )
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'col-md-1 col-md-offset-3' },
+                                { className: 'col-md-1 col-md-offset-2' },
                                 React.createElement(
                                     'button',
-                                    { className: 'btn btn-md' + (_this.state && _this.state.state.validity == this.state['2nd Button Score'] && this.state.state.clicks > 0 ? ' btn-primary' : ' btn-default'), onClick: this.onClick(this.state['2nd Button Score']) },
+                                    { className: 'btn btn-md' + (_this.state && _this.state.state.validity == this.state['2nd Button Score'] && this.state.state.clicks > 0 ? ' btn-success' : ' btn-basic'), onClick: this.onClick(this.state['2nd Button Score']) },
                                     this.state['2nd Button Text']
                                 )
                             )

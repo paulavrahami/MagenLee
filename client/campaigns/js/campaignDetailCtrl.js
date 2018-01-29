@@ -443,7 +443,7 @@ angular
                                   $state.go('recruiter.campaigns');
                                   $uibModal.open({
                                       animation: vm.animationsEnabled,
-                                      templateUrl: 'client/campaigns/URLModal.html',
+                                      templateUrl: 'client/campaigns/view/URLModal.html',
                                       controller: 'ModalURLCtrl',
                                       // resolve: {
                                       //     msg: function () {

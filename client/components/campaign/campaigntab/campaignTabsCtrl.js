@@ -42,7 +42,7 @@ angular
             campaignURL = vm.campaign.applicationURL;
             $uibModal.open({
                 animation: vm.animationsEnabled,
-                templateUrl: 'client/campaigns/URLModal.html',
+                templateUrl: 'client/campaigns/view/URLModal.html',
                 controller: 'ModalURLCtrl',
                 resolve: {
                     msg: function () {
@@ -57,7 +57,7 @@ angular
             $scope.campaign = vm.campaign;
             $uibModal.open({
                 animation: vm.animationsEnabled,
-                templateUrl: 'client/campaigns/targetCampaignSpecificTalent.html',
+                templateUrl: 'client/campaigns/view/targetCampaignSpecificTalent.html',
                 controller: 'targetCampaignSpecificTalent',
                 controllerAs: 'vm',
                 scope: $scope,
@@ -69,7 +69,7 @@ angular
             $scope.campaign = vm.campaign;
             $uibModal.open({
                 animation: vm.animationsEnabled,
-                templateUrl: 'client/campaigns/targetCampaignExternalTalents.html',
+                templateUrl: 'client/campaigns/view/targetCampaignExternalTalents.html',
                 controller: 'targetCampaignExternalTalents',
                 controllerAs: 'vm',
                 scope: $scope,
@@ -81,7 +81,7 @@ angular
             $scope.campaign = vm.campaign;
             $uibModal.open({
                 animation: vm.animationsEnabled,
-                templateUrl: 'client/campaigns/targetCampaignPoolTalents.html',
+                templateUrl: 'client/campaigns/view/targetCampaignPoolTalents.html',
                 controller: 'targetCampaignPoolTalents',
                 controllerAs: 'vm',
                 scope: $scope,
@@ -94,7 +94,7 @@ angular
             $scope.linkedInId = vm.linkedInId;
             $uibModal.open({
                 animation: vm.animationsEnabled,
-                templateUrl: 'client/campaigns/targetCampaignSocial.html',
+                templateUrl: 'client/campaigns/view/targetCampaignSocial.html',
                 controller: 'targetCampaignSocial',
                 controllerAs: 'vm',
                 scope: $scope,
