@@ -1,0 +1,178 @@
+<!--mainHome.html-->
+<!-- Login Modal -->
+
+<!-- Bootstrap Core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="css/qualifit.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+<div class="home-page" ng-class="vm.isSignedUp">
+
+<!-- Login Modal -->
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="loginmodal-container">
+            <h1>Login to Your Account</h1><br>
+            <form>
+                <label>Username/Email:</label>
+                <input type="text" name="user" placeholder="Username" ng-model="vm.emailuser">
+                <label>Password:</label>
+                <input type="password" name="pass" placeholder="Password" ng-model="vm.password">
+                <input type="submit" name="login" class="login loginmodal-submit" ng-click="vm.signIn()" value="Login">
+            </form>
+
+            <div class="login-error">
+                {{vm.error}}
+            </div><div class="login-help">
+                <!--<a href="#">Register</a> - <a href="#">Forgot Password</a>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Bar -->
+<div class="top-bar">
+    <span id="login-icon" href="#" data-toggle="modal" data-target="#login-modal"><i class="fa fa-sign-in" aria-hidden="true"></i><span>&nbsp;Sign In</span></span>
+</div>
+
+<!-- Logo -->
+<div>
+    <img class="logo" src="img/qualifitlogo-trans.png">
+</div>
+
+<!-- Side Bar -->
+<a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+<nav id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+        <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+        <li class="sidebar-brand">
+            <a href="#top" onclick="$('#menu-close').click();">qualiFit</a>
+        </li>
+        <li>
+            <a href="#top" onclick="$('#menu-close').click();">Home</a>
+        </li>
+        <li>
+            <a href="#howItWorks" onclick="$('#menu-close').click();">How it Works</a>
+        </li>
+        <li>
+            <a href="#contact" onclick="$('#menu-close').click();">Contact</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Header -->
+<header id="top" class="header">
+    <div class="text-vertical-center">
+        <h1>qualiFit - Where SKILLS Count!</h1>
+        <div class="header-slogen">
+            <h3>The social recruitment platform where recruiters, talents and domain experts collaborate to enable a truly objective skills evaluation</h3>
+        </div>
+        <a href="#howItWorks" class="btn btn-circle">
+            <i class="fa fa-angle-double-down"></i>
+        </a>
+    </div>
+</header>
+
+<!-- How it Works -->
+<section id="howItWorks" class="services bg-primary">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="service-item">
+                                <span class="fa-stack fa-4x">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-search fa-stack-1x text-primary"></i>
+                                </span>
+                            <h3>
+                                <strong>Screen Candidates</strong>
+                            </h3>
+                            <p id="service-text">As a <span><strong>RECRUITER</strong></span>, we’ll guide you through posting your job positions and screening suitable talents through automated objective professional and personal skills evaluation based on challenges contributed by our Domain Experts’ community</p>
+                            <a href="#" class="btn btn-light" ui-sref="recruiterSigningUp">Register</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="service-item">
+                                <span class="fa-stack fa-4x">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-laptop fa-stack-1x text-primary"></i>
+                                </span>
+                            <h3>
+                                <strong>Apply for Audition</strong>
+                            </h3>
+                            <p id="service-text">As a <span><strong>TALENT</strong></span>, you will gain access to an equal opportunity marketplace which objectively focuses on your skills and professional knowledge when applying for a job position. You will execute an online audition where your relevant skills will be evaluated, scored, and compared to other</p>
+                            <a href="#" class="btn btn-light" ui-sref="comingSoon">Register</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="service-item">
+                                <span class="fa-stack fa-4x">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-certificate fa-stack-1x text-primary"></i>
+                                </span>
+                            <h3>
+                                <strong>Certify your Skills</strong>
+                            </h3>
+                            <p id="service-text">As a <span><strong>TALENT</strong></span>, you may want to enhance your profile by confirming your skill sets or practicing and challenging your skills in preparation for recruitment campaigns. qualiFit's platform provides you challenges and tests composed by many recognized Domain Experts</p>
+                            <a href="#" class="btn btn-light" ui-sref="comingSoon">Register</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="service-item">
+                                <span class="fa-stack fa-4x">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-cubes fa-stack-1x text-primary"></i>
+                                </span>
+                            <h3>
+                                <strong>Compose Challenges</strong>
+                            </h3>
+                            <!-- <a href="#" class="btn btn-light" ui-sref="talentSigningUp">Register Today</a> -->
+                            <p id="service-text">As a <span><strong>DOMAIN EXTERT</strong></span>, you can take advantage of your expertise and compose challenges to be used by recruiters to evaluate talents based on their skills. As a Domain Expert you will be rewarded and graded based on your volume of collaboration and contribution</p>
+                            <a href="#" class="btn btn-light" ui-sref="comingSoon">Register</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.col-lg-10 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+
+<!-- Footer -->
+<footer id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1 text-center">
+                <br>
+                <ul class="list-inline">
+                    <li>
+                        <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-linkedin fa-fw fa-3x"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-instagram fa-fw fa-3x"></i></a>
+                    </li>
+                </ul>
+                <hr class="small">
+                <p class="text-muted">Copyright &copy; qualifit 2016</p>
+            </div>
+        </div>
+    </div>
+    <a id="to-top" href="#top" class="btn btn-dark btn-lg"><i class="fa fa-chevron-up fa-fw fa-1x"></i></a>
+</footer>
+
+</div>

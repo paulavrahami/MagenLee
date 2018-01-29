@@ -1,0 +1,24 @@
+<!-- timeSelect.html -->
+<!--suppress JSUnresolvedVariable, HtmlUnknownAttribute -->
+<div class="timeSelect">
+    <input
+            type="number"
+            ng-model="timeSelect.hours"
+            ng-disabled="timeSelect.ngDisabled"
+            ng-change="timeSelect.watchHoursMinutes()"
+    >
+    <span class="double-dot">:</span>
+    <input
+            type="number"
+            ng-model="timeSelect.minutes"
+            ng-disabled="timeSelect.ngDisabled"
+            ng-change="timeSelect.watchHoursMinutes()"
+    >
+    <span class="double-dot">:</span>
+    <input
+            type="number"
+            ng-model="timeSelect.seconds"
+            ng-disabled="timeSelect.ngDisabled"
+            ng-change="timeSelect.watchHoursMinutes()"
+    >
+</div>

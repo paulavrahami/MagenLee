@@ -1,0 +1,163 @@
+<!--talentMain.html-->
+<!--suppress HtmlUnknownTarget -->
+<div class="row">
+    <div class="col-md-0-6"></div>
+    <div class="col-md-11">
+
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default" role="navigation">
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a ng-if="vm.selectedStatus" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span ng-class="vm.MAP.TALENT_STATUS[vm.selectedStatus]">&nbsp;</span>{{vm.statusFilter(vm.ENUM.TALENT_STATUS[vm.selectedStatus])}} <b class="caret"></b></a>
+                                <a ng-if="!vm.selectedStatus" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">All <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a ng-click="vm.changeSelectedStatus()">All ...</a></li>
+                                    <li class="divider"></li>
+                                    <li ng-repeat="(key, status) in vm.ENUM.TALENT_STATUS">
+                                        <a ng-click="vm.changeSelectedStatus(key)"><span ng-class="vm.MAP.TALENT_STATUS[key]">&nbsp;</span>{{vm.statusFilter(status)}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search" ng-model="vm.query">
+                            </div>
+                        </form>
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                Sort by:
+                            </div>
+                            <div class="form-group">
+                                <div class="btn-group">
+                                    <button class="btn btn-default" type="button" ng-click="vm.setSort('lastName')">
+                                        <span ng-class="vm.getSort('lastName')"></span>
+                                        Last Name
+                                    </button>
+                                    <button class="btn btn-default" type="button" ng-click="vm.setSort('status')">
+                                        <span ng-class="vm.getSort('status')"></span>
+                                        Status
+                                    </button>
+                                </div>
+                            </div>
+                        </form>            
+                    </div><!-- /.navbar-collapse -->
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class=row>
+                <div class="col-md-1">
+                    <h4><strong>Status</strong></h4>
+                </div>
+                <div class="col-md-2">
+                    <h4><strong>Last Name</strong></h4>
+                </div>
+                <div class="col-md-2">
+                    <h4><strong>First Name</strong></h4>
+                </div>
+                <div class="col-md-2">
+                    <h4><strong>Email</strong></h4>
+                </div>
+                <div class="col-md-2">
+                    <h4><strong>Phone</strong></h4>
+                </div>
+                <div class="col-md-3">
+                    <h4><strong>Profession</strong></h4>
+                </div>
+            </div>
+
+            <div class="panel-group col-md-12">
+                <div class="panel panel-default" ng-repeat="talent in vm.talents | filter:vm.search | orderBy: vm.orderBy">
+                    <div>
+                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-talents-group" href="#panel-element-{{$index}}"  aria-expanded="false">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <h5>{{talent.status}}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>{{talent.lastName}}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>{{talent.firstName}}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>{{talent.email}}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>{{talent.phone}}</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5>{{talent.profession}}</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- The collapsed area -->
+                    <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
+                        <div class="panel-body">
+                            <div class="row col-md-12">
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <h5><strong>Gender: </strong> {{talent.gender}}</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h5><strong>DOB: </strong> {{talent.dob}}</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h5><strong>Country: </strong> {{talent.country}}</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h5><strong>City: </strong> {{talent.city}}</h5>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1"></div>
+
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <h5><strong>Skill: </strong> {{talent.skill1}}</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h5><strong>Skill: </strong> {{talent.skill2}}</h5>
+                                    </div>                                        
+                                    <div class="row">
+                                        <h5><strong>Skill: </strong> {{talent.skill3}}</h5>
+                                    </div>                                        
+                                    <div class="row">
+                                        <h5><strong>Skill: </strong> {{talent.skill4}}</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h5><strong>Skill: </strong> {{talent.skill5}}</h5>
+                                    </div>  
+                                </div>
+
+                                <div class="col-md-1"></div>
+
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <h5><strong>Origin: </strong> {{talent.origin}}</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h5><strong>Origin Date: </strong> {{talent.originDate}}</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h5><strong>Registration: </strong> {{talent.registrationStatus}}</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h5><strong>Share Contact: </strong> {{talent.shareContact}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-0-6"></div>
+</div>

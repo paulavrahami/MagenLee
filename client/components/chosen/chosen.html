@@ -1,0 +1,22 @@
+<!-- chosenCtrl.html -->
+<!--suppress JSUnresolvedVariable, HtmlUnknownAttribute -->
+<select ng-if="chosenCtrl.dataType==='object'"
+        ng-class="chosenCtrl.idClass"
+        chosen
+        allow-single-deselect="true"
+        ng-model="chosenCtrl.ngModel"
+        ng-options="item[chosenCtrl.property] for item in chosenCtrl.chosenData"
+        ng-disabled="chosenCtrl.ngDisabled"
+        style="width:100%;">
+    <option></option>
+</select>
+<select ng-if="chosenCtrl.dataType==='string'"
+        ng-class="chosenCtrl.idClass"
+        chosen
+        allow-single-deselect="true"
+        ng-model="chosenCtrl.ngModel"
+        ng-options="item for item in chosenCtrl.chosenData"
+        ng-disabled="chosenCtrl.ngDisabled"
+        style="width:100%;">
+    <option></option>
+</select>

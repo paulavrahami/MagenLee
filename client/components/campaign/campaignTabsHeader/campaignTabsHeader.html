@@ -1,0 +1,66 @@
+<!-- campaignTabsHeader.html -->
+
+<!-- Campaign ID and Status -->
+
+<div class="row">
+    <div class="col-md-0-6"></div>
+    <div class="col-md-11">
+        <div class="col-md-4">
+            <div class="campaign-Header-Info">
+                <h4><strong>{{tabsHeader.title}}{{tabsHeader.status}}</strong></h4>
+            </div>
+        </div>
+        <div class="col-md-7 navbar-right">
+            <div class="navbar-right">
+                <button type="submit" class="btn btn-primary"><span class="fa fa-floppy-o fa-1x">&nbsp;</span>Save</button>
+                <a href="#" class="btn btn-info" ng-click="$parent.vm.verifyCampaign(vm.campaign)"><span class="fa fa-thumbs-up fa-1x">&nbsp;</span>Verify</a>
+                <a href="#" class="btn btn-success" ng-click="$parent.vm.dispatchCampaign(vm.campaign)"><span class="fa fa-paper-plane fa-1x">&nbsp;</span>Publish</a>
+                <a href="#" class="btn btn-default" ng-click="$parent.vm.terminateCampaign(vm.campaign)"><span class="fa fa-stop fa-1x">&nbsp;</span>Terminate</a>
+            </div>
+        </div>
+    </div>    
+    <div class="col-md-0-6"></div>
+</div>
+<br>
+<!-- The tabs header -->
+<div class="row">
+    <div class="col-md-0-6"></div>
+    <div class="col-md-11">
+        <div class="process">
+            <div class="process-row nav nav-tabs">
+                <!-- Position Tab -->
+                <div class="process-step">
+                    <button type="button" class="btn-info btn-circle-tab" data-toggle="tab" href="#menu1"><i class="fa fa-briefcase fa-3x"></i></button>
+                    <p>Position</p>
+                </div>
+                <!-- Skills Tab -->
+                <div class="process-step">
+                    <button type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu2"><i class="fa fa-wrench fa-3x"></i></button>
+                    <p>Skills</p>
+                </div>
+                <!-- Audition Tab -->
+                <div class="process-step">
+                    <button type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu3"><i class="fa fa-check-square-o fa-3x"></i></button>
+                    <p>Audition</p>
+                </div>
+                <!-- Questionnaire Tab -->
+                <div class="process-step">
+                     <button type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu4"><i class="fa fa-question fa-3x"></i></button>
+                     <p>Questionnaire</p>
+                </div>
+                <!-- Seetings Tab -->
+                <div class="process-step">
+                     <button type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu5"><i class="fa fa-cog fa-3x"></i></button>
+                     <p>Settings</p>
+                </div>
+                <!-- Log Tab -->
+                <div class="process-step">
+                     <button type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu6"><i class="fa fa-list fa-3x"></i></button>
+                     <p>Log</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-0-6"></div>
+</div>    
+

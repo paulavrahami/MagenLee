@@ -1,0 +1,684 @@
+.modal-backdrop
+{
+  opacity: 0.6 !important;
+  background: #000;
+}
+
+.auditionEdit {
+  padding: 0px;
+
+
+  iframe {
+    border: none;
+  }
+  .templateIframeZoom {
+    -ms-zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.5);
+    -webkit-transform-origin: 0 0;
+    width: 200%!important;
+    height: 300px!important;
+
+  }
+  .cts-frames-holder {
+    .btn-primary {
+      margin-top:-300px;
+    }
+  }
+  .wrapIfram {
+    margin: 5px;
+    overflow: hidden;
+    height:100px;
+
+  }
+  .templateItem {
+    border-bottom: 1px solid #d3d3d3;
+    max-height: 240px;
+  }
+  .templatesItems {
+    height: 500px;
+    overflow-y: scroll;
+  }
+
+  .auditionItem {
+    position: relative;
+
+    margin-bottom: 4px;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 58px;
+    background: rgba(232, 232, 232, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(221, 221, 221, 1);
+    border-radius: 4px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: 14px;
+    text-align: left;
+    padding: 0 5px;
+
+    &.selected {
+      border: 1px solid rgba(26, 232, 42, 0.6);
+      background: rgba(146, 232, 147, 1);
+
+    }
+    .removeIcon,
+    .editIcon,
+    .arrowUpIcon,
+    .arrowDownIcon,
+    .addItemIcon,
+    .removeItemIcon {
+      display:none;
+
+    }
+    &:hover .arrowUpIcon {
+      position:absolute;
+      display:block;
+      top:0px;
+      right:50px;
+
+    }
+    &:hover .arrowDownIcon {
+      position:absolute;
+      display:block;
+      top:30px;
+      right:50px;
+
+    }
+    &:hover .removeIcon {
+      position:absolute;
+      display:block;
+      top:0px;
+      right:20px;
+
+    }
+    &:hover .editIcon {
+      position:absolute;
+      display:block;
+      top:30px;
+      right:20px;
+
+    }
+    &:hover .addItemIcon {
+      position:absolute;
+      display:block;
+      top:0px;
+      right:20px;
+
+    }
+    &:hover .removeItemIcon {
+      position:absolute;
+      display:block;
+      top:0px;
+      right:20px;
+
+    }
+  }
+
+  .buttonsArea {
+    position:relative;
+    height: 40px;
+    width:100%;
+  }
+  #btn-ctsArea {
+    position: absolute;
+    z-index: 1;
+  }
+  .cts {
+    .ctsArea {
+      position: absolute;
+      top: 0;
+      width: 0;
+      height: 520px;
+      left: -1px;
+      overflow: hidden;
+      background-color: #FFF;
+      opacity: 0;
+      -webkit-transition: width 0.5s, opacity 0.5s; /* Safari */
+      transition: width 0.5s, opacity 0.5s;
+      &.show {
+        width: 430px;
+        opacity: 1;
+        z-index: 2;
+      }
+      &.showAddChallenge {
+        width: 430px;
+        opacity: 1;
+        z-index: 2;
+        padding-top:15px;
+      }
+    }
+    .cts-types-holder {
+      background: #169BD5;
+      height: 100%;
+    }
+    .cts-frames-holder {
+      overflow-x: hidden;
+      overflow-y: scroll;
+      height: 100%;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        color: #FFF;
+        cursor: pointer;
+        line-height: 2em;
+        &:hover {
+          background: #1274d5;
+        }
+        &.selected {
+          background: #1274d5;
+        }
+      }
+    }
+  }
+}
+
+.skill-type {
+  margin: 0 0 15px 0;
+  //border-bottom: 1px solid #B3B3B3;
+  font-size: 13px;
+  padding: 5px 10px;
+  height: 29px;
+  background: #95d6e9;
+}
+.go-back-a::before {
+  position: relative;
+  top: 1px;
+  left: -3px;
+}
+.go-back {
+  font-size: 18px;
+  /* color: black; */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: transparent;
+  color: white;
+}
+
+.summery-area {
+  min-height: 80px;
+  background-color: #373c66;
+  color: #fff;
+  padding: 10px 15px 10px 15px;
+  margin-bottom:5px;
+}
+.summery-table{
+  width: 100%;
+  hr {
+    margin: 0;
+    width: 80%;
+  }
+  td {
+    width: 13%;
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 90%;
+      display: inline-block;
+    }
+  }
+  .Unclassified td {
+    font-weight: bold;
+    color: orangered;
+  }
+}
+new-campaigntabs {
+  .summery-area {
+    min-height: 80px;
+    background-color: #fff;
+    color: #000;
+    padding: 5px;
+  }
+  .summery-table {
+    width: 100%;
+    hr {
+      margin: 0;
+      width: 80%;
+    }
+    td {
+      width: 14.28%;
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 90%;
+        display: inline-block;
+      }
+    }
+    .Unclassified td {
+      font-weight: bold;
+      color: orangered;
+    }
+  }
+}
+.timeWarning {
+  color: red;
+  font-weight: bold;
+}
+.btn-q-primary {
+  display: block;
+  //*background: #f0ad4e;
+  background: #26b99a;
+  border-radius: 5px;
+  //*border: 1px solid #169BD5;
+  color: white;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 3px auto;
+  position: relative;
+  width: inherit;
+  text-align: center;
+  &:hover {
+    background: #169BD5;
+  }
+}
+
+.btn-cts-close {
+  border: 1px solid white;
+  margin-top: 10px;
+  margin-left: 45px;
+}
+
+#btn-open-challenges {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  width: 140px;
+  top: 55px;
+  left: -50px;
+  z-index:1;
+}
+
+.auditionExecute {
+
+  position: relative;
+  padding: 0;
+
+  .sandClock {
+    padding-left: 60px;
+    height: 50px;
+    line-height: 50px;
+    background: url('/images/audition/Sandclock1.png') no-repeat;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: left;
+  }
+  .questions {
+    padding-left: 60px;
+    height: 50px;
+    line-height: 50px;
+    //background: url('/images/audition/V.png') no-repeat;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: right;
+  }
+  .percents {
+    padding-left: 60px;
+    height: 50px;
+    line-height: 50px;
+    background: url('/images/audition/percents.png') no-repeat;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .isExecuteAudition {
+    //height: 540px;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom:0;
+      left:0;
+      right:0;
+      // background: url('/images/exam.jpg');
+      background-size:cover;
+      opacity:0.2;
+      width:100%;
+      height:100%;
+    }
+  }
+  .isOnBreak {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    background: #FFFFFF;
+    z-index:1;
+    height: 100%;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom:0;
+      left:0;
+      right:0;
+      background: url('/images/exam.jpg');
+      background-size:cover;
+      opacity:0.2;
+      width:100%;
+      height:100%;
+    }
+  }
+  .isTimeOut {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    background: #FFFFFF;
+    z-index:1;
+    height: 100%;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom:0;
+      left:0;
+      right:0;
+      background: url('/images/exam.jpg');
+      background-size:cover;
+      opacity:0.2;
+      width:100%;
+      height:100%;
+    }
+  }
+  .isExecuteIntro {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    background: #FFFFFF;
+    z-index:1;
+    height: 100%;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom:0;
+      left:0;
+      right:0;
+      background: url('/images/exam.jpg');
+      background-size:cover;
+      opacity:0.2;
+      width:100%;
+      height:100%;
+    }
+  }
+  #executeFrame {
+    font-size: 20px;
+    padding: 25px 0;
+  }
+  #executeFrame-lg {
+    font-size: 24px;
+    padding: 25px 0;
+    font-weight: 500;
+  }
+  .center-button {
+    text-align: center;
+  }
+  .iframHeaderContainer {
+    margin: 10px auto 0;
+    padding: 10px 0;
+    font-size: 19px;
+  }
+  .iframInfoContainer {
+    margin: 10px auto 0;
+    padding: 10px 0;
+    font-size: 16px;
+  }
+  .iframContainer {
+    height: 425px;
+    padding: 0;
+    border: 1px solid #B3B3B3;
+    overflow: auto;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.8);
+    border-radius: 5px;
+  }
+  .back-next-holder {
+    margin-top: 15px;
+    white-space: nowrap;
+    display: inline-block;
+    overflow: hidden;
+    text-align: center;
+  }
+  .done-button-holder {
+    padding-top: 17px;
+  }
+  .back-button {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 27px;
+    position: relative;
+    top: -31px;
+  }
+  .next-button {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 27px;
+    position: relative;
+    top: -31px;
+  }
+
+  .break-button {
+    display: inline-block;
+    position: relative;
+    background-image: url(/images/audition/break.png);
+    background-size: cover;
+    width: 31px;
+    height: 27px;
+    margin-right: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+    color: #FA9217;
+    float:left;
+  }
+
+  .break-tooltipe {
+    position: absolute;
+    width: 260px;
+    height: 160px;
+    background: #cce6ff;
+    top: 50px;
+    left: -290px;
+    font-size: 16px;
+    text-align: center;
+    padding: 10px;
+    color: black;
+    border-radius: 4px;
+    button {
+      height: 27px;
+      line-height: 24px;
+      padding: 0 16px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .hint-button {
+    display: inline-block;
+    position: relative;
+    background-image: url(/images/audition/hint1.png);
+    background-size: cover;
+    width: 23px;
+    height: 28px;
+    margin-left: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+    color: #FA9217;
+    float:right;
+}
+
+.disabled {
+opacity: 0.5;
+cursor: default;
+}
+}
+.auditionEditItem {
+label {
+display:block;
+}
+input,select {
+height: 36px;
+font-size:14px;
+min-width:210px;
+max-width:210px;
+width:210px;
+}
+input[type=checkbox] {
+height: 20px;
+font-size:14px;
+min-width:20px;
+max-width:20px;
+width:20px;
+}
+textarea {
+height: 52px;
+font-size:14px;
+min-width:210px;
+padding:4px;
+}
+.array-textarea {
+height: 52px;
+font-size:14px;
+max-width:80%;
+padding:4px;
+}
+.edit-item-title {
+background: #373C66;
+color: #fff;
+text-align: center;
+line-height: 60px;
+font-size: 24px;
+}
+.edit-item-body {
+//*height: 605px;
+overflow-y: scroll;
+}
+.edit-item-footer {
+background: #373C66;
+color: #fff;
+height: 40px;
+position: relative;
+text-align: center;
+}
+.item-edit-row {
+margin: 10px 0;
+
+}
+.max-item-score {
+font-weight: bold;
+text-align: right;
+position: relative;
+padding-top: 28px;
+font-size: 14px;
+}
+.is-object {
+  border-top: 3px solid #fff;
+  background-color: #d1eefa;
+  border-radius: 7px;
+}
+.object-textarea {
+  padding:7px 15px 0px 15px;
+}
+.object-checkbox {
+  padding:0px 15px 7px 15px;
+}
+.object-number {
+  padding:0px 15px 7px 15px;
+}
+.groupKeys {
+&:after {
+  display:block;
+  clear:both;
+  height:0;
+  content:"\2000";
+}
+float: left;
+width: 50%;
+padding: 5px;
+
+.h5-parent {
+  border-top: 2px solid #373C66;
+
+  h5 {
+    float: none;
+  }
+
+}
+h5 {
+  width: 15%;
+  font-weight: bold;
+  float:left;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+input,textarea {
+  width: 85%;
+  float: left;
+}
+}
+.remove {
+position: relative;
+top: 4px;
+left: 98px;
+height: 32px;
+}
+}
+.challenge-header {
+  display:table;
+}
+.challenge-header-field {
+  display:table-cell;
+  width: 25%;
+}
+.remove-btn {
+  margin-left: 20px;
+}
+.radio-input-field {
+  margin-top:5px;
+  margin-left:25px;
+}
+.add-Challenge-list-title {
+    text-align: center;
+    background-color: #5bc0de;
+    border-radius: 4px;
+    margin-bottom: 3px;
+    color: white;
+    font-weight: bold;
+}
+.audition-header {
+  padding-left: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.itemAlreadyInAudition {
+  font-weight: bold;
+}
+.lang-font {
+  font-size: 14px;
+  padding: 7px;
+}
+.assist-icons {
+  text-align: center;
+
+}
+.assist-icon {
+  padding: 7px;
+}

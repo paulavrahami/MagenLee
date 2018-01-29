@@ -1,0 +1,61 @@
+
+<div class="modal-header">
+	<h3 class="modal-title" id="modal-title">Invite Talent</h3>
+</div>
+
+<div class="modal-body" id="modal-body">
+	<form class="form" name="customEmailInfo">
+		<div class="row col-md-12">
+			<div class="form-group col-md-4">
+				<label class="required">First Name</label>
+				<input class="form-control" type="text" ng-model="vm.firstName">
+			</div>
+			<div class="form-group col-md-4">
+				<label class="required">Last Name</label>
+				<input class="form-control" type="text" ng-model="vm.lastName">
+			</div>
+			<div class="form-group col-md-4">
+				<label class="required">Email</label>
+				<input class="form-control" type="email" name="email" ng-model="vm.email">
+				<span class="error-msg" ng-show="customEmailInfo.email.$error.email">Invalid email address</span>
+			</div>
+		</div>
+		<div class="row col-md-12">
+			<div class="form-group col-md-12">
+				<label>Message</label>
+				    <textarea 	class="form-control"
+				               	disabled
+				             	rows="12"
+				             	cols="70"
+				               	>
+[Current Date]
+              	 
+Dear [First Name] [Last Name]
+
+We are pleased to provide you with the opportunity to join [Company Name] for a [Position Name] position.
+Please use the following link to complete your application form on qualiFit’s platform where you will be given the opportunity to demonstrate your relevant skills.
+
+We wish you success!
+[Company Name] Recruiting Team
+
+Please click to proceed: [Application Link]			               	 
+				   	</textarea>								
+            </div>
+		</div>
+	</form>
+	<br>
+	<form class="form">
+		<div class="row col-md-12">
+			<div class="col-md-3">
+				<button class="btn btn-info btn-sm" type="button" ng-click="vm.customEmailSend()">Send</button>
+				<button class="btn btn-default btn-sm" type="button" ng-click="vm.customEmailClear()">Clear</button>	
+			</div>
+		</div>
+	
+	</form>
+</div>
+
+<div class="modal-footer">
+    <!-- <button class="btn btn-primary" type="button" ng-click="vm.ok()">OK</button> -->
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">close</button>
+</div>

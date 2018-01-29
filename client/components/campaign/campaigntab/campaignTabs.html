@@ -1,0 +1,556 @@
+<!-- campaignTabs.html -->
+
+<div class="row">
+  	<div class="col-md-0-6"></div>
+  	<div class="col-md-11">
+  		<!-- The tabs' content -->
+		<div class="tab-content">
+			<!-- Position Tab -->
+			<div id="menu1" class="tab-pane fade active in">
+				  <div class="row">
+					  <div class="col-md-12">
+						  <h4 class="sectionHeader"><strong><span class="fa fa-briefcase fa-2x"></span>&nbsp;Position</strong></h4>
+					  </div>
+				  </div>
+				  <div class="row">
+					  <div class="col-md-5">
+						  <div class="form-group">
+							  <label class="required" for="positionName">Name</label>
+							  <input class=" form-control"
+									 type="text"
+									 id="positionName"
+									 name="positioName"
+									 ng-model="vm.campaign.positionName"
+									 ng-disabled="vm.campaignPublished"
+									 placeholder=""
+									 >
+							  <!-- <chosen-select ng-if="vm.isPositions" id="positionName" ng-disabled="vm.campaignPublished" ng-model="vm.campaign.positionName" data="vm.positions" property="title"></chosen-select> -->
+							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.positionName.$error.required && newDemand.positionName.$dirty">Position name is required.</span>
+						  </div>
+						  <div class="form-group">
+							  <label class="required" for="campaignDescription">Description & Responsibilities</label>
+							  <textarea class=" form-control"
+										id="campaignDescription"
+										name="campaignDescription"
+										ng-model="vm.campaign.description"
+										ng-disabled = "vm.campaignPublished"
+										rows="6"
+										cols="70"
+										placeholder="Enter Position Description & Responsibilities" >
+							  </textarea>
+						  </div>
+					  </div>
+					  <div class="col-md-1"></div>
+					  <div class="col-md-5">
+						  <div class="form-group">
+							  <label class="required" for="countrySelect">Location</label>
+							  <div class="dropdown">
+								  <chosen-select id="countrySelect" ng-disabled="vm.campaignPublished" ng-model="vm.campaign.location" data="vm.countries"></chosen-select>
+							  </div>
+							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.countrySelect.$error.required && newDemand.countrySelect.$dirty">Country is required</span>
+						  </div>
+						  <div class="form-group">
+							  <label class="required" for="positionType">Employment Type</label>
+							  <div class="dropdown">
+								  <chosen-select id="positionType" ng-disabled="vm.campaignPublished" ng-model="vm.campaign.positionType" data="vm.positionTypes"></chosen-select>
+							  </div>
+							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.positionType.$error.required && newDemand.positionType.$dirty">Position type is required</span>
+						   </div>
+						   <div class="form-group">
+						  	  <label for="positionName">Department</label>
+						  	  <input class=" form-control"
+						  			 type="text"
+						  			 id="departmentName"
+						  			 name="departmentName"
+						  			 ng-model="vm.campaign.department"
+						  			 ng-disabled="vm.campaignPublished"
+						  			 placeholder="Position Department"
+						  			 >
+						  	  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.departmentName.$error.required && newDemand.departmentName.$dirty">Department name is required</span>
+						   </div>
+						   <div class="form-group">
+						  	  <label for="reportTo">Reporting To</label>
+						  	  <input class=" form-control"
+						  			 type="text"
+						  			 id="reportTo"
+						  			 name="reportTo"
+						  			 ng-model="vm.campaign.reportingTo"
+						  			 ng-disabled="vm.campaignPublished"
+						  			 placeholder="Who the employee will report to"
+						  			 >
+						  	  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.reportTo.$error.required && newDemand.reportTo.$dirty">Reporting To is required</span>
+						   </div>
+					  </div>
+					  <div class="col-md-1"></div>
+				  </div>
+				  <ul class="list-unstyled list-inline pull-right">
+					  <li><button type="button" class="btn btn-info btn-sm next-step">Next <i class="fa fa-chevron-right"></i></button></li>
+				  </ul>
+			</div>
+			<!-- Skills Tab -->
+			<div id="menu2" class="tab-pane fade">
+				<div class="row">
+					<div class="col-md-12">
+						<h4 class="sectionHeader"><strong><span class="fa fa-wrench fa-2x"></span>&nbsp;Skills</strong></h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<table id="skilltbl" class="table table-hover" cellspacing="0" width="100%">
+							<col width="400">
+							<col width="400">
+							<col width="400">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Importance</th>
+									<th>Proficiency</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody >
+								<tr ng-repeat="skill in vm.campaign.skills">
+									<td>
+										<input ng-disabled="vm.campaignPublished" type="text" name='name0' placeholder='Type' ng-model="skill.type" class="form-control"/>
+									</td>
+									<td>
+										<div>
+											<select class="form-control" id="skillImportance" ng-disabled="vm.campaignPublished" ng-model="skill.importance"
+											  	ng-class="{'importance-nice' : skill.importance === 'Nice to have',
+														'importance-low' : skill.importance === 'Low',
+														'importance-normal' : skill.importance === 'Normal',
+														'importance-high' : skill.importance === 'High',
+														'importance-must' : skill.importance === 'Must have'}">
+													<option class="importance-nice" value="Nice to have">Nice to Have</option>
+													<option class="importance-low" value="Low">Low</option>
+												 	<option class="importance-normal" value="Normal">Normal</option>
+												  	<option class="importance-high" value="High">High</option>
+												  	<option class="importance-must" value="Must have">Must Have</option>
+											</select>
+										</div>
+										<!-- <div class="dropdown">
+											<chosen-select id="skillImportance" ng-disabled="vm.campaignPublished" ng-model="skill.importance" data="vm.skillsImportance"
+											  ng-class="{'importance-nice' : skill.importance === 'Nice to have',
+														'importance-low' : skill.importance === 'Low',
+														'importance-normal' : skill.importance === 'Normal',
+														'importance-high' : skill.importance === 'High',
+														'importance-must' : skill.importance === 'Must have'}"></chosen-select>
+										</div> -->
+									</td>
+									<td >
+										<div>
+											<select class="form-control" id="skillExperience" ng-disabled="vm.campaignPublished" ng-model="skill.experience">
+												<option value="Beginner">Beginner</option>
+											 	<option value="Intermediate">Intermediate</option>
+											  	<option value="Advanced">Advanced</option>
+											  	<option value="Expert">Expert</option>
+											</select>
+										</div>
+										<!-- <div class="dropdown">
+											<chosen-select id="skillExperience" ng-disabled="vm.campaignPublished" ng-model="skill.experience" data="vm.skillsExperience"></chosen-select>
+										</div> -->
+									</td>
+									<td>
+										<a class="removeIcon" ng-if="!vm.campaignPublished" ng-click="vm.removeSkill(skill)" href='#'><span class='glyphicon glyphicon-remove-circle'></span></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<a id="add_row" ng-click="vm.addSkill()" ng-if="!vm.campaignPublished" class="btn btn-primary pull-left">Add Skill</a>
+					</div>
+				</div>
+				<ul class="list-unstyled list-inline pull-right">
+					<li><button type="button" class="btn btn-default btn-sm prev-step"><i class="fa fa-chevron-left"></i> Back</button></li>
+					<li><button type="button" class="btn btn-info btn-sm next-step">Next <i class="fa fa-chevron-right"></i></button></li>
+				</ul>
+			</div>
+			<!-- Audition Tab -->
+			<div id="menu3" class="tab-pane fade">
+				  <div class="row">
+					  <div class="col-md-12">
+						  <h4 class="sectionHeader"><strong><span class="fa fa-check-square-o fa-2x"></span>&nbsp;Audition - {{vm.audition.status}}</strong></h4>
+					  </div>
+				  </div>
+				  <div class="row">
+					  <div class="col-md-12">
+						  <table class="table summary-table-audition">
+							  <thead>
+								  <th><strong>Skill</strong></th>
+								  <th><strong>Beginner</strong></th>
+								  <th><strong>Intermediate</strong></th>
+								  <th><strong>Advanced</strong></th>
+								  <th><strong>Expert</strong></th>
+								  <th><strong>Total</strong></th>
+								  <th><strong>Score</strong></th>
+								  <th><strong>Time</strong></th>
+							  </thead>
+							  <tbody>
+								  <tr ng-repeat="(key,skillSummery) in vm.summery.skills" ng-class="key">
+									  <td><strong>{{key}}</strong></td>
+									  <td>{{skillSummery.Beginner}}</td>
+									  <td>{{skillSummery.Intermediate}}</td>
+									  <td>{{skillSummery.Advanced}}</td>
+									  <td>{{skillSummery.Expert}}</td>
+									  <td class="summary-table-totals"><strong>{{skillSummery.total}}</strong></td>
+									  <td class="summary-table-totals"><strong>{{skillSummery.score | number:2}}</strong></td>
+									  <td class="summary-table-totals"><strong>{{skillSummery.time | date:"HH:mm:ss" : 'UTC'}}</strong></td>
+								  </tr>
+								  <tr>
+									  <td></td>
+									  <td></td>
+									  <td></td>
+									  <td></td>
+									  <td></td>
+									  <td></td>
+									  <td></td>
+									  <td></td>
+								  </tr>
+								  <tr class="summ-line">
+									  <td><strong>Summary</strong></td>
+									  <td><strong>{{vm.summery.Beginner}}</strong></td>
+									  <td><strong>{{vm.summery.Intermediate}}</strong></td>
+									  <td><strong>{{vm.summery.Advanced}}</strong></td>
+									  <td><strong>{{vm.summery.Expert}}</strong></td>
+									  <td class="summary-table-totals"><strong>{{vm.summery.total}}</strong></td>
+									  <td class="summary-table-totals"><strong>{{vm.summery.score | number:2}}</strong></td>
+									  <td class="summary-table-totals" ng-class="vm.summery.time > vm.audition.auditionDuration?'timeWarning':''"><strong>{{vm.summery.time | date:"HH:mm:ss" : 'UTC'}}</strong></td>
+								  </tr>
+							  </tbody>
+						  </table>
+					  </div>
+				  </div>
+				  <!-- <div class="row">
+					  <div class="col-md-12">
+						  &nbsp;
+					  </div>
+				  </div> -->
+				  <div class="row">
+					  <div class="col-md-12">
+						  <a class="btn btn-primary pull-left" ng-click="vm.editAudition()">Edit Audition</a>
+					  </div>
+				  </div>
+				  <ul class="list-unstyled list-inline pull-right">
+					   <li><button type="button" class="btn btn-default btn-sm prev-step"><i class="fa fa-chevron-left"></i> Back</button></li>
+					   <li><button type="button" class="btn btn-info btn-sm next-step">Next <i class="fa fa-chevron-right"></i></button></li>
+				  </ul>
+			</div>
+			<!-- Questionnaire Tab -->
+			<div id="menu4" class="tab-pane fade">
+				<div class="row">
+					<div class="col-md-12">
+						<h4 class="sectionHeader"><strong><span class="fa fa-question fa-2x"></span>&nbsp;Questionnaire</strong></h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5">
+						<!-- Are you willing to work at -->
+						<div class="form-group">
+							<label for="willingToWorkPlace">Are you willing to work in</label>
+							<input class=" form-control"
+									type="text"
+									id="willingToWorkPlace"
+									name="willingToWorkPlace"
+									ng-model="vm.campaign.goNoGo4.place"
+									ng-disabled="vm.campaignPublished"
+									placeholder="Please enter the work location">
+							<span class="field-error">&nbsp;</span>
+						</div>
+						<!-- Custom Question 1 -->
+						<div class="form-group">
+							<label for="firstQuestionText">Custom Question 1</label>
+							<input class=" form-control"
+									type="text"
+									id="firstQuestionText"
+									name="firstQuestionText"
+									ng-model="vm.campaign.goNoGo1.text"
+									ng-disabled="vm.campaignPublished"
+									placeholder="Please enter question">
+							 <span class="field-error">&nbsp;</span>
+						</div>
+						<!-- Custom Question 1 -->
+						<div class="form-group">
+							<label for="secondQuestionText">Custom Question 2</label>
+							<input class=" form-control"
+									type="text"
+									id="secondQuestionText"
+									name="secondQuestionText"
+									ng-model="vm.campaign.goNoGo2.text"
+									ng-disabled="vm.campaignPublished"
+									placeholder="Please enter question">
+							<span class="field-error">&nbsp;</span>
+						</div>
+					</div>
+					<div class="col-md-1"></div>
+					<div class="col-md-5">
+						<!-- Resume -->
+					  	<div class="form-group">
+					  		<input class="form-control"
+					  			   	type="checkbox"
+					  			   	id="resume"
+					  			   	name="resume"
+					  			   	ng-model="vm.campaign.cv"
+					  			   	ng-disabled=true>
+					  			   <!-- Temp disabled - issue with uploading CVs -->
+					  			   <!-- ng-disabled="vm.campaignPublished"> -->
+					  		<span class="field-error">&nbsp;</span>
+					  		<label class="checkbox-padding" for="resume">Supply Resume</label>
+					  	</div>
+					  	<!-- LinkedIn Profile -->
+					  	<div class="form-group">
+					  		<input class="form-control"
+					  			  	type="checkbox"
+					  			   	id="linkedInProfile"
+					  			   	name="linkedInProfile"
+					  			   	ng-model="vm.campaign.linkedInProfileUrl"
+					  			   	ng-disabled="vm.campaignPublished">
+					  		<span class="field-error">&nbsp;</span>
+					  		<label class="checkbox-padding" for="linkedInProfile">Provide LinkedIn Profile</label>
+					  	</div>
+					  	<!-- Salary Expectation -->
+					  	<div class="form-group">
+							<input class="form-control"
+									type="checkbox"
+									id="thirdQuestionCheck"
+									name="secondQuestionCheck"
+									ng-model="vm.campaign.goNoGo3.enabled"
+									ng-disabled="vm.campaignPublished">
+							<span class="field-error">&nbsp;</span>
+							<label class="checkbox-padding" for="firstQuestionCheck">Provide Salary Expectation</label>
+					  		<label class="currency-type-margin" ng-show="vm.campaign.goNoGo3.enabled" for="salaryExpactationsCurr">Currency</label>
+					  		<select ng-show="vm.campaign.goNoGo3.enabled" ng-model="vm.campaign.salaryExpCurrency" class="select-field-lenght" ng-disabled="vm.campaignPublished">
+					  			<option>NIS</option>
+					  			<option>USD</option>
+					  			<option>EUR</option>
+					  		</select>
+					  	</div>
+					  	<!-- Salary range -->
+					  	<div class="form-group" ng-show = "vm.campaign.goNoGo3.enabled">
+					  		<div ng-repeat="expectation in vm.campaign.salaryExpactations">
+					  			<div>
+					  				<label class="salary-from-positioning" for="salaryExpactations">From</label>
+					  				<input class="select-field-lenght"
+					  						type="number"
+					  						id="salaryExpactationsFrom"
+					  						name="salaryExpactationsFrom"
+					  						min="0"
+					  						ng-model="expectation.from"
+					  						ng-disabled="vm.campaignPublished">
+					  				<label class="salary-to-positioning" for="salaryExpactations">To</label>
+					  				<input class="select-field-lenght"
+					  						type="number"
+					  						id="salaryExpactationsTo"
+					  						name="salaryExpactationsTo"
+					  						min="0"
+					  						ng-model="expectation.to"
+					  						ng-disabled="vm.campaignPublished">
+					  				<a class="salary-remove-range" ng-if="!vm.campaignPublished" ng-click="vm.removeFromToSalaryExp(expectation)" href='#'><span class='glyphicon glyphicon-remove-circle'></span></a>
+					  			</div>
+					  			<span class="field-error">&nbsp;</span>
+					  		</div>
+					  		<!-- Add salary range button -->
+					  		<div class="row">
+					  			<a class="btn btn-info btn-sm salary-add-range" ng-if="!vm.campaignPublished" ng-click="vm.addFromToSalaryExp()">Add Range</a>
+					  	  	</div>
+					  	</div>
+				  	</div>			  	
+				</div>
+				<ul class="list-unstyled list-inline pull-right">
+					<li><button type="button" class="btn btn-default btn-sm prev-step"><i class="fa fa-chevron-left"></i> Back</button></li>
+					<li><button type="button" class="btn btn-info btn-sm next-step">Next <i class="fa fa-chevron-right"></i></button></li>
+				</ul>
+			</div>
+			<!-- Seetings Tab -->
+			<div id="menu5" class="tab-pane fade">
+				  <div class="row">
+					  <div class="col-md-12">
+						  <h4 class="sectionHeader"><strong><span class="fa fa-cog fa-2x"></span>&nbsp;Settings</strong></h4>
+					  </div>
+				  </div>
+				  <div class="row">
+					  <div class="col-md-3">
+						  <div class="form-group">
+							  <label  for="startDate">Start Date</label>
+							  <input class=" form-control"
+									 type="date"
+									 id="startDate"
+									 name="startDate"
+									 ng-model="vm.campaign.startDate"
+									 ng-disabled="true"
+									 ng-click="vm.calculateEndDate(vm.campaign)">
+							  <span class="field-error">&nbsp;</span>
+						  </div>
+						  <div class="form-group">
+							  <label class="required" for="duration">Duration</label>
+							  <input class=" form-control"
+									 type="number"
+									 id="duration"
+									 name="duration"
+									 min="1"
+									 ng-model="vm.campaign.duration"
+									 ng-click="vm.calculateEndDate(vm.campaign)"
+									 placeholder="Campaign duration in days">
+							  <span class="field-error">&nbsp;</span>
+						  </div>
+						  <div class="form-group">
+							  <label for="endDate">End Date</label>
+							  <input class=" form-control"
+									 type="date"
+									 -             id="endDate"
+									 name="endDate"
+									 ng-model="vm.campaign.endDate"
+									 ng-disabled="true"
+									 ng-click="vm.clearDuration(vm.campaign)">
+							  <span class="field-error">&nbsp;</span>
+						  </div>
+					  </div>                              
+
+					  <div class="col-md-1"></div>
+
+					  <div class="col-md-3">
+						  <div class="form-group">
+							  <div class="dropdown">
+								  <label class="required" for="minScore">Minimum Grade</label>
+								  <input class=" form-control"
+										 type="number"
+										 id="minScore"
+										 name="minScore"
+										 min="40"
+										 max="100"
+										 ng-model="vm.campaign.minScore"
+										 ng-blur="vm.minScoreRange()"
+										 placeholder="Applicants Minimum Score">
+								  <span class="field-error">&nbsp;</span>
+							  </div>
+						  </div>
+						  <div class="form-group">
+							  <div class="dropdown">
+								  <label class="required" for="topApplicant">Top Applicants</label>
+								  <input class=" form-control"
+										 type="number"
+										 id="topApplicant"
+										 name="topApplicant"
+										 min="1"
+										 max="10"
+										 ng-model="vm.campaign.topApplicant"
+										 ng-disabled="vm.campaignPublished"
+										 ng-blur = "vm.topApplicantRange()"
+										 placeholder="Number of Top Applicant">
+								  <span class="field-error">&nbsp;</span>
+							  </div>
+						  </div>
+					  </div>
+
+					  <div class="col-md-1"></div>
+
+					  <div class="col-md-4">
+						  <!-- Campaign target options -->
+						  <div class="col-md-12 form-group">
+							  <!-- <div class="form-group"> -->
+							  <label class="required">Campaign Targets</label>
+							  <div class="row">
+								  <div class="col-md-1">
+									  <label ng-show="vm.campaignPublished" class="glyphicon glyphicon-check"></label>
+									  <label ng-show="!vm.campaignPublished" class="glyphicon glyphicon-unchecked"></label>
+								  </div>
+								  <div class="col-md-4">
+									  <lable class="btn" ng-click="vm.targetCampaignManuallyURL()" ng-disabled="vm.targetManuallyURLDisabled"><strong>Manually via URL</strong></lable>
+								  </div>
+							  </div>  
+							  <!-- Specific Talent -->
+							  <div class="row">
+								  <div class="col-md-1">
+									  <label ng-show="vm.campaignPublished" class="glyphicon glyphicon-unchecked"></label>
+									  <label ng-show="!vm.campaignPublished" class="glyphicon glyphicon-unchecked"></label>
+								  </div>
+								  <div class="col-md-4">
+									  <lable class="btn" ng-click="vm.targetCampaignSpecificTalent()" ng-disabled="vm.targetSpecificTalentDisabled"><strong>Specific Talent</strong></lable>
+								  </div>
+							  </div>
+							  <!-- External Talents -->
+							  <div class="row">
+								  <div class="col-md-1">
+									  <label ng-show="vm.targetExternalTalents" class="glyphicon glyphicon-check"></label>
+									  <label ng-show="!vm.targetExternalTalents" class="glyphicon glyphicon-unchecked"></label>
+								  </div>
+								  <div class="col-md-4">
+									  <lable class="btn" ng-click="vm.targetCampaignExternalTalents()" ng-disabled="vm.targetExternalTalentsDisabled"><strong>External Talents</strong></lable>
+								  </div>
+							  </div>
+							  <!-- Pool Talents -->
+							  <div class="row">
+								  <div class="col-md-1">
+									  <label ng-show="vm.targetPoolTalents" class="glyphicon glyphicon-check"></label>
+									  <label ng-show="!vm.targetPoolTalents" class="glyphicon glyphicon-unchecked"></label>
+								  </div>    
+								  <div class="col-md-4">
+									  <lable class="btn" ng-click="vm.targetCampaignPoolTalents()" ng-disabled="vm.targetPoolTalentsDisabled"><strong>Pool Talents</strong></lable>
+								  </div>
+							  </div>
+							  <!-- Social Network -->
+							  <div class="row">
+								  <div class="col-md-1">
+									  <label ng-show="vm.targetSocialNetworks" class="glyphicon glyphicon-check"></label>
+									  <label ng-show="!vm.targetSocialNetworks" class="glyphicon glyphicon-unchecked"></label>
+								  </div>
+								  <div class="col-md-4">
+									  <lable class="btn" ng-click="vm.targetCampaignSocialNetworks()" ng-disabled="vm.targetSocialNetworksDisabled"><strong>Social Network</strong></lable>
+								  </div>
+							  </div>
+							  <!-- Job Boards -->
+							  <div class="row">
+								  <div class="col-md-1">
+									  <label ng-show="vm.targetJobBoards" class="glyphicon glyphicon-check"></label>
+									  <label ng-show="!vm.targetJobBoards" class="glyphicon glyphicon-unchecked"></label>
+								  </div>
+								  <div class="col-md-4">
+									  <lable class="btn" ng-click="vm.targetCampaignJobBoards()" ng-disabled="vm.targetJobBoardsDisabled"><strong>Job Boards</strong></lable>
+								  </div>
+							  </div>
+						  </div>     
+					  </div>
+				  </div>
+				  <ul class="list-unstyled list-inline pull-right">
+					   <li><button type="button" class="btn btn-default btn-sm prev-step"><i class="fa fa-chevron-left"></i> Back</button></li>
+					   <li><button type="button" class="btn btn-info btn-sm next-step">Next <i class="fa fa-chevron-right"></i></button></li>
+				  </ul>
+			</div>
+			<!-- Log Tab -->
+			<div id="menu6" class="tab-pane fade">
+				  <div class="row">
+					  <div class="col-md-12">
+						  <h4 class="sectionHeader"><strong><span class="fa fa-list fa-2x"></span>&nbsp;Campaign History</strong></h4>
+					  </div>
+				  </div>
+				  <div class="row">
+					  <div class="col-md-12">
+						  <table class="table" cellspacing="0" width="100%">
+							  <thead>
+							  <tr>
+								  <th><strong>#</strong></th>
+								  <th>Date</th>
+								  <th>User</th>
+								  <th>Activity</th>
+								  <th>Description</th>
+							  </tr>
+							  </thead>
+							  <tbody >
+							  <tr ng-repeat="log in vm.activityLog | orderBy:'-date'" ng-class="$index % 2 ? '' : 'active'">
+								  <td>{{$index + 1}}</td>
+								  <td>{{log.date | date:'medium'}}</td>
+								  <td>{{log.user}}</td>
+								  <td>{{log.activity}}</td>
+								  <td>{{log.text}}</td>
+							  </tr>
+							  </tbody>
+						  </table>
+					  </div>
+					  <!-- <div class="col-md-1"></div> -->
+				  </div>
+				  <ul class="list-unstyled list-inline pull-right">
+					   <li><button type="button" class="btn btn-default btn-sm prev-step"><i class="fa fa-chevron-left"></i> Back</button></li>
+				  </ul>
+			</div>
+		</div>
+	</div>
+  	<div class="col-md-0-6"></div>
+</div>

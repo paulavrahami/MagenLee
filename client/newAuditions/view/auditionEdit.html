@@ -1,0 +1,403 @@
+<qualifit-header></qualifit-header>
+<div class="row auditionEdit" ng-if="auditionEdit.subsciptionOk">
+    <div class="col-md-0-6">
+        <div class="col-md-12">
+            <div id="btn-ctsArea" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE">
+                <div class="cts">
+                    <div>
+                        <!-- Generate Audition option -->
+                        <div
+                            id="btn-open-challenges"
+                            class="btn-q-primary"
+                            ng-click="auditionEdit.generateAudition()">Generate Audition 
+                        </div>
+                        <br><br><br><br><br><br>
+                        <!-- Add Challenge option -->
+                        <div
+                            id="btn-open-challenges"
+                            class="btn-q-primary"
+                            ng-click="auditionEdit.addChallenge()">Add Challenge 
+                        </div>
+                        <div class="ctsArea q-border" ng-class="auditionEdit.showCtsAreaAddChallenge?'showAddChallenge':''">
+                            <div class="col-md-12">
+                                <div class="audition-header">
+                                    <h4><strong>Add Challenge</strong></h4>
+                                </div>
+                                <form class="col-md-12" role="form">
+                                    <div>
+                                        <label class="required">Author</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" ng-model="auditionEdit.myChallenges">
+                                        <label class="checkbox-inline">My Challenges</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" ng-model="auditionEdit.communityChallenges">
+                                        <label class="checkbox-inline">Other Recruiters</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" ng-model="auditionEdit.domainExpertsChallenges">
+                                        <label class="checkbox-inline">Domain Experts</label>
+                                    </div>
+                                </form>
+                                <form class="col-md-12" role="form" ng-show="auditionEdit.domainExpertsChallenges">
+                                    <div class="radio-input-field col-md-12">
+                                        <div class="col-md-4">
+                                            <input type="radio" name="domainExperts" checked> All
+                                        </div>
+                                        <div class="col-md-8"></div>
+                                    </div>
+                                    <div class="radio-input-field col-md-12">
+                                        <div class="col-md-4">
+                                            <input type="radio" name="domainExperts"> Name
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" ng-model="auditionEdit.domainExpertsName" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="radio-input-field col-md-12">
+                                        <div class="col-md-4">
+                                            <input type="radio" name="domainExperts"> Expertise
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" ng-model="auditionEdit.domainExpertsExpertise" disabled>
+                                        </div>
+                                    </div>
+                                </form>
+                                <br><br><br><br><br><br>
+                                <form class="col-md-12" role="form">
+                                    <div class="form-group">
+                                        <label>Skills</label>
+                                        <select type="text" ng-model="auditionEdit.addChallengeSkills" class="form-control" id="addChallengeSkills" placeholder="" ng-options="skill as skill.type for skill in auditionEdit.skills track by skill.type">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Complexity</label>
+                                        <select ng-model="auditionEdit.addChallengeComplexity" class="form-control" id="addChallengeComplexity" placeholder="" ng-options="complexity for complexity in auditionEdit.complexityArray">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Template</label>
+                                        <select ng-model="auditionEdit.addChallengeTemplate" class="form-control" id="addChallengeTemplate" placeholder="" ng-options="challengeName for challengeName in auditionEdit.templateNames">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Content</label>
+                                        <input ng-model="auditionEdit.addChallengeContent" class="form-control" id="addChallengeContent" placeholder="">
+                                    </div>
+                                </form>
+                                <div>&nbsp;</div>
+                                <a class="btn btn-primary fa fa-arrow-left fa-1x" ng-click="auditionEdit.addChallengeClose()"></a>
+                                <a class="btn btn-primary pull-right" ng-click="auditionEdit.addChallengeSearch()">Search</a>
+                                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.addItems.length===0" ng-click="auditionEdit.addChallengeAdd()">Add</a>
+                                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.addItems.length===0" ng-click="auditionEdit.addChallengeClear()">Clear</a>
+                                <!-- <a class="btn btn-primary" ng-click="auditionEdit.addChallengeReset()">Reset</a> -->
+                            </div>
+                        </div>
+                        <br><br><br><br><br><br>
+                        <!-- Create Challenge option -->
+                        <div
+                            id="btn-open-challenges"
+                            class="btn-q-primary"
+                            ng-click="auditionEdit.createChallenge()">Create Challenge
+                        </div>
+                        <div class="ctsArea q-border" ng-class="auditionEdit.showCtsAreaCreateChallenge?'show':''">
+                            <div class="cts-types-holder col-md-4">
+                                <div>
+                                    <a class="btn-cts-close btn btn-primary fa fa-arrow-left fa-1x"
+                                     ng-click="auditionEdit.createChallengeClose()"></a>
+                                </div>
+                                <hr style="border-color:#FFF">
+                                <ul>
+                                    <li
+                                        ng-click="auditionEdit.setSelected(challengesType)"
+                                        ng-repeat="(key, challengesType) in auditionEdit.challengesTypes"
+                                        ng-class="challengesType.selected ? 'selected':''">{{key}}</li>
+                                </ul>
+                            </div>
+                            <div class="cts-frames-holder col-md-8">
+                                <div class="templateItem" ng-repeat="auditionItem in auditionEdit.templates">
+                                    <h4>{{auditionItem.name}}</h4>
+                                    <!--<div class="wrapIfram">-->
+                                        <!--<iframe id="templatesAudition" class="templateIframeZoom" ng-src="{{auditionEdit.getAuditionItemSrc($index, auditionItem._id)}}"></iframe>-->
+                                    <!--</div>-->
+                                    <div class="wrapIfram templateIframeZoom" ng-bind-html="trust(auditionEdit.getAuditionHtml($index, auditionItem._id))"></div>
+                                    <button class="btn btn-primary" ng-click="auditionEdit.createNewItem(auditionItem._id)">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-11">
+        <!-- Audition properties area -->
+        <div class="col-md-4">
+            <div class="q-border-padding">
+                <div class="audition-header">
+                    <h4><strong>Edit Audition - {{auditionEdit.audition.status}}</strong></h4>
+                </div>
+                <form class="col-md-12" role="form">
+                    <div class="form-group">
+                        <label for="" class="required">Name</label>
+                        <input type="text" ng-model="auditionEdit.audition.name" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" class="form-control" id="auditionName" placeholder="Audition Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea ng-model="auditionEdit.audition.description" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" class="form-control" id="auditionDescription" placeholder="Audition Description" cols="20" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Instructions</label>
+                        <textarea ng-model="auditionEdit.audition.instructions" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" class="form-control" id="auditionInstructions" placeholder="Audition Instructions" cols="20" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Duration (hh:mm:ss)</label>
+                        <time-select ng-model="auditionEdit.audition" property="auditionDuration" ng-change="auditionEdit.saveAudition" ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE"></time-select>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label>Challenges Order</label>
+                        <select
+                            id="auditionComplexity"
+                            class="form-control"
+                            ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE"
+                            ng-change="auditionEdit.saveAudition()"
+                            ng-model="auditionEdit.audition.itemsOrder"
+                            ng-options="value as value for value in auditionEdit.itemsOrderArray"></select>
+                    </div> -->
+                </form>
+                <div>&nbsp;</div>
+
+                <a class="btn btn-primary fa fa-arrow-left fa-1x" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ui-sref="recruiter.recruiterDemand({id:auditionEdit.audition.campaignId,'#':'menu3'})"></a>
+                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.auditionDone()">Done</a>
+                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.clearAudition()">Clear</a>
+                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.previewAudition()">Preview</a>
+                
+                <a class="btn btn-primary fa fa-arrow-left fa-1x" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ui-sref="recruiter.recruiterDemand({id:auditionEdit.audition.campaignId,'#':'menu3'})"></a>
+                <a class="btn btn-primary pull-right" aria-hidden="true" ng-if="(auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) && ((auditionEdit.campaignStatus === auditionEdit.ENUM.CAMPAIGN_STATUS.IN_WORK) || (auditionEdit.campaignStatus === auditionEdit.ENUM.CAMPAIGN_STATUS.VERIFIED))" ng-click="auditionEdit.auditionRework()">Rework</a>
+                <a class="btn btn-primary pull-right" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.previewAudition()">Preview</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <!-- Items summary area - Items already selected for the audition -->
+            <div class="col-md-12" ng-if="!auditionEdit.addChallengeOption">
+                <div class="q-border summery-area">
+                    <table class="summery-table">
+                        <thead>
+                            <th><strong>Skill</strong></th>
+                            <th><strong>Beginner</strong></th>
+                            <th><strong>Intermediate</strong></th>
+                            <th><strong>Advanced</strong></th>
+                            <th><strong>Expert</strong></th>
+                            <th><strong>Total</strong></th>
+                            <th><strong>Score</strong></th>
+                            <th><strong>Duration</strong></th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key,skillSummery) in auditionEdit.summery.skills" ng-class="key">
+                                <td>{{key}}</td>
+                                <td>{{skillSummery.Beginner}}</td>
+                                <td>{{skillSummery.Intermediate}}</td>
+                                <td>{{skillSummery.Advanced}}</td>
+                                <td>{{skillSummery.Expert}}</td>
+                                <td>{{skillSummery.total}}</td>
+                                <td>{{skillSummery.score | number:2}}</td>
+                                <td>{{skillSummery.time | date:"HH:mm:ss" : 'UTC'}}</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>{{auditionEdit.summery.Beginner}}</td>
+                                <td>{{auditionEdit.summery.Intermediate}}</td>
+                                <td>{{auditionEdit.summery.Advanced}}</td>
+                                <td>{{auditionEdit.summery.Expert}}</td>
+                                <td>{{auditionEdit.summery.total}}</td>
+                                <td>{{auditionEdit.summery.score | number:2}}</td>
+                                <td ng-class="auditionEdit.summery.time > auditionEdit.audition.auditionDuration ? 'timeWarning' : ''">{{auditionEdit.summery.time | date:"HH:mm:ss" : 'UTC'}}</td>
+                            </tr>
+                            <tr>
+                                <td>Remaining</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>{{auditionEdit.audition.auditionDuration - auditionEdit.summery.time + auditionEdit.timeOffset> auditionEdit.timeOffset ? auditionEdit.audition.auditionDuration - auditionEdit.summery.time + auditionEdit.timeOffset : auditionEdit.timeOffset | date:"HH:mm:ss" : 'UTC'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Items summary area - Add challenge option -->
+            <div class="col-md-12" ng-if="auditionEdit.addChallengeOption">
+                <div class="q-border summery-area">
+                    <table class="summery-table">
+                        <thead>
+                            <th><strong>Skill</strong></th>
+                            <th><strong>Beginner</strong></th>
+                            <th><strong>Intermediate</strong></th>
+                            <th><strong>Advanced</strong></th>
+                            <th><strong>Expert</strong></th>
+                            <th><strong>Total</strong></th>
+                            <th><strong>Duration</strong></th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key,skillSummery) in auditionEdit.addBufferSummery.skills" ng-class="key">
+                                <td>{{key}}</td>
+                                <td>{{skillSummery.Beginner}}</td>
+                                <td>{{skillSummery.Intermediate}}</td>
+                                <td>{{skillSummery.Advanced}}</td>
+                                <td>{{skillSummery.Expert}}</td>
+                                <td>{{skillSummery.total}}</td>
+                                <td>{{skillSummery.time | date:"HH:mm:ss" : 'UTC'}}</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                                <td><hr></td>
+                            </tr>
+                            <tr>
+                                <td>Selected</td>
+                                <td>{{auditionEdit.addBufferSummery.Beginner}}</td>
+                                <td>{{auditionEdit.addBufferSummery.Intermediate}}</td>
+                                <td>{{auditionEdit.addBufferSummery.Advanced}}</td>
+                                <td>{{auditionEdit.addBufferSummery.Expert}}</td>
+                                <td>{{auditionEdit.addBufferSummery.total}}</td>
+                                <td ng-class="auditionEdit.addBufferSummery.time > auditionEdit.audition.auditionDuration ? 'timeWarning' : ''">{{auditionEdit.addBufferSummery.time | date:"HH:mm:ss" : 'UTC'}}</td>
+                            </tr>
+                            <tr>
+                                <td>Remaining</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>{{auditionEdit.audition.auditionDuration - auditionEdit.addBufferSummery.time - auditionEdit.summery.time + auditionEdit.timeOffset> auditionEdit.timeOffset ? auditionEdit.audition.auditionDuration - auditionEdit.addBufferSummery.time - auditionEdit.summery.time + auditionEdit.timeOffset : auditionEdit.timeOffset | date:"HH:mm:ss" : 'UTC'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Items list area - Items already selected for the audition -->
+            <div class="col-md-12" ng-if="!auditionEdit.addChallengeOption">
+                <div
+                    class="row auditionItem col-md-12"
+                    ng-class="auditionItem.itemId === auditionEdit.currentItem._id ? 'selected' : ''"
+                    ng-click="auditionEdit.selectCurrentItem(auditionItem.itemId)"
+                    ng-hide="auditionItem.itemId === auditionEdit.editItem._id"
+                    ng-repeat="auditionItem in auditionEdit.audition.items">
+                    <div class="row">
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3"><span>{{$index+1}}.</span> Skill: {{auditionEdit.getItem(auditionItem.itemId).skill.type}}</h5>
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Complexity: {{auditionEdit.getItem(auditionItem.itemId).complexity}}</h5>
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Duration: {{auditionEdit.getItem(auditionItem.itemId).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Score: {{auditionItem.maxScore | number:2}}</h5>
+                    </div>
+                    <div class="col-md-12 ellipsis"><span>{{auditionEdit.itemToString(auditionItem.itemId)}}</span></div>
+                    <a  class="removeIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.removeItem(auditionItem)" href='#'>
+                        <span class='glyphicon glyphicon-remove-circle'></span>
+                    </a>
+                    <a  class="editIcon"  ng-click="auditionEdit.openEditItem(auditionItem)" href='#'>
+                        <span class='glyphicon glyphicon-pencil'></span>
+                    </a>
+                    <a  class="arrowUpIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.moveItemDown(auditionItem)" href='#'>
+                        <span class='glyphicon glyphicon-arrow-up'></span>
+                    </a>
+                    <a  class="arrowDownIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.moveItemUp(auditionItem)" href='#'>
+                        <span class='glyphicon glyphicon-arrow-down'></span>
+                    </a>
+                </div>
+            </div>
+            <!-- Items list area - Add challenge/Challenges to be added -->
+            <div class="col-md-12" ng-if="auditionEdit.addChallengeOption && auditionEdit.itemsAdded">
+                <div class="col-md-12 add-Challenge-list-title">
+                    <span>Selected Challenges</span>
+                </div>
+                <div
+                    class="row auditionItem col-md-12"
+                    ng-click="auditionEdit.selectCurrentItem(auditionItem)"
+                    ng-hide="auditionItem === auditionEdit.editItem._id"
+                    ng-repeat="auditionItem in auditionEdit.addItems">
+                    <div class="row">
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Skill: {{auditionEdit.getItem(auditionItem).skill.type}}</h5>
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Complexity: {{auditionEdit.getItem(auditionItem).complexity}}</h5>
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Duration: {{auditionEdit.getItem(auditionItem).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
+                        <h5 class=" col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3">Type: {{auditionEdit.templateName(auditionItem)}}</h5>
+                    </div>
+                    <div class="col-md-12 ellipsis">{{auditionEdit.itemToString(auditionItem)}}</div>
+                    <a  class="removeItemIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.removeItemFromBuffer(auditionItem)" href='#'>
+                        <span class='glyphicon glyphicon-minus'></span>
+                    </a>
+                    <a  class="editIcon"  ng-click="auditionEdit.openEditItem(auditionItem)" href='#'>
+                        <span class='glyphicon glyphicon-eye-open'></span>
+                    </a>
+                </div>
+            </div>
+            <!-- Items list area - Add challenge/Search results -->
+            <div class="col-md-12" ng-if="auditionEdit.addChallengeOption && auditionEdit.itemsFound">
+                <div class = "col-md-12 add-Challenge-list-title">
+                    <span>Search Result</span>
+                </div>
+                <div
+                    class="row auditionItem col-md-12"
+                    ng-click="auditionEdit.selectCurrentItem(auditionItem.itemId)"
+                    ng-class="auditionItem.itemId === auditionEdit.currentItem._id ? 'selected' : ''"
+                    ng-hide="auditionItem === auditionEdit.editItem._id"
+                    ng-repeat="auditionItem in auditionEdit.searchItems">
+                    <div class="row">
+                        <h5 class="col-md-3 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Skill: {{auditionEdit.getItem(auditionItem.itemId).skill.type}}</h5>
+                        <h5 class="col-md-3 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Complexity: {{auditionEdit.getItem(auditionItem.itemId).complexity}}</h5>
+                        <h5 class="col-md-3 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Duration: {{auditionEdit.getItem(auditionItem.itemId).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
+                        <h5 class="col-md-2 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Type: {{auditionEdit.templateName(auditionItem.itemId)}}</h5>
+                    </div>
+                    <div class="col-md-12 ellipsis">{{auditionEdit.itemToString(auditionItem.itemId)}}</div>
+                    <a  class="addItemIcon" ng-if="(auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) && !auditionItem.itemAlreadyInAudition" ng-click="auditionEdit.addItemToBuffer(auditionItem.itemId, $index)" href='#'>
+                        <span class='glyphicon glyphicon-plus'></span>
+                    </a>
+                    <a  class="editIcon" ng-click="auditionEdit.openEditItem(auditionItem.itemId)" href='#'>
+                        <span class='glyphicon glyphicon-eye-open'></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-0-6"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

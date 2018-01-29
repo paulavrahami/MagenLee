@@ -1,0 +1,30 @@
+{
+  "name": "QualiFit",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.38",
+    "alasql": "^0.4.4",
+    "angular": "https://registry.npmjs.org/angular/-/angular-1.5.8.tgz",
+    "angular-chosen-localytics": "https://registry.npmjs.org/angular-chosen-localytics/-/angular-chosen-localytics-1.5.0.tgz",
+    "angular-filter": "https://registry.npmjs.org/angular-filter/-/angular-filter-0.5.11.tgz",
+    "angular-input-masks": "^2.6.0",
+    "angular-js-xlsx": "0.0.3",
+    "angular-meteor": "https://registry.npmjs.org/angular-meteor/-/angular-meteor-1.3.11.tgz",
+    "angular-meteor-promiser": "https://registry.npmjs.org/angular-meteor-promiser/-/angular-meteor-promiser-1.1.0.tgz",
+    "angular-moment": "https://registry.npmjs.org/angular-moment/-/angular-moment-1.0.0-beta.6.tgz",
+    "angular-ui-bootstrap": "https://registry.npmjs.org/angular-ui-bootstrap/-/angular-ui-bootstrap-1.3.3.tgz",
+    "angular-ui-mask": "https://registry.npmjs.org/angular-ui-mask/-/angular-ui-mask-1.8.7.tgz",
+    "angular-ui-router": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.18.tgz",
+    "babel-runtime": "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.26.0.tgz",
+    "bcrypt": "https://registry.npmjs.org/bcrypt/-/bcrypt-1.0.3.tgz",
+    "meteor-node-stubs": "^0.2.11",
+    "moment": "^2.20.1",
+    "ngclipboard": "https://registry.npmjs.org/ngclipboard/-/ngclipboard-1.1.1.tgz",
+    "nodemailer": "https://registry.npmjs.org/nodemailer/-/nodemailer-2.7.2.tgz",
+    "nodemailer-smtp-transport": "https://registry.npmjs.org/nodemailer-smtp-transport/-/nodemailer-smtp-transport-2.7.2.tgz",
+    "shrinkwrap": "^0.4.0"
+  }
+}

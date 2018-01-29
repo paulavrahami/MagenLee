@@ -1,0 +1,140 @@
+<!-- talentSignUp.html -->
+<hr>
+<div class="container margintop">
+
+<form class="form-horizontal top-margin" id="SignUp" name="talentSignUp" novalidate>
+    <div class="row col-md-12">
+        <div class="col-md-0-6"></div>
+        <div class="col-md-5">
+            <fieldset form="userProfile">
+                <div class="form-group">
+                    <div class="col-sm-4"></div>
+                    <h3 class="col-sm-8"><strong>User Profile</strong></h3>
+                </div>
+                <!-- User Name -->
+                <div class="form-group">
+                    <label for="talentName" class="col-sm-4 control-label required-before">User Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" ng-model="vm.newTalentRegister.name" ng-blur="vm.checkUserName(vm.newTalentRegister.name)" class="form-control " placeholder="Login user name" required>
+                        <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.name.$error.required">User name is required</span>
+                    </div>
+                </div>
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="applicantEmail" class="col-sm-4 control-label required-before">Email</label>
+                    <div class="col-sm-8">
+                        <input type="email" ng-model="vm.newTalentRegister.email" name="email" class="form-control" placeholder="your@email.addr" ng-change="onEmailUpdate()" required>
+                        <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.email.$error.required">Email is required</span>
+                        <span class="error-msg" ng-show="talentSignUp.email.$error.email">Invalid email address</span>
+                    </div>
+                </div>
+                <!-- Pass -->
+                <div class="form-group">
+                    <label for="applicantPass" class="col-sm-4 control-label required-before">Password</label>
+                    <div class="col-sm-8">
+                        <input type="password" name="pass1" ng-model="vm.newTalentRegister.pass1" class="form-control" placeholder="" required>
+                        <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.pass1.$error.required">Password is required</span>
+                    </div>
+                </div>
+                <!-- Pass Confirm -->
+                <div class="form-group">
+                    <label for="applicantPassConf" class="col-sm-4 control-label required-before">Confirm Password</label>
+                    <div class="col-sm-8">
+                        <input type="password" name="pass2" ng-model="vm.newTalentRegister.pass2" class="form-control" placeholder="" required>
+                        <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.pass1.$error.required">Password is required</span>
+                        <span class="error-msg" ng-show="vm.newTalentRegister.pass1 !== vm.newTalentRegister.pass2">Passwords do not match</span>
+                    </div>
+                </div>
+                <hr>
+                <!-- First Name -->
+                <div class="form-group">
+                    <label for="inputtalentFName" class="col-sm-4 control-label required-before">First Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" ng-model = "vm.newTalentRegister.profile.firstName" name="fName" class="form-control" placeholder="" required>
+                        <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.fName.$error.required">First name is required</span>
+                    </div>
+                </div>
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label for="inputtalentLName" class="col-sm-4 control-label required-before">Last Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" ng-model = "vm.newTalentRegister.profile.lastName" name="lName" class="form-control" placeholder="" required>
+                        <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.lName.$error.required">Last name is required</span>
+                    </div>
+                </div>
+                <!-- Contact Email -->
+                <div class="form-group">
+                    <label for="inputtalentContactEmail" class="col-sm-4 control-label required-before">Contact Email</label>
+                    <div class="col-sm-8">
+                        <input  type="email" ng-model="vm.newTalentRegister.profile.contactEmail" name="contactEmail" class="form-control" placeholder="your@email.addr" required>
+                        <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.contactEmail.$error.required">Contact Email is required</span>
+                        <span class="error-msg" ng-show="talentSignUp.contactEmail.$error.email">Invalid email format.</span>
+                    </div>
+                </div>
+                <!-- Contact Phone -->
+                <div class="form-group">
+                    <label for="inputtalentPhone" class="col-sm-4 control-label">Contact Phone</label>
+                    <div class="col-sm-8">
+                        <!-- <input type="text" pattern='[\+]\d{3}[\(]\d{3}[\)]\d{4}[\-]\d{4}' -->
+                        <input type="text"
+                                ui-mask="(999) 999-9999"
+                                ui-mask-placeholder
+                                ui-mask-placeholder-char="_"
+                                ng-model = "vm.newTalentRegister.profile.phoneNumber"
+                                name = "phoneNumber"
+                                class="form-control"
+                                placeholder="">
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-5">
+          <fieldset form="talentProfile">
+              <div class="form-group">
+                  <div class="col-sm-4"></div>
+                  <h3 class="col-sm-8"><strong>Talent Profile</strong></h3>
+              </div>
+              <!-- Expertize category -->
+              <div class="form-group">
+                  <label for="talentExpertizeCat" class="col-sm-4 control-label">Experize Category</label>
+                  <div class="col-sm-8">
+                      <input type="text" ng-model="vm.newTalentRegister.expertizeCategory" name="expertizeCategory" class="form-control " placeholder="Expertize Category" required>
+                  </div>
+              </div>
+
+              <!-- Expertize Sub category -->
+              <div class="form-group">
+                  <label for="talentExpertizeSubCat" class="col-sm-4 control-label">Experize Sub Category</label>
+                  <div class="col-sm-8">
+                      <input type="text" ng-model="vm.newTalentRegister.expertizeSubCategory" name="expertizeSubCategory" class="form-control " placeholder="Expertize Sub Category" required>
+                  </div>
+              </div>
+
+          </fieldset>
+        </div>
+        <div class="col-md-0-6"></div>
+    </div>
+
+    <div class="sign-up-footer col-md-12">
+        <div>
+            <fieldset form="termsAndCond">
+                <!-- Terms -->
+                <input type="checkbox" ng-model="vm.newTalentRegister.legal" name="legal" required>
+                <label class="checkbox-terms"><a href='#' ng-click = "vm.displayLegal('lg')">I've read and accept the terms and conditions</a></label>
+                <span class="error-msg" ng-show="!vm.newTalentRegister.legal && talentSignUp.$submitted">You must accept the terms and conditions</span>
+            </fieldset>
+        </div>
+        <br>
+
+        <div style="text-align:center" class="col-md-12">
+            <button type="submit" ng-click="vm.register()" class="btn btn-primary">Save & Continue</button>
+        </div>
+    </div>
+
+    <div ng-show="vm.error" class="row" >
+        <p>{{ vm.error }}</p>
+    </div>
+
+</form>
+</div>

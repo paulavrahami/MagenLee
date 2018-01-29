@@ -1,0 +1,27 @@
+        <script src=".API/lib/react/react-15.0.0.js"></script>
+        <script src=".API/lib/react/react-dom-15.0.0.js"></script>
+        <script src=".API/lib/react/browser.min.js"></script>
+
+        <link rel="stylesheet" href="{{auditionItemUrl}}/css/TrueFalse.css">
+        <script type="text/javascript" src="{{auditionItemUrl}}/js/TrueFalseCtrl.js"></script>
+        <script type="text/javascript" src="{{auditionItemUrl}}/jsx/TrueFalse.js"></script>
+
+        <script type="text/javascript">
+            //function auditionApiLoaded(AuditionItemApi) {
+
+
+                let audition = new Meteor.AuditionItemApi();
+                let TrueFalseCtrl = new Meteor.TrueFalseCtrl();
+
+                audition.addEventListener('content', TrueFalseCtrl.onRequestContent);
+                audition.addEventListener('initialize', TrueFalseCtrl.onInit);
+                audition.addEventListener('results', TrueFalseCtrl.onRequestResults);
+                audition.addEventListener('command', TrueFalseCtrl.onRequestCommand);
+
+                audition.declareLoaded();
+            var height ='500px';// document.body.offsetHeight + 'px';
+            //alert(height);
+                //audition.sendToQualiFit('settings', {height:height, width:'100%'});
+            //}
+        </script>
+        <div id="audition">{{auditionItemUrl}}</div>

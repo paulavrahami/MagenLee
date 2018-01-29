@@ -1,0 +1,236 @@
+ <!--campaignApplyInformation.html-->
+
+<div class="apply-home-page">
+    <div class="row application-form">
+        <div class="bg"></div>
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title"><strong>One last step, and you're done!</strong></h3>
+        </div>
+
+        <div class="modal-body" id="modal-body">
+            <div class="row">
+                <div class="col-md-0-6"></div>
+                <div class="col-md-6">
+                    <form>
+                        <div class = "row">
+                            <div class="form-group">
+                                <label for="firstName" class="col-sm-4 control-label required">First Name</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control input-sm"
+                                           type="text"
+                                           id="firstName"
+                                           name="firstName"
+                                           ng-model="vm.application.firstName"
+                                           placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class = "row">
+                            <div class="form-group">
+                                <label for="firstName" class="col-sm-4 control-label required">Last Name</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control input-sm"
+                                           type="text"
+                                           id="lastName"
+                                           name="lastName"
+                                           ng-model="vm.application.lastName"
+                                           placeholder="">
+                               </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class = "row">
+                            <div class="form-group">
+                                <label for="email" class="col-sm-4 control-label required">Email</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control input-sm"
+                                           type="email"
+                                           id="email"
+                                           name="email"
+                                           ng-model="vm.application.email"
+                                           placeholder="Contact Email address">
+                                    <span class="error-msg" ng-show="campaignApplyInformation.email.$error.email">Invalid Email format</span>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class = "row">
+                            <div class="form-group">
+                                <label for="phone" class="col-sm-4 control-label required">Phone</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control input-sm"
+                                           type="text"
+                                           id="phone"
+                                           name="phone"
+                                           ng-model="vm.application.phone"
+                                           ui-mask="(999) 999-9999"
+                                           ui-mask-placeholder
+                                           ui-mask-placeholder-char="_"
+                                           placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class = "row">
+                            <div class="form-group">
+                                <label for="countr" class="col-sm-4 control-label">Country</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control input-sm"
+                                           type="text"
+                                           id="country"
+                                           name="country"
+                                           ng-model="vm.application.country"
+                                           placeholder="Country of residence"
+                                           >
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class = "row">
+                            <div class="form-group">
+                                <label for="countr" class="col-sm-4 control-label">Language</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control input-sm"
+                                           type="text"
+                                           id="language"
+                                           name="language"
+                                           ng-model="vm.application.language"
+                                           placeholder="Languages proficiency"
+                                           >
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class = "row">
+                            <div class="form-group" ng-show = "vm.campaign.linkedInProfileUrl">
+                                <label for="countr" class="col-sm-4 control-label">LinkedIn Profile</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control input-sm"
+                                           type="text"
+                                           id="linkedInUr"
+                                           name="linkedInUrl"
+                                           ng-model="vm.application.linkedInURL"
+                                           placeholder="Your LinkedIn profile URL"
+                                           >
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <!-- ** (zvika) This is temp blocking until the crass resulted from the upload will be solved -->
+                        <!-- <div class = "row">
+                            <div class="form-group" ng-show = "vm.campaign.cv">
+                                <label for="countr" class="col-sm-4 control-label">Upload CV</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control input-sm"
+                                        type="file"
+                                        onchange="angular.element(this).scope().onFileChange(this)">
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- Questionnaire -->
+                        <div ng-show = "(vm.campaign.goNoGo1.text) || (vm.campaign.goNoGo2.text) || (vm.campaign.goNoGo4.place) || (vm.campaign.goNoGo3.enabled)">
+                            <hr class="hr-application">
+                            <!-- Go/NoGo questain-1  -->
+                            <div class = "row" ng-show = "vm.campaign.goNoGo1.text">
+                                <form action="" method="post">
+                                    <div class="form-group">
+                                        <label for="firstName" class="col-sm-9 control-label">{{vm.campaign.goNoGo1.text}}</label>
+                                        <div class="col-sm-3 go-nogo-right">
+                                            <input
+                                                    type="radio"
+                                                    name="goNoGo1"
+                                                    value = "Yes"
+                                                    ng-model="vm.application.goNoGo1.yes"
+                                            >
+                                            Yes
+                                            <input
+                                                    type="radio"
+                                                    name="goNoGo1"
+                                                    value = "No"
+                                                    ng-model="vm.application.goNoGo1.no"
+                                            >
+                                            No
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- Go/NoGo questain-2 -->
+                            <div class = "row" ng-show = "vm.campaign.goNoGo2.text">
+                                <form action="" method="post">
+                                    <div class="form-group">
+                                        <label for="firstName" class="col-sm-9 control-label">{{vm.campaign.goNoGo2.text}}</label>
+                                        <div class="col-sm-3 go-nogo-right">
+                                            <input
+                                                    type="radio"
+                                                    name="goNoGo2"
+                                                    value = "Yes"
+                                                    ng-model="vm.application.goNoGo2.yes"
+                                            >
+                                            Yes
+                                            <input
+                                                    type="radio"
+                                                    name="goNoGo2"
+                                                    value = "No"
+                                                    ng-model="vm.application.goNoGo2.no"
+                                            >
+                                            No
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class = "row" ng-show = "vm.campaign.goNoGo4.place">
+                                <form action="" method="post">
+                                    <div class="form-group">
+                                        <label  class="col-sm-9 control-label">Are you willing to work in {{vm.campaign.goNoGo4.place}}?</label>
+                                        <div class="col-sm-3 go-nogo-right">
+                                            <input
+                                                    type="radio"
+                                                    name="goNoGo4"
+                                                    value = "Yes"
+                                                    ng-model="vm.application.goNoGo4.yes"
+                                            >
+                                            Yes
+                                            <input
+                                                    type="radio"
+                                                    name="goNoGo4"
+                                                    value = "No"
+                                                    ng-model="vm.application.goNoGo4.no"
+                                            >
+                                            No
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- Salary Expecation -->
+                            <div class = "row" ng-show = "vm.campaign.goNoGo3.enabled">
+                                <form action="" method="post">
+                                    <div class="form-group">
+                                        <label for="firstName" class="col-sm-12 control-label">What are your salary expectations?</label>
+                                        <div class="col-sm-12 go-nogo-left" ng-repeat = "expectations in vm.campaign.salaryExpactations">
+                                            <input
+                                                type="radio"
+                                                name="goNoGo3"
+                                                value = "{{expectations.from}} - {{expectations.to}}"
+                                                ng-model="vm.application.goNoGo3">
+                                            {{expectations.from}}-{{expectations.to}} {{vm.campaign.salaryExpCurrency}}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </form>     
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="apply-text-vertical-center">
+                <button class="btn btn-primary" type="button" ng-click="vm.saveApplication()">Submit</button>
+                <h5 class="checkbox-terms"><a href='#' ng-click = "vm.displayLegal('lg')"><i>By clicking submit you agree to qualiFit’s terms and conditions and privacy policy</i></a></h5>
+            </div> 
+        </div>
+    </div>
+</div>

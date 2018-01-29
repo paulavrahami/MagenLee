@@ -1,0 +1,217 @@
+<!-- Modal Header -->
+<div class="modal-header">
+	<h3 class="modal-title" id="modal-title">Invite via Social Networks</h3>
+</div>
+
+<!-- Modal Body -->
+<div class="modal-body" id="modal-body">
+	<!-- Social Networks Header -->
+	<div class="row">
+	    <div class="col-md-0-6"></div>
+	    <div class="col-md-11">
+	        <div class="process">
+	            <div class="process-row nav nav-tabs">
+	                <!-- LinkedIn Tab -->
+	                <div class="process-step">
+	                    <button type="button" class="btn-info btn-circle-tab" data-toggle="tab" href="#menu1"><i class="fa fa-linkedin fa-2x"></i></button>
+	                    <p>LinkedIn</p>
+	                </div>
+	                <!-- Facebook Tab -->
+	                <div class="process-step">
+	                    <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu2"><i class="fa fa-facebook fa-2x"></i></button>
+	                    <p>Facebook</p>
+	                </div>
+	                <!-- Twitter Tab -->
+	                <div class="process-step">
+	                    <button type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu3"><i class="fa fa-twitter fa-2x"></i></button>
+	                    <p>Twitter</p>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="col-md-0-6"></div>
+	</div>
+	<!-- The Social Networks tabs' content -->
+	<div class="row">
+	    <div class="col-md-0-6"></div>
+	    <div class="col-md-11">
+	        <div class="tab-content">
+	            <!-- LinkedIn Tab -->
+	            <div id="menu1" class="tab-pane fade active in">
+	                <div class="row">
+	                    <div class="col-md-12">
+	                        <h4 class="sectionHeader"><strong><span class="fa fa-linkedin-square fa-2x"></span>&nbsp;LinkedIn</strong></h4>
+	                    </div>
+	                </div>
+	          		<!-- LinkedIn - Main Section -->        
+	          		<form class="form" id="linkedInForm" name="linkedInForm">
+	          			<div class="row col-md-12">
+	          				<div class="col-md-6">
+	          					<div class="form-group">
+	          						<label class="required">Header/Comment</label>
+	          						<textarea name="linkedInPostComment" ng-model="vm.linkedInPostComment" class="form-control" placeholder="A comment to associated with the post (700 Characters)" maxlength="700" rows="3" required></textarea>
+	          					</div>
+	          					<div class="form-group">
+	          						<label class="required">Title</label>
+	          						<textarea id="linkedInPostComment" ng-model="vm.linkedInPostTitle" class="form-control" placeholder="The title of the content being shared (200 Characters)" maxlength="200" rows="3" required></textarea>
+	          					</div>
+	          					<div class="form-group">
+	          						<label>Description</label>
+	          						<textarea id="linkedInPostText" ng-model="vm.linkedInPostDescription" class="form-control" placeholder="The description of the content being shared (256 Characters)" maxlength="256" rows="3"></textarea>
+	          					</div>
+	          					<div class="form-group">
+	          						<button class="btn btn-default btn-sm" type="button" ng-click="vm.resetLinkedInPost()">Reset</button>
+	          						<button class="btn btn-default btn-sm" type="button" ng-click="vm.clearLinkedInPost()">Clear</button>
+	          					</div>	
+	          				</div>
+	          				<div class="col-md-0-6"></div>
+	          				<div class="col-md-6">
+	          					<div class="form-group col-md-12">
+	          						<label>Audition URL</label>
+	          						<input type="text" id="linkedInAuditionURL" ng-model="vm.linkedInPostSubmittedUrl" class="form-control">
+	          					</div>
+	          					<div class="form-group col-md-12">
+	          						<label>Image URL</label>
+	          						<input type="text" id="linkedInImageURL" ng-model="vm.linkedInPostSubmittedImageUrl" class="form-control" placeholder="Image/Logo URL (https://example.com/image.png)">
+	          					</div>
+	          					<div class="form-group col-md-11">
+	          						<label class="required">LinkedIn Company ID</label>
+	          						<input type="text" id="linkedInId" ng-model="vm.linkedInId" class="form-control" placeholder="" required>
+	          					</div>
+	          					<div class="form-group col-md-1">
+	          						<br>
+	          						<div id="tooltip">
+	          							<a href="#" data-toggle="tooltip" data-placement="auto" title="Log in to your LinkedIn company account and check the URL. The ID is the number immediately following 'www.linkedin.com/company/'"><span class="glyphicon glyphicon-question-sign"></span></a>
+	          						</div>
+	          					</div>
+	          				</div>
+	          			</div>
+	          			<div class="row col-md-12">
+	          				<br><br>
+	          				<button class="btn btn-primary" type="button" ng-click="vm.linkedInDispatch()">Post</button>
+	          				<button class="btn btn-primary" type="button" ng-click="vm.linkedInActivityLog()">History</button>
+	          			</div>
+	          		</form>
+	          		<!-- LinkedIn - View History (Log) -->
+	          		<form class="form" ng-show="vm.displayLinkedInActivityLog">
+	          			<p><br></p>
+	          			<div class="cust-table col-md-12">
+	          			    <table class="table" cellspacing="0" width="100%">
+	          			        <thead>
+	          			        <tr>
+	          			            <th>Date</th>
+	          			            <th>Activity</th>
+	          			            <th>Description</th>
+	          			        </tr>
+	          			        </thead>
+	          			        <tbody>
+	          			        <tr ng-repeat="log in vm.activityLog | orderBy:'-date'">
+	          	 			        <td>{{log.date | date:'medium'}}</td>
+	          			            <td>{{log.activity}}</td>
+	          			            <td>{{log.text}}</td>
+	          			        </tr>
+	          			        </tbody>
+	          			    </table>
+	          			</div>
+	          			<div class="row col-md-12">
+	          			  	<button class="btn btn-warning btn-sm" type="button" ng-click="vm.closeLinkedInActivityLog()">Close</button>
+	          			</div>
+	          		</form>
+	            </div>
+	            <!-- Facebook tab -->
+	            <div id="menu2" class="tab-pane fade">
+	            	<div class="row">
+	            	    <div class="col-md-12">
+	            	        <h4 class="sectionHeader"><strong><span class="fa fa-facebook-square fa-2x"></span>&nbsp;Facebook</strong></h4>
+	            	    </div>
+	            	</div>
+	            	<!-- Facebook - Main Section -->
+		            <form class="form" id="facebook" name="facebookForm">
+		            	<div class="row col-md-12">
+		            		<p>Comming Soon...</p>
+		            	</div>
+		            </form>
+		            <!-- Facebook - View History (Log) -->
+		           	<form class="form" ng-show="vm.displayLinkedInActivityLog">
+		           		<p><br></p>
+		           		<div class="cust-table col-md-12">
+		           		    <table class="table" cellspacing="0" width="100%">
+		           		        <thead>
+		           		        <tr>
+		           		            <th>Date</th>
+		           		            <th>Activity</th>
+		           		            <th>Description</th>
+		           		        </tr>
+		           		        </thead>
+		           		        <tbody>
+		           		        <tr ng-repeat="log in vm.activityLog | orderBy:'-date'">
+		             			    <td>{{log.date | date:'medium'}}</td>
+		            		        <td>{{log.activity}}</td>
+		            		        <td>{{log.text}}</td>
+		            	        </tr>
+		            	        </tbody>
+		            		    </table>
+		            	</div>
+		            	<div class="row col-md-12">
+		            	  	<button class="btn btn-warning btn-sm" type="button" ng-click="vm.closeLinkedInActivityLog()">Close</button>
+		           		</div>
+		           	</form>
+		        </div>
+		        <!-- Twitter tab -->
+		        <div id="menu3" class="tab-pane fade">
+		          	<div class="row">
+		           	    <div class="col-md-12">
+		           	        <h4 class="sectionHeader"><strong><span class="fa fa-twitter-square fa-2x"></span>&nbsp;Twitter</strong></h4>
+	            	    </div>
+	            	</div>
+	     		   	<!-- Twitter - Main Section -->
+			      	<form class="form" id="twitter" name="twitterForm">
+			           	<div class="row col-md-12">
+			           		<p>Comming Soon...</p>
+			           	</div>
+			        </form>
+	          		<!-- Twitter - View History (Log) -->
+			        <form class="form" ng-show="vm.displayLinkedInActivityLog">
+			         	<p><br></p>
+			           	<div class="cust-table col-md-12">
+			           		<table class="table" cellspacing="0" width="100%">
+			           		    <thead>
+			           		    <tr>
+			           		        <th>Date</th>
+			                       	<th>Activity</th>
+			       		            <th>Description</th>
+			           		    </tr>
+			           		    </thead>
+			           	        <tbody>
+			           	        <tr ng-repeat="log in vm.activityLog | orderBy:'-date'">
+			            			<td>{{log.date | date:'medium'}}</td>
+			            		    <td>{{log.activity}}</td>
+			            	        <td>{{log.text}}</td>
+			                    </tr>
+			           	        </tbody>
+			           		    </table>
+			           	</div>
+			            <div class="row col-md-12">
+			           	  	<button class="btn btn-warning btn-sm" type="button" ng-click="vm.closeLinkedInActivityLog()">Close</button>
+			        	</div>
+			        </form>
+			    </div>
+	        </div>
+	    </div>
+	    <div class="col-md-0-6"></div>
+	</div>
+	<div ng-show="vm.error" class="row" >
+	    <p>{{ vm.error }}</p>
+	</div>
+</div>
+
+<!-- Modal Footer -->
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Close</button>
+</div>
+
+<script>
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip();   
+	});
+</script>

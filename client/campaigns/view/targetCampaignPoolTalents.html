@@ -1,0 +1,112 @@
+
+<div class="modal-header">
+	<h3 class="modal-title" id="modal-title">Invite qualiFit Talents</h3>
+</div>
+
+<div class="modal-body" id="modal-body">
+	<form class="form">
+		<div class="row col-md-12">
+			<div class="form-group col-md-3">
+				<label>Profession</label>
+				<input class="form-control" type="text" ng-model="vm.selectProfession">			
+			</div>
+			<div class="form-group col-md-3">
+				<label>Skill</label>
+				<input class="form-control" type="text" ng-model="vm.selectSkill1">
+			</div>
+			<div class="form-group col-md-3">
+				<label>Skill</label>
+				<input class="form-control" type="text" ng-model="vm.selectSkill2">
+			</div>
+			<div class="form-group col-md-3">
+				<label>Skill</label>
+				<input class="form-control" type="text" ng-model="vm.selectSkill3">
+			</div>
+		</div>
+		<div class="row col-md-12">
+			<div class="form-group col-md-3">
+				<label>Country</label>
+				<input class="form-control" type="text" ng-model="vm.selectCountry">
+			</div>
+			<div class="form-group col-md-3">
+				<label>City</label>
+				<input class="form-control" type="text" ng-model="vm.selectCity">
+			</div>
+			<div class="col-md-6"></div>
+		</div>
+	</form>
+	<form class="form">
+		<div class="row col-md-12">
+			<div class="col-md-3">
+				<button class="btn btn-info btn-sm" type="button" ng-click="vm.qualifitTalentsSelect()">Select</button>
+				<button class="btn btn-default btn-sm" type="button" ng-click="vm.qualifitTalentsReset()">Reset</button>
+				<button class="btn btn-default btn-sm" type="button" ng-click="vm.qualifitTalentsClear()">Clear</button>	
+			</div>
+			<div class="panel panel-info col-md-9" ng-if="vm.displaySelectionMsg">
+				<div class="panel-heading">{{vm.numberOfTalents}} Talents have been selected<span class ng-show=vm.campaign.published>. Please select the Dispatch button to send invitations</span></div>
+			</div>
+		</div>
+	</form>
+	<p><br></p>
+	<form class="form">
+	    <div class="col-md-12">
+	    	<div class="col-md-3">
+	    		<label class="required">Dispatch Channels</label>
+	    	</div>
+	    	<div class="col-md-9"></div>
+	    </div>
+	    <div class="col-md-12">
+	        <div class="col-md-2">
+	        	<input class="form-control" type="checkbox" ng-model="vm.dispatchEmail" checked="checked">
+	            <label class="checkbox-inline"><strong>Email</strong></label>
+	        </div>
+	        <div class="col-md-2">
+	            <input class="form-control" type="checkbox" ng-model="vm.dispatchSMS" disabled>
+	            <label class="checkbox-inline"><strong>SMS</strong></label>
+	        </div>
+	        <div class="col-md-2">
+	            <input class="form-control" type="checkbox" ng-model="vm.dispatchWhatsApp" disabled>
+	            <label class="checkbox-inline"><strong>WhatsApp</strong></label>
+	        </div>
+	        <div class="col-md-2">
+	            <input class="form-control" type="checkbox" ng-model="vm.dispatchLinkedIn" disabled>
+	            <label class="checkbox-inline"><strong>LinkedIn</strong></label>
+	        </div>
+	        <div class="col-md-2">
+	            <input class="form-control" type="checkbox" ng-model="vm.dispatchFacebook" disabled>
+	            <label class="checkbox-inline"><strong>Facebook</strong></label>
+	        </div>
+	    </div>
+	</form>
+
+	<form class="form" ng-show="vm.displayActivityLog">
+			<p><br></p>
+		    <div class="cust-table col-md-12">
+		        <table class="table" cellspacing="0" width="100%">
+		            <thead>
+		            <tr>
+		                <th>Date</th>
+		                <th>Activity</th>
+		                <th>Description</th>
+		            </tr>
+		            </thead>
+		            <tbody >
+		            <tr ng-repeat="log in vm.activityLog | orderBy:'-date'">
+ 			            <td>{{log.date | date:'medium'}}</td>
+		                <td>{{log.activity}}</td>
+		                <td>{{log.text}}</td>
+		            </tr>
+		            </tbody>
+		        </table>
+		    </div>
+		    <div class="row col-md-12">
+		    	<button class="btn btn-warning btn-sm" type="button" ng-click="vm.closeActivityLog()">Close</button>
+		    </div>
+	</form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="vm.dispatch()">Dispatch </button>
+    <button class="btn btn-primary" type="button" ng-click="vm.activityLogSummary()">History</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Close</button>
+</div>

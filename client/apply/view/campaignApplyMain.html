@@ -1,0 +1,167 @@
+<!--campaignApplyMain.html-->
+
+<div class="apply-home-page">
+    <!-- Side Bar -->
+    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li class="sidebar-brand">
+                <a href="#top" onclick="$('#menu-close').click();">qualiFit</a>
+            </li>
+            <li>
+                <a href="#top" onclick="$('#menu-close').click();">Home</a>
+            </li>
+            <li>
+                <a href="#howItWorks" onclick="$('#menu-close').click();">How it Works</a>
+            </li>
+            <li>
+                <a href="#about" onclick="$('#menu-close').click();">About</a>
+            </li>
+            <li>
+                <a href="#contact" onclick="$('#menu-close').click();">Contact</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header id="top" class="header">
+        <div class="bg"></div>
+        <div class="container text-vertical-center">
+            <div class="container">
+                <h1> Welcome to {{vm.campaign.control.companyOwner}} Audition Center</h1>
+            </div>
+            <br><br>
+            <div class="container">
+                <h3>No CV hassle, No subjective screening</h3>
+                <h3>Recieve equal opertunity in getting your next dream job</h3>
+                <br>
+                <h3><strong>Simply get on stage, where your skills count!</strong></h3>
+            </div>
+            <br>
+            <button id="button-center" type="button" ng-click="vm.auditionExecute()" class="btn btn-primary btn-lg">Get on Stage</button>
+            <h5><i>The use of your content will not infringe any right of confidence, right of privacy, or right under data protection legislation</i></h5>
+        </div>
+    </header>
+
+    <!-- How it Works -->
+    <section id="howItWorks" class="about">
+        <div class="container text-vertical-center">
+            <div class="col-md-2"></div>
+            <div class="col-md-3 service-item">
+                <span class="fa-stack fa-4x">
+                   <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-video-camera fa-stack-1x text-primary"></i>
+                </span>
+                <h3>
+                    <strong>Get on Stage</strong>
+                </h3>
+                <p>Get on stage to execute an audition in a form of questions and challenges in a friendly and self-explanatory environment. The audition will evaluate your skills for the key position's requirements and provide you with a chance to receive higher priority in the screening process</p>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-3 service-item">
+                <span class="fa-stack fa-4x">
+                   <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-file-text-o fa-stack-1x text-primary"></i>
+                </span>
+                <h3>
+                    <strong>Submit Application</strong>
+                </h3>
+                <p>Complete the application with your contact details and additional information which may be required to validate that you comply with the position's operations and logistics requirements. After submitting the application, it will be evaluated and you will be contacted accordingly</p>
+            </div>
+            <div class="col-md-2"></div>             
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about">
+        <div class="row text-vertical-center">
+            <div class="col-md-0-6"></div>
+            <div class="col-md-11">
+                <h3>The audition center is powered by qualifit, a social recruitment platform where recruiters, talents and domain Experts collaborate to enable truly objective skills evaluation as part of the initial screening, and not relying on a resume as a major factor in the process</h3>
+            </div>
+            <div class="col-md-0-6"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <br>
+                    <ul class="list-inline">
+                        <li>
+                            <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-linkedin fa-fw fa-3x"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-instagram fa-fw fa-3x"></i></a>
+                        </li>
+                    </ul>
+                    <hr class="small">
+                    <p class="text-muted">Copyright &copy; qualifit 2018</p>
+                </div>
+            </div>
+        </div>
+        <a id="to-top" href="#top" class="btn btn-dark btn-lg"><i class="fa fa-chevron-up fa-fw fa-1x"></i></a>
+    </footer>
+
+    <script>
+        // Closes the sidebar menu
+        $("#menu-close").click(function(e) {
+            e.preventDefault();
+            $("#sidebar-wrapper").toggleClass("active");
+        });
+        // Opens the sidebar menu
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#sidebar-wrapper").toggleClass("active");
+        });
+        // Scrolls to the selected menu item on the page
+        $(function() {
+            $('a[href*=#]:not([href=#],[data-toggle],[data-target],[data-slide])').click(function() {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                        $('html,body').animate({
+                            scrollTop: target.offset().top
+                        }, 100);
+                        return false;
+                    }
+                }
+            });
+        });
+        //#to-top button appears after scrolling
+        var fixed = false;
+        $(document).scroll(function() {
+            if ($(this).scrollTop() > 250) {
+                if (!fixed) {
+                    fixed = true;
+                    // $('#to-top').css({position:'fixed', display:'block'});
+                    $('#to-top').show("fast", function() {
+                        $('#to-top').css({
+                            position: 'fixed',
+                            display: 'block'
+                        });
+                    });
+                }
+            } else {
+                if (fixed) {
+                    fixed = false;
+                    $('#to-top').hide("fast", function() {
+                        $('#to-top').css({
+                            display: 'none'
+                        });
+                    });
+                }
+            }
+        });
+    </script>
+</div>

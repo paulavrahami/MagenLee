@@ -1,0 +1,12 @@
+<div class="progress"
+    ng-class="statusBar.isRunning ? 'progress-striped progress-dark':''">
+    <div
+            class="progress-bar"
+            role="progressbar"
+            aria-valuenow={{statusBar.getProgress()}}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            ng-style="{'width':statusBar.getProgress() + '%'}"
+            ng-class="statusBar.getClass">{{statusBar.getText}}
+    </div>
+</div>
