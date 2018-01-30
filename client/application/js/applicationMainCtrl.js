@@ -92,15 +92,12 @@ angular
             vm.applicantPassMinScore = 0;
 
             if (vm.campaign.applications.length) {
-                for  (let z = 0 ; z < vm.campaign.applications.length;z++) {
+                for  (z = 0 ; z < vm.campaign.applications.length ; z++) {
                     if (vm.applications[z].grade >= vm.campaign.minScore){
                         vm.applicantPassMinScore ++;
                     }
                 }
             }
-
-            console.log(vm.applicantPassMinScore);
-
 
             if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type === 'Recruiter') {
                 vm.subscribe('campaignsRecruiter',() => [Meteor.user().profile.companyName]);
