@@ -87,7 +87,7 @@ Meteor.MultipleChoiceSimple = React.createClass({
                 this.currentAnswer = this.state.state.answer;
             }
         }
-
+console.log("float right? " + _this.state['floatRight']);
         return React.createElement(
             'div',
             { className: 'container-fluid' },
@@ -122,7 +122,7 @@ Meteor.MultipleChoiceSimple = React.createClass({
                             if (_this4.state['statement'] && _this4.state['statement'] !== "") {
                                 return React.createElement(
                                     'div',
-                                    { className: 'md-col-12' },
+                                    { className: 'md-col-12' + (_this4.state['float Right'] ? ' float-right': '') },
                                     React.createElement(
                                         'pre',
                                         null,
@@ -140,7 +140,7 @@ Meteor.MultipleChoiceSimple = React.createClass({
                         ),
                         React.createElement(
                             'div',
-                            { className: 'radio' },
+                            { className: 'radio' + (_this4.state['float Right'] ? ' float-left': '') },
                             React.createElement('input', {
                                 id: 'radio_1',
                                 name: 'multipleChoiceAnswer',
@@ -156,7 +156,7 @@ Meteor.MultipleChoiceSimple = React.createClass({
                         ),
                         React.createElement(
                             'div',
-                            { className: 'radio' },
+                            { className: 'radio' + (_this4.state['floatRight'] ? ' float-left': '') },
                             React.createElement('input', {
                                 id: 'radio_2',
                                 name: 'multipleChoiceAnswer',
@@ -172,7 +172,7 @@ Meteor.MultipleChoiceSimple = React.createClass({
                         ),
                         React.createElement(
                             'div',
-                            { className: 'radio' },
+                            { className: 'radio' + (_this4.state['floatRight'] ? ' float-left': '') },
                             React.createElement('input', {
                                 id: 'radio_3',
                                 name: 'multipleChoiceAnswer',
@@ -188,7 +188,7 @@ Meteor.MultipleChoiceSimple = React.createClass({
                         ),
                         React.createElement(
                             'div',
-                            { className: 'radio' },
+                            { className: 'radio' + (_this4.state['floatRight'] ? ' float-left': '') },
                             React.createElement('input', {
                                 id: 'radio_4',
                                 name: 'multipleChoiceAnswer',

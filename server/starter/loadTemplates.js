@@ -12,6 +12,7 @@ if (Meteor.isServer) {
                     "interfaces" : {},
                     "structure" : {
                         "statement" : "string",
+                        "float Right" : "boolean",
                         "question" : "string",
                         "hint" : "string",
                         // "hintTime" : "number",
@@ -47,6 +48,7 @@ if (Meteor.isServer) {
                     "interfaces" : {},
                     "structure" : {
                         "statement" : "string",
+                        "float Right" : "boolean",
                         "question" : "string",
                         "hint" : "string",
                         // "hintTime" : "number",

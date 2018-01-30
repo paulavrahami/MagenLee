@@ -27,7 +27,8 @@ let SendEmailAPI = {
             template    += `<div>&nbsp;</div>`;
             template    += `<div>(Your qualiFit reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
             template    += `<div><hr></div>`;
-            template    += `<div><strong>Powered by <a href="https://qualifit.herokuapp.com/" target="_blank">qualiFit</a></strong> </div>`;
+            template    += `<div><strong>Powered by qualiFit</strong></div>`;
+            // template    += `<div><strong>Powered by <a href="https://qualifit.herokuapp.com/" target="_blank">qualiFit</a></strong> </div>`;
 
             transporter.sendMail({
                 from: 'qualifitsocial@gmail.com',
@@ -62,7 +63,8 @@ let SendEmailAPI = {
             template    += `<div><strong>Please click to proceed: <a href="${emailArguments.applicationURL}" target="_blank">${emailArguments.position}</a></strong></div>`;
             template    += `<div>&nbsp;</div>`;
             template    += `<div><hr></div>`;
-            template    += `<div><strong>Powered by <a href="https://qualifit.herokuapp.com/" target="_blank">qualiFit</a></strong></div>`;
+            template    += `<div><strong>Powered by qualiFit</strong></div>`;
+            // template    += `<div><strong>Powered by <a href="https://qualifit.herokuapp.com/" target="_blank">qualiFit</a></strong></div>`;
 
             transporter.sendMail({
                 from: 'qualifitsocial@gmail.com',
