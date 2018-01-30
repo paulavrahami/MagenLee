@@ -594,7 +594,7 @@ angular
 
                 auditionEdit.modalInstance = $uibModal.open({
                     animation: true,
-                    templateUrl: 'client/newAuditions/auditionEditItem.html',
+                    templateUrl: 'client/newAuditions/view/auditionEditItem.html',
                     controller: 'AuditionEditItemCtrl',
                     controllerAs: 'auditionEditItem',
                     keyboard: false,
@@ -1363,7 +1363,7 @@ angular
             };
             vm.modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'client/newAuditions/auditionsExecute.html',
+                templateUrl: 'client/newAuditions/view/auditionsExecute.html',
                 controller: 'AuditionsExecuteCtrl',
                 controllerAs: 'vm',
                 keyboard: false,

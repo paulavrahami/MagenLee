@@ -8,7 +8,7 @@ function routerConfig($stateProvider) {
   $stateProvider
     .state('campaignApply', {
       url:'/campaignApply/:id',
-      templateUrl: 'client/apply/campaignApplyMain.html',
+      templateUrl: 'client/apply/view/campaignApplyMain.html',
       resolve:{
         campaignrecord: function ($promiser) {
                       "use strict";

@@ -130,7 +130,7 @@ angular
 
             $uibModal.open({
                 animation: vm.animationsEnabled,
-                templateUrl: 'client/registration/TCModal.html',
+                templateUrl: 'client/registration/view/TCModal.html',
                 controller: 'ModalTcoCtrl',
                 size: sizeArg
             });
