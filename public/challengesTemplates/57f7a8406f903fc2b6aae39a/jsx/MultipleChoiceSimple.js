@@ -156,7 +156,7 @@ console.log("float right? " + _this.state['floatRight']);
                         ),
                         React.createElement(
                             'div',
-                            { className: 'radio' + (_this4.state['floatRight'] ? ' float-left': '') },
+                            { className: 'radio' + (_this4.state['float Right'] ? ' float-left': '') },
                             React.createElement('input', {
                                 id: 'radio_2',
                                 name: 'multipleChoiceAnswer',
@@ -172,7 +172,7 @@ console.log("float right? " + _this.state['floatRight']);
                         ),
                         React.createElement(
                             'div',
-                            { className: 'radio' + (_this4.state['floatRight'] ? ' float-left': '') },
+                            { className: 'radio' + (_this4.state['float Right'] ? ' float-left': '') },
                             React.createElement('input', {
                                 id: 'radio_3',
                                 name: 'multipleChoiceAnswer',
@@ -188,7 +188,7 @@ console.log("float right? " + _this.state['floatRight']);
                         ),
                         React.createElement(
                             'div',
-                            { className: 'radio' + (_this4.state['floatRight'] ? ' float-left': '') },
+                            { className: 'radio' + (_this4.state['float Right'] ? ' float-left': '') },
                             React.createElement('input', {
                                 id: 'radio_4',
                                 name: 'multipleChoiceAnswer',
