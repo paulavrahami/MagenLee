@@ -14,6 +14,7 @@ var MultipleChoiceSimpleCtrl = function (auditionIdArg) {
         title: 'Multiple Choice (Basic)',
         description: 'This is a Multiple Choice question with 4 fixed answers',
         "free text" : "Free Text (Optional)",
+        "Float Right" : false,
         question: 'Which of these are the primary colors?',
         hint: 'Hint text',
         hintTime: 10,
