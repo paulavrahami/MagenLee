@@ -60,9 +60,8 @@
 #multipleChoiceSimple .float-right {
     float: right;
     position: relative;
-    min-width: 390px;
-    max-width: 390px;
-    margin: 7px 7px 20px 20px;
+    width: 420px;
+    margin: 0px 0px 0px 15px;
 }
 
 #multipleChoiceSimple .float-right pre {
@@ -70,7 +69,6 @@
 }
 
 #multipleChoiceSimple .float-left {
-    float: left;
-    min-width: 410px;
-    max-width: 410px;
+    position: relative;
+    width: 380px;
 }
