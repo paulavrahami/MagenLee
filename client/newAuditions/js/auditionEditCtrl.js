@@ -913,9 +913,10 @@ angular
                 let itemsPerSkill = [];
                 let conditions = {};
                 // Get all items for the current skill, with status = assigned OR available, AND allowed to be shared
-                conditions = {$and:[{skill: skill},
+                conditions = {$and:[{"$text": {"$search": skill.type}},
                                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                     {shareInd: true}]};
+
                 (new Promise((resolve, reject) => {
                     Meteor.call('items.getItemsSummary', conditions, (err, res) => {
                         if (err) {
@@ -1118,9 +1119,10 @@ angular
 
             conditions = {$and:[{$or:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
                                 {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
-                                {skill: auditionEdit.addChallengeSkills},
+                                {"$text": {"$search": auditionEdit.addChallengeSkills.type}},
                                 {complexity: complexityParam},
                                 {shareInd: true}]};
+
             itemsPerAddChallenges = [];
             auditionEdit.searchItems = [];
             (new Promise((resolve, reject) => {

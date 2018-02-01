@@ -87,7 +87,6 @@ Meteor.MultipleChoiceSimple = React.createClass({
                 this.currentAnswer = this.state.state.answer;
             }
         }
-console.log("float right? " + _this.state['floatRight']);
         return React.createElement(
             'div',
             { className: 'container-fluid' },
