@@ -682,8 +682,10 @@ angular
                     };
                     if ((!auditionEdit.editItem.content['1st Button Text']) ||
                         (!auditionEdit.editItem.content['2nd Button Text']) ||
-                        (!auditionEdit.editItem.content['1st Button Score']) ||
-                        (!auditionEdit.editItem.content['2nd Button Score'])) {
+                        (auditionEdit.editItem.content['1st Button Score'] === null) ||
+                        (auditionEdit.editItem.content['1st Button Score'] === undefined) ||
+                        (auditionEdit.editItem.content['2nd Button Score'] === null) ||
+                        (auditionEdit.editItem.content['2nd Button Score'] === undefined)) {
                         showErrorMessage("All challenge's buttons should be defined");
                         return;
                     };
@@ -692,7 +694,11 @@ angular
                         showErrorMessage("Button's score can not be greater than 100");
                         return;
                     };
-
+                    if ((auditionEdit.editItem.content['1st Button Score'] !== 100) &&
+                        (auditionEdit.editItem.content['2nd Button Score'] !== 100)) {
+                        showErrorMessage("At leaset one button's score should be equal to 100");
+                        return;
+                    };
                     break;
             };
 
