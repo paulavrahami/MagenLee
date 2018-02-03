@@ -611,26 +611,97 @@ angular
             loadModal();
             auditionEdit.dependency.changed();
         };
-        /**
-         * @desc edit an item of the audition;
-         */
-        auditionEdit.closeEditItem = function () {
+
+        
+        auditionEdit.registerEditItem = function () {
+
+            if  (!auditionEdit.editItem.skill.type) {
+                showErrorMessage("The challenge's skill should be defined");
+                return
+            };
+            if  (!auditionEdit.editItem.complexity) {
+                showErrorMessage("The challenge's complexity should be defined");
+                return
+            };
+            
+            // Challenge content's checks according to the different templates
+            switch (auditionEdit.editTemplate._id) {
+                case "57f7a8406f903fc2b6aae39a" :
+                    if (!auditionEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if ((!auditionEdit.editItem.content["1st Answer"] || auditionEdit.editItem.content["1st Answer"] && !auditionEdit.editItem.content["1st Answer"].answer) ||
+                        (!auditionEdit.editItem.content["2nd Answer"] || auditionEdit.editItem.content["2nd Answer"] && !auditionEdit.editItem.content["2nd Answer"].answer) ||
+                        (!auditionEdit.editItem.content["3rd Answer"] || auditionEdit.editItem.content["3rd Answer"] && !auditionEdit.editItem.content["3rd Answer"].answer) ||
+                        (!auditionEdit.editItem.content["4th Answer"] || auditionEdit.editItem.content["4th Answer"] && !auditionEdit.editItem.content["4th Answer"].answer)) {
+                        showErrorMessage("All answers should be defined");
+                        return
+                    };
+                    let i=0;
+                    auditionEdit.editItem.content["1st Answer"].correct ? i++ : i=i;
+                    auditionEdit.editItem.content["2nd Answer"].correct ? i++ : i=i;
+                    auditionEdit.editItem.content["3rd Answer"].correct ? i++ : i=i;
+                    auditionEdit.editItem.content["4th Answer"].correct ? i++ : i=i;
+                    if (i===0) {
+                        showErrorMessage("The Challenge's correct answer should be defined");
+                        return;
+                    };
+                    if (i>1) {
+                        showErrorMessage("Only one correct answer can be defined for the challenge");
+                        return;  
+                    };
+                    break;
+
+                case "57f7a8406f903fc2b6aae49a" :
+                    if (!auditionEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if (!auditionEdit.editItem.content.answers || !auditionEdit.editItem.content.results) {
+                        showErrorMessage("The challenge's answers and results should be defined");
+                        return;
+                    };
+                    if (
+                        auditionEdit.editItem.content.answers.length !== auditionEdit.editItem.content.results.length) {
+                        showErrorMessage("The challenge's number of answers and results should match");
+                        return;
+                    };
+                    break;
+
+                case "5814b536e288e1a685c7a451" :
+                    if (!auditionEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if ((!auditionEdit.editItem.content['1st Button Text']) ||
+                        (!auditionEdit.editItem.content['2nd Button Text']) ||
+                        (!auditionEdit.editItem.content['1st Button Score']) ||
+                        (!auditionEdit.editItem.content['2nd Button Score'])) {
+                        showErrorMessage("All challenge's buttons should be defined");
+                        return;
+                    };
+                    if (((auditionEdit.editItem.content['1st Button Score']) && (auditionEdit.editItem.content['1st Button Score'] > 100)) ||
+                        ((auditionEdit.editItem.content['2nd Button Score']) && (auditionEdit.editItem.content['2nd Button Score'] > 100))) {
+                        showErrorMessage("Button's score should not be greater than zero");
+                        return;
+                    };
+
+                    break;
+            };
 
             if (auditionEdit.editItem.status == ENUM.ITEM_STATUS.NEW) {
                 auditionEdit.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
                 auditionEdit.saveEditItem();
             }
             auditionEdit.editItem = null;
-
             if (auditionEdit.modalInstance) {
                 auditionEdit.modalInstance.close();
-            }
+            };
         };
-        /**
-         * @desc edit an item of the audition;
-         */
-        auditionEdit.cancelEditItem = function () {
 
+
+        auditionEdit.cancelEditItem = function () {
             if (auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) {
                 if (auditionEdit.editItem.status == ENUM.ITEM_STATUS.NEW) {
                     auditionEdit.removeItem(auditionEdit.editItem._id);
@@ -638,10 +709,22 @@ angular
                 else {
                     auditionEdit.editItem = auditionEdit.editItemForCancel;
                     auditionEdit.saveEditItem();
-                }
-            }
-            auditionEdit.closeEditItem();
+                };
+            };
+            auditionEdit.editItem = null;
+            if (auditionEdit.modalInstance) {
+                auditionEdit.modalInstance.close();
+            };
         };
+
+
+        auditionEdit.closeEditItem = function () {
+            if (auditionEdit.modalInstance) {
+                auditionEdit.modalInstance.close();
+            };
+        };
+
+
         /**
          * @desc Add a new item to the audition;
          * @param templateIdArg 
@@ -653,7 +736,7 @@ angular
                 "status" : ENUM.ITEM_STATUS.NEW,
                 "statusDate" : new Date(),
                 "skill" : auditionEdit.emptySkill,
-                "complexity" : ENUM.AUDITION_COMPLEXITY.BEGINNER,
+                "complexity" : "",
                 "itemDuration" : 30000,
                 "title": "",
                 "description": "",
