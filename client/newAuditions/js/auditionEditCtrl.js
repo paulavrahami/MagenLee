@@ -667,6 +667,12 @@ angular
                         showErrorMessage("The challenge's number of answers and results should match");
                         return;
                     };
+                    for (i=0; i < auditionEdit.editItem.content.results.length; i++) {
+                        if (auditionEdit.editItem.content.results[i] > 100) {
+                            showErrorMessage("Answer's result can not be greater than 100");
+                            return;
+                        };
+                    };
                     break;
 
                 case "5814b536e288e1a685c7a451" :
@@ -683,7 +689,7 @@ angular
                     };
                     if (((auditionEdit.editItem.content['1st Button Score']) && (auditionEdit.editItem.content['1st Button Score'] > 100)) ||
                         ((auditionEdit.editItem.content['2nd Button Score']) && (auditionEdit.editItem.content['2nd Button Score'] > 100))) {
-                        showErrorMessage("Button's score should not be greater than zero");
+                        showErrorMessage("Button's score can not be greater than 100");
                         return;
                     };
 
