@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('timeSelect', function($state, $scope, $reactive) {
 
         let timeSelect = this;

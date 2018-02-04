@@ -1,6 +1,6 @@
 
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('AuditionsExecuteCtrl', function($state,$stateParams,$window, moment, $scope,$reactive,$UserAlerts,ENUM, $promiser, $http,$sce,$uibModal,$uibModalInstance) {
         $scope.trust = $sce.trustAsHtml;
         let vm = this;
@@ -77,7 +77,7 @@ angular
                 vm.states.startTime = currentTime;
 
                 if (vm.onContent === vm.pseudoFunction) {
-                    Meteor.qualiFit.requestContent(vm.executeItem);
+                    Meteor.skillera.requestContent(vm.executeItem);
                 }
 
                 if (vm.states.timeLeft <= vm.states.timeTarget) {
@@ -94,7 +94,7 @@ angular
 
             if (vm.previewMode) {
                 if (vm.onContent === vm.pseudoFunction) {
-                    Meteor.qualiFit.requestContent(vm.executeItem);
+                    Meteor.skillera.requestContent(vm.executeItem);
                 };
                 vm.dependency.changed();
             }
@@ -202,7 +202,7 @@ angular
                 vm.states.timerIsOn = false;
 
                 vm.onContent = function () {
-                    Meteor.qualiFit.requestTerminate(vm.executeItem);
+                    Meteor.skillera.requestTerminate(vm.executeItem);
                     vm.states.currentItem = parseInt(itemIndexArg);
                     vm.states.currentItem = Math.min(vm.states.currentItem, $window._audition.items.length - 1);
                     vm.executeItem = $window._audition.items[vm.states.currentItem].itemId;
@@ -214,7 +214,7 @@ angular
                     vm.states.isShowControls = false;
                     vm.dependency.changed();
                 };
-                Meteor.qualiFit.requestContent(vm.executeItem);
+                Meteor.skillera.requestContent(vm.executeItem);
             }
         };
         /**
@@ -226,7 +226,7 @@ angular
                 vm.states.timerIsOn = false;
 
                 vm.onContent = function () {
-                    Meteor.qualiFit.requestTerminate(vm.executeItem);
+                    Meteor.skillera.requestTerminate(vm.executeItem);
                     vm.states.currentItem++;
                     vm.states.currentItem = Math.min(vm.states.currentItem, $window._audition.items.length - 1);
                     vm.executeItem = $window._audition.items[vm.states.currentItem].itemId;
@@ -238,7 +238,7 @@ angular
                     vm.states.isShowControls = false;
                     vm.dependency.changed();
                 };
-                Meteor.qualiFit.requestContent(vm.executeItem);
+                Meteor.skillera.requestContent(vm.executeItem);
             }
         };
 
@@ -251,7 +251,7 @@ angular
                 vm.states.timerIsOn = false;
 
                 vm.onContent = function () {
-                    Meteor.qualiFit.requestTerminate(vm.executeItem);
+                    Meteor.skillera.requestTerminate(vm.executeItem);
                     vm.states.currentItem--;
                     vm.states.currentItem = Math.max(vm.states.currentItem, 0);
                     vm.executeItem = $window._audition.items[vm.states.currentItem].itemId;
@@ -264,7 +264,7 @@ angular
                     vm.dependency.changed();
                 }
             }
-            Meteor.qualiFit.requestContent(vm.executeItem);
+            Meteor.skillera.requestContent(vm.executeItem);
         };
 
         /**
@@ -275,7 +275,7 @@ angular
             vm.onContent = function () {
                 if (vm.states.hintCount > 0 && !vm.states.itemsContent[vm.executeItem].hintCount) {
                     vm.states.hintCount--;
-                    Meteor.qualiFit.requestCommand('hint', vm.executeItem);
+                    Meteor.skillera.requestCommand('hint', vm.executeItem);
 
                     vm.states.itemsContent[vm.executeItem].hintCount =
                         vm.states.itemsContent[vm.executeItem].hintCount === undefined ? 1 :
@@ -285,7 +285,7 @@ angular
                 }
             };
             if (vm.states.hintCount > 0 && vm.executeItemConfig.enabled.hint) {
-                Meteor.qualiFit.requestContent(vm.executeItem);
+                Meteor.skillera.requestContent(vm.executeItem);
             }
         };
 
@@ -335,7 +335,7 @@ angular
             vm.breakStartTime = (new Date()).valueOf();
             vm.breakTimeLeft  = 300000;
 
-            Meteor.qualiFit.requestCommand('pause', vm.executeItem);
+            Meteor.skillera.requestCommand('pause', vm.executeItem);
 
             /**
              * Count down the break time and end the break in timeout;
@@ -354,7 +354,7 @@ angular
 
                     vm.states.startTime = (new Date()).valueOf();
 
-                    Meteor.qualiFit.requestCommand('resume', vm.executeItem);
+                    Meteor.skillera.requestCommand('resume', vm.executeItem);
                 }
                 vm.dependency.changed();
             }, 1000)
@@ -394,7 +394,7 @@ angular
                 };
             };
             vm.onContentTimer = setTimeout(vm.onContent, 3000);
-            Meteor.qualiFit.requestContent(vm.executeItem);
+            Meteor.skillera.requestContent(vm.executeItem);
 
             $uibModalInstance.close();
         };

@@ -1,7 +1,7 @@
 // Controler for external execution of an campaign apply main
 
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('CampaignApplyMainCtrl', function($state,$stateParams,$scope,$filter,$window,$reactive,dbhService,$promiser,$uibModal,campaignrecord,moment,utilsService,$UserAlerts,ENUM) {
 
         var vm = this;
@@ -137,7 +137,7 @@ angular
         });
 
         vm.createApplication = function () {
-            let fromLocalStorage = localStorage.getItem("qualiFit");
+            let fromLocalStorage = localStorage.getItem("skillera");
 
             if (fromLocalStorage) {
                 fromLocalStorage = JSON.parse(fromLocalStorage);
@@ -208,9 +208,9 @@ angular
             Applications.update({_id: vm.applicationId},{$set: vm.application});
             vm.application._id = vm.applicationId;
 
-            let fromLocalStorage = JSON.parse(localStorage.getItem("qualiFit") || '{}');
+            let fromLocalStorage = JSON.parse(localStorage.getItem("skillera") || '{}');
             fromLocalStorage[vm.audition._id] = vm.applicationId;
-            localStorage.setItem('qualiFit', JSON.stringify(fromLocalStorage));
+            localStorage.setItem('skillera', JSON.stringify(fromLocalStorage));
         };
 
         vm.auditionDone = function (itemsContentsArg, numberOfItemsArg) {

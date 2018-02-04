@@ -80,7 +80,7 @@ TrueFalseCtrl.prototype = {
         this.audition.removeEventListener('results', this.onRequestResults);
         this.audition.removeEventListener('command', this.onRequestCommand);
         this.audition.removeEventListener('terminate', this.onRequestTerminate);
-        this.audition.sendToQualiFit('terminate', null);
+        this.audition.sendToskillera('terminate', null);
         this.audition.terminate();
         this.audition = null;
 
@@ -104,7 +104,7 @@ TrueFalseCtrl.prototype = {
             //validity = (validity + 5) - questionResult.clicks * 5;
         }
 
-        this.audition.sendToQualiFit('results', validity < 0 ? 0 : validity);
+        this.audition.sendToskillera('results', validity < 0 ? 0 : validity);
     },
 
     onRequestContent (eventArg) {
@@ -121,7 +121,7 @@ TrueFalseCtrl.prototype = {
         }catch(e) {
             debugger;
         }
-        this.audition.sendToQualiFit('content', this.content);
+        this.audition.sendToskillera('content', this.content);
     },
 
     onRequestConfiguration (eventArg) {
@@ -136,7 +136,7 @@ TrueFalseCtrl.prototype = {
             }
         };
 
-        this.audition.sendToQualiFit('configuration', configuration);
+        this.audition.sendToskillera('configuration', configuration);
     },
 
     onRequestCommand (eventArg) {

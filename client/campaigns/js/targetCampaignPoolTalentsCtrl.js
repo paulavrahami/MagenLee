@@ -1,5 +1,5 @@
 angular
-   .module('brgo')
+   .module('skillera')
    .controller('targetCampaignPoolTalents', function($state, $scope, $reactive, $UserAlerts, ENUM, dbhService, $uibModalInstance) {
       var selectSkills = ['','',''];
       var vm = this;
@@ -77,7 +77,7 @@ angular
       // });
 
 
-      vm.qualifitTalentsReset = function () {
+      vm.skilleraTalentsReset = function () {
         vm.selectProfession = vm.campaign.positionName;
         var length = vm.campaign.skills.length;
         for (var i = 0; i < length; i++) {
@@ -92,7 +92,7 @@ angular
       };
 
 
-      vm.qualifitTalentsClear = function () {
+      vm.skilleraTalentsClear = function () {
         vm.selectProfession = '';
         vm.selectSkill1 = '';
         vm.selectSkill2 = '';
@@ -103,7 +103,7 @@ angular
       };
 
 
-     	vm.qualifitTalentsSelect = function () {
+     	vm.skilleraTalentsSelect = function () {
         if ((vm.selectProfession === '') && (vm.selectSkill1 === '') && (vm.selectSkill2 === '') && (vm.selectSkill3 === '')) {
           showErrorMessage('Either Profession or Skills shall be defined');
           vm.displaySelectionMsg = false;

@@ -1,4 +1,4 @@
-angular.module('brgo')
+angular.module('skillera')
     .component('newCampaigntabs', {
         templateUrl: 'client/components/campaign/campaigntab/campaignTabs.html',
         bindings: {

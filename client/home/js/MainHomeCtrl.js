@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('MainHomeCtrl', function($state,$scope,$reactive,$uibModal, ENUM) {
 
         let vm = this;

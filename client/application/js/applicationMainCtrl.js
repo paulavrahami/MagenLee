@@ -1,6 +1,6 @@
 
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('applicationMain', function($state,$stateParams,$window, $scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
 
         let vm = this;

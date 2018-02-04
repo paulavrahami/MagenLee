@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('AuditionEditCtrl', function($state,$stateParams,$scope,$filter,$window,$reactive,dbhService, $UserAlerts, $uibModal, ENUM, MAP, $promiser, $http,$sce,moment) {
         $scope.trust = $sce.trustAsHtml;
         let auditionEdit = this;
@@ -1413,7 +1413,7 @@ angular
             // (NOTE!!! - Keep this in-sync with the vm.applicationSave in campaignApplyMailCtrl.js)
             // 
             // *** Prepare Application - Start ***
-            let fromLocalStorage = localStorage.getItem("qualiFit");
+            let fromLocalStorage = localStorage.getItem("skillera");
             if (fromLocalStorage) {
                 fromLocalStorage = JSON.parse(fromLocalStorage);
                 if (fromLocalStorage[vm.audition._id]) {

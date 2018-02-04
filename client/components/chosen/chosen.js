@@ -1,4 +1,4 @@
-angular.module('brgo')
+angular.module('skillera')
     .component('chosenSelect', {
         templateUrl: 'client/components/chosen/chosen.html',
         bindings: {

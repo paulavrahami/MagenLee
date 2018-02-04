@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('statusBarCtrl', function($state,$scope,$reactive,$uibModal, ENUM) {
 
         let statusBar = this;

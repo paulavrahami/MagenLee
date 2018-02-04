@@ -1,9 +1,0 @@
-<div class="menu-prefix"></div>
-<ul class="nav navbar-nav nav-header-menu" ng-if="headerMenu.entitiesMenu.prefix!==''">
-    <li class="nav-item prefix"><a>{{headerMenu.entitiesMenu.prefix}}</a></li>
-</ul>
-<ul class="nav navbar-nav nav-header-menu" ng-repeat="item in headerMenu.entitiesMenu.items">
-    <li class="nav-item">
-        <a class="nav-link" ui-sref="{{item.link}}">{{item.caption}}</a>
-    </li>
-</ul>

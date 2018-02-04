@@ -1,7 +1,7 @@
 // Controler for external execution of an campaign apply login
 
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('CampaignApplyInformationCtrl', function($state,$stateParams,$scope,$window,$reactive,$UserAlerts,$uibModal,$uibModalInstance,ENUM) {
         let vm = this;
         $reactive(vm).attach($scope);
@@ -146,9 +146,9 @@ angular
                                 Campaigns.update({_id:vm.campaign._id},{$set: copyCampaign});
                               }
 
-                            let fromLocalStorage = JSON.parse(localStorage.getItem("qualiFit") || '{}');
+                            let fromLocalStorage = JSON.parse(localStorage.getItem("skillera") || '{}');
                             delete fromLocalStorage[vm.campaign.auditionId];
-                            localStorage.setItem('qualiFit', JSON.stringify(fromLocalStorage));
+                            localStorage.setItem('skillera', JSON.stringify(fromLocalStorage));
 
                             $window._auditionCompleted = true;
                             
@@ -168,7 +168,7 @@ angular
   
                             $uibModalInstance.close();
                                                       
-                            // let thankYouMsg = "Good luck with your "+vm.campaign.positionName+" application! (qualiFit ref: "+vm.application.number+")";
+                            // let thankYouMsg = "Good luck with your "+vm.campaign.positionName+" application! (skillera ref: "+vm.application.number+")";
                             let thankYouMsg = "Good luck with your "+vm.campaign.positionName+" application!";
                             showInfoMessage(thankYouMsg);
                       }

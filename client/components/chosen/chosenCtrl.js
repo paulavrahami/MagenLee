@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('chosenCtrl', function($state, $scope, $reactive) {
 
         let chosenCtrl = this;

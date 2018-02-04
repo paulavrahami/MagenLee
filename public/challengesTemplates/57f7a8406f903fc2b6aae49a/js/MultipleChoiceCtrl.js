@@ -85,7 +85,7 @@ MultipleChoiceCtrl.prototype = {
         this.audition.removeEventListener('results', this.onRequestResults);
         this.audition.removeEventListener('command', this.onRequestCommand);
         this.audition.removeEventListener('terminate', this.onRequestTerminate);
-        this.audition.sendToQualiFit('terminate', null);
+        this.audition.sendToskillera('terminate', null);
         this.audition.terminate();
         this.audition = null;
 
@@ -110,7 +110,7 @@ MultipleChoiceCtrl.prototype = {
             validity = (validity + 5) - questionResult.clicks * 5;
         }
 
-        this.audition.sendToQualiFit('results', validity < 0 ? 0 : validity);
+        this.audition.sendToskillera('results', validity < 0 ? 0 : validity);
     },
 
     onRequestContent (eventArg) {
@@ -126,7 +126,7 @@ MultipleChoiceCtrl.prototype = {
         }
 
         this.content.state.validity = validity < 0 ? 0 : validity;
-        this.audition.sendToQualiFit('content', this.content);
+        this.audition.sendToskillera('content', this.content);
     },
 
     onRequestConfiguration (eventArg) {
@@ -141,7 +141,7 @@ MultipleChoiceCtrl.prototype = {
             }
         };
 
-        this.audition.sendToQualiFit('configuration', configuration);
+        this.audition.sendToskillera('configuration', configuration);
     },
 
     onRequestCommand (eventArg) {

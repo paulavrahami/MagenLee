@@ -1,4 +1,4 @@
-angular.module('brgo')
+angular.module('skillera')
     .component('timeSelect', {
         templateUrl: 'client/components/timeSelect/timeSelect.html',
         bindings: {

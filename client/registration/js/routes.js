@@ -3,7 +3,7 @@
  */
 
 angular
-  .module('brgo')
+  .module('skillera')
   .config(routerConfig);
 
 
