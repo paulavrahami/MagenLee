@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('campaignTabsHeader', function($state, $scope, $reactive, ENUM, MAP) {
 
         let tabsHeader = this;

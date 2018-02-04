@@ -2,7 +2,7 @@
  * Created by itaym on 07/09/2016.
  */
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('MessageModalCtrl', function($state,$scope,$reactive,$uibModalInstance) {
 
         $reactive(this).attach($scope);

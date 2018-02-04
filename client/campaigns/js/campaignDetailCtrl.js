@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('campaignDetail', function($state,$stateParams,$scope,$reactive,fileUpload,utilsService,dbhService,$UserAlerts,ENUM,$uibModal,moment) {
 
         let vm = this;

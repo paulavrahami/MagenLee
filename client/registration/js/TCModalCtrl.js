@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('ModalTcoCtrl', function($state, $scope, $uibModalInstance) {
 
       $scope.ok = function () {

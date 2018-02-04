@@ -1,4 +1,4 @@
-angular.module('brgo')
+angular.module('skillera')
     .component('statusBar', {
         templateUrl: 'client/components/statusBar/statusBar.html',
         controller: 'statusBarCtrl',

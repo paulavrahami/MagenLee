@@ -6,7 +6,7 @@ import Skills from '/model/skills';
 import Auditions from '/model/auditions';
 
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('campaignTabs', function($state, $scope, $reactive, $uibModal, moment, utilsService,$UserAlerts,dbhService, ENUM) {
 
         let vm = this;
@@ -798,7 +798,7 @@ angular
  * File Upload Controller
  */
 angular
-    .module('brgo')
+    .module('skillera')
     .service('fileUpload', ['$http', function ($http) {
         //noinspection JSUnusedGlobalSymbols
         this.uploadFileToUrl = function(file, uploadUrl){

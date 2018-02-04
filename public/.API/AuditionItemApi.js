@@ -6,8 +6,8 @@ let Audition = function (auditionIdArg) {
     'use strict';
 
     this.init = this.init.bind(this);
-    this.getQualiFitPostMessage = this.getQualiFitPostMessage.bind(this);
-    this.sendToQualiFit = this.sendToQualiFit.bind(this);
+    this.getskilleraPostMessage = this.getskilleraPostMessage.bind(this);
+    this.sendToskillera = this.sendToskillera.bind(this);
     this.auditionSettings = this.auditionSettings.bind(this);
     this.addEventListener = this.addEventListener.bind(this);
     this.dispatchEvent = this.dispatchEvent.bind(this);
@@ -40,7 +40,7 @@ let Audition = function (auditionIdArg) {
          */
         init (auditionIdArg) {
             /** @desc Get the _id from the URL, this _id will be used
-             *  in the communication between the audition and QualiFit;
+             *  in the communication between the audition and skillera;
              */
             this._id = auditionIdArg; //document.querySelector('meta[name="auditionId"]').getAttribute("content");
 
@@ -56,21 +56,21 @@ let Audition = function (auditionIdArg) {
             };
             this._callbacks = {};
 
-            window.addEventListener("message", this.getQualiFitPostMessage);
+            window.addEventListener("message", this.getskilleraPostMessage);
         },
         /**
          * @desc Terminate the class and free resources;
          */
         terminate () {
-            window.removeEventListener("message", this.getQualiFitPostMessage);
+            window.removeEventListener("message", this.getskilleraPostMessage);
             this._eventListeners = null;
             this._id = "";
         },
         /**
-         * @desc QualiFit events sent to the Audition;
+         * @desc skillera events sent to the Audition;
          * @param eventArg
          */
-        getQualiFitPostMessage (eventArg) {
+        getskilleraPostMessage (eventArg) {
 
             let data;
             try {
@@ -97,11 +97,11 @@ let Audition = function (auditionIdArg) {
             }
         },
         /**
-         * @desc Send post message to QualiFit;
+         * @desc Send post message to skillera;
          * @param messageTypeArg
          * @param messageDataArg
          */
-        sendToQualiFit (messageTypeArg, messageDataArg) {
+        sendToskillera (messageTypeArg, messageDataArg) {
 
             let messageData = {
                 data: messageDataArg,
@@ -121,12 +121,12 @@ let Audition = function (auditionIdArg) {
         },
 
         /**
-         * @desc Let QualiFit set the audition settings;
+         * @desc Let skillera set the audition settings;
          * @param settingsArg
          */
         auditionSettings (settingsArg) {
 
-            this.sendToQualiFit('settings', settingsArg);
+            this.sendToskillera('settings', settingsArg);
         },
 
         /**
@@ -156,7 +156,7 @@ let Audition = function (auditionIdArg) {
         },
 
         /**
-         * @desc dispatch an event came from QualiFit;
+         * @desc dispatch an event came from skillera;
          * @param customEventArg
          */
         dispatchEvent (customEventArg) {
@@ -170,10 +170,10 @@ let Audition = function (auditionIdArg) {
         },
 
         /**
-         * @desc Let QualiFit know the item is ready for communication;
+         * @desc Let skillera know the item is ready for communication;
          */
         declareLoaded () {
-            this.sendToQualiFit('declareLoaded')
+            this.sendToskillera('declareLoaded')
         },
 
         /**
@@ -207,7 +207,7 @@ let Audition = function (auditionIdArg) {
                     break;
             }
 
-            this.sendToQualiFit('resource', request);
+            this.sendToskillera('resource', request);
         },
 
         buildResource (resourceDataArg) {

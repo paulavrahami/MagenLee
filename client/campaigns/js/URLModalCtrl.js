@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('ModalURLCtrl', function($state, $scope, $uibModalInstance,msg) {
 
     	$scope.urlSelected = false;

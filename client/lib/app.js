@@ -5,11 +5,11 @@
 
 //import { Meteor } from 'meteor/meteor';
 
-//angular.module('brgo', ['angularMeteor','ui.router','ui.bootstrap']);
-//angular.module('brgo', ['angularMeteor','uiRouter','ui.bootstrap']);
+//angular.module('skillera', ['angularMeteor','ui.router','ui.bootstrap']);
+//angular.module('skillera', ['angularMeteor','uiRouter','ui.bootstrap']);
 
 //function onReady() {
-//  angular.bootstrap(document, ['brgo'], {
+//  angular.bootstrap(document, ['skillera'], {
 //    strictDi: true
 //  });
 
@@ -37,8 +37,8 @@ import uiMask from 'angular-ui-mask';
 
 //import { Meteor } from 'meteor/meteor';
 
-//angular.module('brgo', ['angularMeteor','ui.router','ui.bootstrap']);
-//angular.module('brgo', [angularMeteor, 'ui.router','accounts.ui','ui.bootstrap']);
+//angular.module('skillera', ['angularMeteor','ui.router','ui.bootstrap']);
+//angular.module('skillera', [angularMeteor, 'ui.router','accounts.ui','ui.bootstrap']);
 function inIframe () {
     try {
         return window.self !== window.top;
@@ -48,17 +48,17 @@ function inIframe () {
 }
 if (!inIframe()) {
     angular.module(
-        'brgo',
+        'skillera',
         [angularMeteor, angularUiRouter, 'ngclipboard', 'angularMoment', 'accounts.ui', 'angular.filter', uiMask, angularBootstrap, angularPromiser, 'localytics.directives']);
 }
 else {
     angular.module(
-        'brgo',
+        'skillera',
         [angularMeteor, angularUiRouter, angularBootstrap, angularPromiser]);
 }
 
     function onReady() {
-        angular.bootstrap(document, ['brgo'], {
+        angular.bootstrap(document, ['skillera'], {
             strictDi: true
         });
 

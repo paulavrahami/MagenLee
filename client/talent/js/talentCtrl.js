@@ -1,5 +1,5 @@
 angular
-  .module('brgo')
+  .module('skillera')
   .controller('TalentCtrl', function($state,$scope,$reactive) {
 
     var vm = this;

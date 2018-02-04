@@ -127,7 +127,7 @@ $UserAlerts.prototype = {
  * @desc create the service;
  */
 angular
-    .module('brgo')
+    .module('skillera')
     .service('$UserAlerts', ['$uibModal', 'ENUM', function ($uibModal, ENUM) {
 
         return new $UserAlerts($uibModal, ENUM);

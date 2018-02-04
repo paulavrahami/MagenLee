@@ -1,7 +1,7 @@
 import countries from '/public/countries.js';
 
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('recruiterSignUpCtrl', function($state, $scope, $reactive, $uibModal, dbhService, $UserAlerts,ENUM) {
 
         let vm = this;

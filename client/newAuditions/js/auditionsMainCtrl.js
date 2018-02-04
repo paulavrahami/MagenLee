@@ -1,6 +1,6 @@
 
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('AuditionsMainCtrl', function($state,$scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
 
         var vm = this;

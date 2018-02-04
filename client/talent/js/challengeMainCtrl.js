@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .controller('ChallengeMainCtrl', function($state,$scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
 
         let vm = this;

@@ -1,5 +1,5 @@
 angular
-   .module('brgo')
+   .module('skillera')
    .controller('targetCampaignSpecificTalent', function($state, $scope, $reactive, $UserAlerts, ENUM, $uibModalInstance) {    
 
       var vm = this;

@@ -1,5 +1,5 @@
 angular
-  .module('brgo')
+  .module('skillera')
   .controller('MainRouterCtrl', function($state,$scope,$reactive,$uibModal, ENUM) {
 
       let mainRouter = this;

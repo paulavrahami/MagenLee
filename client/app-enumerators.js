@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .constant('ENUM', {
         AUDITION_COMPLEXITY : {
             BEGINNER:       'Beginner',
@@ -116,7 +116,7 @@ angular
     });
 
 angular
-    .module('brgo')
+    .module('skillera')
     .constant('MAP', {
         CAMPAIGN_STATUS : {
             DELETE:     'glyphicon glyphicon-trash',

@@ -1,0 +1,29 @@
+<!--skilleraHeader.html -->
+<div class="row header-setting">
+    <div class="col-md-0-6"></div>
+        <div class="col-md-11">
+            <nav class="navbar navbar-custom" role="navigation">
+                <div class="collapse navbar-collapse header-style">
+                    <!-- Logo -->
+                    <div class="navbar-header">
+                        <img class="navbar-logo" src="/img/skilleralogo-trans.png"/>
+                    </div>
+                    <!-- Main menu -->
+                    <skillera-header-menu user="header.currentUser"></skillera-header-menu>
+                    <!-- Side menu -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{header.currentUser.username}} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a ng-if="!header.isLoggedIn" href="#" ng-click="header.logout();">Exit</a></li>
+                                <li><a ng-if="header.isLoggedIn" href="#" ng-click="header.logout();">Logout</a></li>
+                                <!-- <li><a ng-if="header.isLoggedIn" href="#" ng-click="header.changePassword();">Change Password</a></li> -->
+                                <li><a ng-if="header.isLoggedIn" href="#" ng-click="header.update();">Update User profile</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    <div class="col-md-0-6"></div>
+</div>

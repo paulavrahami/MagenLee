@@ -1,5 +1,5 @@
 angular
-    .module('brgo')
+    .module('skillera')
     .factory ('dbhService',function () {
         Meteor.subscribe('sequences');
         return {

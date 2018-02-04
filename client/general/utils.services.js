@@ -1,4 +1,4 @@
-angular.module('brgo').factory ('utilsService',function (){
+angular.module('skillera').factory ('utilsService',function (){
 
 return {
 

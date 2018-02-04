@@ -1,5 +1,5 @@
 angular
-   .module('brgo')
+   .module('skillera')
    .controller('targetCampaignSocial', function($state, $scope, $reactive, $UserAlerts, ENUM, dbhService, $uibModal, $uibModalInstance) {
       var vm = this;
       $reactive(vm).attach($scope);

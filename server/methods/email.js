@@ -25,15 +25,17 @@ let SendEmailAPI = {
             template    += `<div>We wish you success!</div>`;
             template    += `<div>${emailArguments.company} recruiting team</div>`;
             template    += `<div>&nbsp;</div>`;
-            template    += `<div>(Your qualiFit reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
+            template    += `<div>(Your Skillera reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
             template    += `<div><hr></div>`;
-            template    += `<div><strong>Powered by qualiFit</strong></div>`;
-            // template    += `<div><strong>Powered by <a href="https://qualifit.herokuapp.com/" target="_blank">qualiFit</a></strong> </div>`;
+            template    += `<div><strong>Powered by Skillera</strong></div>`;
+            // template    += `<div><strong>Powered by <a href="https://skillera.herokuapp.com/" target="_blank">skillera</a></strong> </div>`;
+            template    += `<div><br></div>`;
+            template    += `<div><strong>Please do not reply to this email address</strong></div>`;
 
             transporter.sendMail({
-                from: 'qualifitsocial@gmail.com',
+                from: 'skillera_admin@gmail.com',
                 to: emailArguments.email,
-                subject: `Qualifit application ${emailArguments.applicationNumber}`,
+                subject: `Skillera Application ${emailArguments.applicationNumber}`,
                 html: template
             }, function(error, response) {
                 if (error) {
@@ -55,7 +57,7 @@ let SendEmailAPI = {
             template    += `<div><strong>Dear ${emailArguments.firstName} ${emailArguments.lastName}</strong></div>`;
             template    += `<div>&nbsp;</div>`;
             template    += `<div>We are pleased to provide you with the opportunity to join ${emailArguments.company} for a ${emailArguments.position} position.</div>`;
-            template    += `<div>Please use the following link to complete your application form on qualiFit’s platform where you will be given the opportunity to demonstrate your relevant skills.</div>`;
+            template    += `<div>Please use the following link to complete your application form on Skillera’s platform where you will be given the opportunity to demonstrate your relevant skills.</div>`;
             template    += `<div>&nbsp;</div>`;
             template    += `<div>We wish you success!</div>`;
             template    += `<div>${emailArguments.company} Recruiting Team</div>`;
@@ -63,11 +65,13 @@ let SendEmailAPI = {
             template    += `<div><strong>Please click to proceed: <a href="${emailArguments.applicationURL}" target="_blank">${emailArguments.position}</a></strong></div>`;
             template    += `<div>&nbsp;</div>`;
             template    += `<div><hr></div>`;
-            template    += `<div><strong>Powered by qualiFit</strong></div>`;
-            // template    += `<div><strong>Powered by <a href="https://qualifit.herokuapp.com/" target="_blank">qualiFit</a></strong></div>`;
+            template    += `<div><strong>Powered by Skillera</strong></div>`;
+            // template    += `<div><strong>Powered by <a href="https://skillera.herokuapp.com/" target="_blank">skillera</a></strong></div>`;
+            template    += `<div><br></div>`;
+            template    += `<div><strong>Please do not reply to this email</strong></div>`;
 
             transporter.sendMail({
-                from: 'qualifitsocial@gmail.com',
+                from: 'skillera_admin@gmail.com',
                 to: emailArguments.email,
                 subject: `Job Opportunity - ${emailArguments.position}`,
                 html: template
