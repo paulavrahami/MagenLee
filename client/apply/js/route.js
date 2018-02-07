@@ -7,7 +7,7 @@ angular
 function routerConfig($stateProvider) {
   $stateProvider
     .state('campaignApply', {
-      url:'/campaignApply/:id',
+      url:'/campaignApply/:id/:aid',
       templateUrl: 'client/apply/view/campaignApplyMain.html',
       resolve:{
         campaignrecord: function ($promiser) {
