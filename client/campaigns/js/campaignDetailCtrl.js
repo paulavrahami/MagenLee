@@ -422,7 +422,7 @@ angular
 
                       campaign.endDate = vm.currentCampaign.endDate = new Date(endDate);
                       
-                      var campaignURL = location.protocol +'//' + location.host + '/campaignApply/' + vm.currentCampaign._id;
+                      var campaignURL = location.protocol +'//' + location.host + '/campaignApply/' + vm.currentCampaign._id +'/';
                       campaign.applicationURL = campaignURL;
 
                       /** Update campaign; */

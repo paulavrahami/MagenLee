@@ -25,6 +25,8 @@ angular
           $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
       }
 
+      // Build the application (campaign) URL
+      var shortURL =  location.protocol + '//' + location.host + '/campaignApply/';
 
       function sendInvitations () {
         (new Promise((resolve, reject) => {
@@ -35,12 +37,13 @@ angular
               headerEmail:vm.headerEmail,
               position:vm.campaign.positionName,
               company:vm.campaign.control.companyOwner,
-              applicationURL:vm.campaign.applicationURL,
+              campaign:vm.campaign._id,
               dispatchEmail:vm.dispatchEmail,
               dispatchSMS:vm.dispatchSMS,
               dispatchWhatsApp:vm.dispatchWhatsApp,
               dispatchLinkedIn:vm.dispatchLinkedIn,
-              dispatchFacebook:vm.dispatchFacebook
+              dispatchFacebook:vm.dispatchFacebook,
+              shortURL: shortURL,
               }, (err, res) => {
                   if (err) {
                     reject();

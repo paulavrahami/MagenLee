@@ -101,7 +101,8 @@ angular
                                       ]},
                                 {"number": {$ne:vm.application.number}},
                                 {"campaignId": vm.application.campaignId},
-                                {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                                {"control.status": ENUM.APPLICATION_STATUS.COMPLETED},
+                                {"control.statusDate": new Date()}
                               ]});
                             } else {
                               vm.originalApplication = Applications.findOne({
@@ -112,7 +113,8 @@ angular
                                         ]},
                                   {"number": {$ne:vm.application.number}},
                                   {"campaignId": vm.application.campaignId},
-                                  {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                                  {"control.status": ENUM.APPLICATION_STATUS.COMPLETED},
+                                  {"control.statusDate": new Date()}
                                 ]});
                             }
 
@@ -121,8 +123,10 @@ angular
                                 vm.campaignApply.date = currentDate;
                                 vm.campaignApply.campaignID = vm.campaignId;
                                 vm.application.control.status = ENUM.APPLICATION_STATUS.COMPLETED;
+                                vm.application.control.statusDate = new Date();
                             } else {
                                 vm.application.control.status = ENUM.APPLICATION_STATUS.RETRY;
+                                vm.application.control.statusDate = new Date();
                                 vm.application.originalNumber = vm.originalApplication.number;
                             }
                             if (vm.campaign.goNoGo4) {

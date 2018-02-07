@@ -98,10 +98,15 @@ angular
             REGULAR : 'Regular'
         },
         APPLICATION_STATUS : {
-          IN_WORK : 'In work',
-          CANCELED : 'Canceled',
-          COMPLETED : 'Completed',
-          RETRY: 'Retry'
+            SENT_TO_TALENT : 'Sent to Talent',
+            IN_WORK : 'In work',
+            CANCELED : 'Canceled',
+            COMPLETED : 'Completed',
+            RETRY: 'Retry'
+        },
+        APPLICATION_ORIGIN : {
+            PROACTIVE_CAMPAIGN : 'Proactive Campaign',
+            TALENT : 'Talent'
         },
         TALENT_STATUS : {
             ACTIVE : 'Active',

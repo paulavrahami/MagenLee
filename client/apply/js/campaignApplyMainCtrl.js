@@ -157,8 +157,10 @@ angular
                 vm.application.sessions = [];
 
                 vm.application.control = {
+                    origin: ENUM.APPLICATION_ORIGIN.TALENT,
                     createDate: new Date(),
                     status: ENUM.APPLICATION_STATUS.IN_WORK,
+                    statusDate: new Date(),
                     companyOwner : vm.audition.control.companyOwner
                 };
 
@@ -171,7 +173,15 @@ angular
                         vm.applicationId = tempIdArg;
                     }
                 });
-            }
+            } else {
+                if (vm.application.control.status === ENUM.APPLICATION_STATUS.SENT_TO_TALENT) {
+                    vm.application.control.status = ENUM.APPLICATION_STATUS.IN_WORK;
+                    vm.application.control.statusDate = vm.currentDate;
+                    delete vm.application._id;
+                    Applications.update({_id: vm.applicationId}, {$set: vm.application});
+                    vm.application._id = vm.applicationId;
+                };
+            };
         };
 
         vm.helpers({
