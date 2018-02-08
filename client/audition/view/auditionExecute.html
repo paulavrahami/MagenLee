@@ -1,0 +1,260 @@
+<!--auditionExecute.html-->
+
+<!-- Custom Fonts -->
+<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src=".API/base64.js"></script>
+<script type="text/javascript" src=".API/AuditionItemApi.js"></script>
+
+<script src=".API/lib/react/react-15.0.0.js"></script>
+<script src=".API/lib/react/react-dom-15.0.0.js"></script>
+<script src=".API/lib/react/browser.min.js"></script>
+
+<script type="text/javascript" src="/challengesTemplates/57f7a8406f903fc2b6aae39a/js/MultipleChoiceSimpleCtrl.js"></script>
+<script type="text/javascript" src="/challengesTemplates/57f7a8406f903fc2b6aae39a/jsx/MultipleChoiceSimple.js"></script>
+<script type="text/javascript" src="/challengesTemplates/57f7a8406f903fc2b6aae49a/js/MultipleChoiceCtrl.js"></script>
+<script type="text/javascript" src="/challengesTemplates/57f7a8406f903fc2b6aae49a/jsx/MultipleChoice.js"></script>
+<script type="text/javascript" src="/challengesTemplates/5814b536e288e1a685c7a451/js/TrueFalseCtrl.js"></script>
+<script type="text/javascript" src="/challengesTemplates/5814b536e288e1a685c7a451/jsx/TrueFalse.js"></script>
+
+<div class="container-fluid auditionExecute" ng-if="vm.subscriptionOk">
+
+    <!-- Audition Intro -->
+    <div class="row isExecuteIntro" ng-if="vm.states.isExecuteIntro">
+        <!-- Time and Number of Questions -->
+        <div class="row">
+            <div class="col-md-1"><img class="intro-logo" src="/img/skilleralogo-trans.png"></div>
+            <!-- <div class="col-md-10 iframHeaderContainer">
+                <span class="fa fa-hourglass-half fa-1x"></span>
+                &nbsp;
+                <span>{{vm.states.timeLeft| date:"HH:mm:ss" : 'UTC'}}</span>
+                <span style="float:right">Executed: {{vm.countAnswer}}/{{vm.numberOfItems}}</span>
+            </div> -->
+            <div class="col-md-1"></div>
+        </div>
+        <!-- HE/HE selection -->
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <div class="lang-font">
+                    <span class="language"><span ng-class="vm.howItWorkLang === 'eng'?'':'eng'" ng-click="vm.english()">EN </span>/<span ng-class="vm.howItWorkLang === 'heb'?'':'heb'" ng-click="vm.hebrew()"> HE</span></span>
+                </div>
+            </div>
+        </div>
+        <!-- The info section title -->
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframInfoContainer">
+                <h1 class="col-md-12 label-top">
+                    <span ng-show="vm.howItWorkLang ==='eng'">Before You Start...</span>
+                    <span ng-show="vm.howItWorkLang ==='heb'" dir="rtl">רגע לפני שמתחילים...</span>
+                </h1>
+                <!-- English text -->
+                <div class="row intro-area" ng-show="vm.howItWorkLang ==='eng'">
+                    <br>
+                    <p id="executeFrame" class="col-md-12">
+                        You are just about to start an Audition where you will be prompted to respond to serious of {{vm.numberOfItems}} challenges.
+                        The time you may want to devote to the Audition is up to {{vm.states.timeLeft| date:"HH:mm:ss" : 'UTC'}} minutes.
+                    </p>
+                    <br>
+                    <p id="executeFrame" class="col-md-12" ng-if="vm.states.isSpecialInstructions">
+                        Special Instructions TBD
+                    </p>
+                    <p id="executeFrame-lg" class="col-md-12">
+                        Sit back, relax, and start whenever you are ready - Good Luck!
+                    </p>
+                </div>
+                <!-- Hebrew text -->
+                <div class="row" dir="rtl" ng-show="vm.howItWorkLang ==='heb'">
+                    <br>
+                    <p id="executeFrame" class="col-md-12">
+                        הינך עומד/ת להתחיל אודישן שבמהלכו תביא/י לידי ביטוי את יכולתיך המקצועיות באמצעות מענה על סידרה של {{vm.numberOfItems}} שאלות.
+                        פרק הזמן הנדרש לביצוע האודישן הינו עד {{vm.states.timeLeft| date:"HH:mm:ss" : 'UTC'}} דקות.
+                    </p>
+                    <br>
+                    <p id="executeFrame" class="col-md-12" ng-if="vm.states.isSpecialInstructions">
+                        Special Instructions TBD
+                    </p>
+                    <p id="executeFrame-lg" class="col-md-12">
+                        הינך מוזמן/ת להתארגן ולהתחיל את האודישן בזמנך החופשי - בהצלחה!
+                    </p>
+                </div>
+                <br>
+                <br>
+                <div class="row center-button">
+                    <button class="btn btn-primary btn-lg" type="button" ng-click="vm.requestStartAudition()" ng-show="vm.howItWorkLang === 'eng'">Start When Ready</button>
+                    <button class="btn btn-primary btn-lg" type="button" ng-click="vm.requestStartAudition()" ng-show="vm.howItWorkLang === 'heb'">התחל/י בזמך החופשי</button>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+
+    <!-- Coffee break -->
+    <div class="row isOnBreak" ng-if="vm.states.isOnBreak">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <span class="fa fa-hourglass-half fa-1x"></span>
+                &nbsp;
+                <span>{{vm.states.timeLeft| date:"HH:mm:ss" : 'UTC'}}</span>
+                <span style="float:right">Executed: {{vm.countAnswer}}/{{vm.numberOfItems}}</span>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <!-- HE/HE selection -->
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <div class="lang-font">
+                    <span class="language"><span ng-class="vm.howItWorkLang === 'eng'?'':'eng'" ng-click="vm.english()">EN </span>/<span ng-class="vm.howItWorkLang === 'heb'?'':'heb'" ng-click="vm.hebrew()"> HE</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="vm.howItWorkLang ==='eng'">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <h2 id="executeFrame" class="col-md-12">Take a short break for your relief. The Audition will be resumed shortly...</h2>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row" dir="rtl" ng-show="vm.howItWorkLang ==='heb'">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <h2 id="executeFrame" class="col-md-12">קח/י הפסקה קלה לרווחתך. האודישן ימשיך בתוך זמן קצר...</h2>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row center-button" ng-show="vm.howItWorkLang ==='eng'">
+            <button class="btn btn-primary btn-md" type="button" ng-click="vm.requestEndBreak()">End Break</button>
+        </div>
+        <div class="row center-button" dir="rtl" ng-show="vm.howItWorkLang ==='heb'">
+            <button class="btn btn-primary btn-md" type="button" ng-click="vm.requestEndBreak()">סיים הפסקה</button>
+        </div>
+    </div>
+
+    <!-- Timeout message -->
+    <div class="row isTimeOut" ng-if="vm.states.timeOut">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <span class="fa fa-hourglass-half fa-1x"></span>
+                &nbsp;
+                <span><strong>{{vm.states.timeLeft| date:"HH:mm:ss" : 'UTC'}}</strong></span>
+                <span style="float:right">Executed: {{vm.countAnswer}}/{{vm.numberOfItems}}</span>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <!-- HE/HE selection -->
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <div class="lang-font">
+                    <span class="language"><span ng-class="vm.howItWorkLang === 'eng'?'':'eng'" ng-click="vm.english()">EN </span>/<span ng-class="vm.howItWorkLang === 'heb'?'':'heb'" ng-click="vm.hebrew()"> HE</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="vm.howItWorkLang ==='eng'">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <p id="executeFrame" class="col-md-12">Unfortunatly the audition duration has ended</p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row" dir="rtl" ng-show="vm.howItWorkLang ==='heb'">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <p id="executeFrame" class="col-md-12">לצערינו זמן האודישן הסתיים</p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row" ng-show="vm.howItWorkLang ==='eng'">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <p id="executeFrame" class="col-md-12">To apply for the position, please fill the form in the next page. We wish you success!</p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row" dir="rtl" ng-show="vm.howItWorkLang ==='heb'">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <p id="executeFrame" class="col-md-12">בכדי להגיש את מועמדותך למשרה, עליך למלא את הטופס במלואו בדף הבא. אנו מאחלים לך בהצלחה!</p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row center-button" ng-show="vm.howItWorkLang ==='eng'">
+            <button class="btn btn-primary btn-md" type="button" ng-click="vm.clickDone()">Apply</button>
+        </div>
+        <div class="row center-button" dir="rtl" ng-show="vm.howItWorkLang ==='heb'">
+            <button class="btn btn-primary btn-md" type="button" ng-click="vm.clickDone()">הגש מועמדות</button>
+        </div>
+    </div>
+
+    <!-- Audition Execution -->
+    <div class="row isExecuteAudition">
+        <!-- audition outstanding summary info -->
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframHeaderContainer">
+                <span class="fa fa-hourglass-half fa-1x"></span>
+                &nbsp;
+                <span>{{vm.states.timeLeft| date:"HH:mm:ss" : 'UTC'}}</span>
+                <span style="float:right">Executed: {{vm.countAnswer}}/{{vm.numberOfItems}}</span>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+
+        <!-- challenge framework -->
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10 iframContainer">
+                <!--<iframe ng-attr-id="{{vm.executeItem}}" ng-src="{{vm.getAuditionItemSrc(vm.executeItem, vm.getTemplateId(vm.executeItem))}}"></iframe>-->
+                <div class="skill-type"><strong>Skill:</strong> {{vm.getAuditionItemSkillType(vm.executeItem)}}</div>
+                <div class="wrapIfram" ng-bind-html="trust(vm.getAuditionHtml(vm.executeItem, vm.getTemplateId(vm.executeItem)))"></div>
+            </div>
+            <div class="col-md-1">
+                <div class="col-md-12 assist-icons">
+                    <!-- coffee breaks icons -->
+                    <div ng-if="vm.states.isRequestBreak" class="break-tooltipe">You will have 5 minutes break after pressing one of the arrow buttons (before closing the tooltip)
+                        <div>
+                            <br>
+                            <button class="btn btn-primary" ng-click="vm.unRequestBreak()">Cancel</button>
+                        </div>
+                    </div>
+                    <div ng-repeat="i in vm.states.breakCount | times" title="Breaks" ng-class="!vm.states.breakCount ? 'disabled':''" ng-click="vm.requestBreak()"><span class="fa fa-coffee fa-2x assist-icon"></span>
+                    </div>
+                    <!-- hints icons -->
+                    <div ng-repeat="i in vm.states.hintCount | times" title="Hints" ng-class="!!vm.executeItemConfig.enabled.hint && vm.states.hintCount && !vm.states.itemsContent[vm.executeItem].hintCount ? '':'disabled'" ng-click="vm.requestHint()"><span class="fa fa-lightbulb-o fa-2x assist-icon"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- challenge controls -->
+        <div class="row" ng-class="!vm.states.isShowControls?'disabled':''">
+            <div class="col-md-2"></div>
+            <!-- navigation buttons -->
+            <div class="col-md-8 back-next-holder" ng-class="!vm.states.isShowControls?'disabled':''">
+                <div class="glyphicon glyphicon-chevron-left back-button" ng-class="vm.states.currentItem === 0 ? 'disabled' : ''" ng-click="vm.previousItem()"></div>
+                <div class="hold-items-scroll">
+                    <span
+                        ng-repeat="itemKey in vm.itemsKeys"
+                        class="dose-not-executed"
+                        ng-click="vm.goToItem($index)"
+                        ng-class="{'disabled':!vm.states.isShowControls,'has-executed':vm.isItemHasExecuted(itemKey.itemId),'current-execute':itemKey.itemId === vm.executeItem}">
+                        {{$index + 1}}
+                    </span>
+                </div>
+                <div class="glyphicon glyphicon-chevron-right next-button" ng-class="vm.states.currentItem === vm.numberOfItems - 1 ? 'disabled' : ''" ng-click="vm.nextItem()"></div>
+            </div>
+            <!-- end audition button -->
+            <div class="col-md-1">
+                <div class="done-button-holder">
+                    <button class="btn btn-primary pull-right" ng-click="vm.clickDone()">Done</button>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+</div>
