@@ -274,8 +274,8 @@ angular
 
                 vm.modalInstance = $uibModal.open({
                     animation: true,
-                    templateUrl: 'client/newAuditions/view/auditionsExecute.html',
-                    controller: 'AuditionsExecuteCtrl',
+                    templateUrl: 'client/audition/view/auditionExecute.html',
+                    controller: 'AuditionExecuteCtrl',
                     controllerAs: 'vm',
                     keyboard: false,
                     backdrop: 'static',
