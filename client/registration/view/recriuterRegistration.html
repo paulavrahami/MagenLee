@@ -55,7 +55,7 @@
                                         class="form-control">
                             </div>
                             <!-- Company Code -->
-                            <div class="form-group">
+                            <div class="form-group" ng-show="vm.recruiterRegistration.profile.companyUserType === vm.ENUM.COMPANY_USER_TYPE.ADMIN">
                                 <label for="inputRecruiterName" class="required">Company Code</label>
                                 <input  type="text"
                                         ng-model="vm.companyPassword"
@@ -227,7 +227,7 @@
                                         <input  type="password"
                                                 ng-model="vm.userPasswordConf"
                                                 name="userAdminPassConf"
-                                                placeholder="Confirm"
+                                                placeholder="New Password"
                                                 ng-show="vm.setPassword"
                                                 ng-class="{'company-code-field' : vm.setPassword}"
                                                 class="form-control"
