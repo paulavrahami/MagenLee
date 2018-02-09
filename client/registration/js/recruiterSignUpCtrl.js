@@ -106,6 +106,13 @@ angular
 
         vm.userRegistration = function (){
             let profileRec = angular.copy(vm.newRecruiterRegister.profile);
+            
+            // ensure that the company code has been confirmed
+            if (!vm.companyPasswordPass) {
+                 showErrorMessage("Please confirm the company code");
+                 return
+            };
+
             // In case the Company information has been completed, inquier the user to enter the admin/user information
             if (vm.newRecruiterRegister.profile.companyName &&
                 vm.newRecruiterRegister.profile.companyPassword &&
@@ -294,7 +301,7 @@ angular
                             alert('There is an error while checking company code uniqueness');
                         } else {
                             if (result === false) {
-                                //no compny code is unique
+                                //no company code is unique
                                 vm.companyPasswordPass = true;
                             } else {
                                 //company code already exist
