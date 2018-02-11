@@ -14,11 +14,6 @@ angular
         auditionEdit.timeOffset = 0;//(new Date()).getTimezoneOffset() * 60000;
 
         auditionEdit.dependency = new Deps.Dependency();
-        auditionEdit.emptySkill = {
-            "type": '',
-            "experience": '',
-            "Importance": ''
-        };
 
         auditionEdit.auditionGenerationOption = false;
         auditionEdit.addChallengeOption = false;
@@ -359,50 +354,56 @@ angular
                 total:0,
                 time: auditionEdit.timeOffset
             };
-
             auditionEdit.skills.every(function (skill) {
-                auditionEdit.summery.skills[skill.type] = {
+                auditionEdit.summery.skills[skill.type.toLowerCase()] = {
                     time: 0,
                 };
                 auditionEdit.complexityArray.every(function (complexity) {
-                    auditionEdit.summery.skills[skill.type][complexity] = 0;
+                    auditionEdit.summery.skills[skill.type.toLowerCase()][complexity] = 0;
                     auditionEdit.summery[complexity] = 0;
-                    auditionEdit.summery.skills[skill.type].score = 0;
-                    auditionEdit.summery.skills[skill.type].total = 0;
-                    auditionEdit.summery.skills[skill.type].time = auditionEdit.timeOffset;
+                    auditionEdit.summery.skills[skill.type.toLowerCase()].score = 0;
+                    auditionEdit.summery.skills[skill.type.toLowerCase()].total = 0;
+                    auditionEdit.summery.skills[skill.type.toLowerCase()].time = auditionEdit.timeOffset;
                     return true;
                 });
                 return true;
             });
 
-            //** Calculate the items scoring weighting basis
+            //** Calculate the items scoring weight based on the campaign's skills they are associated with
             let allWeight = 0;
-
+            // for all items associated with the audition do:
             auditionEdit.audition.items.every(function (singleItem) {
-
+                // Get the item
                 let item = auditionEdit.getItem(singleItem.itemId);
-
                 if (!item) {
                     alert(`Cannot get item id: ${singleItem.itemId}`);
                     return false;
-                }
+                };
                 if (!item.skill) {
-                    item.skill = angular.copy(auditionEdit.emptySkill);
-                }
-
-                if (item.skill.importance === ENUM.SKILL_IMPORTANCE.NICE) {
+                    item.skill = "";
+                };
+                // The "auditionEdit.skills" is an array of skill objects taken from the campaign.
+                // Each object's instance consists of: skill type, importance and proficiency.
+                // The following line of code tries to find the related object the item has been assigned to.
+                index = auditionEdit.skills.findIndex(findItem => findItem.type.toLowerCase() == item.skill.toLowerCase());
+                if (index === -1) {
+                    alert(`The skill associated with the item is not defined for the campaign - ${item.skill}`);
+                    return false;
+                };
+                // calculate the weight by adding the related skill factor. This is the skill the item is linked to.
+                if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.NICE) {
                     allWeight += 1;
                 }
-                else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.LOW) {
+                else if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.LOW) {
                     allWeight += 2;
                 }
-                else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.NORMAL) {
+                else if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.NORMAL) {
                     allWeight += 3;
                 }
-                else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.HIGH) {
+                else if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.HIGH) {
                     allWeight += 4;
                 }
-                else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.MUST) {
+                else if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.MUST) {
                     allWeight += 5;
                 }
 
@@ -420,27 +421,31 @@ angular
 
                 allTime += item.itemDuration.valueOf() - auditionEdit.timeOffset;
 
-                if (item.skill instanceof Object) {
+                index = auditionEdit.skills.findIndex(findItem => findItem.type.toLowerCase() == item.skill.toLowerCase());
+                if (index === -1) {
+                     alert(`The skill associated with the item is not defined for the campaign - ${item.skill}`);
+                    return false;
+                };
 
-                    if (item.skill.importance === ENUM.SKILL_IMPORTANCE.NICE) {
-                        singleItem.maxScore = singleWeight;
-                    }
-                    else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.LOW) {
-                        singleItem.maxScore = 2 * singleWeight;
-                    }
-                    else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.NORMAL) {
-                        singleItem.maxScore = 3 * singleWeight;
-                    }
-                    else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.HIGH) {
-                        singleItem.maxScore = 4 * singleWeight;
-                    }
-                    else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.MUST) {
-                        singleItem.maxScore = 5 * singleWeight;
-                    }
-                    else {
-                        singleItem.maxScore = 0;
-                    }
+                if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.NICE) {
+                    singleItem.maxScore = singleWeight;
                 }
+                else if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.LOW) {
+                    singleItem.maxScore = 2 * singleWeight;
+                }
+                else if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.NORMAL) {
+                    singleItem.maxScore = 3 * singleWeight;
+                }
+                else if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.HIGH) {
+                    singleItem.maxScore = 4 * singleWeight;
+                }
+                else if (auditionEdit.skills[index].importance === ENUM.SKILL_IMPORTANCE.MUST) {
+                    singleItem.maxScore = 5 * singleWeight;
+                }
+                else {
+                    singleItem.maxScore = 0;
+                }
+
                 auditionEdit.saveItem(item);
 
                 return true;
@@ -450,16 +455,16 @@ angular
             auditionEdit.audition.items.every(function (singleItem) {
 
                 let item = auditionEdit.getItem(singleItem.itemId);
-
                 if (!item) {
                     alert(`Cannot get item id: ${singleItem.itemId}`);
                     return false;
                 }
                 if (!item.skill) {
-                    item.skill = angular.copy(auditionEdit.emptySkill);
+                    item.skill = "";
                 }
+
                 //** Sum the unclassified audition items
-                if (item.skill instanceof Object && item.skill.type === "" && !auditionEdit.summery.skills["Unclassified"]) {
+                if (item.skill === "" && !auditionEdit.summery.skills["Unclassified"]) {
                     auditionEdit.summery.skills["Unclassified"] = {};
                     auditionEdit.complexityArray.every(function (complexity) {
                         auditionEdit.summery.skills["Unclassified"][complexity] = 0;
@@ -471,43 +476,40 @@ angular
                 }
 
                 //** Sum audition items per skills
-                if (item.skill instanceof Object) {
-
-                    let skillType = item.skill.type || 'Unclassified';
-                    try {
-                        if (item.complexity === ENUM.EXPERIENCE.up1) {
-                            auditionEdit.summery.skills[skillType][ENUM.EXPERIENCE.up1]++;
-                            auditionEdit.summery[ENUM.EXPERIENCE.up1]++;
-                        }
-                        if (item.complexity === ENUM.EXPERIENCE.up2) {
-                            auditionEdit.summery.skills[skillType][ENUM.EXPERIENCE.up2]++;
-                            auditionEdit.summery[ENUM.EXPERIENCE.up2]++;
-                        }
-                        if (item.complexity === ENUM.EXPERIENCE.up3) {
-                            auditionEdit.summery.skills[skillType][ENUM.EXPERIENCE.up3]++;
-                            auditionEdit.summery[ENUM.EXPERIENCE.up3]++;
-                        }
-                        if (item.complexity === ENUM.EXPERIENCE.up4) {
-                            auditionEdit.summery.skills[skillType][ENUM.EXPERIENCE.up4]++;
-                            auditionEdit.summery[ENUM.EXPERIENCE.up4]++;
-                        }
-                        auditionEdit.summery.skills[skillType].time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
-                        auditionEdit.summery.time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
-                        auditionEdit.summery.skills[skillType].score += singleItem.maxScore;
-                        auditionEdit.summery.skills[skillType].total++;
-                        auditionEdit.summery.score += singleItem.maxScore;
-                        auditionEdit.summery.total++;
-
-                        if ((auditionEdit.summery.skills[skillType].score + "").indexOf("999") > -1) {
-                            auditionEdit.summery.skills[skillType].score = Math.ceil(auditionEdit.summery.skills[skillType].score);
-                        }
-                        if ((auditionEdit.summery.score + "").indexOf("999") > -1) {
-                            auditionEdit.summery.score = Math.ceil(auditionEdit.summery.score);
-                        }
+                let skillName = item.skill || 'Unclassified';
+                try {
+                    if (item.complexity === ENUM.EXPERIENCE.up1) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up1]++;
+                        auditionEdit.summery[ENUM.EXPERIENCE.up1]++;
                     }
-                    catch (e) {}
-                  
+                    if (item.complexity === ENUM.EXPERIENCE.up2) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up2]++;
+                        auditionEdit.summery[ENUM.EXPERIENCE.up2]++;
+                    }
+                    if (item.complexity === ENUM.EXPERIENCE.up3) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up3]++;
+                        auditionEdit.summery[ENUM.EXPERIENCE.up3]++;
+                    }
+                    if (item.complexity === ENUM.EXPERIENCE.up4) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up4]++;
+                        auditionEdit.summery[ENUM.EXPERIENCE.up4]++;
+                    }
+                    auditionEdit.summery.skills[skillName.toLowerCase()].time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
+                    auditionEdit.summery.time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
+                    auditionEdit.summery.skills[skillName.toLowerCase()].score += singleItem.maxScore;
+                    auditionEdit.summery.skills[skillName.toLowerCase()].total++;
+                    auditionEdit.summery.score += singleItem.maxScore;
+                    auditionEdit.summery.total++;
+
+                    if ((auditionEdit.summery.skills[skillName.toLowerCase()].score + "").indexOf("999") > -1) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()].score = Math.ceil(auditionEdit.summery.skills[skillName.toLowerCase()].score);
+                    }
+                    if ((auditionEdit.summery.score + "").indexOf("999") > -1) {
+                        auditionEdit.summery.score = Math.ceil(auditionEdit.summery.score);
+                    }
                 }
+                catch (e) {}
+
                 auditionEdit.summery.timeLeft = auditionEdit.audition.auditionDuration - auditionEdit.summery.time;
                 return true;
             });
@@ -615,7 +617,7 @@ angular
         
         auditionEdit.registerEditItem = function () {
 
-            if  (!auditionEdit.editItem.skill.type) {
+            if  (!auditionEdit.editItem.skill) {
                 showErrorMessage("The challenge's skill should be defined");
                 return
             };
@@ -747,7 +749,7 @@ angular
             let editItem = {
                 "status" : ENUM.ITEM_STATUS.NEW,
                 "statusDate" : new Date(),
-                "skill" : auditionEdit.emptySkill,
+                "skill" : "",
                 "complexity" : "",
                 "itemDuration" : 30000,
                 "title": "",
@@ -759,7 +761,7 @@ angular
                 "lastAssignedDate" : "",
                 "authorType" : ENUM.ITEM_AUTHOR_TYPE.RECRUITER,
                 "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID*/
-                "shareInd" : true, /*Zvika - Currently this is the defualt and cannot be changed. In the future it should be taken from the Recruiter profile*/
+                "shareInd" : true, /*Zvika - Currently this is the default and cannot be changed. In the future it should be taken from the Recruiter profile*/
                 "control" : {
                     "createdBy" : Meteor.user()._id,
                     "createDate" : new Date(),
@@ -1085,7 +1087,7 @@ angular
                             foundItemPerSkill = true;
                         } else {
                             // If the item doesn't satisfy the criteria, retry for x times to find proper item
-                            while ((!foundItemPerSkill && (foundRetry <= 5)) && (itemsFoundCount < itemsPerSkill.length)) {
+                            while ((!foundItemPerSkill && (foundRetry <= 50)) && (itemsFoundCount < itemsPerSkill.length)) {
                                 randomItem = itemsPerSkill[Math.floor(Math.random() * itemsPerSkill.length)];
                                 let itemAlreadySelected = tempSelectedItems.indexOf(randomItem._id);
                                 if (((randomItem.itemDuration + actualDurationPerSkill) <= totalDurationPerSkill) &&
@@ -1214,7 +1216,7 @@ angular
 
             conditions = {$and:[{$or:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
                                 {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
-                                {"$text": {"$search": auditionEdit.addChallengeSkills.type}},
+                                {"$text": {"$search": auditionEdit.addChallengeSkills}},
                                 {complexity: complexityParam},
                                 {shareInd: true}]};
 
@@ -1301,19 +1303,19 @@ angular
 
         function clearAddBufferSummary() {
             auditionEdit.addBufferSummery = {
-                skills:{},
+                skills:[],
                 total:0,
                 time: auditionEdit.timeOffset
             };
             auditionEdit.skills.every(function (skill) {
-                auditionEdit.addBufferSummery.skills[skill.type] = {
+                auditionEdit.addBufferSummery.skills[skill.type.toLowerCase()] = {
                     time: 0,
                 };
                 auditionEdit.complexityArray.every(function (complexity) {
-                    auditionEdit.addBufferSummery.skills[skill.type][complexity] = 0;
+                    auditionEdit.addBufferSummery.skills[skill.type.toLowerCase()][complexity] = 0;
                     auditionEdit.addBufferSummery[complexity] = 0;
-                    auditionEdit.addBufferSummery.skills[skill.type].total = 0;
-                    auditionEdit.addBufferSummery.skills[skill.type].time = auditionEdit.timeOffset;
+                    auditionEdit.addBufferSummery.skills[skill.type.toLowerCase()].total = 0;
+                    auditionEdit.addBufferSummery.skills[skill.type.toLowerCase()].time = auditionEdit.timeOffset;
                     return true;
                 });
                 return true;
@@ -1326,32 +1328,32 @@ angular
 
             auditionEdit.addItems.every(function (singleItem) {
                 let item = auditionEdit.getItem(singleItem);
-                if (item.skill instanceof Object) {
-                    let skillType = item.skill.type;
-                    try {
-                        if (item.complexity === ENUM.EXPERIENCE.up1) {
-                            auditionEdit.addBufferSummery.skills[skillType][ENUM.EXPERIENCE.up1]++;
-                            auditionEdit.addBufferSummery[ENUM.EXPERIENCE.up1]++;
-                        }
-                        if (item.complexity === ENUM.EXPERIENCE.up2) {
-                            auditionEdit.addBufferSummery.skills[skillType][ENUM.EXPERIENCE.up2]++;
-                            auditionEdit.addBufferSummery[ENUM.EXPERIENCE.up2]++;
-                        }
-                        if (item.complexity === ENUM.EXPERIENCE.up3) {
-                            auditionEdit.addBufferSummery.skills[skillType][ENUM.EXPERIENCE.up3]++;
-                            auditionEdit.addBufferSummery[ENUM.EXPERIENCE.up3]++;
-                        }
-                        if (item.complexity === ENUM.EXPERIENCE.up4) {
-                            auditionEdit.addBufferSummery.skills[skillType][ENUM.EXPERIENCE.up4]++;
-                            auditionEdit.addBufferSummery[ENUM.EXPERIENCE.up4]++;
-                        }
-                        auditionEdit.addBufferSummery.skills[skillType].time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
-                        auditionEdit.addBufferSummery.time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
-                        auditionEdit.addBufferSummery.skills[skillType].total++;
-                        auditionEdit.addBufferSummery.total++;
+
+                let skillName = item.skill;
+                try {
+                    if (item.complexity === ENUM.EXPERIENCE.up1) {
+                        auditionEdit.addBufferSummery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up1]++;
+                        auditionEdit.addBufferSummery[ENUM.EXPERIENCE.up1]++;
                     }
-                    catch (e) {}
+                    if (item.complexity === ENUM.EXPERIENCE.up2) {
+                        auditionEdit.addBufferSummery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up2]++;
+                        auditionEdit.addBufferSummery[ENUM.EXPERIENCE.up2]++;
+                    }
+                    if (item.complexity === ENUM.EXPERIENCE.up3) {
+                        auditionEdit.addBufferSummery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up3]++;
+                        auditionEdit.addBufferSummery[ENUM.EXPERIENCE.up3]++;
+                    }
+                    if (item.complexity === ENUM.EXPERIENCE.up4) {
+                        auditionEdit.addBufferSummery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up4]++;
+                        auditionEdit.addBufferSummery[ENUM.EXPERIENCE.up4]++;
+                    }
+                    auditionEdit.addBufferSummery.skills[skillName.toLowerCase()].time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
+                    auditionEdit.addBufferSummery.time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
+                    auditionEdit.addBufferSummery.skills[skillName.toLowerCase()].total++;
+                    auditionEdit.addBufferSummery.total++;
                 }
+                catch (e) {}
+
                 auditionEdit.addBufferSummery.timeLeft = auditionEdit.audition.auditionDuration - auditionEdit.summery.time;
                 return true;
             });

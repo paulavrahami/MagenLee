@@ -273,10 +273,10 @@ angular
                         return false;
                     }
                     if (!item.skill) {
-                        item.skill = angular.copy(auditionEdit.emptySkill);
+                        item.skill = "";
                     }
 
-                    if ((item.skill instanceof Object && item.skill.type === "" || !item.skill) && !vm.summery.skills["Unclassified"]) {
+                    if ((!item.skill) && !vm.summery.skills["Unclassified"]) {
                         vm.summery.skills["Unclassified"] = {};
                         vm.complexityArray.every(function (complexity) {
                             vm.summery.skills["Unclassified"][complexity] = 0;
@@ -285,61 +285,59 @@ angular
                             vm.summery.skills["Unclassified"].time = vm.timeOffset;
                             return true;
                         });
-                    }
+                    };
+                  
+                    let skillType = item.skill || 'Unclassified';
+                    try {
+                        if (item.complexity === ENUM.EXPERIENCE.up1) {
+                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up1]++;
+                            vm.summery[ENUM.EXPERIENCE.up1]++;
+                        }
+                        if (item.complexity === ENUM.EXPERIENCE.up2) {
+                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up2]++;
+                            vm.summery[ENUM.EXPERIENCE.up2]++;
+                        }
+                        if (item.complexity === ENUM.EXPERIENCE.up3) {
+                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up3]++;
+                            vm.summery[ENUM.EXPERIENCE.up3]++;
+                        }
+                        if (item.complexity === ENUM.EXPERIENCE.up4) {
+                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up4]++;
+                            vm.summery[ENUM.EXPERIENCE.up4]++;
+                        }
+                        vm.summery.skills[skillType].time += item.itemDuration.valueOf() - vm.timeOffset;
+                        vm.summery.time += item.itemDuration.valueOf() - vm.timeOffset;
+                        vm.summery.skills[skillType].score += singleItem.maxScore;
+                        vm.summery.skills[skillType].total++;
+                        vm.summery.score += singleItem.maxScore;
+                        vm.summery.total++;
 
-                    if (item.skill instanceof Object || !item.skill) {
-
-                        let skillType = item.skill.type || 'Unclassified';
-                        try {
-                            if (item.complexity === ENUM.EXPERIENCE.up1) {
-                                vm.summery.skills[skillType][ENUM.EXPERIENCE.up1]++;
-                                vm.summery[ENUM.EXPERIENCE.up1]++;
-                            }
-                            if (item.complexity === ENUM.EXPERIENCE.up2) {
-                                vm.summery.skills[skillType][ENUM.EXPERIENCE.up2]++;
-                                vm.summery[ENUM.EXPERIENCE.up2]++;
-                            }
-                            if (item.complexity === ENUM.EXPERIENCE.up3) {
-                                vm.summery.skills[skillType][ENUM.EXPERIENCE.up3]++;
-                                vm.summery[ENUM.EXPERIENCE.up3]++;
-                            }
-                            if (item.complexity === ENUM.EXPERIENCE.up4) {
-                                vm.summery.skills[skillType][ENUM.EXPERIENCE.up4]++;
-                                vm.summery[ENUM.EXPERIENCE.up4]++;
-                            }
-                            vm.summery.skills[skillType].time += item.itemDuration.valueOf() - vm.timeOffset;
-                            vm.summery.time += item.itemDuration.valueOf() - vm.timeOffset;
-                            vm.summery.skills[skillType].score += singleItem.maxScore;
-                            vm.summery.skills[skillType].total++;
-                            vm.summery.score += singleItem.maxScore;
-                            vm.summery.total++;
-
-                            if ((vm.summery.skills[skillType].score + "").indexOf("999") > -1) {
-                                vm.summery.skills[skillType].score = Math.ceil(vm.summery.skills[skillType].score);
-                            }
-                            if ((vm.summery.score + "").indexOf("999") > -1) {
-                                vm.summery.score = Math.ceil(vm.summery.score);
-                            }
+                        if ((vm.summery.skills[skillType].score + "").indexOf("999") > -1) {
+                            vm.summery.skills[skillType].score = Math.ceil(vm.summery.skills[skillType].score);
                         }
-                        catch (e) {
-                        }
-
-                        if (item.skill.importance === ENUM.SKILL_IMPORTANCE.NICE) {
-                            allWeight += 1;
-                        }
-                        else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.LOW) {
-                            allWeight += 2;
-                        }
-                        else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.NORMAL) {
-                            allWeight += 3;
-                        }
-                        else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.HIGH) {
-                            allWeight += 4;
-                        }
-                        else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.MUST) {
-                            allWeight += 5;
+                        if ((vm.summery.score + "").indexOf("999") > -1) {
+                            vm.summery.score = Math.ceil(vm.summery.score);
                         }
                     }
+                    catch (e) {
+                    }
+
+                    if (item.skill.importance === ENUM.SKILL_IMPORTANCE.NICE) {
+                        allWeight += 1;
+                    }
+                    else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.LOW) {
+                        allWeight += 2;
+                    }
+                    else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.NORMAL) {
+                        allWeight += 3;
+                    }
+                    else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.HIGH) {
+                        allWeight += 4;
+                    }
+                    else if (item.skill.importance === ENUM.SKILL_IMPORTANCE.MUST) {
+                        allWeight += 5;
+                    }
+                    
                     vm.summery.timeLeft = vm.audition.auditionDuration - vm.summery.time;
                     return true;
                 });

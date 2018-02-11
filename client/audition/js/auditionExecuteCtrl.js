@@ -474,7 +474,7 @@ angular
          * @returns {string}
          */
         vm.getAuditionItemSkillType = function (auditionItemIdArg) {
-            return Items.findOne(auditionItemIdArg).skill.type;
+            return Items.findOne(auditionItemIdArg).skill;
         };
         vm.getAuditionItemSrc = function (auditionItemIdArg, templateIdArg) {
             return '/iframeTemplate/' + auditionItemIdArg + '/' + templateIdArg;
