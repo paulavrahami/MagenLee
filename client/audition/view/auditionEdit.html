@@ -68,8 +68,9 @@
                                 <form class="col-md-12" role="form">
                                     <div class="form-group">
                                         <label>Skills</label>
-                                        <select type="text" ng-model="auditionEdit.addChallengeSkills" class="form-control" id="addChallengeSkills" placeholder="" ng-options="skill as skill.type for skill in auditionEdit.skills track by skill.type">
+                                        <select type="text" ng-model="auditionEdit.addChallengeSkills" class="form-control" id="addChallengeSkills" placeholder="">
                                             <option value=""></option>
+                                            <option ng-repeat="skill in auditionEdit.skills" value="{{skill.type}}">{{skill.type}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -301,10 +302,10 @@
                     class="row auditionItem col-md-12"
                     ng-class="auditionItem.itemId === auditionEdit.currentItem._id ? 'selected' : ''"
                     ng-click="auditionEdit.selectCurrentItem(auditionItem.itemId)"
-                    ng-hide="auditionItem.itemId === auditionEdit.editItem._id"
                     ng-repeat="auditionItem in auditionEdit.audition.items">
+                    <!-- ng-hide="auditionItem.itemId === auditionEdit.editItem._id" -->
                     <div class="row">
-                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3"><span>{{$index+1}}.</span> Skill: {{auditionEdit.getItem(auditionItem.itemId).skill.type}}</h5>
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3"><span>{{$index+1}}.</span> Skill: {{auditionEdit.getItem(auditionItem.itemId).skill}}</h5>
                         <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Complexity: {{auditionEdit.getItem(auditionItem.itemId).complexity}}</h5>
                         <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Duration: {{auditionEdit.getItem(auditionItem.itemId).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
                         <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Score: {{auditionItem.maxScore | number:2}}</h5>
@@ -332,10 +333,10 @@
                 <div
                     class="row auditionItem col-md-12"
                     ng-click="auditionEdit.selectCurrentItem(auditionItem)"
-                    ng-hide="auditionItem === auditionEdit.editItem._id"
                     ng-repeat="auditionItem in auditionEdit.addItems">
+                    <!-- ng-hide="auditionItem === auditionEdit.editItem._id" -->
                     <div class="row">
-                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Skill: {{auditionEdit.getItem(auditionItem).skill.type}}</h5>
+                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Skill: {{auditionEdit.getItem(auditionItem).skill}}</h5>
                         <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Complexity: {{auditionEdit.getItem(auditionItem).complexity}}</h5>
                         <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Duration: {{auditionEdit.getItem(auditionItem).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
                         <h5 class=" col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3">Type: {{auditionEdit.templateName(auditionItem)}}</h5>
@@ -357,11 +358,11 @@
                 <div
                     class="row auditionItem col-md-12"
                     ng-click="auditionEdit.selectCurrentItem(auditionItem.itemId)"
-                    ng-class="auditionItem.itemId === auditionEdit.currentItem._id ? 'selected' : ''"
-                    ng-hide="auditionItem === auditionEdit.editItem._id"
                     ng-repeat="auditionItem in auditionEdit.searchItems">
+                    <!-- ng-hide="auditionItem === auditionEdit.editItem._id" -->
+                    <!-- ng-class="auditionItem.itemId === auditionEdit.currentItem._id ? 'selected' : ''" -->
                     <div class="row">
-                        <h5 class="col-md-3 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Skill: {{auditionEdit.getItem(auditionItem.itemId).skill.type}}</h5>
+                        <h5 class="col-md-3 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Skill: {{auditionEdit.getItem(auditionItem.itemId).skill}}</h5>
                         <h5 class="col-md-3 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Complexity: {{auditionEdit.getItem(auditionItem.itemId).complexity}}</h5>
                         <h5 class="col-md-3 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Duration: {{auditionEdit.getItem(auditionItem.itemId).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
                         <h5 class="col-md-2 ellipsis" ng-class="auditionItem.itemAlreadyInAudition ? 'itemAlreadyInAudition' : ''" style="border-bottom:1px dotted #d3d3d3">Type: {{auditionEdit.templateName(auditionItem.itemId)}}</h5>

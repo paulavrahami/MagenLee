@@ -339,15 +339,15 @@ angular
 
                     if (vm.gradePerSkill.length === 0) {
                         vm.gradePerSkill[0] = {
-                            skill: itemRec.skill.type,
+                            skill: itemRec.skill,
                             grade: application.states.itemsContent[itemArray[x]].state.validity,
-                            importance: itemRec.skill.importance,
+                            // importance: itemRec.skill.importance,
                             count: 1
                         }
                     } else {
                         let skillIndex = -1;
                         for (let i = 0; i < vm.gradePerSkill.length; i++) {
-                            if (vm.gradePerSkill[i].skill === itemRec.skill.type) {
+                            if (vm.gradePerSkill[i].skill === itemRec.skill) {
                                 skillIndex = i;
                             }
                         }
@@ -357,9 +357,9 @@ angular
                             vm.gradePerSkill[skillIndex].count++;
                         } else {
                             vm.gradePerSkill.push({
-                                skill: itemRec.skill.type,
+                                skill: itemRec.skill,
                                 grade: application.states.itemsContent[itemArray[x]].state.validity,
-                                importance: itemRec.skill.importance,
+                                // importance: itemRec.skill.importance,
                                 count: 1
                             })
                         }
