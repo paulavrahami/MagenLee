@@ -108,7 +108,7 @@ angular
             let profileRec = angular.copy(vm.newRecruiterRegister.profile);
             
             // ensure that the company code has been confirmed
-            if (!vm.companyPasswordPass) {
+            if ((vm.companySignUp === 'Join') && (!vm.companyPasswordPass)) {
                  showErrorMessage("Please confirm the company code");
                  return
             };
