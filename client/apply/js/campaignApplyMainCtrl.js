@@ -171,6 +171,15 @@ angular
                         showErrorMessage(errorArg.message);
                     } else {
                         vm.applicationId = tempIdArg;
+
+                        // load an array of all items to be executed. Items will be removed from this array when executed/visited. By the end of the 
+                        // audition's execution we'll now what items where not touched at all
+                        vm.application.auditionItemsNotDone = [];
+                        for (let i = 0; i < vm.audition.items.length ; i++) {
+                            vm.application.auditionItemsNotDone[i] = vm.audition.items[i].itemId;
+                        };
+                        console.log("vm.audition.items", vm.audition.items);
+                        console.log("vm.application.auditionItemsNotDone", vm.application.auditionItemsNotDone);
                     }
                 });
             } else {
@@ -206,8 +215,24 @@ angular
 
                     score += (currentItem.maxScore / 100) * parseInt(vm.application.states.itemsContent[contentIndex].state.validity ? vm.application.states.itemsContent[contentIndex].state.validity + '' : '0');
 
+                    let indexOf = vm.application.auditionItemsNotDone.indexOf(contentIndex);
+                    console.log("indexOf", indexOf);
+                    if (indexOf !== -1) {
+                        vm.application.auditionItemsNotDone.splice(indexOf, 1);
+                    };
+                    console.log("vm.application.auditionItemsNotDone", vm.application.auditionItemsNotDone);
                     //vm.application.states.itemsContent[contentIndex].state.itemId = contentIndex;
                     //vm.application.states.push(vm.application.states.itemsContent[contentIndex].state);
+                } else {
+                    // If item has been executed/visited it should be dropped from the auditionItemsNotDone array. This array will be 
+                    // evaluated at the time the audition is done in order to add to the application states the unexecuted items. This 
+                    // will make statistics and scoring calculations accurate
+                    // let indexOf = vm.application.auditionItemsNotDone.indexOf(contentIndex);
+                    // colnsole.log("indexOf", indexOf);
+                    // if (indexOf !== -1) {
+                    //     vm.application.auditionItemsNotDone.splice(indexOf, 1);
+                    // };
+                    // console.log("vm.application.auditionItemsNotDone", vm.application.auditionItemsNotDone);
                 }
             }
             //todo: remove the console.log score
@@ -226,6 +251,21 @@ angular
         vm.auditionDone = function (itemsContentsArg, numberOfItemsArg) {
 
             vm.applicationSave(itemsContentsArg, numberOfItemsArg);
+            // add an empty entry in the application's state for each unexecuted/visited item
+            if (vm.application.auditionItemsNotDone.length !== 0) {
+                for (i = 0 ; i < vm.application.auditionItemsNotDone.length ; i++) {
+                    itemContentNotDone = {state: {validity: 0}};
+                    vm.application.states.itemsContent[vm.application.auditionItemsNotDone[i]] = itemContentNotDone;
+                    console.log(vm.application.states.itemsContent[vm.application.auditionItemsNotDone[i]]);
+
+                    // vm.application.states.itemsContent[vm.application.auditionItemsNotDone[i]].state.validity === 0;
+
+ // vm.gradePerSkill.push({
+ //  360                                  skill: itemRec.skill,
+ //  361                                  grade: application.states.itemsContent[itemArray[x]].state.validity,
+
+                };
+            };
 
             $scope.campaignId = vm.campaignId;
             $scope.applicationId = vm.applicationId;
