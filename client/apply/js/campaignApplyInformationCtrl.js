@@ -99,10 +99,12 @@ angular
                                 {"phone": vm.application.phone},
                                 {"linkedInURL": vm.application.linkedInURL}
                                       ]},
-                                {"number": {$ne:vm.application.number}},
+                             // HG - Comment the retrieve of the original application by application number
+                             // and status date
+                             //   {"number": {$ne:vm.application.number}},
                                 {"campaignId": vm.application.campaignId},
-                                {"control.status": ENUM.APPLICATION_STATUS.COMPLETED},
-                                {"control.statusDate": new Date()}
+                                {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                             //   {"control.statusDate": new Date()}
                               ]});
                             } else {
                               vm.originalApplication = Applications.findOne({
@@ -111,10 +113,12 @@ angular
                                   {"email": vm.application.email},
                                   {"phone": vm.application.phone}
                                         ]},
-                                  {"number": {$ne:vm.application.number}},
+                                // HG - Comment the retrieve of the original application by application number
+                                // and status date
+                               //   {"number": {$ne:vm.application.number}},
                                   {"campaignId": vm.application.campaignId},
-                                  {"control.status": ENUM.APPLICATION_STATUS.COMPLETED},
-                                  {"control.statusDate": new Date()}
+                                  {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                               //   {"control.statusDate": new Date()}
                                 ]});
                             }
 
