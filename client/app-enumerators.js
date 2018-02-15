@@ -104,6 +104,10 @@ angular
             COMPLETED : 'Completed',
             RETRY: 'Retry'
         },
+        APPLICATION_FRUAD_TYPE : {
+            NONE    :   'No Fraud',
+            REPEAT  :   'Repeat'
+        },
         APPLICATION_ORIGIN : {
             PROACTIVE_CAMPAIGN : 'Proactive Campaign',
             TALENT : 'Talent'
