@@ -122,14 +122,17 @@ angular
                                 ]});
                             }
 
+                            //HG - Add the fraud type
                             vm.saved = true;
                             if (!vm.originalApplication) {
                                 vm.campaignApply.date = currentDate;
                                 vm.campaignApply.campaignID = vm.campaignId;
                                 vm.application.control.status = ENUM.APPLICATION_STATUS.COMPLETED;
+                                vm.application.fraudType = ENUM.APPLICATION_FRUAD_TYPE.NONE;
                                 vm.application.control.statusDate = new Date();
                             } else {
-                                vm.application.control.status = ENUM.APPLICATION_STATUS.RETRY;
+                                vm.application.control.status = ENUM.APPLICATION_STATUS.COMPLETED;
+                                vm.application.fraudType = ENUM.APPLICATION_FRUAD_TYPE.REPEAT;
                                 vm.application.control.statusDate = new Date();
                                 vm.application.originalNumber = vm.originalApplication.number;
                             }

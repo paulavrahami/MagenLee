@@ -137,6 +137,7 @@ angular
                             conditions = {$and: [
                                 {grade: {$gte: vm.campaign.minScore}},
                                 {campaignId: vm.campaignId},
+                                {"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE},
                                 {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
                             ]};
                             break;
@@ -144,6 +145,7 @@ angular
                             conditions = {$and: [
                                 {grade: {$gte: vm.campaign.minScore - 10}},
                                 {campaignId: vm.campaignId},
+                                {"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE},
                                 {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
                             ]};
                             break;
@@ -151,6 +153,7 @@ angular
                             conditions = {$and: [
                                 {grade: {$gte: vm.campaign.minScore - 20}},
                                 {campaignId: vm.campaignId},
+                                {"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE},
                                 {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
                             ]};
                             break;
@@ -159,7 +162,7 @@ angular
                     }
                 }
                 else {
-                    conditions = {campaignId: vm.campaignId,"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                    conditions = {campaignId: vm.campaignId,"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE,"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
                 }
 
 
