@@ -13,6 +13,10 @@ if (Meteor.isServer) {
                     "structure" : {
                         "statement" : "string",
                         "float Right" : "boolean",
+                        "image" : "string",
+                        "image Width" : "number",
+                        "image Height" : "number",
+                        "image Float Right" : "boolean",
                         "question" : "string",
                         "hint" : "string",
                         // "hintTime" : "number",
@@ -49,6 +53,10 @@ if (Meteor.isServer) {
                     "structure" : {
                         "statement" : "string",
                         "float Right" : "boolean",
+                        "image" : "string",
+                        "image Width" : "number",
+                        "image Height" : "number",
+                        "image Float Right" : "boolean",
                         "question" : "string",
                         "hint" : "string",
                         // "hintTime" : "number",
