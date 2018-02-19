@@ -159,7 +159,7 @@ angular
                             vm.talent.street = record.profile.street;
                             vm.talent.city = record.profile.city;
                             vm.talent.country = record.profile.country;
-                            vm.talent.contactPhone = record.profile.phoneNumber;
+                            vm.talent.contactPhone = record.profile.contactPhone;
                             vm.talent.contactEmail = record.profile.contactEmail;
                             vm.talent.receiveJobOffer = record.profile.receiveJobOffer;
                             vm.talent.talentId = record.talentId;

@@ -40,6 +40,17 @@ function routerConfig($stateProvider) {
         }]
       }
     })
+    .state('talentRegistration', {
+      url:'/updTalent',
+      templateUrl: 'client/registration/view/talentRegistration.html',
+      controller: 'talentRegistrationCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        "currentUser": ["$meteor", function($meteor){
+          return $meteor.waitForUser();
+        }]
+      }
+    })
     .state('applicantRegistration', {
       url:'/newApplicant',
       templateUrl: 'client/registration/view/applicantRegistration.html',
