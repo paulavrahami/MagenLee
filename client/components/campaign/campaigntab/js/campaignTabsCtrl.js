@@ -702,6 +702,13 @@ angular
                 }
                 vm.campaign.skills.splice(index, 1);
 
+                if (vm.campaign.skills.length === 0) {
+                    vm.campaign.skills[0] = {
+                        type: '',
+                        experience: '',
+                        importance: ''};
+                };
+
                 if (index > vm.campaign.skills.length - 1) {
                     index = vm.campaign.skills.length - 1;
                 }
