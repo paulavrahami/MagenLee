@@ -90,6 +90,63 @@
                                             <span class="error-msg" ng-show="vm.newTalentRegister.pass1 !== vm.newTalentRegister.pass2">Passwords do not match</span>
                                     </div>
                                 </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-0-6"></div>
+                                <div class="col-md-3">
+                                        <!-- First Name -->
+                                        <div class="form-group">
+                                                <label for="inputTalentFirstName" class="required">First Name</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.firstName" 
+                                                        name="firstName"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                                <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.fName.$error.required">First name is required</span>
+                                        </div>
+                                                
+                                        <!-- Last Name -->
+                                        <div class="form-group">
+                                                <label for="inputTalentLasttName" class="required">Last Name</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.lastName" 
+                                                        name="firstName"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                                <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.lName.$error.required">Last name is required</span>
+                                        </div>
+                                        <!-- Address Street -->
+                                        <div class="form-group">
+                                                <label for="inputTalentFirstName">Street</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.street" 
+                                                        name="street"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                        </div>
+                                        <!-- Address City -->
+                                        <div class="form-group">
+                                                <label for="inputTalentFirstName">City</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.city" 
+                                                        name="city"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                        </div>
+                                        <!-- Address Country -->
+                                        <div class="form-group">
+                                                <label for="inputTalentFirstName">Country</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.country" 
+                                                        name="country"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                        </div>                                
+                                    </div>
 
                         </div>
                     </div>
@@ -102,65 +159,6 @@
                             </div>
                         </div>
                         <div class="row">
-                                <div class="col-md-3">
-                                    <!-- First Name -->
-                                    <div class="form-group">
-                                            <label for="inputTalentFirstName" class="required">First Name</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.firstName" 
-                                                    name="firstName"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                            <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.fName.$error.required">First name is required</span>
-                                    </div>
-                                            
-                                    <!-- Last Name -->
-                                    <div class="form-group">
-                                            <label for="inputTalentLasttName" class="required">Last Name</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.lastName" 
-                                                    name="firstName"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                            <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.lName.$error.required">Last name is required</span>
-                                    </div>
-                                    <!-- Address Street -->
-                                    <div class="form-group">
-                                            <label for="inputTalentFirstName">Street</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.street" 
-                                                    name="street"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                    </div>
-                                    <!-- Address City -->
-                                    <div class="form-group">
-                                            <label for="inputTalentFirstName">City</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.city" 
-                                                    name="city"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                    </div>
-                                    <!-- Address Country -->
-                                    <div class="form-group">
-                                            <label for="inputTalentFirstName">Country</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.country" 
-                                                    name="country"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                    </div>                                
-                                </div>
-        
-                                <div class="col-md-1"></div>
-                                <div class="col-md-0-6"></div>
-
                                 <div class="col-md-3">
                                     <!-- Contact Email -->
                                     <div class="form-group">

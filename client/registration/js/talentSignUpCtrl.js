@@ -82,7 +82,6 @@ angular
                                             password: vm.newTalentRegister.pass1,
                                             profile: {
                                                 type: 'Talent',
-                                                tcAcknowledge: vm.newTalentRegister.legal,
                                                 talentId: vm.newTalentRegister.talentId
                                             }
                                         },
@@ -149,6 +148,7 @@ angular
                             
                             /* populate talent attributes */
                             vm.talent.status = record.status;
+                            vm.talent.tcAcknowledge =  record.legal,
                             vm.talent.statusDate = vm.currentDate;
                             vm.talent.origin = record.origin;
                             vm.talent.originDate = vm.currentDate;

@@ -54,7 +54,7 @@ angular
                     skill1: currentTalent.skill1 ? currentTalent.skill1 : null,
                     skill2: currentTalent.skill2 ? currentTalent.skill2 : null,
                     skill3: currentTalent.skill3 ? currentTalent.skill3 : null,
-                    tcAcknowledge: currentUser.profile.tcAcknowledge ? currentUser.profile.tcAcknowledge : null
+                    tcAcknowledge: currentTalent.tcAcknowledge ? currentTalent.tcAcknowledge : null
                       }
                   };
                   vm.dependency.changed();
@@ -83,8 +83,7 @@ angular
                     } else {
                                 profileUser = {
                                       type: ENUM.USER.TALENT,
-                                      talentId: talentId,
-                                      tcAcknowledge: profileRec.tcAcknowledge
+                                      talentId: talentId
                                 };
                                 Meteor.users.update(Meteor.userId(),
                                     {$set: {
