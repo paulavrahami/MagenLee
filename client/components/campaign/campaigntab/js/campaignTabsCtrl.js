@@ -7,7 +7,7 @@ import Auditions from '/model/auditions';
 
 angular
     .module('skillera')
-    .controller('campaignTabs', function($state, $scope, $reactive, $uibModal, moment, utilsService,$UserAlerts,dbhService, ENUM) {
+    .controller('campaignTabs', function($state, $scope, $rootScope, $reactive, $uibModal, moment, utilsService,$UserAlerts,dbhService, ENUM) {
 
         let vm = this;
         $reactive(vm).attach($scope);
@@ -113,6 +113,10 @@ angular
          */
         function showInfoMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
+        }
+
+        function showErrorMessage(msgArg, callbackArg) {
+            $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true, callbackArg);
         }
 
         $scope.$watch("vm.campaign.skills", function() {
@@ -630,16 +634,6 @@ angular
         };
 
 
-
-        /**
-         * @desc Delete a skill;
-         * @param {Number} indexArg
-         */
-        vm.delSkill = function (indexArg) {
-
-            vm.campaign.skills.splice(indexArg, 1);
-        };
-
         /**
          * @desc Clear a campaign date;
          */
@@ -653,13 +647,18 @@ angular
 
         /** Skills management area */
 
+
         /**
          * @desc Add a new empty skill.
          */
         vm.addSkill = function () {
 
-// if the add skill button was clicked with no skill exist at all then do nothing
+            if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
+                showErrorMessage('Skill cannot be added as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+                return;
+            };
 
+            // if the add skill button was clicked with no skill exist at all then do nothing
             if (vm.campaign.skills[0].type === '') {
                 return
             };
@@ -684,9 +683,20 @@ angular
          * @desc remove a skill from campaign
          * @param {Object} skillArg
          *
-         */
-        vm.removeSkill = function(skillArg) {
+        */
 
+        function deleteItemsPerSkill (skillArg) {
+            for (let i = 0; i < vm.audition.items.length; i++) {
+                let item = Items.findOne({_id:vm.audition.items[i].itemId});
+                if (item.skill === skillArg.type) {
+                    vm.audition.items.splice(i,1);
+                    i--;
+                };
+            };
+        };
+
+
+        function deleteSkill (skillArg){
             let index = vm.campaign.skills.indexOf(skillArg);
 
             if (index > -1) {
@@ -696,8 +706,6 @@ angular
                         type: '',
                         experience: '',
                         importance: ''
-                        // auditionId: '',
-                        // auditionName: ''
                     };
                 }
                 vm.campaign.skills.splice(index, 1);
@@ -714,8 +722,8 @@ angular
                 }
 
                 /**
-                 * No skills, so create an empty one;
-                 */
+                * No skills, so create an empty one;
+                */
                 if (index < 0) {
                     vm.addSkill();
                 }
@@ -724,6 +732,90 @@ angular
                 }
             }
         };
+
+
+        vm.removeSkill = function(skillArg) {
+
+            let foundItemForSkill = false;
+            // scan all audition's items until one is found for the skill
+            for (let i=0; (i<vm.audition.items.length) && !foundItemForSkill; i++) {
+                let item = Items.findOne({_id:vm.audition.items[i].itemId});
+                if (!item) {
+                    alert(`Cannot get item id: ${vm.audition.items[i].itemId}`);
+                    return;
+                };
+                if (item.skill === skillArg.type) {
+                    // item has been found for the skill
+                    foundItemForSkill = true;
+                    if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
+                        showErrorMessage('The skill cannot be removed as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+                        return;
+                    } else {
+                        if (vm.audition.status === ENUM.AUDITION_STATUS.IN_WORK) {
+                            showErrorMessage('The skill cannot be removed as related challenges have already been defined. Please remove these challenges in order to proceed');
+                            return;
+                            // *** Zvika - TBD/ Need to invoke the "auditionEdit.saveEditItem" function from the "auditionEditCtrl"
+                            // let msgArg = "Challenges already defined for this skill and should be removed from the audition. Please confirm";
+                            // $UserAlerts.prompt(
+                            //     msgArg,
+                            //     ENUM.ALERT.INFO,
+                            //     false,
+                            //     function(){
+                            //         deleteItemsPerSkill (skillArg);
+                            //         deleteSkill (skillArg);
+                            //     },
+                            //     function(){
+                            //     }
+                            // );
+                        };
+                    };
+                };
+            };
+            // if no item has been found for the skill, the skill can be removed
+            if (!foundItemForSkill) {
+                deleteSkill (skillArg);
+            };
+        };
+
+
+        vm.modifySkill = function(skillArg) {
+            let foundItemForSkill = false;
+            // scan all audition's items until one is found for the skill
+            for (let i=0; (i<vm.audition.items.length) && !foundItemForSkill; i++) {
+                let item = Items.findOne({_id:vm.audition.items[i].itemId});
+                if (!item) {
+                    alert(`Cannot get item id: ${vm.audition.items[i].itemId}`);
+                    return;
+                };
+                if (item.skill === skillArg.type) {
+                    // item has been found for the skill
+                    foundItemForSkill = true;
+                    if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
+                        showErrorMessage('The skill cannot be modified as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+                        return;
+                    } else {
+                        if (vm.audition.status === ENUM.AUDITION_STATUS.IN_WORK) {
+                            showErrorMessage('The skill cannot be modified as related challenges have already been defined. Please remove these challenges in order to proceed');
+                            return;
+                            // *** Zvika - TBD/ Need to invoke the "auditionEdit.saveEditItem" function from the "auditionEditCtrl"
+                            // let msgArg = "Challenges already defined for this skill and should be removed from the audition. Please confirm";
+                            // $UserAlerts.prompt(
+                            //     msgArg,
+                            //     ENUM.ALERT.INFO,
+                            //     false,
+                            //     function(){
+                            //         deleteItemsPerSkill (skillArg);
+                            //         deleteSkill (skillArg);
+                            //     },
+                            //     function(){
+                            //     }
+                            // );
+                        };
+                    };
+                };
+            };
+        };
+
 
         /**
          * @desc Add a new frm/t salary expectations.

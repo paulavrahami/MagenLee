@@ -191,6 +191,21 @@ angular
         /**
          *
          */
+        function checkItemsForSkill () {
+
+            let campaign = Campaigns.findOne({_id: auditionEdit.audition.campaignId});
+            let noChallenges = false;
+            // check for each campaign's skill if items are associated with
+            for (let i = 0; (i < campaign.skills.length) && !noChallenges; i++) {
+                if (!Items.findOne({skill: campaign.skills[i].type})) {
+                    noChallenges = true;
+                    showErrorMessage('No challenges have been defined for the "' + campaign.skills[i].type + '" skill');
+                    return false;
+                };
+            };
+            return true;
+        };
+
         auditionEdit.auditionDone = function () {
             // function checkAudition () {
             //     return new Promise((resolve, reject) => {
@@ -215,6 +230,7 @@ angular
             //         });
             // }).catch(function(error, success){});
 
+            
             if (!auditionEdit.audition.items[0].itemId){
                   showInfoMessage('At least one challenge have to be defined for the audition', function () {});
             } else {
@@ -225,6 +241,10 @@ angular
                       ENUM.ALERT.INFO,
                       false,
                       function(){
+                          let itemsExist = checkItemsForSkill();
+                          if (!itemsExist) {
+                            return;
+                          };                   
                           auditionEdit.audition.status = ENUM.AUDITION_STATUS.AVAILABLE;
                           auditionEdit.saveAuditionStatus();
                           $state.go("recruiter.recruiterDemand",{id:auditionEdit.audition.campaignId,'#':'panel-3'});

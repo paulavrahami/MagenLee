@@ -111,11 +111,11 @@
 							<tbody >
 								<tr ng-repeat="skill in vm.campaign.skills">
 									<td>
-										<input ng-disabled="vm.campaignPublished" type="text" name='name0' placeholder='Type' ng-model="skill.type" class="form-control"/>
+										<input ng-disabled="vm.campaignPublished" type="text" name='name' placeholder='Type' ng-model="skill.type" ng-click="vm.modifySkill(skill)" class="form-control"/>
 									</td>
 									<td>
 										<div>
-											<select class="form-control" id="skillImportance" ng-disabled="vm.campaignPublished" ng-model="skill.importance"
+											<select class="form-control" ng-click="vm.modifySkill(skill)" id="skillImportance" ng-disabled="vm.campaignPublished" ng-model="skill.importance"
 											  	ng-class="{'importance-nice' : skill.importance === 'Nice to have',
 														'importance-low' : skill.importance === 'Low',
 														'importance-normal' : skill.importance === 'Normal',
