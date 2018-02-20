@@ -49,11 +49,15 @@ angular
                     contactEmail: currentTalent.contactEmail  ? currentTalent.contactEmail  : null,
                     contactPhone: currentTalent.contactPhone ? currentTalent.contactPhone : null,
                     receiveJobOffer: currentTalent.receiveJobOffer ? currentTalent.receiveJobOffer : null,
+                    linkedin: currentTalent.linkedin ? currentTalent.linkedin : null,
+                    proffesion: currentTalent.proffesion ? currentTalent.proffesion : null,
                     expertizeCategory: currentTalent.expertizeCategory ? currentTalent.expertizeCategory : null,
                     expertizeSubCategory: currentTalent.expertizeSubCategory ? currentTalent.expertizeSubCategory : null,
                     skill1: currentTalent.skill1 ? currentTalent.skill1 : null,
                     skill2: currentTalent.skill2 ? currentTalent.skill2 : null,
                     skill3: currentTalent.skill3 ? currentTalent.skill3 : null,
+                    skill4: currentTalent.skill4 ? currentTalent.skill4 : null,
+                    skill5: currentTalent.skill5 ? currentTalent.skill5 : null,
                     tcAcknowledge: currentTalent.tcAcknowledge ? currentTalent.tcAcknowledge : null
                       }
                   };
@@ -117,12 +121,16 @@ angular
                               'country': talentRecord.country,
                               'contactPhone': talentRecord.contactPhone,
                               'contactEmail': talentRecord.contactEmail,
+                              'proffesion': talentRecord.proffesion,
                               'expertizeCategory': talentRec.expertizeCategory,
                               'expertizeSubCategory': talentRecord.expertizeSubCategory,
                               'receiveJobOffer': talentRecord.receiveJobOffer,
+                              'linkedin': talentRecord.linkedin,
                               'skill1': talentRecord.skill1,
                               'skill2': talentRecord.skill2,
-                              'skill3': talentRecord.skill3}},
+                              'skill3': talentRecord.skill3,
+                              'skill4': talentRecord.skill4,
+                              'skill5': talentRecord.skill5}},
                               function (errorArg, tempIdArg) {
                   if (errorArg) {
                       showErrorMessage(errorArg.message);

@@ -152,11 +152,37 @@
                                                         required>
                                         </div>                                
                                     </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-0-6"></div>
+                                    <div class="col-md-3">
+                                        <!-- Contact Email -->
+                                        <div class="form-group">
+                                                <label for="inputTalentContactEmail">Contact Email</label>
+                                                <input  type="email" 
+                                                        ng-model="vm.newTalentRegister.profile.contactEmail" 
+                                                        name="contactEmail"
+                                                        class="form-control " 
+                                                        placeholder="your@email.addr" 
+                                                        required>
+                                        </div>
+                                        <!-- Contact Phone -->
+                                        <div class="form-group">
+                                                <label for="inputTalentPhone">Contact Phone</label>
+                                                <input type="text"
+                                                        ui-mask="(999) 999-9999"
+                                                        ui-mask-placeholder
+                                                        ui-mask-placeholder-char="_"
+                                                        ng-model="vm.newTalentRegister.profile.contactPhone"
+                                                        name="phoneNumber"
+                                                        class="form-control "
+                                                        placeholder="">
+                                        </div>
+                                    </div>
 
                         </div>
                     </div>
 
-                    <!-- Talent Tab -->
+                    <!-- Personal Tab -->
                     <div id="menu2" class="tab-pane fade">
                         <div class="row">
                             <div class="col-md-12">
@@ -165,28 +191,7 @@
                         </div>
                         <div class="row">
                                 <div class="col-md-3">
-                                    <!-- Contact Email -->
-                                    <div class="form-group">
-                                            <label for="inputTalentContactEmail">Contact Email</label>
-                                            <input  type="email" 
-                                                    ng-model="vm.newTalentRegister.profile.contactEmail" 
-                                                    name="contactEmail"
-                                                    class="form-control " 
-                                                    placeholder="your@email.addr" 
-                                                    required>
-                                    </div>
-                                    <!-- Contact Phone -->
-                                    <div class="form-group">
-                                            <label for="inputTalentPhone">Contact Phone</label>
-                                            <input type="text"
-                                                    ui-mask="(999) 999-9999"
-                                                    ui-mask-placeholder
-                                                    ui-mask-placeholder-char="_"
-                                                    ng-model="vm.newTalentRegister.profile.contactPhone"
-                                                    name="phoneNumber"
-                                                    class="form-control "
-                                                    placeholder="">
-                                    </div>
+                                    
                                     <!-- Receive Other Job Offering -->
                                     <div class="form-group">
                                             <label>Receive Job Offering</label>
@@ -201,62 +206,7 @@
                                             No
                                     </div>
                                 </div>
-                                <div class="col-md-1"></div>
-                                <div class="col-md-0-6"></div>
-                                
-                                <div class="col-md-3">
-                                    <!-- Expertize category -->
-                                    <div class="form-group">
-                                            <label for="inputTalentExpertizeCategory">Expertize Category</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.expertizeCategory" 
-                                                    name="expertiseCategory"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                    </div>
-                                    <!-- Expertize sub category -->
-                                    <div class="form-group">
-                                            <label for="inputTalentExpertizeSubCategory">Expertize Sub Category</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.expertizeSubCategory" 
-                                                    name="expertiseSubCategory"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                    </div>
-                                    <!-- Skills -->
-                                    <div class="form-group">
-                                            <label for="inputTalentSkill1">Skill 1</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.skill1" 
-                                                    name="skill1"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                                    
-                                    </div>
-                                    <div class="form-group">
-                                            <label for="inputTalentSkill2">Skill 2</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.skill2" 
-                                                    name="skill2"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                                    
-                                    </div>
-                                    <div class="form-group">
-                                            <label for="inputTalentSkill1">Skill 3</label>
-                                            <input type="text" 
-                                                    ng-model="vm.newTalentRegister.profile.skill3" 
-                                                    name="skill3"
-                                                    class="form-control " 
-                                                    placeholder="" 
-                                                    required>
-                                                    
-                                    </div>
-                                </div>
+
 
                         </div>
                     </div>
@@ -268,6 +218,110 @@
                                 <h4 class="sectionHeader"><strong><span class="fa fa-clipboard fa-1x"></span>&nbsp;Credentials</strong></h4>
                              </div>
                         </div>
+
+                        <div class="row">
+                             <div class="col-md-3">
+                                    <!-- Proffesion -->
+                                    <div class="form-group">
+                                                <label for="inputTalentProffesion">Proffesion</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.proffesion" 
+                                                        name="proffesion"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                    </div>
+                                    <!-- Expertize category -->
+                                    <div class="form-group">
+                                                <label for="inputTalentExpertizeCategory">Expertize Category</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.expertizeCategory" 
+                                                        name="expertiseCategory"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                     </div>
+                                     <!-- Expertize sub category -->
+                                     <div class="form-group">
+                                                <label for="inputTalentExpertizeSubCategory">Expertize Sub Category</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.expertizeSubCategory" 
+                                                        name="expertiseSubCategory"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                     </div>
+                                     <!-- Linkedin profile URL -->
+                                     <div class="form-group">
+                                                <label for="inputTalentLinkedinProfile">Linkedin Profile</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.linkedin" 
+                                                        name="linkedin"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                     </div>
+                             </div>
+
+                             <div class="col-md-1"></div>
+                             <div class="col-md-0-6"></div>
+                             
+                             <div class="col-md-3">
+
+                                 <!-- Skills -->
+                                 <div class="form-group">
+                                         <label for="inputTalentSkill1">Skill</label>
+                                         <input type="text" 
+                                                 ng-model="vm.newTalentRegister.profile.skill1" 
+                                                 name="skill1"
+                                                 class="form-control " 
+                                                 placeholder="" 
+                                                 required>
+                                                 
+                                 </div>
+                                 <div class="form-group">
+                                         <label for="inputTalentSkill2">Skill</label>
+                                         <input type="text" 
+                                                 ng-model="vm.newTalentRegister.profile.skill2" 
+                                                 name="skill2"
+                                                 class="form-control " 
+                                                 placeholder="" 
+                                                 required>
+                                                 
+                                 </div>
+                                 <div class="form-group">
+                                         <label for="inputTalentSkill1">Skill</label>
+                                         <input type="text" 
+                                                 ng-model="vm.newTalentRegister.profile.skill3" 
+                                                 name="skill3"
+                                                 class="form-control " 
+                                                 placeholder="" 
+                                                 required>
+                                                 
+                                 </div>
+                                 <div class="form-group">
+                                                <label for="inputTalentSkill1">Skill</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.skill4" 
+                                                        name="skill4"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                                        
+                                 </div>
+                                 <div class="form-group">
+                                                <label for="inputTalentSkill1">Skill</label>
+                                                <input type="text" 
+                                                        ng-model="vm.newTalentRegister.profile.skill5" 
+                                                        name="skill5"
+                                                        class="form-control " 
+                                                        placeholder="" 
+                                                        required>
+                                                                
+                                 </div>
+                             </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

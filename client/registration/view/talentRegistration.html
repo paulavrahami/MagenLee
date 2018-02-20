@@ -12,9 +12,14 @@
                     </div>
                     <!-- Talent Tab -->
                     <div class="process-step">
-                            <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu2"><i class="fa fa-clipboard fa-3x"></i></button>
-                            <p>Talent</p>
+                            <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu2"><i class="fa fa-address-card fa-3x"></i></button>
+                            <p>Personal</p>
                     </div>
+                    <!-- Credentials Tab -->
+                    <div class="process-step">
+                            <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu3"><i class="fa fa-clipboard fa-3x"></i></button>
+                            <p>Credintials</p>
+                        </div>
                 </div>
             </div>
         </div>
@@ -141,18 +146,9 @@
                                             required>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- Talent Tab -->
-                <div id="menu2" class="tab-pane fade">
-                    <div class="row">
-                            <div class="col-md-12">
-                                <h4 class="sectionHeader"><strong><span class="fa fa-clipboard fa-1x"></span>&nbsp;Talent Profile</strong></h4>
-                            </div>
-                    </div>
-                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-0-6"></div>
                         <div class="col-md-3">
-
                             <!-- Contact Email -->
                             <div class="form-group">
                                     <label for="talentContactEmail">Contact Email</label>
@@ -174,7 +170,19 @@
                                             name="phoneNumber"
                                             class="form-control "
                                             placeholder="">
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+                <!-- Personal Tab -->
+                <div id="menu2" class="tab-pane fade">
+                    <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="sectionHeader"><strong><span class="fa fa-address-card fa-1x"></span>&nbsp;Personal Profile</strong></h4>
                             </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
 
                             <!-- Receive Other Job Offering -->
                             <div class="form-group">
@@ -194,8 +202,35 @@
                         <div class="col-md-0-6"></div>
                         <div class="col-md-3">
 
-                            <!-- Expertize category -->
-                            <div class="form-group">
+                            
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credentials Tab -->
+                <div id="menu3" class="tab-pane fade">
+                    <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="sectionHeader"><strong><span class="fa fa-clipboard fa-1x"></span>&nbsp;Credentials</strong></h4>
+                            </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-3">
+                                <!-- Proffesion -->
+                                <div class="form-group">
+                                        <label for="talentProffesion">Proffesion</label>
+                                        <input type="text" 
+                                                ng-model="vm.talentRegistration.proffesion" 
+                                                name="proffesion"
+                                                class="form-control " 
+                                                placeholder="" 
+                                                required>
+                                </div>
+
+                                <!-- Expertize category -->
+                                <div class="form-group">
                                     <label for="talentExpertizeCategory">Expertize Category</label>
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.expertizeCategory" 
@@ -203,10 +238,10 @@
                                             class="form-control " 
                                             placeholder="" 
                                             required>
-                            </div>
+                                </div>
 
-                            <!-- Expertize sub category -->
-                            <div class="form-group">
+                                <!-- Expertize sub category -->
+                                <div class="form-group">
                                     <label for="talentExpertizeSubCategory">Expertize Sub Category</label>
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.expertizeSubCategory" 
@@ -214,11 +249,24 @@
                                             class="form-control " 
                                             placeholder="" 
                                             required>
+                                </div>
+                                <!-- Linkedin profile -->
+                                <div class="form-group">
+                                        <label for="talentLinkedinProfile">Linkedin Profile</label>
+                                        <input type="text" 
+                                                ng-model="vm.talentRegistration.linkedin" 
+                                                name="linkedin"
+                                                class="form-control " 
+                                                placeholder="" 
+                                                required>
+                                </div>
                             </div>
-
-                            <!-- Skills -->
-                            <div class="form-group">
-                                    <label for="talentSkill1">Skill 1</label>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-0-6"></div>
+                            <div class="col-md-3">
+                                <!-- Skills -->
+                                <div class="form-group">
+                                    <label for="talentSkill1">Skill</label>
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.skill1" 
                                             name="skill1"
@@ -226,10 +274,10 @@
                                             placeholder="" 
                                             required>
                                                     
-                            </div>
+                                </div>
 
-                            <div class="form-group">
-                                    <label for="talentSkill2">Skill 2</label>
+                                <div class="form-group">
+                                    <label for="talentSkill2">Skill</label>
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.skill2" 
                                             name="skill2"
@@ -237,10 +285,10 @@
                                             placeholder="" 
                                             required>
                                                     
-                            </div>
+                                </div>
 
-                            <div class="form-group">
-                                    <label for="talentSkill1">Skill 3</label>
+                                <div class="form-group">
+                                    <label for="talentSkill1">Skill</label>
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.skill3" 
                                             name="skill3"
@@ -248,9 +296,30 @@
                                             placeholder="" 
                                             required>
                                                     
+                                </div>
+                                <div class="form-group">
+                                    <label for="talentSkill1">Skill</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.skill4" 
+                                            name="skill4"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                                        
+                                </div>
+                                <div class="form-group">
+                                    <label for="talentSkill1">Skill</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.skill5" 
+                                            name="skill5"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                                        
+                                </div>
                             </div>
-                        </div>
                     </div>
+
                 </div>
 
             </div>

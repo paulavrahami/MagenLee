@@ -162,12 +162,16 @@ angular
                             vm.talent.contactPhone = record.profile.contactPhone;
                             vm.talent.contactEmail = record.profile.contactEmail;
                             vm.talent.receiveJobOffer = record.profile.receiveJobOffer;
+                            vm.talent.linkedin = record.profile.linkedin;
                             vm.talent.talentId = record.talentId;
+                            vm.talent.proffesion = record.profile.proffesion;
                             vm.talent.expertizeCategory = record.profile.expertizeCategory;
                             vm.talent.expertizeSubCategory = record.profile.expertizeSubCategory;
                             vm.talent.skill1 = record.profile.skill1;
                             vm.talent.skill2 = record.profile.skill2;
                             vm.talent.skill3 = record.profile.skill3;
+                            vm.talent.skill4 = record.profile.skill4;
+                            vm.talent.skill5 = record.profile.skill5;
             
                             /** Make sure it has control object; */
                             if (!vm.talent.control) {
