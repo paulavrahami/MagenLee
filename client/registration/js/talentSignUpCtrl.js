@@ -161,6 +161,8 @@ angular
                             vm.talent.country = record.profile.country;
                             vm.talent.contactPhone = record.profile.contactPhone;
                             vm.talent.contactEmail = record.profile.contactEmail;
+                            vm.talent.birthDate = record.profile.birthDate;
+                            vm.talent.gender = record.profile.gender;
                             vm.talent.receiveJobOffer = record.profile.receiveJobOffer;
                             vm.talent.linkedin = record.profile.linkedin;
                             vm.talent.talentId = record.talentId;

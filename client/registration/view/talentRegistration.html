@@ -183,6 +183,34 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
+                            <!-- Date of Birth -->
+                            <div class="form-group">
+                                    <label  for="talentDOB">Date of Birth</label>
+                                    <input class=" form-control"
+                                            type="date"
+                                            id="endofDate"
+                                            name="endofDate"
+                                            ng-model="vm.talentRegistration.birthDate">
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="form-group">
+                                    <label>Gender</label>
+                                    <input type="radio"
+                                            value = "Male"
+                                            ng-model="vm.talentRegistration.gender">
+                                    Male
+                                    <input type="radio"
+                                            value = "Female"
+                                            ng-model="vm.talentRegistration.gender">
+                                    Female
+                            </div>
+
+                            
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-0-6"></div>
+                        <div class="col-md-3">
 
                             <!-- Receive Other Job Offering -->
                             <div class="form-group">
@@ -197,12 +225,6 @@
                                             ng-model="vm.talentRegistration.receiveJobOffer">
                                     No
                             </div>
-                        </div>
-                        <div class="col-md-1"></div>
-                        <div class="col-md-0-6"></div>
-                        <div class="col-md-3">
-
-                            
 
                         
                         </div>

@@ -190,21 +190,50 @@
                             </div>
                         </div>
                         <div class="row">
+                                
                                 <div class="col-md-3">
-                                    
-                                    <!-- Receive Other Job Offering -->
-                                    <div class="form-group">
-                                            <label>Receive Job Offering</label>
-                                            <input type="radio"
-                                                    value = "Yes"
-                                                    ng-model="vm.newTalentRegister.profile.receiveJobOffer"
-                                                    checked>
-                                            Yes
-                                            <input type="radio"
-                                                    value = "No"
-                                                    ng-model="vm.newTalentRegister.profile.receiveJobOffer">
-                                            No
-                                    </div>
+                                        <!-- Date of Birth -->
+                                        <div class="form-group">
+                                                <label  for="inputTalentDOB">Date of Birth</label>
+                                                <input class=" form-control"
+                                                        type="date"
+                                                        id="endofDate"
+                                                        name="endofDate"
+                                                        ng-model="vm.newTalentTegister.profile.birthDate">
+                                        </div>
+
+                                        <!-- Gender -->
+                                        <div class="form-group">
+                                                        <label>Gender</label>
+                                                        <input type="radio"
+                                                                value = "Male"
+                                                                ng-model="vm.newTalentRegister.profile.gender"
+                                                                checked>
+                                                        Male
+                                                        <input type="radio"
+                                                                value = "Female"
+                                                                ng-model="vm.newTalentRegister.profile.gender">
+                                                        Female
+                                        </div>
+
+                                        
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-0-6"></div>
+                                <div class="col-md-3">
+                                        <!-- Receive Other Job Offering -->
+                                        <div class="form-group">
+                                                        <label>Receive Job Offering</label>
+                                                        <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.newTalentRegister.profile.receiveJobOffer"
+                                                                checked>
+                                                        Yes
+                                                        <input type="radio"
+                                                                value = "No"
+                                                                ng-model="vm.newTalentRegister.profile.receiveJobOffer">
+                                                        No
+                                        </div>
                                 </div>
 
 
