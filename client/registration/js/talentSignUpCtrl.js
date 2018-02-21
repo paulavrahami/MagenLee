@@ -92,7 +92,11 @@ angular
                                                 alert(vm.error);
                                             } else {
                                                 vm.handleTalent(vm.newTalentRegister);
-                                                $state.go('talent.challenges');
+                                                if (vm.talentType === 'TALENT'){
+                                                    $state.go('talent.challenges');
+                                                } else {
+                                                    $state.go('talent.challenges');
+                                                }
                                             }
                                         })
                                     );
