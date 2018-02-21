@@ -2,9 +2,11 @@
 
 angular
     .module('skillera')
-    .controller('talentSignUpCtrl', function($state, $scope, $reactive, $uibModal, dbhService, $UserAlerts,ENUM) {
+    .controller('talentSignUpCtrl', function($state,$stateParams, $scope, $reactive, $uibModal, dbhService, $UserAlerts,ENUM) {
 
         let vm = this;
+
+        vm.talentType = $stateParams.type;
 
         $reactive(vm).attach($scope);
         vm.dependency = new Deps.Dependency();

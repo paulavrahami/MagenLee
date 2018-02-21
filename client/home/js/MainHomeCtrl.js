@@ -1,11 +1,15 @@
 angular
     .module('skillera')
-    .controller('MainHomeCtrl', function($state,$scope,$reactive,$uibModal, ENUM) {
+    .controller('MainHomeCtrl', function($state,$stateParams, $scope,$reactive,$uibModal, ENUM) {
 
         let vm = this;
         $reactive(vm).attach($scope);
 
+        vm.talentType = $stateParams.type;
+
         vm.signup = {};
+
+        vm.talentSignUpType = '';
 
         vm.helpers({
             isLoggedIn() {
@@ -36,6 +40,16 @@ angular
                 },500);
             }
         });
+
+        /**
+         * @desc In case of doing Talent signin up, based on the option clicked on the home page
+         * Talent or Domain Expert) route to the appropriate page after registration
+         */
+
+        vm.talentTypeRoute = function(type) {
+            vm.talentType = type;
+        };
+
 
         /**
          * @desc When going to Recruiter Main, decide to which page to route the user
