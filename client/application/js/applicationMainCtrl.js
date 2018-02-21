@@ -1,7 +1,7 @@
 
 angular
     .module('skillera')
-    .controller('applicationMain', function($state,$stateParams,$window, $scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
+    .controller('applicationMain', function($state,$stateParams,$window, $scope,$reactive,dbhService, $UserAlerts, ENUM, MAP, moment, $uibModal) {
 
         let vm = this;
         // $reactive(vm).attach($scope);
@@ -302,9 +302,43 @@ angular
             } else {
                 vm.reveal(applicationRec);
             }
-
-
         };
+
+
+        vm.viewAuditionResults = function(applicationArg) {
+            // Invoke the application process in a 'preview' mode to provide the recruiter with the ability
+            // to view the actual audition conducted by the Talent
+            vm.application = applicationArg;
+            vm.howItWorkLang = 'eng';
+            vm.application.sessions = [];
+            vm.application.sessions.push({
+                date: (new Date()),
+                states: vm.application.states ? vm.application.states : {}
+            });
+           
+            vm.auditionViewMode = ENUM.AUDITION_VIEW_MODE.RESULTS;
+            $scope.auditionViewMode = vm.auditionViewMode;
+
+            vm.modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'client/audition/view/auditionExecute.html',
+                controller: 'AuditionExecuteCtrl',
+                controllerAs: 'vm',
+                keyboard: false,
+                backdrop: 'static',
+                scope: $scope,
+                resolve: {
+                    auditionId: function () {
+                        return vm.campaign.auditionId;
+                    },
+                    applicationCtrl: function () {
+                        return vm;
+                    }
+                },
+                size: 'executeAudition'
+            });
+        };
+
 
         //Round grades for presentation
         vm.round = function(grade) {
