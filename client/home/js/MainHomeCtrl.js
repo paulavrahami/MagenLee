@@ -9,7 +9,6 @@ angular
 
         vm.signup = {};
 
-        vm.talentSignUpType = '';
 
         vm.helpers({
             isLoggedIn() {

@@ -24,7 +24,7 @@ function routerConfig($stateProvider) {
       controllerAs: 'vm'
     })
     .state('talentSigningUp', {
-      url:'/talentSignUp',
+      url:'/talentSignUp/:type',
       templateUrl: 'client/registration/view/talentSignUp.html',
       controller: 'talentSignUpCtrl',
       controllerAs: 'vm'

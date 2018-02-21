@@ -6,9 +6,8 @@ angular
 
         let vm = this;
 
-        vm.talentType = $stateParams.type;
-
         $reactive(vm).attach($scope);
+        vm.talentType = $stateParams.type;
         vm.dependency = new Deps.Dependency();
         vm.newTalentRegister = {};
         vm.newTalentRegister.profile = {};
