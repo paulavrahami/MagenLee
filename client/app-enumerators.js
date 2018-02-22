@@ -29,6 +29,10 @@ angular
             MANUAL:     'Manual',
             AUTOMATIC:  'Automatic'
         },
+        AUDITION_VIEW_MODE : {
+            PREVIEW:     'Preview',
+            RESULTS:     'Results'
+        },
         ITEM_STATUS : {
             NEW:        'New',
             IN_WORK:    'In Work',
