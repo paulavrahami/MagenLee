@@ -25,6 +25,11 @@
                             <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu4"><i class="fa fa-cog fa-3x"></i></button>
                             <p>Setting</p>
                     </div>
+                    <!-- Account Tab -->
+                    <div class="process-step">
+                        <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu5"><i class="fa fa-briefcase fa-3x"></i></button>
+                        <p>Account</p>
+                </div>
                 </div>
             </div>
         </div>
@@ -226,19 +231,7 @@
                                             placeholder="" 
                                             required>
                             </div>
-                            <!-- Receive Other Job Offering -->
-                            <div class="form-group">
-                                    <label>Receive Job Offering</label>
-                                    <input type="radio"
-                                            value = "Yes"
-                                            ng-model="vm.talentRegistration.receiveJobOffer"
-                                            checked>
-                                    Yes
-                                    <input type="radio"
-                                            value = "No"
-                                            ng-model="vm.talentRegistration.receiveJobOffer">
-                                    No
-                            </div>
+                            
 
                         
                         </div>
@@ -365,6 +358,66 @@
                                     <h4 class="sectionHeader"><strong><span class="fa fa-cog fa-1x"></span>&nbsp;Setting</strong></h4>
                                 </div>
                         </div>
+
+                        <div class="row">
+                                <div class="col-md-3">
+
+                                        <!-- Receive Other Job Offering -->
+                                        <div class="form-group">
+                                                <label>Receive Job Offering</label>
+                                                <input type="radio"
+                                                        value = "Yes"
+                                                        ng-model="vm.talentRegistration.receiveJobOffer"
+                                                        checked>
+                                                Yes
+                                                <input type="radio"
+                                                        value = "No"
+                                                        ng-model="vm.talentRegistration.receiveJobOffer">
+                                                No
+                                        </div>
+
+                                        <!-- Share contact -->
+                                        <div class="form-group">
+                                                        <label>Share Contact</label>
+                                                        <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.talentRegistration.shareContact"
+                                                                checked>
+                                                Yes
+                                                        <input type="radio"
+                                                                value = "No"
+                                                                ng-model="vm.talentRegistration.shareContact">
+                                                No
+                                        </div>
+
+                                        <!-- Discrete Ind -->
+                                        <div class="form-group">
+                                                        <label>Discrete Indicator</label>
+                                                        <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.talentRegistration.discreteInd"
+                                                                checked>
+                                                Yes
+                                                        <input type="radio"
+                                                                value = "No"
+                                                                ng-model="vm.talentRegistration.discreteInd">
+                                                No
+                                        </div>
+                                </div>
+                        </div>
+
+                </div>
+
+                <!-- Account Tab -->
+                <div id="menu5" class="tab-pane fade">
+                                <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="sectionHeader"><strong><span class="fa fa-briefcase fa-1x"></span>&nbsp;Account</strong></h4>
+                                        </div>
+                                </div>
+                                <div class="row">
+                                                <h4 class="recruiter-signUp-titel">Talent Account feature is comming soon...</h4>
+                                </div>
                 </div>
 
             </div>

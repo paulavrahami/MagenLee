@@ -28,7 +28,12 @@
                             <div class="process-step">
                                 <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu4"><i class="fa fa-cog fa-3x"></i></button>
                                 <p>Settings</p>
-                                    </div>
+                            </div>
+                            <!-- Account Tab -->
+                            <div class="process-step">
+                                <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu5"><i class="fa fa-briefcase fa-3x"></i></button>
+                                <p>Account</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -237,19 +242,7 @@
                                                                 placeholder="" 
                                                                 required>
                                                 </div>
-                                        <!-- Receive Other Job Offering -->
-                                        <div class="form-group">
-                                                        <label>Receive Job Offering</label>
-                                                        <input type="radio"
-                                                                value = "Yes"
-                                                                ng-model="vm.newTalentRegister.profile.receiveJobOffer"
-                                                                checked>
-                                                        Yes
-                                                        <input type="radio"
-                                                                value = "No"
-                                                                ng-model="vm.newTalentRegister.profile.receiveJobOffer">
-                                                        No
-                                        </div>
+                                        
                                 </div>
 
 
@@ -377,8 +370,64 @@
                                      </div>
                                 </div>
 
+                                <div class="row">
+                                        <div class="col-md-3">
+                                                <!-- Receive Other Job Offering -->
+                                                <div class="form-group">
+                                                        <label>Receive Job Offering</label>
+                                                        <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.newTalentRegister.profile.receiveJobOffer"
+                                                                checked>
+                                                        Yes
+                                                        <input type="radio"
+                                                                value = "No"
+                                                                ng-model="vm.newTalentRegister.profile.receiveJobOffer">
+                                                        No
+                                                </div>
 
+                                                <!-- Share contact -->
+                                                <div class="form-group">
+                                                        <label>Share Contact</label>
+                                                        <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.newTalentRegister.profile.shareContact"
+                                                                checked>
+                                                        Yes
+                                                        <input type="radio"
+                                                                value = "No"
+                                                                ng-model="vm.newTalentRegister.profile.shareContact">
+                                                        No
+                                                </div>
 
+                                                <!-- Discrete Indicator -->
+                                                <div class="form-group">
+                                                                <label>Discrete Indicator</label>
+                                                                <input type="radio"
+                                                                        value = "Yes"
+                                                                        ng-model="vm.newTalentRegister.profile.discreteInd"
+                                                                        checked>
+                                                                Yes
+                                                                <input type="radio"
+                                                                        value = "No"
+                                                                        ng-model="vm.newTalentRegister.profile.discreteInd">
+                                                                No
+                                                        </div>
+                                        </div>
+                                </div>
+
+                     </div>
+
+                     <!-- Account Tab -->
+                     <div id="menu5" class="tab-pane fade">
+                                <div class="row">
+                                     <div class="col-md-12">
+                                        <h4 class="sectionHeader"><strong><span class="fa fa-briefcase fa-1x"></span>&nbsp;Account</strong></h4>
+                                     </div>
+                                </div>
+                                <div class="row">
+                                      <h4 class="recruiter-signUp-titel">Talent Account feature is comming soon...</h4>
+                                </div>
                      </div>
                 </div>
             </div>

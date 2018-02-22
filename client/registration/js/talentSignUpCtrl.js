@@ -12,6 +12,8 @@ angular
         vm.newTalentRegister = {};
         vm.newTalentRegister.profile = {};
         vm.newTalentRegister.profile.receiveJobOffer = 'Yes';
+        vm.newTalentRegister.profile.shareContact = 'Yes';
+        vm.newTalentRegister.profile.discreteInd = 'No';
         vm.talent = {};
         vm.userNameInd = false;
         vm.currentDate = new Date();
@@ -170,6 +172,8 @@ angular
                             vm.talent.language = record.profile.language;
                             VM.talent.pictureURL = record.profile.pictureURL;
                             vm.talent.receiveJobOffer = record.profile.receiveJobOffer;
+                            vm.talent.shareContact = record.profile.shareContact;
+                            vm.talent.discreteInd = record.profile.discreteInd;
                             vm.talent.linkedin = record.profile.linkedin;
                             vm.talent.talentId = record.talentId;
                             vm.talent.proffesion = record.profile.proffesion;
