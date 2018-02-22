@@ -206,7 +206,7 @@
         </div>
 
         <!-- challenge framework -->
-        <div class="row">
+        <div class="row" ng-class="{'disable-challenge':vm.auditionViewDisabled}">
             <div class="col-md-1"></div>
             <div class="col-md-10 iframContainer">
                 <!--<iframe ng-attr-id="{{vm.executeItem}}" ng-src="{{vm.getAuditionItemSrc(vm.executeItem, vm.getTemplateId(vm.executeItem))}}"></iframe>-->
