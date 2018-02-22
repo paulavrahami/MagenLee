@@ -161,13 +161,14 @@ angular
                             vm.talent.registrationStatusDate = vm.currentDate;
                             vm.talent.firstName = record.profile.firstName;
                             vm.talent.lastName = record.profile.lastName
-                            vm.talent.street = record.profile.street;
-                            vm.talent.city = record.profile.city;
+                            vm.talent.address = record.profile.address;
                             vm.talent.country = record.profile.country;
                             vm.talent.contactPhone = record.profile.contactPhone;
                             vm.talent.contactEmail = record.profile.contactEmail;
                             vm.talent.birthDate = record.profile.birthDate;
                             vm.talent.gender = record.profile.gender;
+                            vm.talent.language = record.profile.language;
+                            VM.talent.pictureURL = record.profile.pictureURL;
                             vm.talent.receiveJobOffer = record.profile.receiveJobOffer;
                             vm.talent.linkedin = record.profile.linkedin;
                             vm.talent.talentId = record.talentId;
