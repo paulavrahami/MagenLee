@@ -95,9 +95,9 @@ angular
                                             } else {
                                                 vm.handleTalent(vm.newTalentRegister);
                                                 if (vm.talentType === 'TALENT'){
-                                                    $state.go('talent.challenges');
+                                                    $state.go('mainChallenges');
                                                 } else {
-                                                    $state.go('talent.challenges');
+                                                    $state.go('mainApplications');
                                                 }
                                             }
                                         })
@@ -170,7 +170,7 @@ angular
                             vm.talent.birthDate = record.profile.birthDate;
                             vm.talent.gender = record.profile.gender;
                             vm.talent.language = record.profile.language;
-                            VM.talent.pictureURL = record.profile.pictureURL;
+                            vm.talent.pictureURL = record.profile.pictureURL;
                             vm.talent.receiveJobOffer = record.profile.receiveJobOffer;
                             vm.talent.shareContact = record.profile.shareContact;
                             vm.talent.discreteInd = record.profile.discreteInd;
