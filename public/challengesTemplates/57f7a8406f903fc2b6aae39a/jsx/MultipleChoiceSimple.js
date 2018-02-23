@@ -134,22 +134,6 @@ Meteor.MultipleChoiceSimple = React.createClass({
                         }(),
 
                         function () {
-                            if (_this4.state['statement'] && _this4.state['statement'] !== "") {
-                                return React.createElement(
-                                    'div',
-                                    { className: 'md-col-12' + (_this4.state['float Right'] ? ' float-right': '') },
-                                    React.createElement(
-                                        'pre',
-                                        null,
-                                        _this4.state['statement']
-                                    )
-                                );
-                            } else {
-                                return React.createElement('span', null);
-                            }
-                        }(),                        
-
-                        function () {
                             if (_this4.state['image'] && _this4.state['image'] !== "") {
                                 return React.createElement(
                                     'div',
