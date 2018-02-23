@@ -99,10 +99,12 @@ angular
                                 {"phone": vm.application.phone},
                                 {"linkedInURL": vm.application.linkedInURL}
                                       ]},
-                                {"number": {$ne:vm.application.number}},
+                             // HG - Comment the retrieve of the original application by application number
+                             // and status date
+                             //   {"number": {$ne:vm.application.number}},
                                 {"campaignId": vm.application.campaignId},
-                                {"control.status": ENUM.APPLICATION_STATUS.COMPLETED},
-                                {"control.statusDate": new Date()}
+                                {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                             //   {"control.statusDate": new Date()}
                               ]});
                             } else {
                               vm.originalApplication = Applications.findOne({
@@ -111,21 +113,26 @@ angular
                                   {"email": vm.application.email},
                                   {"phone": vm.application.phone}
                                         ]},
-                                  {"number": {$ne:vm.application.number}},
+                                // HG - Comment the retrieve of the original application by application number
+                                // and status date
+                               //   {"number": {$ne:vm.application.number}},
                                   {"campaignId": vm.application.campaignId},
-                                  {"control.status": ENUM.APPLICATION_STATUS.COMPLETED},
-                                  {"control.statusDate": new Date()}
+                                  {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                               //   {"control.statusDate": new Date()}
                                 ]});
                             }
 
+                            //HG - Add the fraud type
                             vm.saved = true;
                             if (!vm.originalApplication) {
                                 vm.campaignApply.date = currentDate;
                                 vm.campaignApply.campaignID = vm.campaignId;
                                 vm.application.control.status = ENUM.APPLICATION_STATUS.COMPLETED;
+                                vm.application.fraudType = ENUM.APPLICATION_FRUAD_TYPE.NONE;
                                 vm.application.control.statusDate = new Date();
                             } else {
-                                vm.application.control.status = ENUM.APPLICATION_STATUS.RETRY;
+                                vm.application.control.status = ENUM.APPLICATION_STATUS.COMPLETED;
+                                vm.application.fraudType = ENUM.APPLICATION_FRUAD_TYPE.REPEAT;
                                 vm.application.control.statusDate = new Date();
                                 vm.application.originalNumber = vm.originalApplication.number;
                             }

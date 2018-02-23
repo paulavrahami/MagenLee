@@ -174,9 +174,9 @@ angular
 
                         // load an array of all items to be executed. Items will be removed from this array when executed/visited. By the end of the 
                         // audition's execution we'll now what items where not touched at all
-                        vm.application.auditionItemsNotDone = [];
+                        vm.itemsNotDone = [];
                         for (let i = 0; i < vm.audition.items.length ; i++) {
-                            vm.application.auditionItemsNotDone[i] = vm.audition.items[i].itemId;
+                            vm.itemsNotDone[i] = vm.audition.items[i].itemId;
                         };
                     }
                 });
@@ -212,12 +212,12 @@ angular
 
                     score += (currentItem.maxScore / 100) * parseInt(vm.application.states.itemsContent[contentIndex].state.validity ? vm.application.states.itemsContent[contentIndex].state.validity + '' : '0');
 
-                    // If the item has been executed/visited it should be dropped from the auditionItemsNotDone array.
+                    // If the item has been executed/visited it should be dropped from the "vm.itemsNotDone" array.
                     // This array will be evaluated at the time the audition is done in order to add to the application
                     // states the unexecuted items. This will make statistics and scoring calculations accurate
-                    let indexOf = vm.application.auditionItemsNotDone.indexOf(contentIndex);
+                    let indexOf = vm.itemsNotDone.indexOf(contentIndex);
                     if (indexOf !== -1) {
-                        vm.application.auditionItemsNotDone.splice(indexOf, 1);
+                        vm.itemsNotDone.splice(indexOf, 1);
                     };
                 }
             }
@@ -239,9 +239,9 @@ angular
 
             // add an empty entry to the application's state for each unexecuted/visited item.
             // See also vm.applicationSave and vm.createApplication
-            if (vm.application.auditionItemsNotDone.length !== 0) {
-                for (i = 0 ; i < vm.application.auditionItemsNotDone.length ; i++) {
-                    vm.application.states.itemsContent[vm.application.auditionItemsNotDone[i]] = {state: {validity: 0}};
+            if (vm.itemsNotDone.length !== 0) {
+                for (i = 0 ; i < vm.itemsNotDone.length ; i++) {
+                    vm.application.states.itemsContent[vm.itemsNotDone[i]] = {state: {validity: 0}};
                 };
             };
 
