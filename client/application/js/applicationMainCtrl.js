@@ -308,6 +308,8 @@ angular
         vm.viewAuditionResults = function(applicationArg) {
             // Invoke the application process in a 'preview' mode to provide the recruiter with the ability
             // to view the actual audition conducted by the Talent
+
+            vm.application = {};
             vm.application = applicationArg;
             vm.howItWorkLang = 'eng';
             vm.application.sessions = [];
@@ -315,6 +317,7 @@ angular
                 date: (new Date()),
                 states: vm.application.states ? vm.application.states : {}
             });
+            vm.application.states.currentItem = 1;
            
             vm.auditionViewMode = ENUM.AUDITION_VIEW_MODE.RESULTS;
             $scope.auditionViewMode = vm.auditionViewMode;
