@@ -46,7 +46,8 @@ angular
             vm.states.startTime          = vm.states.startTime + timeGap || (new Date()).valueOf();
             // vm.states.timerIsOn          = vm.states.timerIsOn || false;
             vm.states.timerIsOn          = false;
-            vm.states.currentItem        = vm.states.currentItem || 0;
+            vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.states.currentItem = 0 : 
+                                                                      (vm.states.currentItem = vm.states.currentItem || 0);
             vm.states.percentageComplete = vm.states.percentageComplete || 0;
             vm.countAnswer = vm.countAnswer || 0;
             vm.states.isRequestBreak     = false; //vm.states.isRequestBreak ||
@@ -54,7 +55,9 @@ angular
             vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.states.isExecuteIntro = false : 
                                                                       vm.states.isExecuteIntro = true;
             vm.states.isShowControls     = vm.states.isShowControls || false;
-            vm.states.timeOut            = vm.states.timeOut || false;
+            // vm.states.timeOut            = vm.states.timeOut || false;
+            vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.states.timeOut = false :
+                                                                     (vm.states.timeOut = vm.states.timeOut || false);
             /** counters */
             vm.states.hintCount          = vm.states.hintCount || 2;
             vm.states.fiftyFiftyCount    = vm.states.fiftyFiftyCount || 2;
