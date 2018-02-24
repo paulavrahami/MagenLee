@@ -95,9 +95,9 @@ angular
                                             } else {
                                                 vm.handleTalent(vm.newTalentRegister);
                                                 if (vm.talentType === 'TALENT'){
-                                                    $state.go('mainChallenges');
-                                                } else {
                                                     $state.go('mainApplications');
+                                                } else {
+                                                    $state.go('mainChallenges');
                                                 }
                                             }
                                         })
