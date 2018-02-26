@@ -1,0 +1,435 @@
+<form class="row" id="talentRegistration" name="talentRegistration" novalidate>
+    <!-- The signUp information Header -->
+    <div class="row">
+        <div class="col-md-0-6"></div>
+        <div class="col-md-11">
+            <div class="process">
+                <div class="process-row nav nav-tabs">
+                    <!-- User Tab -->
+                    <div class="process-step">
+                            <button type="button" class="btn-info btn-circle-tab" data-toggle="tab" href="#menu1"><i class="fa fa-user fa-3x"></i></button>
+                            <p>User</p>
+                    </div>
+                    <!-- Talent Tab -->
+                    <div class="process-step">
+                            <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu2"><i class="fa fa-address-card fa-3x"></i></button>
+                            <p>Personal</p>
+                    </div>
+                    <!-- Credentials Tab -->
+                    <div class="process-step">
+                            <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu3"><i class="fa fa-clipboard fa-3x"></i></button>
+                            <p>Expertise</p>
+                    </div>
+                    <!-- Setting Tab -->
+                    <div class="process-step">
+                            <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu4"><i class="fa fa-cog fa-3x"></i></button>
+                            <p>Setting</p>
+                    </div>
+                    <!-- Account Tab -->
+                    <div class="process-step">
+                        <button  type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu5"><i class="fa fa-briefcase fa-3x"></i></button>
+                        <p>Account</p>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-0-6"></div>
+    </div> 
+    <!-- The tabs' content -->
+    <div class="row">
+        <div class="col-md-0-6"></div>
+        <div class="col-md-11">
+            <div class="tab-content">
+                <!-- User Tab -->
+                <div id="menu1" class="tab-pane fade active in">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="sectionHeader"><strong><span class="fa fa-user fa-1x"></span>&nbsp;User Profile</strong></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <!-- User Name -->
+                            <div class="form-group">
+                                <label for="inputTalentUserName" class="required">User Name</label>
+                                <input type="text" 
+                                        ng-model="vm.talentRegistration.username"
+                                        name="userName"
+                                        class="form-control " 
+                                        placeholder=""
+                                        readonly 
+                                        required>
+                            </div>
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label for="inputTalentEmail" class="required">Email</label>
+                                <input type="email"
+                                        ng-model="vm.talentRegistration.email"
+                                        name="email"
+                                        class="form-control"
+                                        readonly
+                                        required>
+                            </div>
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label for="userAdminPass">Password</label>
+                                <div>
+                                    <div class="row">
+                                        <input  type="password"
+                                                ng-model="vm.userPasswordNew"
+                                                name="userPassNew"
+                                                class="form-control company-code-field"
+                                                placeholder="New Password"
+                                                ng-disabled = "!vm.setPassword">
+                                                <button ng-click="vm.setUserPassword()" class="btn btn-sm btn-info company-code-button" ng-show="!vm.setPassword" type="button">Change</button>
+                                                <!-- Confirm password -->
+                                        <input  type="password"
+                                                ng-model="vm.userPasswordConf"
+                                                name="userPassConf"
+                                                placeholder="Confirm new Password"
+                                                ng-show="vm.setPassword"
+                                                ng-class="{'company-code-field' : vm.setPassword}"
+                                                class="form-control"
+                                                required>
+                                        <span class="error-msg" ng-show="(vm.userPasswordNew !== vm.userPasswordConf) && vm.setPassword">Passwords do not match</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-0-6"></div>
+                        <div class="col-md-3">
+                            <!-- First Name -->
+                            <div class="form-group">
+                                    <label for="talentFirstName" class="required">First Name</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.firstName" 
+                                            name="firstName"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                    <span class="error-msg" ng-show="talentRegistration.$submitted && talentRegistration.firstName.$error.required">First name is required</span>
+                            </div>
+                                            
+                            <!-- Last Name -->
+                            <div class="form-group">
+                                    <label for="talentLasttName" class="required">Last Name</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.lastName" 
+                                            name="lastName"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                    <span class="error-msg" ng-show="talentRegistration.$submitted && talentRegistration.lastName.$error.required">Last name is required</span>
+                            </div>
+
+                        
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-0-6"></div>
+                        <div class="col-md-3">
+                            <!-- Contact Email -->
+                            <div class="form-group">
+                                    <label for="talentContactEmail">Contact Email</label>
+                                    <input  type="email" 
+                                            ng-model="vm.talentRegistration.contactEmail" 
+                                            name="contactEmail"
+                                            class="form-control"  
+                                            required>
+                            </div>
+
+                            <!-- Contact Phone -->
+                            <div class="form-group">
+                                    <label for="talentPhone">Contact Phone</label>
+                                    <input type="text"
+                                            ui-mask="(999) 999-9999"
+                                            ui-mask-placeholder
+                                            ui-mask-placeholder-char="_"
+                                            ng-model="vm.talentRegistration.contactPhone"
+                                            name="phoneNumber"
+                                            class="form-control "
+                                            placeholder="">
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+                <!-- Personal Tab -->
+                <div id="menu2" class="tab-pane fade">
+                    <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="sectionHeader"><strong><span class="fa fa-address-card fa-1x"></span>&nbsp;Personal Profile</strong></h4>
+                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <!-- Address  -->
+                            <div class="form-group">
+                                    <label for="talentCity">City</label>
+                                    <textarea 
+                                            ng-model="vm.talentRegistration.address"
+                                            class="form-control " 
+                                            placeholder="">
+                                    </textarea>
+                            </div>
+    
+                            <!-- Address Country -->
+                            <div class="form-group">
+                                    <label for="talentCountry">Country</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.country" 
+                                            name="country"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                            </div>
+                            
+
+                            
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-0-6"></div>
+                        <div class="col-md-3">
+                            <!-- Date of Birth -->
+                            <div class="form-group">
+                                    <label  for="talentDOB">Date of Birth</label>
+                                    <input class=" form-control"
+                                            type="date"
+                                            id="endofDate"
+                                            name="endofDate"
+                                            ng-model="vm.talentRegistration.birthDate">
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="form-group">
+                                    <label>Gender</label>
+                                    <input type="radio"
+                                            value = "Male"
+                                            ng-model="vm.talentRegistration.gender">
+                                    Male
+                                    <input type="radio"
+                                            value = "Female"
+                                            ng-model="vm.talentRegistration.gender">
+                                    Female
+                            </div>
+                            <!-- Language -->
+                            <div class="form-group">
+                                    <label for="talentLanguage">Language</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.language" 
+                                            name="language"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                            </div>
+                            <!-- Picture URL -->
+                            <div class="form-group">
+                                    <label for="talentPictureURL">Picture URL</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.pictureURL" 
+                                            name="pictureURL"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                            </div>
+                            
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expertise Tab -->
+                <div id="menu3" class="tab-pane fade">
+                    <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="sectionHeader"><strong><span class="fa fa-clipboard fa-1x"></span>&nbsp;Expertise</strong></h4>
+                            </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-3">
+                                <!-- Proffesion -->
+                                <div class="form-group">
+                                        <label for="talentProffesion">Proffesion</label>
+                                        <input type="text" 
+                                                ng-model="vm.talentRegistration.proffesion" 
+                                                name="proffesion"
+                                                class="form-control " 
+                                                placeholder="" 
+                                                required>
+                                </div>
+
+                                <!-- Expertize category -->
+                                <div class="form-group">
+                                    <label for="talentExpertizeCategory">Expertize Category</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.expertizeCategory" 
+                                            name="expertiseCategory"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                </div>
+
+                                <!-- Expertize sub category -->
+                                <div class="form-group">
+                                    <label for="talentExpertizeSubCategory">Expertize Sub Category</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.expertizeSubCategory" 
+                                            name="expertiseSubCategory"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                </div>
+                                <!-- Linkedin profile -->
+                                <div class="form-group">
+                                        <label for="talentLinkedinProfile">Linkedin Profile</label>
+                                        <input type="text" 
+                                                ng-model="vm.talentRegistration.linkedin" 
+                                                name="linkedin"
+                                                class="form-control " 
+                                                placeholder="" 
+                                                required>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-0-6"></div>
+                            <div class="col-md-3">
+                                <!-- Skills -->
+                                <div class="form-group">
+                                    <label for="talentSkill1">Skill</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.skill1" 
+                                            name="skill1"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                                    
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="talentSkill2">Skill</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.skill2" 
+                                            name="skill2"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                                    
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="talentSkill1">Skill</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.skill3" 
+                                            name="skill3"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                                    
+                                </div>
+                                <div class="form-group">
+                                    <label for="talentSkill1">Skill</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.skill4" 
+                                            name="skill4"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                                        
+                                </div>
+                                <div class="form-group">
+                                    <label for="talentSkill1">Skill</label>
+                                    <input type="text" 
+                                            ng-model="vm.talentRegistration.skill5" 
+                                            name="skill5"
+                                            class="form-control " 
+                                            placeholder="" 
+                                            required>
+                                                        
+                                </div>
+                            </div>
+                    </div>
+
+                </div>
+
+                <!-- Expertise Tab -->
+                <div id="menu4" class="tab-pane fade">
+                        <div class="row">
+                                <div class="col-md-12">
+                                    <h4 class="sectionHeader"><strong><span class="fa fa-cog fa-1x"></span>&nbsp;Setting</strong></h4>
+                                </div>
+                        </div>
+
+                        <div class="row">
+                                <div class="col-md-3">
+
+                                        <!-- Receive Other Job Offering -->
+                                        <div class="form-group">
+                                                <label>Receive Job Offering</label>
+                                                <input type="radio"
+                                                        value = "Yes"
+                                                        ng-model="vm.talentRegistration.receiveJobOffer"
+                                                        checked>
+                                                Yes
+                                                <input type="radio"
+                                                        value = "No"
+                                                        ng-model="vm.talentRegistration.receiveJobOffer">
+                                                No
+                                        </div>
+
+                                        <!-- Share contact -->
+                                        <div class="form-group">
+                                                        <label>Share Contact</label>
+                                                        <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.talentRegistration.shareContact"
+                                                                checked>
+                                                Yes
+                                                        <input type="radio"
+                                                                value = "No"
+                                                                ng-model="vm.talentRegistration.shareContact">
+                                                No
+                                        </div>
+
+                                        <!-- Discrete Ind -->
+                                        <div class="form-group">
+                                                        <label>Discrete Indicator</label>
+                                                        <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.talentRegistration.discreteInd"
+                                                                checked>
+                                                Yes
+                                                        <input type="radio"
+                                                                value = "No"
+                                                                ng-model="vm.talentRegistration.discreteInd">
+                                                No
+                                        </div>
+                                </div>
+                        </div>
+
+                </div>
+
+                <!-- Account Tab -->
+                <div id="menu5" class="tab-pane fade">
+                                <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="sectionHeader"><strong><span class="fa fa-briefcase fa-1x"></span>&nbsp;Account</strong></h4>
+                                        </div>
+                                </div>
+                                <div class="row">
+                                                <h4 class="recruiter-signUp-titel">Talent Account feature is comming soon...</h4>
+                                </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="submit-footer">
+                <button type="submit" ng-click="vm.updateTalent()" class="btn btn-primary">Save</button>
+                <button type="submit" ng-click="vm.cancelTalent()" class="btn btn-primary">Cancel</button>
+            </div>
+        </div>
+        <div class="col-md-0-6"></div>
+    </div>
+    <div ng-show="vm.error" class="row" >
+        <p>{{ vm.error }}</p>
+    </div>
+</form>

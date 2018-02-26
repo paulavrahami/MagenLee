@@ -40,5 +40,9 @@ Meteor.methods({
 
     'talents.getTalentsCount' (conditions) {
         return TalentsAPI.getTalentsCount(conditions);
+    },
+
+    'getTalentById': function (condition) {
+          return Talents.findOne({talentId: condition});
     }
 });
