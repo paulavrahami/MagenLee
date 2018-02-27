@@ -81,7 +81,7 @@ angular
             RECRUITER: 'recruiter.campaigns',
             APPLICANT: 'applicant' ,
             DOMAIN_EXPERT: 'domainExpert.auditions',
-            TALENT: 'talent.challenges'
+            TALENT: 'mainApplications'
         },
         SKILL_IMPORTANCE : {
             NICE:   'Nice to have',
