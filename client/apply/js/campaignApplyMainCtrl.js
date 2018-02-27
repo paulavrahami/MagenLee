@@ -200,7 +200,7 @@ angular
 
         vm.applicationSave = function (itemsContentsArg, numberOfItemsArg) {
             //todo: score should be calculate at server side
-            let score = 0;
+            let totScore = 0;
             let currentItem ={};
 
             vm.application.states.itemsContent = vm.application.states.itemsContent || {};
@@ -210,7 +210,11 @@ angular
                     
                     let currentItem = $filter('filter')(vm.audition.items, {itemId: contentIndex}, true)[0];
 
-                    score += (currentItem.maxScore / 100) * parseInt(vm.application.states.itemsContent[contentIndex].state.validity ? vm.application.states.itemsContent[contentIndex].state.validity + '' : '0');
+                    let itemScore = 0;
+                    itemScore = (currentItem.maxScore / 100) * parseInt(vm.application.states.itemsContent[contentIndex].state.validity ? vm.application.states.itemsContent[contentIndex].state.validity + '' : '0');
+                    vm.application.states.itemsContent[contentIndex].state.score = itemScore;
+                    vm.application.states.itemsContent[contentIndex].state.maxScore = currentItem.maxScore;
+                    totScore += itemScore;
 
                     // If the item has been executed/visited it should be dropped from the "vm.itemsNotDone" array.
                     // This array will be evaluated at the time the audition is done in order to add to the application
@@ -222,7 +226,7 @@ angular
                 }
             }
 
-            vm.application.grade = score;
+            vm.application.grade = totScore;
 
             delete vm.application._id;
             Applications.update({_id: vm.applicationId},{$set: vm.application});
@@ -240,10 +244,12 @@ angular
             // add an empty entry to the application's state for each unexecuted/visited item.
             // See also vm.applicationSave and vm.createApplication
             if (vm.itemsNotDone.length !== 0) {
-                var emptyState = {clicks: 0, validity: 0, answer: ""};
+                var emptyState = {clicks: 0, validity: 0, answer: "", score: 0, maxScore: 0};
                 for (i = 0 ; i < vm.itemsNotDone.length ; i++) {
                     var itemNotDone = Items.findOne({_id: vm.itemsNotDone[i]});
                     emptyItem = itemNotDone.content;
+                    let currentItem = $filter('filter')(vm.audition.items, {itemId: vm.itemsNotDone[i]}, true)[0];
+                    emptyState.maxScore = currentItem.maxScore;
                     emptyItem.state = emptyState;
                     vm.application.states.itemsContent[vm.itemsNotDone[i]] = emptyItem;
                 };
