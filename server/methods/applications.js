@@ -22,6 +22,27 @@ let ApplicationsAPI = {
                 reject(error);
             }
         });
+    },
+    getApplicationsSummary (conditions) {
+        return new Promise((resolve, reject) => {
+
+            conditions = conditions || {};
+
+            try {
+                let applications = Applications.find(conditions);
+                let results = [];
+                applications.forEach(function (application) {
+                    application.positionName = Campaigns.findOne({_id: application.campaignId}).positionName;
+                    application.companyName = Campaigns.findOne({_id: application.campaignId}).control.companyOwner;
+                    results.push(application);
+                });
+
+                resolve(results);
+            }
+            catch (error) {
+                reject(error);
+            }
+        });
     }
 };
 
@@ -30,5 +51,9 @@ Meteor.methods({
     'applications.getApplications' (conditions) {
 
         return ApplicationsAPI.getApplications(conditions);
+    },
+    'applications.getApplicationsSummary' (conditions) {
+        
+        return ApplicationsAPI.getApplicationsSummary(conditions);
     }
 });

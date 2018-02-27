@@ -11,6 +11,8 @@ angular
     vm.orderBy           = 'positionName';
     vm.ENUM = ENUM;
     vm.MAP = MAP;
+    vm.numOfApplications = 0;
+    vm.campaignTemp = {};
 
     vm.dependency = new Deps.Dependency();
 
@@ -65,7 +67,7 @@ angular
             let conditions = {};
             conditions = {"email": Meteor.user().emails[0].address,"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE,"control.status": ENUM.APPLICATION_STATUS.COMPLETED};
 
-            Meteor.call('applications.getApplications', conditions, (err, res) => {
+            Meteor.call('applications.getApplicationsSummary', conditions, (err, res) => {
                 if (err) {
                     reject();
                 } else {
@@ -74,16 +76,15 @@ angular
             });
         })).then(function(results){
             vm.applications = results;
+            
             vm.dependency.changed();
         }).catch(function() {
             vm.applications = [];
         });
-          
+                              
           return vm.applications;
       }
     });
-
-
 
     /**
      * @desc search (filter) campaigns;
