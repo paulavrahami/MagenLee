@@ -148,7 +148,7 @@
           <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
               <div class="panel-body" >
                   <div class="col-md-12">
-                    <h6>
+                    <h5>
                         <!-- Audition results -->
                         <div class="row col-md-7">
                             <!-- Statistics summary table -->
@@ -161,15 +161,18 @@
                                         <th class="col-md-1">Chl Done</th>
                                         <th class="col-md-1">Avg Done</th>
                                         <th class="col-md-1">Max Score</th>
-                                        <th class="col-md-1">Avg Score</th>
                                         <th class="col-md-1">Talent Score</th>
                                         <th class="col-md-1">% Score</th>
+                                        <th class="col-md-1">Avg Score</th>
                                     </tr>
                                 </thead>
                                 <tbody >
                                     <colgroup>
-                                        <col span="7" class="summary-col">
+                                        <col span="3" class="summary-col">
+                                        <col span="1" class="summary-col-prime">
+                                        <col span="2" class="summary-col">
                                         <col span="2" class="summary-col-prime">
+                                        <col span="1" class="summary-col">
                                       </colgroup>
                                     <tr ng-repeat="results in application.auditionResults">
                                         <td>
@@ -194,14 +197,14 @@
                                         <td class="max-score">
                                             {{vm.round(results.maxScore)}}
                                         </td>
-                                        <td class="avg-score">
-                                            {{vm.round(results.avgScore)}}
-                                        </td>
-                                        <td ng-class="{'arrow-up': (vm.round(results.score) >= vm.round(results.avgScore)), 'arrow-down': (vm.round(results.score) < vm.round(results.avgScore))}">
+                                        <td ng-class="{'above-avg': (vm.round(results.score) >= vm.round(results.avgScore)), 'below-avg': (vm.round(results.score) < vm.round(results.avgScore))}">
                                             {{vm.round(results.score)}}
                                         </td>
-                                        <td>
+                                        <td ng-class="{'above-avg': (vm.round(results.score) >= vm.round(results.avgScore)), 'below-avg': (vm.round(results.score) < vm.round(results.avgScore))}">
                                             {{vm.round((results.score / results.maxScore) * 100)}}&#37;
+                                        </td>
+                                        <td class="avg-score">
+                                            {{vm.round((results.avgScore / results.maxScore) * 100)}}&#37;
                                         </td>
                                     </tr>
                                 </tbody>
@@ -211,7 +214,7 @@
                               <a class="btn btn-sm btn-primary" ng-click="vm.viewAuditionResults(application)">View Audition</a>
                           </div>
                       </div>
-                    </h6>
+                    </h5>
                     <h5>
                       <div class="row col-md-1"></div>
                       <!-- Questionnaire section -->
