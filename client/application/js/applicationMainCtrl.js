@@ -418,10 +418,9 @@ angular
                 return true
             });
             // Calculate the average per all campaign's applications
-            let totalApplications = Applications.find({campaignId: vm.campaignId, "fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE, "control.status": ENUM.APPLICATION_STATUS.COMPLETED}).count();
             application.auditionResults.forEach(function (resultsPerSkill) {
-                resultsPerSkill.avgScore = (resultsPerSkill.avgScore / totalApplications);
-                resultsPerSkill.avgApplicationsItemsAnswered = (resultsPerSkill.avgApplicationsItemsAnswered / totalApplications);
+                resultsPerSkill.avgScore = (resultsPerSkill.avgScore / vm.campaign.applications.length);
+                resultsPerSkill.avgApplicationsItemsAnswered = (resultsPerSkill.avgApplicationsItemsAnswered / vm.campaign.applications.length);
             });
         };
 
