@@ -9,7 +9,7 @@
       <ul class="navbar-nav nav-header-menu">
           <li class="nav-item marketplace-menu">
               <a class="nav-link marketplace-menu-item" ui-sref="mainChallenges">My Challenges</a>
-              <a class="nav-link marketplace-menu-item" ui-sref="mainApplications">My Auditions</a>
+              <a class="nav-link marketplace-menu-item" ui-sref="mainApplications"><mark> My Auditions</mark></a>
               <a class="nav-link marketplace-menu-item" ui-sref="#">My Proposals</a>
               <a class="nav-link marketplace-menu-item" ui-sref="#">Dashboard</a>
               <a class="nav-link marketplace-menu-item" ui-sref="#">My Account</a>
@@ -68,14 +68,12 @@
                         </div>
                     </div>
                 </div>
-    </div>
+    
         <!-- Talent Application summary line -->
           <div class="panel panel-default"  ng-repeat="application in vm.applications | filter:vm.search | orderBy: vm.orderBy">
-            <div class="panel-heading application-record-line">
-                <a class="panel-title collapsed"  data-toggle="collapse" data-parent="#panel-campaigns-group"
-                   aria-expanded="false">
-                    <div class="row application-general" ng-class="application.revealed ? 'revealed-record' : 'application-record'">
-                        <div class="col-md-1">
+             <div class="panel-heading application-record-line">
+                    <div class="row application-general revealed-record">
+                        <div class="col-md-1"> 
                             <h5>{{application.number}}</h5>
                         </div>
                         <div class="col-md-2">
@@ -88,10 +86,9 @@
                             <h5>{{application.positionName}}</h5>
                         </div>
                     </div>
-                </a>
-            </div>
-            </div>
-
+             </div>
+          </div>
+        </div>
 </div>
 
 </div>

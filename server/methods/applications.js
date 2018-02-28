@@ -31,9 +31,11 @@ let ApplicationsAPI = {
             try {
                 let applications = Applications.find(conditions);
                 let results = [];
+                let applicationRec = {};
                 applications.forEach(function (application) {
-                    application.positionName = Campaigns.findOne({_id: application.campaignId}).positionName;
-                    application.companyName = Campaigns.findOne({_id: application.campaignId}).control.companyOwner;
+                    applicationRec = Campaigns.findOne({_id: application.campaignId});
+                    application.positionName = applicationRec.positionName;
+                    application.companyName = applicationRec.control.companyOwner;
                     results.push(application);
                 });
 
