@@ -1,2 +1,96 @@
-<!--talent.html-->
-<div class="heightWidth100" ui-view></div>
+<!--talent Application Main.html-->
+<div class="row">
+    <div class="col-md-0-6"></div>
+    <div class="col-md-11">
+
+
+<div class="row">
+    <div class="col-md-12">
+      <ul class="navbar-nav nav-header-menu">
+          <li class="nav-item marketplace-menu">
+              <a class="nav-link marketplace-menu-item" ui-sref="mainChallenges">My Challenges</a>
+              <a class="nav-link marketplace-menu-item" ui-sref="mainApplications"><mark> My Auditions</mark></a>
+              <a class="nav-link marketplace-menu-item" ui-sref="#">My Proposals</a>
+              <a class="nav-link marketplace-menu-item" ui-sref="#">Dashboard</a>
+              <a class="nav-link marketplace-menu-item" ui-sref="#">My Account</a>
+          </li>
+      </ul>
+    </div>
+    <div class="col-md-12">
+        <nav class="navbar navbar-default" role="navigation">
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search" ng-model="vm.query">
+                    </div>
+                </form>
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        Sort by:
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <button class="btn btn-default" type="button" ng-click="vm.setSort('positionName')">
+                                <span ng-class="vm.getSort('positionName')"></span>
+                                Name
+                            </button>
+                            <button class="btn btn-default" type="button" ng-click="vm.setSort('control.createDate')">
+                                <span ng-class="vm.getSort('control.createDate')"></span>
+                                Date
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="panel-group col-md-12">
+      <!-- Talent Application  header -->
+
+                <div class="panel panel-default">
+                    <div class="row">
+                        <div class="col-md-1 appl-formating-left">
+                            <h5><strong>ID</strong></h5>
+                        </div>
+                        <div class="col-md-2 appl-formating-left">
+                            <h5><strong>Date</strong></h5>
+                        </div>
+                        <div class="col-md-1 appl-formating">
+                            <h5><strong>Company</strong></h5>
+                        </div>
+                        <div class="col-md-2 appl-formating-left">
+                            <h5><strong>Job offer</strong></h5>
+                        </div>
+                    </div>
+                </div>
+    
+        <!-- Talent Application summary line -->
+          <div class="panel panel-default"  ng-repeat="application in vm.applications | filter:vm.search | orderBy: vm.orderBy">
+             <div class="panel-heading application-record-line">
+                    <div class="row application-general revealed-record">
+                        <div class="col-md-1"> 
+                            <h5>{{application.number}}</h5>
+                        </div>
+                        <div class="col-md-2">
+                            <h5>{{application.control.createDate | date}}</h5>
+                        </div>
+                        <div class="col-md-1 appl-formating">
+                            <h5>{{application.companyName}}</h5>
+                        </div>
+                        <div class="col-md-2">
+                            <h5>{{application.positionName}}</h5>
+                        </div>
+                    </div>
+             </div>
+          </div>
+        </div>
+</div>
+
+</div>
+</div>
+
