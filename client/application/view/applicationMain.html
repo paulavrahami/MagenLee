@@ -157,44 +157,44 @@
                                     <tr>
                                         <th class="col-md-3">Skill</th>
                                         <th class="col-md-2">Importance</th>
-                                        <th class="col-md-1">Total Chl</th>
-                                        <th class="col-md-1">Chl Done</th>
-                                        <th class="col-md-1">Avg Done</th>
-                                        <th class="col-md-1">Max Score</th>
-                                        <th class="col-md-1">Talent Score</th>
-                                        <th class="col-md-1">% Score</th>
-                                        <th class="col-md-1">Avg Score</th>
+                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Total challenges defined for the skill">Total Chl</th>
+                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Total challenges completed by talent">Chl Done</th>
+                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Avarage challenges completed by all talents">Avg Done</th>
+                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Maximume score per skill">Max Score</th>
+                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Talent score per skill">Talent Score</th>
+                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Talent score">% Score</th>
+                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Applicants avarage score">Avg Score</th>
                                     </tr>
                                 </thead>
                                 <tbody >
                                     <colgroup>
-                                        <col span="3" class="summary-col">
+                                        <col span="3">
                                         <col span="1" class="summary-col-prime">
-                                        <col span="2" class="summary-col">
+                                        <col span="2">
                                         <col span="2" class="summary-col-prime">
-                                        <col span="1" class="summary-col">
+                                        <col span="1">
                                       </colgroup>
                                     <tr ng-repeat="results in application.auditionResults">
                                         <td>
                                           {{results.skill}}
                                         </td>
-                                        <td ng-class="{'importance-nice' : totGrade.importance === 'Nice to have',
-                                                         'importance-low' : totGrade.importance === 'Low',
-                                                         'importance-normal' : totGrade.importance === 'Normal',
-                                                         'importance-high' : totGrade.importance === 'High',
-                                                         'importance-must' : totGrade.importance === 'Must have'}">
+                                        <td ng-class="{'importance-nice' : results.importance === 'Nice to have',
+                                                         'importance-low' : results.importance === 'Low',
+                                                         'importance-normal' : results.importance === 'Normal',
+                                                         'importance-high' : results.importance === 'High',
+                                                         'importance-must' : results.importance === 'Must have'}">
                                               {{results.importance}}
                                         </td>
                                         <td>
-                                            {{vm.round(results.totalItems)}}
+                                            {{results.totalItems}}
                                         </td>
                                         <td>
-                                            {{vm.round(results.totalItemsAnswered)}}
+                                            {{results.totalItemsAnswered}}
                                         </td>
                                         <td>
                                             {{vm.round(results.avgApplicationsItemsAnswered)}}
                                         </td>
-                                        <td class="max-score">
+                                        <td>
                                             {{vm.round(results.maxScore)}}
                                         </td>
                                         <td ng-class="{'above-avg': (vm.round(results.score) >= vm.round(results.avgScore)), 'below-avg': (vm.round(results.score) < vm.round(results.avgScore))}">
@@ -203,7 +203,7 @@
                                         <td ng-class="{'above-avg': (vm.round(results.score) >= vm.round(results.avgScore)), 'below-avg': (vm.round(results.score) < vm.round(results.avgScore))}">
                                             {{vm.round((results.score / results.maxScore) * 100)}}&#37;
                                         </td>
-                                        <td class="avg-score">
+                                        <td>
                                             {{vm.round((results.avgScore / results.maxScore) * 100)}}&#37;
                                         </td>
                                     </tr>
@@ -275,3 +275,10 @@
 </div>
 <div class="col-md-0-6"></div>
 </div>
+
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>

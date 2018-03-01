@@ -244,11 +244,15 @@ angular
             // add an empty entry to the application's state for each unexecuted/visited item.
             // See also vm.applicationSave and vm.createApplication
             if (vm.itemsNotDone.length !== 0) {
-                var emptyState = {clicks: 0, validity: 0, answer: "", score: 0, maxScore: 0};
                 for (i = 0 ; i < vm.itemsNotDone.length ; i++) {
-                    var itemNotDone = Items.findOne({_id: vm.itemsNotDone[i]});
+                    let emptyState = {clicks: 0, validity: 0, answer: "", score: 0, maxScore: 0};
+                    let itemNotDone = {};
+                    let emptyItem = {};
+                    let currentItem = {};
+
+                    itemNotDone = Items.findOne({_id: vm.itemsNotDone[i]});
                     emptyItem = itemNotDone.content;
-                    let currentItem = $filter('filter')(vm.audition.items, {itemId: vm.itemsNotDone[i]}, true)[0];
+                    currentItem = $filter('filter')(vm.audition.items, {itemId: vm.itemsNotDone[i]}, true)[0];
                     emptyState.maxScore = currentItem.maxScore;
                     emptyItem.state = emptyState;
                     vm.application.states.itemsContent[vm.itemsNotDone[i]] = emptyItem;
