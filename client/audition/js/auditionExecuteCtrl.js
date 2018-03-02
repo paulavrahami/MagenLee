@@ -14,6 +14,7 @@ angular
         vm.doneItemsKeys = [];
         // vm.howItWorkLang = 'heb';
         vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.auditionViewDisabled = true : vm.auditionViewDisabled = false;
+        vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.auditionViewResults = true : vm.auditionViewResults = false;
 
         //noinspection JSUnresolvedVariable
         vm.dependency = new Deps.Dependency();
@@ -22,7 +23,7 @@ angular
             vm.dependency.changed();
         };
         vm.onContent = vm.pseudoFunction;
-
+        
         if ($scope.$resolve && $scope.$resolve.auditionId) {
             vm.auditionId = $scope.$resolve.auditionId;
             vm.applicationCtrl = $scope.$resolve.applicationCtrl;
@@ -179,7 +180,6 @@ angular
             //let time = new Date($window._audition.auditionDuration);
             let time = $window._audition.auditionDuration / 1000;
 
-
             let H = Math.floor(time / 3600),
                 M = Math.floor(((time % 3600) + 60) / 60 - 1),
                 S = time % 60;
@@ -194,7 +194,91 @@ angular
             if (!vm.states.timeTarget) {
                 vm.states.timeTarget = vm.states.timeLeft - (H * 3600 + M * 60 + S * 1) * 1000;
             }
+
+            // build the item's totals table. This info will be presented while the audition is displayed in "Results" mode 
+            if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS) {
+                // initialize the totals table
+                vm.totalsPerItem = [];
+                for (let i=0 ; i<$window._audition.items.length ; i++) {
+                    vm.totalsPerItem.push({itemId: $window._audition.items[i].itemId,
+                                           totalCorrect: 0,
+                                           totalWrong: 0,
+                                           totalNotAnswered: 0
+                    });
+                };
+                // get the campaign the audition has been defined for
+                let campaignRec = Campaigns.findOne({_id: $window._audition.campaignId});
+                // for all the campaign's applications:
+                campaignRec.applications.every(function (applicationKey) {
+                    // get an application
+                    let applicationRec = Applications.findOne({_id: applicationKey})
+                    // for all application's items:
+                    for (let contentIndex in applicationRec.states.itemsContent) {
+                        // search the item in the totals table
+                        index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === contentIndex);
+                        // update the totals table
+                        if (applicationRec.states.itemsContent[contentIndex].state.validity === 100) {
+                            vm.totalsPerItem[index].totalCorrect++;
+                        } else {
+                            if ((applicationRec.states.itemsContent[contentIndex].state.validity === 0) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
+                            vm.totalsPerItem[index].totalWrong++;
+                            } else {
+                                if (applicationRec.states.itemsContent[contentIndex].state.clicks === 0) {
+                                    vm.totalsPerItem[index].totalNotAnswered++;
+                                }
+                            }
+                        }
+                    };
+                return true
+                });
+
+                // // initialize the totals table
+                // vm.totalsPerItem = {};
+                // emptyItemTotals = {totalCorrect: 0, totalWrong: 0, totalNotAnswered: 0};
+                // for (let i=0 ; i<$window._audition.items.length ; i++) {
+                //     vm.totalsPerItem[$window._audition.items[i].itemId] = emptyItemTotals;
+                // };
+    
+                // // get the campaign the audition has been defined for
+                // let campaignRec = Campaigns.findOne({_id: $window._audition.campaignId});
+                // // for all the campaign's applications:
+                // campaignRec.applications.every(function (applicationKey) {
+                //     // get an application
+                //     let applicationRec = Applications.findOne({_id: applicationKey})
+                //     // for all application's items:
+                //     for (let contentIndex in applicationRec.states.itemsContent) {
+                //         if (applicationRec.states.itemsContent[contentIndex].state.validity === 100) {
+                //             vm.totalsPerItem[contentIndex].totalCorrect++;
+                //         } else {
+                //             if ((applicationRec.states.itemsContent[contentIndex].state.validity === 0) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
+                //             vm.totalsPerItem[contentIndex].totalWrong++;
+                //             } else {
+                //                 if (applicationRec.states.itemsContent[contentIndex].state.clicks === 0) {
+                //                     vm.totalsPerItem[contentIndex].totalNotAnswered++;
+                //                 }
+                //             }
+                //         }
+                //     };
+                // return true
+                // });  
+            };
+
             $window.loadAudition();
+        };
+
+        vm.displayItemTotalsCorrect = function (itemKey) {
+            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+            return vm.totalsPerItem[index].totalCorrect;
+        };
+
+        vm.displayItemTotalsWrong = function (itemKey) {
+            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+            return vm.totalsPerItem[index].totalWrong;
+        };
+
+        vm.displayItemTotalsNotAnswered = function (itemKey) {
+            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+            return vm.totalsPerItem[index].totalNotAnswered;
         };
 
         /**

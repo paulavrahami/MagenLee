@@ -72,7 +72,7 @@ angular
      
 
         vm.cancelTalent = function () {
-            $state.go("talent.challenges");
+            $state.go("mainChallenges");
         };
 
 
@@ -107,7 +107,7 @@ angular
                                                 vm.updateUserPassword (Meteor.userId(),vm.userPasswordNew);
                                             };
                                             vm.updateTalentRec(vm.talentRegistration);
-                                            $state.go("talent.challenges");
+                                            $state.go("mainChallenges");
                                         }
                                     })
                                 );
