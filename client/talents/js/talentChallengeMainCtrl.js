@@ -3,7 +3,7 @@ angular
     .controller('ChallengeMainCtrl', function($state,$scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
 
         let vm = this;
-        $reactive(vm).attach($scope);
+        let reactiveContext = $reactive(vm).attach($scope);
 
         vm.animationsEnabled = true;
         vm.isViewThumbnails  = true;
@@ -13,6 +13,12 @@ angular
         vm.MAP = MAP;
 
         vm.dependency = new Deps.Dependency();
+
+        vm.talentChallenges = [];
+        vm.talentChallenge = {
+            skill: '',
+            challenges:[]
+        };
 
 
         /** get user previous selections */
@@ -36,15 +42,23 @@ angular
         /**
          * ReactiveContext;
          */
+
+        function doSubscription () {
+            
+                        if (Meteor.user() && Meteor.user().profile) {
+                            reactiveContext.subscribe('itemsByAuthorId', () => [Meteor.user()._id]);
+                        }
+                    }
+
         vm.helpers({
             /**
              * @desc Retrieve users campaigns by status;
              * @returns {*}
              */
-            campaigns () {
+            items () {
                 vm.dependency.depend();
-
-                return vm.campaigns;
+                doSubscription ();
+                return vm.itemss;
             },
             /**
              * @desc retrieve Meteor.user;
@@ -55,31 +69,6 @@ angular
             }
         });
 
-
-
-        /**
-         * @desc Check if the user is a recruiter;
-         * @returns {boolean}
-         */
-        vm.isTalent = function () {
-            if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type === 'Talent') {
-                //vm.subscribe('campaignsRecruiter',() => [Meteor.user().profile.companyName]);
-                if (Meteor.user().profile.accessMode) {
-                  vm.accessMode = Meteor.user().profile.accessMode
-                } else {
-                  vm.accessMode = 'Admin';
-                }
-
-                return true;
-            }
-            else {
-                return false;
-            }
-        };
-
-        /**
-         * User nav-bar selections & search:
-         */
 
         /**
          * @desc Change the selected status and announce change;
