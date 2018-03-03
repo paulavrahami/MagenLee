@@ -148,32 +148,33 @@
           <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
               <div class="panel-body" >
                   <div class="col-md-12">
-                    <h5>
+                    <h6>
                         <!-- Audition results -->
                         <div class="row col-md-7">
+                          <br>
                             <!-- Statistics summary table -->
                             <table id="gradetbl" class="table" cellspacing="0" width="100%">
+                                  <col width="20%">
+                                  <col width="20%">
+                                  <col width="10%">
+                                  <col width="10%" class="summary-col-prime">
+                                  <col width="10%">
+                                  <col width="10%" class="summary-col-prime">
+                                  <col width="10%" class="summary-col-prime">
+                                  <col width="10%">
                                 <thead>
                                     <tr>
-                                        <th class="col-md-3">Skill</th>
-                                        <th class="col-md-2">Importance</th>
-                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Total challenges defined for the skill">Total Chl</th>
-                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Total challenges completed by talent">Chl Done</th>
-                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Avarage challenges completed by all talents">Avg Done</th>
-                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Maximume score per skill">Max Score</th>
-                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Talent score per skill">Talent Score</th>
-                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Talent score">% Score</th>
-                                        <th id="tooltip" class="col-md-1" data-toggle="tooltip" title="Applicants avarage score">Avg Score</th>
+                                        <th>Skill</th>
+                                        <th>Importance</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Total challenges defined for the skill">Total Challenges</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Total challenges completed by talent">Completed Challenges</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Maximume score per skill">Max Score</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Talent score per skill">Talent Score</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Talent score">% Score</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Applicants avarage score">Avg Score</th>
                                     </tr>
                                 </thead>
                                 <tbody >
-                                    <colgroup>
-                                        <col span="3">
-                                        <col span="1" class="summary-col-prime">
-                                        <col span="2">
-                                        <col span="2" class="summary-col-prime">
-                                        <col span="1">
-                                      </colgroup>
                                     <tr ng-repeat="results in application.auditionResults">
                                         <td>
                                           {{results.skill}}
@@ -183,16 +184,13 @@
                                                          'importance-normal' : results.importance === 'Normal',
                                                          'importance-high' : results.importance === 'High',
                                                          'importance-must' : results.importance === 'Must have'}">
-                                              {{results.importance}}
+                                            {{results.importance}}
                                         </td>
                                         <td>
                                             {{results.totalItems}}
                                         </td>
                                         <td>
                                             {{results.totalItemsAnswered}}
-                                        </td>
-                                        <td>
-                                            {{vm.round(results.avgApplicationsItemsAnswered)}}
                                         </td>
                                         <td>
                                             {{vm.round(results.maxScore)}}
@@ -214,9 +212,9 @@
                               <a class="btn btn-sm btn-primary" ng-click="vm.viewAuditionResults(application)">View Audition</a>
                           </div>
                       </div>
-                    </h5>
+                    </h6>
+                    <div class="row col-md-1"></div>
                     <h5>
-                      <div class="row col-md-1"></div>
                       <!-- Questionnaire section -->
                       <div class = "col-md-4">
                             <div class="row" ng-if="application.goNoGo1.yes">
