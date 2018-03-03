@@ -208,10 +208,20 @@
         <!-- challenge framework -->
         <div class="row" ng-class="{'disable-challenge':vm.auditionViewDisabled}">
             <div class="col-md-1" ng-show="vm.auditionViewResults">
-                <h5 class="totals">Totals</h5>
-                <div class="totalsCorrect"><h6>Correct: {{vm.displayItemTotalsCorrect(vm.executeItem)}}</h6></div>
-                <div class="totalsIncorrect"><h6>Incorrect: {{vm.displayItemTotalsWrong(vm.executeItem)}}</h6></div>
-                <div class="totalsIgnored"><h6>Ignored: {{vm.displayItemTotalsNotAnswered(vm.executeItem)}}</h6></div>
+                <div class="totals-area">
+                    <div class="totals">Total<br>Applications</div>
+                    <div class="totalsCorrect">Correct: {{vm.displayItemTotalsCorrect(vm.executeItem)}}</div>
+                    <div class="totalsIncorrect">Incorrect: {{vm.displayItemTotalsWrong(vm.executeItem)}}</div>
+                    <div class="totalsIgnored">Ignored: {{vm.displayItemTotalsNotAnswered(vm.executeItem)}}</div>
+                </div>
+                <div class="mark-area">
+                    <div class="correct-answer" ng-show="vm.correctAnswer(vm.executeItem) === true">
+                        <span class="fa fa-check fa-2x"></span>
+                    </div>
+                    <div class="wrong-answer" ng-show="vm.correctAnswer(vm.executeItem) === false">
+                        <span class="fa fa-times fa-2x"></span>
+                    </div>
+                </div>
             </div>
             <div class="col-md-1" ng-show="!vm.auditionViewResults">
             </div>

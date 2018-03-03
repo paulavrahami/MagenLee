@@ -231,38 +231,7 @@ angular
                     };
                 return true
                 });
-
-                // // initialize the totals table
-                // vm.totalsPerItem = {};
-                // emptyItemTotals = {totalCorrect: 0, totalWrong: 0, totalNotAnswered: 0};
-                // for (let i=0 ; i<$window._audition.items.length ; i++) {
-                //     vm.totalsPerItem[$window._audition.items[i].itemId] = emptyItemTotals;
-                // };
-    
-                // // get the campaign the audition has been defined for
-                // let campaignRec = Campaigns.findOne({_id: $window._audition.campaignId});
-                // // for all the campaign's applications:
-                // campaignRec.applications.every(function (applicationKey) {
-                //     // get an application
-                //     let applicationRec = Applications.findOne({_id: applicationKey})
-                //     // for all application's items:
-                //     for (let contentIndex in applicationRec.states.itemsContent) {
-                //         if (applicationRec.states.itemsContent[contentIndex].state.validity === 100) {
-                //             vm.totalsPerItem[contentIndex].totalCorrect++;
-                //         } else {
-                //             if ((applicationRec.states.itemsContent[contentIndex].state.validity === 0) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
-                //             vm.totalsPerItem[contentIndex].totalWrong++;
-                //             } else {
-                //                 if (applicationRec.states.itemsContent[contentIndex].state.clicks === 0) {
-                //                     vm.totalsPerItem[contentIndex].totalNotAnswered++;
-                //                 }
-                //             }
-                //         }
-                //     };
-                // return true
-                // });  
             };
-
             $window.loadAudition();
         };
 
@@ -280,6 +249,16 @@ angular
             index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
             return vm.totalsPerItem[index].totalNotAnswered;
         };
+        
+        vm.correctAnswer = function (itemKey) {
+            if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 100) {
+                return true;
+            } else {
+                if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 0) {
+                    return false;
+                };
+            };
+        }; 
 
         /**
          * @desc Go to item;
