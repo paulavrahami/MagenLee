@@ -138,6 +138,13 @@ angular
             TERMINATED: 'glyphicon glyphicon-stop',
             VERIFIED:   'glyphicon glyphicon-thumbs-up'
         },
+        ITEM_STATUS : {
+            TERMINATED: 'glyphicon glyphicon-trash',
+            NEW:        'glyphicon glyphicon-ok',
+            IN_WORK:    'glyphicon glyphicon-cutlery',
+            AVAILABLE:  'glyphicon glyphicon-play',
+            ASSIGNED:   'glyphicon glyphicon-ok-circle'
+        },
         TALENT_STATUS : {
             CANCELED:  'glyphicon glyphicon-trash',
             SUSPENDED: 'glyphicon glyphicon-stop',

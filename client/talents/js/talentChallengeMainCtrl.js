@@ -58,7 +58,28 @@ angular
             items () {
                 vm.dependency.depend();
                 doSubscription ();
-                return vm.itemss;
+
+                (new Promise((resolve, reject) => {
+                    let applications;
+                    let conditions = {};
+                    conditions = {"authorId": Meteor.user()._id};
+        
+                    Meteor.call('items.getItemsSummary', conditions, (err, res) => {
+                        if (err) {
+                            reject();
+                        } else {
+                            resolve(res);
+                        }
+                    });
+                })).then(function(results){
+                    vm.items = results;
+                    
+                    vm.dependency.changed();
+                }).catch(function() {
+                    vm.items = [];
+                });
+               
+                return vm.items;
             },
             /**
              * @desc retrieve Meteor.user;
@@ -69,7 +90,7 @@ angular
             }
         });
 
-
+        
         /**
          * @desc Change the selected status and announce change;
          * @param statusArg
@@ -112,6 +133,8 @@ angular
             }).catch(function(error) {
                 vm.campaigns = [];
             });
+
+            
         };
 
         /**
@@ -266,5 +289,6 @@ angular
         /**
          * By vm.changeSelectedStatus() we bring the campaigns
          */
+        
         vm.changeSelectedStatus(vm.selectedStatus);
     });
