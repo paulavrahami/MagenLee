@@ -28,8 +28,8 @@
                         <ul class="dropdown-menu">
                             <li><a ng-click="vm.changeSelectedStatus()">All ...</a></li>
                             <li class="divider"></li>
-                            <li ng-repeat="(key, status) in vm.ENUM.CAMPAIGN_STATUS">
-                                <a ng-click="vm.changeSelectedStatus(key)"><span ng-class="vm.MAP.CAMPAIGN_STATUS[key]">&nbsp;</span>{{vm.statusFilter(status)}}</a>
+                            <li ng-repeat="(key, status) in vm.ENUM.ITEM_STATUS">
+                                <a ng-click="vm.changeSelectedStatus(key)"><span ng-class="vm.MAP.ITEM_STATUS[key]">&nbsp;</span>{{vm.statusFilter(status)}}</a>
                             </li>
                         </ul>
                     </li>
@@ -64,7 +64,7 @@
                 </form>
                 <form ng-show="vm.accessMode !== 'Application'" class="navbar-form navbar-right" role="search">
                     <div class="form-group">
-                        <button class="btn btn-primary" type="button" ui-sref="#">Create New Challenge</button>
+                        <button class="btn btn-primary" type="button" ui-sref="talentCreateChallenge">Create New Challenge</button>
                     </div>
                 </form>
             </div><!-- /.navbar-collapse -->
@@ -83,6 +83,7 @@
                       <div>  
                         <h3 class="job-positionName" ng-if="item.status === vm.ENUM.ITEM_STATUS.ASSIGNED"><span ng-class="vm.MAP.ITEM_STATUS.ASSIGNED">&nbsp;</span>{{item.status}}</h3>
                         <h3 class="job-positionName" ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK"><span ng-class="vm.MAP.ITEM_STATUS.IN_WORK">&nbsp;</span>{{item.status}}</h3>
+                        <h3 class="job-positionName" ng-if="item.status === vm.ENUM.ITEM_STATUS.NEW"><span ng-class="vm.MAP.ITEM_STATUS.NEW">&nbsp;</span>{{item.status}}</h3>
                       </div>
               </div>
               <div class="col-md-6">
@@ -109,95 +110,48 @@
 </div>
 
 
-
-<div class="row" ng-show="vm.isViewThumbnails">
-    <div class="col-md-3" ng-repeat="campaign in vm.campaigns | filter:vm.search | orderBy: vm.orderBy">
-        <div class="thumbnail">
-            <!-- <div>
-                <button ng-if="campaign.applicationsCount" type="button" class="campaign-button btn btn-default btn-circle btn-main-campaign">
-                  {{campaign.applicationsCount}}</button>
-            </div> -->
-            <div class="big-status">{{campaign.positionName}}&nbsp;</div>
-            <div class="row">
-              <div class="col-md-6">
-
-                      <div>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DELETE">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DISPATCHED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DISPATCHED">&nbsp;</span>On Air</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.IN_WORK"><span ng-class="vm.MAP.CAMPAIGN_STATUS.IN_WORK">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.TERMINATED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.TERMINATED">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.VERIFIED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.VERIFIED">&nbsp;</span>{{campaign.status}}</h3>
-
-                          <!-- <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DELETE">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DISPATCHED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DISPATCHED">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.IN_WORK"><span ng-class="vm.MAP.CAMPAIGN_STATUS.IN_WORK">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.TERMINATED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.TERMINATED">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.VERIFIED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.VERIFIED">&nbsp;</span>{{campaign.status}}</h3> -->
-                      </div>
-              </div>
-              <div class="col-md-6">
-                <h3 class="job-positionName date-right">{{campaign.statusDate | date}}</h3>
-              </div>
-            </div>
-                <!-- <h3 class="job-positionName">{{campaign.positionName}}</h3> -->
-                <p class="job-description">{{campaign.description}}&nbsp;</p>
-                <status-bar ng-model="campaign"></status-bar>
-                <p>
-
-                    <a ng-if="campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id})"><span ng-class="vm.MAP.BUTTONS.EDIT">&nbsp;</span>Edit</a>
-                    <a ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary btn-sm" disabled><span ng-class="vm.MAP.BUTTONS.SAVE">&nbsp;</span>Edit</a>
-                    <a ng-if="campaign.applicationsCount" class="btn btn-primary btn-sm" ui-sref="recruiter.application({id:campaign._id})"><span ng-class="vm.MAP.BUTTONS.APPLICATION">&nbsp;</span>Application</a>
-                    <a ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE)
-                                && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)
-                                && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.TERMINATED)" class="btn btn-primary btn-sm" ng-click="vm.deleteCampaign(campaign)"><span ng-class="vm.MAP.BUTTONS.DELETE">&nbsp;</span>Delete</a>
-                    <a ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary btn-sm" ng-click="vm.undeleteCampaign(campaign)" ><span ng-class="vm.MAP.BUTTONS.UNDELETE">&nbsp;</span>Undelete</a>
-                    <!-- todo:  remove - TEMPRARY ADDITION FOR TESTING CAMPAIGN APPLICATION -->
-                    <!-- <a ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DISPATCHED" class="btn btn-primary" ui-sref="campaignApply({id:campaign._id})" ><span >&nbsp;</span>Run</a> -->
-                </p>
-        </div>
-    </div>
-</div>
 <div class="row" ng-hide="vm.isViewThumbnails">
     <div class="panel-group col-md-12">
-        <div class="panel panel-default" ng-repeat="campaign in vm.campaigns | filter:vm.search | orderBy: vm.orderBy">
-            <div>
-                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-campaigns-group" href="#panel-element-{{$index}}"  aria-expanded="false">
-                    <div class="row">
-                        <div class="col-md-1">
-                            <h5>[{{campaign.num}}]</h5>
-                        </div>
-                        <div class="col-md-3">
-                            <h5>{{campaign.positionName}}</h5>
-                        </div>
 
-                        <div class="col-md-1">
-                            <h5 span ng-if="(campaign.status === vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)">On Air</h5>
-                            <h5 span ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)">{{campaign.status}}</h5>
-                        </div>
-                        <div class="col-md-2">
-                          <h5>{{campaign.statusDate | date}}</h5>
-                        </div>
-                        <div class="col-md-3">
-                            <status-bar ng-model="campaign"></status-bar>
-                        </div>
-                        <div class="col-md-2">
-                            <p><a class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id})">Edit</a>
-                              <a class="btn btn-primary btn-sm" ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE)
-                              && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)
-                              && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.TERMINATED)" ng-click="vm.deleteCampaign(campaign)">Delete</a></p>
-                        </div>
-
+            <div class="panel panel-default" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">
+                    <div>
+                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-campaigns-group" href="#panel-element-{{$index}}"  aria-expanded="false">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <h5>{{item.skill}}</h5>
+                                </div>
+                                <div class="col-md-1">
+                                    <h5>{{item.status}}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                  <h5>{{item.statusDate | date}}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>{{item.shareInd}}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>{{item.complexity}}</h5>
+                                </div>
+                                
+                                <div class="col-md-2">
+                                    <p><a class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id})">Edit</a>
+                                      <a class="btn btn-primary btn-sm" ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE)
+                                      && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)
+                                      && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.TERMINATED)" ng-click="vm.deleteCampaign(campaign)">Delete</a></p>
+                                </div>
+        
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-            <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
-                <div class="panel-body" >
-                  <div class="col-md-12">
-                      <p>{{campaign.description}}</p>
-                  </div>
+                    <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
+                        <div class="panel-body" >
+                          <div class="col-md-12">
+                              <p>{{campaign.description}}</p>
+                          </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+
     </div>
 </div>
     </div>

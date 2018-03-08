@@ -42,7 +42,8 @@ angular
         },
         ITEM_AUTHOR_TYPE : {
             RECRUITER:    'Recruiter',
-            DOMAIN_EXPERT:'Domain Expert'
+            DOMAIN_EXPERT:'Domain Expert',
+            TALENT:       'Talent'
         },
         ALERT : {
             SUCCESS:    'success',

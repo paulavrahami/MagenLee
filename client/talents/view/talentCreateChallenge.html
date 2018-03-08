@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-md-0-6"></div>
+    <div class="col-md-11">
+    
+    
+                <div class="row">
+                    <div class="col-md-12">
+                    <ul class="navbar-nav nav-header-menu">
+                        <li class="nav-item marketplace-menu">
+                            <a class="nav-link marketplace-menu-item" ui-sref="mainChallenges"><mark>My Challenges</mark></a>
+                            <a class="nav-link marketplace-menu-item" ui-sref="#">My Auditions</a>
+                            <a class="nav-link marketplace-menu-item" ui-sref="#">My Proposals</a>
+                            <a class="nav-link marketplace-menu-item" ui-sref="#">Dashboard</a>
+                            <a class="nav-link marketplace-menu-item" ui-sref="#">My Account</a>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+    </div>
+</div>
+
+<div class = "row">
+    <div class = "col-md-4">
+        <ul>
+            <li
+                ng-click="vm.setSelected(challengesType)"
+                ng-repeat="(key, challengesType) in vm.challengesTypes"
+                ng-class="challengesType.selected ? 'selected':''">{{key}}</li>
+        </ul>
+    </div>
+
+    <div class="col-md-8">
+            <div class="templateItem" ng-repeat="template in vm.templates">
+                <h4>{{template.name}}</h4>
+                <div class="wrapIfram templateIframeZoom" ng-bind-html="trust(vm.getAuditionHtml($index, template._id))"></div>
+                <button class="btn btn-primary" ng-click="vm.createNewItem(template._id)">Add</button>
+            </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

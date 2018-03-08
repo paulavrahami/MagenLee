@@ -12,6 +12,7 @@ angular
         vm.ENUM = ENUM;
         vm.MAP = MAP;
 
+
         vm.dependency = new Deps.Dependency();
 
         vm.talentChallenges = [];
@@ -48,6 +49,7 @@ angular
                         if (Meteor.user() && Meteor.user().profile) {
                             reactiveContext.subscribe('itemsByAuthorId', () => [Meteor.user()._id]);
                         }
+
                     }
 
         vm.helpers({
@@ -81,6 +83,7 @@ angular
                
                 return vm.items;
             },
+
             /**
              * @desc retrieve Meteor.user;
              * @returns {Meteor.user}
@@ -104,35 +107,6 @@ angular
                 vm.selectedStatus = undefined;
                 localStorage.removeItem('selectedStatus');
             }
-            (new Promise((resolve, reject) => {
-                let campaigns;
-                let conditions = {};
-
-                if (vm.selectedStatus) {
-                    conditions = {$and: [
-                        {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
-                        {status: vm.ENUM.CAMPAIGN_STATUS[vm.selectedStatus]}
-                    ]}
-                }
-                else {
-                    conditions = {$and: [
-                        {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
-                        {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETE}}
-                    ]}
-                }
-                Meteor.call('campaigns.getCampaignsSummery', conditions, (err, res) => {
-                    if (err) {
-                        reject();
-                    } else {
-                        resolve(res);
-                    }
-                });
-            })).then(function(results){
-                vm.campaigns = results;
-                vm.dependency.changed();
-            }).catch(function(error) {
-                vm.campaigns = [];
-            });
 
             
         };
@@ -163,6 +137,8 @@ angular
             vm.isViewThumbnails = false;
             localStorage.setItem('isViewThumbnails', vm.isViewThumbnails);
         };
+
+    
 
         /**
          * @desc search (filter) campaigns;
@@ -278,16 +254,10 @@ angular
                 });
         };
 
-        /**
-         * @desc test the campaign;
-         * @param campaignArg
-         */
-        vm.applyCampaign = function(campaignArg){
-            $state.go("campaignApply",{id:campaignArg._id});
-        };
+        
 
         /**
-         * By vm.changeSelectedStatus() we bring the campaigns
+         * By vm.changeSelectedStatus() we bring the challenges
          */
         
         vm.changeSelectedStatus(vm.selectedStatus);
