@@ -64,7 +64,7 @@ angular
                 (new Promise((resolve, reject) => {
                     let applications;
                     let conditions = {};
-                    conditions = {"authorId": Meteor.user()._id};
+                    conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
         
                     Meteor.call('items.getItemsSummary', conditions, (err, res) => {
                         if (err) {

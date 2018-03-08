@@ -382,16 +382,53 @@ angular
             vm.editItem = null;
             if (vm.modalInstance) {
                 vm.modalInstance.close();
+                $state.go('mainChallenges');
             };
         };
 
 
+        vm.cancelEditItem = function () {
+        
+                if (vm.editItem.status == ENUM.ITEM_STATUS.NEW) {
+                    vm.removeItem(vm.editItem._id);
+                }
+                else {
+                    vm.editItem = vm.editItemForCancel;
+                    vm.saveEditItem();
+                };
+            vm.editItem = null;
+            if (vm.modalInstance) {
+                vm.modalInstance.close();
+                $state.go('mainChallenges');
+            };
+        };
 
+        vm.removeItem = function (itemIdArg) {
+            
+                        
+                            // let indexOf = vm.audition.items.indexOf(itemIdArg);
+            
+                            // auditionEdit.audition.items.splice(indexOf, 1);
+                            // auditionEdit.saveAudition();
+            
+                            // indexOf--;
+            
+            
+                            // if (indexOf < 0) {
+                            //     indexOf = 0;
+                            // }
+                            // if (indexOf < auditionEdit.audition.items.length) {
+                            //     auditionEdit.selectCurrentItem(auditionEdit.audition.items[indexOf].itemId);
+                            // }
+                        
+                        vm.saveEditItem();
+                    };
 
 
         vm.closeEditItem = function () {
             if (vm.modalInstance) {
                 vm.modalInstance.close();
+                $state.go('mainChallenges');
             };
         };
 
