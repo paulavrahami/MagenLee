@@ -95,8 +95,8 @@
                 <!-- <status-bar ng-model="campaign"></status-bar> -->
                 <p>
 
-                    <a ng-if="item.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id})"><span ng-class="vm.MAP.BUTTONS.EDIT">&nbsp;</span>Edit</a>
-                    <a ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary btn-sm" disabled><span ng-class="vm.MAP.BUTTONS.SAVE">&nbsp;</span>Edit</a>
+                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm"  ng-click="vm.openEditItem(item._id)"><span ng-class="vm.MAP.BUTTONS.EDIT">&nbsp;</span>Editt</a>
+                    <!-- <a ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary btn-sm" disabled><span ng-class="vm.MAP.BUTTONS.SAVE">&nbsp;</span>Edit</a> -->
                     <a ng-if="campaign.applicationsCount" class="btn btn-primary btn-sm" ui-sref="recruiter.application({id:campaign._id})"><span ng-class="vm.MAP.BUTTONS.APPLICATION">&nbsp;</span>Application</a>
                     <a ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE)
                                 && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)

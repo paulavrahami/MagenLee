@@ -203,6 +203,58 @@ angular
          */
 
         /**
+        * @desc Select the current edit item;
+        * @param itemIdArg
+        */
+       vm.selectEditItem = function (itemIdArg) {
+
+           if (itemIdArg instanceof Object) {
+               getItemId = itemIdArg.itemId;
+               vm.maxScore = itemIdArg.maxScore;
+           } else {
+               getItemId = itemIdArg;
+           };
+           vm.editItem = vm.getItem(getItemId);
+           vm.editTemplate = TemplatesCollection.findOne({_id:vm.editItem.templateId});
+           vm.editItemForCancel = angular.copy(vm.editItem);
+       };
+
+       /**
+       * @desc return  specific item;
+       * @param itemIdArg
+       * @returns {*}
+       */
+      vm.getItem = function (itemIdArg) {
+          return vm.getItem(itemIdArg);
+      };
+
+        vm.openEditItem = function (itemIdArg) {
+            
+                        vm.selectEditItem(itemIdArg);
+            
+                        function loadModal () {
+            
+                            auditionEdit.modalInstance = $uibModal.open({
+                                animation: true,
+                                templateUrl: 'client/talents/view/editItem.html',
+                                controller: 'editItemCtrl',
+                                controllerAs: 'editItem',
+                                keyboard: false,
+                                backdrop  : 'static',
+                                resolve: {
+                                    ChallengeMainCtrl : function () {
+            
+                                        return vm;
+                                    }
+                                },
+                                size: 'xl'
+                            });
+                        }
+                        loadModal();
+                        vm.dependency.changed();
+                    };
+
+        /**
          * @desc delete the campaign by changing its status;
          * @param campaignArg
          */
