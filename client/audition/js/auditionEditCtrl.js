@@ -191,6 +191,21 @@ angular
         /**
          *
          */
+        function checkItemsForSkill () {
+
+            let campaign = Campaigns.findOne({_id: auditionEdit.audition.campaignId});
+            let noChallenges = false;
+            // check for each campaign's skill if items are associated with
+            for (let i = 0; (i < campaign.skills.length) && !noChallenges; i++) {
+                if (!Items.findOne({skill: campaign.skills[i].type})) {
+                    noChallenges = true;
+                    showErrorMessage('No challenges have been defined for the "' + campaign.skills[i].type + '" skill');
+                    return false;
+                };
+            };
+            return true;
+        };
+
         auditionEdit.auditionDone = function () {
             // function checkAudition () {
             //     return new Promise((resolve, reject) => {
@@ -215,6 +230,7 @@ angular
             //         });
             // }).catch(function(error, success){});
 
+            
             if (!auditionEdit.audition.items[0].itemId){
                   showInfoMessage('At least one challenge have to be defined for the audition', function () {});
             } else {
@@ -225,6 +241,10 @@ angular
                       ENUM.ALERT.INFO,
                       false,
                       function(){
+                          let itemsExist = checkItemsForSkill();
+                          if (!itemsExist) {
+                            return;
+                          };                   
                           auditionEdit.audition.status = ENUM.AUDITION_STATUS.AVAILABLE;
                           auditionEdit.saveAuditionStatus();
                           $state.go("recruiter.recruiterDemand",{id:auditionEdit.audition.campaignId,'#':'panel-3'});
@@ -1398,68 +1418,31 @@ angular
             // to preview the audition
 
             var vm = this;
-            $reactive(vm).attach($scope);
-            
-            vm.previewMode = true;
-
-            vm.now = moment();
-            vm.currentDate = new Date();
             vm.howItWorkLang = 'eng';
-            // vm.hoverEdit = false;
-
-            vm.campaign = auditionEdit.campaign;
-            vm.audition = auditionEdit.audition;
 
             // Prepare an application. This is essential in order to have the Preview function
             // built on top of the application process.
             // (NOTE!!! - Keep this in-sync with the vm.applicationSave in campaignApplyMailCtrl.js)
-            // 
-            // *** Prepare Application - Start ***
-            let fromLocalStorage = localStorage.getItem("skillera");
-            if (fromLocalStorage) {
-                fromLocalStorage = JSON.parse(fromLocalStorage);
-                if (fromLocalStorage[vm.audition._id]) {
-                    vm.applicationId = fromLocalStorage[vm.audition._id];
-                }
-            }
-            if (vm.applicationId) {
-                vm.application = Applications.findOne({_id:vm.applicationId});
-            }
-            if (!vm.application) {
-                vm.application = {};
-                vm.application.campaignId = vm.campaignId;
-                vm.application.number = 'APL' + dbhService.getNextSequenceValue('application');
-                vm.application.sessions = [];
-                vm.application.control = {
-                    createDate: new Date(),
-                    status: ENUM.APPLICATION_STATUS.IN_WORK,
-                    companyOwner : vm.audition.control.companyOwner
-                };
-                // New application record, no user information yet
-                // Applications.insert(vm.application, function (errorArg, tempIdArg) {
-                //     if (errorArg) {
-                //         showErrorMessage(errorArg.message);
-                //     } else {
-                //         vm.applicationId = tempIdArg;
-                //     }
-                // });
-            }
-            // *** Prepare Application - End ***
-
+            vm.application = {};
+            vm.application.campaignId = vm.campaignId;
+            vm.application.number = 'APL' + dbhService.getNextSequenceValue('application');
+            vm.application.sessions = [];
+            vm.application.control = {
+                createDate: new Date(),
+                status: ENUM.APPLICATION_STATUS.IN_WORK,
+                companyOwner : vm.audition.control.companyOwner
+            };
             // Invoke the Audition Execution process - this is done via the auditionExecute modal
             // NOTE!!! - Keep this in-sync with the vm.auditionExecute in campaignApplyMailCtrl.js
-            // 
-            // *** Audition Execution - Start ***
-            if (!vm.application.sessions) {
-                vm.application.sessions = [];
-            }
+            vm.application.sessions = [];
             vm.application.sessions.push({
                 date: (new Date()),
                 states: vm.application.states ? vm.application.states : {}
             });
-            if (vm.previewMode) {
-                $scope.previewMode = vm.previewMode;
-            };
+
+            vm.auditionViewMode = ENUM.AUDITION_VIEW_MODE.PREVIEW;
+            $scope.auditionViewMode = vm.auditionViewMode;
+
             vm.modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'client/audition/view/auditionExecute.html',
@@ -1478,9 +1461,7 @@ angular
                 },
                 size: 'executeAudition'
             });
-            // *** Audition Execution - End ***
         };
-
 
              
     });

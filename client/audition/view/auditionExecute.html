@@ -206,8 +206,25 @@
         </div>
 
         <!-- challenge framework -->
-        <div class="row">
-            <div class="col-md-1"></div>
+        <div class="row" ng-class="{'disable-challenge':vm.auditionViewDisabled}">
+            <div class="col-md-1" ng-show="vm.auditionViewResults">
+                <div class="totals-area">
+                    <div class="totals">Total<br>Applications</div>
+                    <div class="totalsCorrect">Correct: {{vm.displayItemTotalsCorrect(vm.executeItem)}}</div>
+                    <div class="totalsIncorrect">Incorrect: {{vm.displayItemTotalsWrong(vm.executeItem)}}</div>
+                    <div class="totalsIgnored">Ignored: {{vm.displayItemTotalsNotAnswered(vm.executeItem)}}</div>
+                </div>
+                <div class="mark-area">
+                    <div class="correct-answer" ng-show="vm.correctAnswer(vm.executeItem) === true">
+                        <span class="fa fa-check fa-2x"></span>
+                    </div>
+                    <div class="wrong-answer" ng-show="vm.correctAnswer(vm.executeItem) === false">
+                        <span class="fa fa-times fa-2x"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1" ng-show="!vm.auditionViewResults">
+            </div>
             <div class="col-md-10 iframContainer">
                 <!--<iframe ng-attr-id="{{vm.executeItem}}" ng-src="{{vm.getAuditionItemSrc(vm.executeItem, vm.getTemplateId(vm.executeItem))}}"></iframe>-->
                 <div class="skill-type"><strong>Skill:</strong> {{vm.getAuditionItemSkillType(vm.executeItem)}}</div>

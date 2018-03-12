@@ -29,6 +29,10 @@ angular
             MANUAL:     'Manual',
             AUTOMATIC:  'Automatic'
         },
+        AUDITION_VIEW_MODE : {
+            PREVIEW:     'Preview',
+            RESULTS:     'Results'
+        },
         ITEM_STATUS : {
             NEW:        'New',
             IN_WORK:    'In Work',
@@ -77,7 +81,7 @@ angular
             RECRUITER: 'recruiter.campaigns',
             APPLICANT: 'applicant' ,
             DOMAIN_EXPERT: 'domainExpert.auditions',
-            TALENT: 'talent.challenges'
+            TALENT: 'mainApplications'
         },
         SKILL_IMPORTANCE : {
             NICE:   'Nice to have',
@@ -103,6 +107,10 @@ angular
             CANCELED : 'Canceled',
             COMPLETED : 'Completed',
             RETRY: 'Retry'
+        },
+        APPLICATION_FRUAD_TYPE : {
+            NONE    :   'No Fraud',
+            REPEAT  :   'Repeat'
         },
         APPLICATION_ORIGIN : {
             PROACTIVE_CAMPAIGN : 'Proactive Campaign',

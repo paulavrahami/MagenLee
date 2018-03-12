@@ -68,6 +68,9 @@ angular
                 case 'Applicant' :
                     $state.go('applicantRegistration');
                     break;
+                case 'Talent'   :
+                    $state.go('talentRegistration');
+                    break;
                 case 'Recruiter' :
                     $state.go('recruiterRegistration');
                     break;

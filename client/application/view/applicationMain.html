@@ -70,6 +70,7 @@
 
 <div class="row">
     <div class="panel-group col-md-12">
+      <!-- Application summary header -->
       <div class="panel panel-default">
         <div class="row">
             <div class="col-md-1 appl-formating-left">
@@ -95,143 +96,187 @@
             </div>
         </div>
       </div>
-        <div class="panel panel-default"  ng-repeat="application in vm.applications | filter:vm.search | orderBy: vm.orderBy">
-            <div class="panel-heading application-record-line">
-                <a class="panel-title collapsed"  data-toggle="collapse" data-parent="#panel-campaigns-group"
-                ng-click="vm.calcGrade(application)" href="#panel-element-{{$index}}"  aria-expanded="false">
-                    <div class="row application-general" ng-class="application.revealed ? 'application-record' : ''">
-                        <div class="col-md-1">
-                            <h5>{{application.number}}</h5>
+      <!-- Application summary line -->
+      <div class="panel panel-default"  ng-repeat="application in vm.applications | filter:vm.search | orderBy: vm.orderBy">
+          <div class="panel-heading application-record-line">
+              <a class="panel-title collapsed"  data-toggle="collapse" data-parent="#panel-campaigns-group"
+              ng-click="vm.calcAuditionResults(application)" href="#panel-element-{{$index}}"  aria-expanded="false">
+                  <div class="row application-general" ng-class="application.revealed ? 'revealed-record' : 'application-record'">
+                      <div class="col-md-1">
+                          <h5>{{application.number}}</h5>
+                      </div>
+                      <div class="col-md-2">
+                          <h5>{{application.control.createDate | date}}</h5>
+                      </div>
+                      <div class="col-md-1 appl-formating">
+                          <h5>{{vm.round(application.grade)}}</h5>
+                      </div>
+                      <div class="col-md-2">
+                          <h5>{{application.firstName}}</h5>
+                      </div>
+                      <div class="col-md-2">
+                        <div ng-show="!application.revealed">
+                          <h5>************</h5>
                         </div>
-                        <div class="col-md-2">
-                            <h5>{{application.control.createDate | date}}</h5>
+                        <div ng-show="application.revealed">
+                          <h5>{{application.lastName}}</h5>
                         </div>
-                        <div class="col-md-1 appl-formating">
-                            <h5>{{vm.round(application.grade)}}</h5>
+                      </div>
+                      <div class="col-md-2">
+                        <div ng-show="!application.revealed">
+                          <h5>************</h5>
                         </div>
-                        <div class="col-md-2">
-                            <h5>{{application.firstName}}</h5>
+                        <div ng-show="application.revealed">
+                          <h5>{{application.email}}</h5>
                         </div>
-                        <div class="col-md-2">
-                          <div ng-show="!application.revealed">
-                            <h5>************</h5>
-                          </div>
-                          <div ng-show="application.revealed">
-                            <h5>{{application.lastName}}</h5>
-                          </div>
+                      </div>
+                      <div class="col-md-1">
+                        <div ng-show="!application.revealed">
+                          <h5>************</h5>
                         </div>
-                        <div class="col-md-2">
-                          <div ng-show="!application.revealed">
-                            <h5>************</h5>
-                          </div>
-                          <div ng-show="application.revealed">
-                            <h5>{{application.email}}</h5>
-                          </div>
+                        <div ng-show="application.revealed">
+                          <h5>{{application.phone}}</h5>
                         </div>
-                        <div class="col-md-1">
-                          <div ng-show="!application.revealed">
-                            <h5>************</h5>
-                          </div>
-                          <div ng-show="application.revealed">
-                            <h5>{{application.phone}}</h5>
-                          </div>
-                        </div>
-                        <div class="col-md-1" ng-hide="application.revealed">
-                            <a class="btn btn-sm btn-primary" ng-click="vm.revealedApplicants(application)" ng-disabled="application.revealed">Reveal</a>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
-                <div class="panel-body" >
-                    <div class="col-md-12">
-                      <h5>
-                        <div class="row col-md-5">
-                            <table id="gradetbl" class="table table-hover table-striped" cellspacing="0" width="100%">
-                              <col width="50">
-                              <col width="25">
-                              <col width="25">
+                      </div>
+                      <div class="col-md-1" ng-hide="application.revealed">
+                          <a class="btn btn-sm btn-primary reveal-btn" ng-click="vm.revealedApplicants(application)" ng-disabled="application.revealed">Reveal</a>
+                      </div>
+                  </div>
+              </a>
+          </div>
+      <!-- Application summary expanded line -->
+          <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
+              <div class="panel-body" >
+                  <div class="col-md-12">
+                    <h6>
+                        <!-- Audition results -->
+                        <div class="row col-md-7">
+                          <br>
+                            <!-- Statistics summary table -->
+                            <table id="gradetbl" class="table" cellspacing="0" width="100%">
+                                  <col width="20%">
+                                  <col width="20%">
+                                  <col width="10%">
+                                  <col width="10%" class="summary-col-prime">
+                                  <col width="10%">
+                                  <col width="10%" class="summary-col-prime">
+                                  <col width="10%" class="summary-col-prime">
+                                  <col width="10%">
                                 <thead>
-                                <tr>
-                                    <th>Skill Type</th>
-                                    <th>Importance</th>
-                                    <th>Grade</th>
-                                </tr>
+                                    <tr>
+                                        <th>Skill</th>
+                                        <th>Importance</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Total challenges defined for the skill">Total Challenges</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Total challenges completed by talent">Completed Challenges</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Maximume score per skill">Max Score</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Talent score per skill">Talent Score</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Talent score">% Score</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Applicants avarage score">Avg Score</th>
+                                    </tr>
                                 </thead>
                                 <tbody >
-                                  <tr ng-repeat="totGrade in application.gradePerSkill">
-                                    <td>
-                                        {{totGrade.skill}}
-                                    </td>
-                                    <td ng-class="{'importance-nice' : totGrade.importance === 'Nice to have',
-                                                   'importance-low' : totGrade.importance === 'Low',
-                                                   'importance-normal' : totGrade.importance === 'Normal',
-                                                   'importance-high' : totGrade.importance === 'High',
-                                                   'importance-must' : totGrade.importance === 'Must have'}">
-                                        {{totGrade.importance}}
-                                    </td>
-                                    <td >
-                                        {{vm.round(totGrade.grade / totGrade.count)}}
-                                    </td>
-                                  </tr>
+                                    <tr ng-repeat="results in application.auditionResults">
+                                        <td>
+                                          {{results.skill}}
+                                        </td>
+                                        <td ng-class="{'importance-nice' : results.importance === 'Nice to have',
+                                                         'importance-low' : results.importance === 'Low',
+                                                         'importance-normal' : results.importance === 'Normal',
+                                                         'importance-high' : results.importance === 'High',
+                                                         'importance-must' : results.importance === 'Must have'}">
+                                            {{results.importance}}
+                                        </td>
+                                        <td>
+                                            {{results.totalItems}}
+                                        </td>
+                                        <td>
+                                            {{results.totalItemsAnswered}}
+                                        </td>
+                                        <td>
+                                            {{vm.round(results.maxScore)}}
+                                        </td>
+                                        <td ng-class="{'above-avg': (vm.round(results.score) >= vm.round(results.avgScore)), 'below-avg': (vm.round(results.score) < vm.round(results.avgScore))}">
+                                            {{vm.round(results.score)}}
+                                        </td>
+                                        <td ng-class="{'above-avg': (vm.round(results.score) >= vm.round(results.avgScore)), 'below-avg': (vm.round(results.score) < vm.round(results.avgScore))}">
+                                            {{vm.round((results.score / results.maxScore) * 100)}}&#37;
+                                        </td>
+                                        <td>
+                                            {{vm.round((results.avgScore / results.maxScore) * 100)}}&#37;
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="row col-md-2"></div>
-                        <div class = "col-md-5">
-                              <div class="row" ng-if="application.goNoGo1.yes">
-                                  <br> {{vm.campaign.goNoGo1.text}} : <strong>{{application.goNoGo1.yes}}</strong>
-                              </div>
-                              <div class="row" ng-if="application.goNoGo1.no">
-                                  <br>{{vm.campaign.goNoGo1.text}} : <strong>{{application.goNoGo1.no}}</strong>
-                              </div>
-                              <div class="row" ng-if="vm.campaign.goNoGo1.text && !application.goNoGo1.yes && !application.goNoGo1.no">
-                                  <br>{{vm.campaign.goNoGo1.text}} : <strong>Not Answered</strong>
-                              </div>
-                              <div class="row" ng-if="application.goNoGo2.yes">
-                                <br>  {{vm.campaign.goNoGo2.text}} : <strong>{{application.goNoGo2.yes}}</strong>
-                              </div>
-                              <div class="row" ng-if="application.goNoGo2.no">
-                                <br>  {{vm.campaign.goNoGo2.text}} : <strong>{{application.goNoGo2.no}}</strong>
-                              </div>
-                              <div class="row" ng-if="vm.campaign.goNoGo2.text && !application.goNoGo2.yes && !application.goNoGo2.no">
-                                <br>  {{vm.campaign.goNoGo2.text}} : <strong>Not Answered</strong>
-                              </div>
-                              <div class="row" ng-if="application.goNoGo4.yes">
-                                <br>  Are you willing to work in {{application.goNoGo4Place}}? : <strong>{{application.goNoGo4.yes}}</strong>
-                              </div>
-                              <div class="row" ng-if="application.goNoGo4.no">
-                                <br>  Are you willing to work in {{application.goNoGo4Place}}? : <strong>{{application.goNoGo4.no}}</strong>
-                              </div>
-                              <div class="row" ng-if="application.goNoGo4Place && !application.goNoGo4.yes && !application.goNoGo4.no">
-                                <br>  Are you willing to work in {{application.goNoGo4Place}}? : <strong>Not Answered</strong>
-                              </div>
-                              <div class="row" ng-if="application.goNoGo3">
-                                <br>  Salary Expectations : <strong>{{application.goNoGo3}} {{vm.campaign.salaryExpCurrency}}</strong>
-                              </div>
-                              <div class="row" ng-if="vm.campaign.goNoGo3.enabled && !application.goNoGo3">
-                                <br>  Salary Expectations : <strong>Not Answered</strong>
-                              </div>
-                              <div class="row" ng-show="application.revealed">
+                          <!-- Audition preview -->
+                          <div>
+                              <a class="btn btn-sm btn-primary" ng-click="vm.viewAuditionResults(application)">View Audition</a>
+                          </div>
+                      </div>
+                    </h6>
+                    <div class="row col-md-1"></div>
+                    <h5>
+                      <!-- Questionnaire section -->
+                      <div class = "col-md-4">
+                            <div class="row" ng-if="application.goNoGo1.yes">
+                                <br> {{vm.campaign.goNoGo1.text}} : <strong>{{application.goNoGo1.yes}}</strong>
+                            </div>
+                            <div class="row" ng-if="application.goNoGo1.no">
+                                <br>{{vm.campaign.goNoGo1.text}} : <strong>{{application.goNoGo1.no}}</strong>
+                            </div>
+                            <div class="row" ng-if="vm.campaign.goNoGo1.text && !application.goNoGo1.yes && !application.goNoGo1.no">
+                                <br>{{vm.campaign.goNoGo1.text}} : <strong>Not Answered</strong>
+                            </div>
+                            <div class="row" ng-if="application.goNoGo2.yes">
+                              <br>  {{vm.campaign.goNoGo2.text}} : <strong>{{application.goNoGo2.yes}}</strong>
+                            </div>
+                            <div class="row" ng-if="application.goNoGo2.no">
+                              <br>  {{vm.campaign.goNoGo2.text}} : <strong>{{application.goNoGo2.no}}</strong>
+                            </div>
+                            <div class="row" ng-if="vm.campaign.goNoGo2.text && !application.goNoGo2.yes && !application.goNoGo2.no">
+                              <br>  {{vm.campaign.goNoGo2.text}} : <strong>Not Answered</strong>
+                            </div>
+                            <div class="row" ng-if="application.goNoGo4.yes">
+                              <br>  Are you willing to work in {{application.goNoGo4Place}}? : <strong>{{application.goNoGo4.yes}}</strong>
+                            </div>
+                            <div class="row" ng-if="application.goNoGo4.no">
+                              <br>  Are you willing to work in {{application.goNoGo4Place}}? : <strong>{{application.goNoGo4.no}}</strong>
+                            </div>
+                            <div class="row" ng-if="application.goNoGo4Place && !application.goNoGo4.yes && !application.goNoGo4.no">
+                              <br>  Are you willing to work in {{application.goNoGo4Place}}? : <strong>Not Answered</strong>
+                            </div>
+                            <div class="row" ng-if="application.goNoGo3">
+                              <br>  Salary Expectations : <strong>{{application.goNoGo3}} {{vm.campaign.salaryExpCurrency}}</strong>
+                            </div>
+                            <div class="row" ng-if="vm.campaign.goNoGo3.enabled && !application.goNoGo3">
+                              <br>  Salary Expectations : <strong>Not Answered</strong>
+                            </div>
+                            <div class="row" ng-show="application.revealed">
+                                <br>
+                                <div ng-if="application.linkedInURL">
+                                  LinkedIn Profile : <strong>{{application.linkedInURL}}</strong>
                                   <br>
-                                  <div ng-if="application.linkedInURL">
-                                    LinkedIn Profile : <strong>{{application.linkedInURL}}</strong>
+                                </div>
+                                <div ng-if="application.fileId">
                                     <br>
-                                  </div>
-                                  <div ng-if="application.fileId">
-                                      <br>
-                                      <a href="{{vm.getCVLink(application.fileId).url()}}" download="{{vm.getCVLink(application.fileId).original.name}}" target="_blank"><strong>Download CV</strong></a>
-                                  </div>
-                              </div>
-                        </div>
-                      </h5>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                    <a href="{{vm.getCVLink(application.fileId).url()}}" download="{{vm.getCVLink(application.fileId).original.name}}" target="_blank"><strong>Download CV</strong></a>
+                                </div>
+                            </div>
+                      </div>
+                    </h5>
+                  </div>
+              </div>
+          </div>
+      </div>
     </div>
 </div>
 
 </div>
 <div class="col-md-0-6"></div>
 </div>
+
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>

@@ -1,7 +1,7 @@
 
 angular
     .module('skillera')
-    .controller('applicationMain', function($state,$stateParams,$window, $scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
+    .controller('applicationMain', function($state,$stateParams,$window, $scope,$reactive,dbhService, $UserAlerts, ENUM, MAP, moment, $uibModal) {
 
         let vm = this;
         // $reactive(vm).attach($scope);
@@ -46,6 +46,7 @@ angular
                 reactiveContext.subscribe('cv.files');
             }
         }
+
         /**
          * ReactiveContext;
          */
@@ -59,6 +60,7 @@ angular
 
                 return vm.applications;
             }
+
         });
 
 
@@ -90,9 +92,9 @@ angular
         vm.isRecruiter = function () {
             // Calculate number of applicants passing minimum score
             vm.applicantPassMinScore = 0;
-
+            vm.campaign = Campaigns.findOne({_id: vm.campaignId});
             if (vm.campaign.applications.length) {
-                for  (z = 0 ; z < vm.campaign.applications.length ; z++) {
+                for  (let z = 0 ; z < vm.campaign.applications.length ; z++) {
                     if (vm.applications[z].grade >= vm.campaign.minScore){
                         vm.applicantPassMinScore ++;
                     }
@@ -137,6 +139,7 @@ angular
                             conditions = {$and: [
                                 {grade: {$gte: vm.campaign.minScore}},
                                 {campaignId: vm.campaignId},
+                                {"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE},
                                 {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
                             ]};
                             break;
@@ -144,6 +147,7 @@ angular
                             conditions = {$and: [
                                 {grade: {$gte: vm.campaign.minScore - 10}},
                                 {campaignId: vm.campaignId},
+                                {"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE},
                                 {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
                             ]};
                             break;
@@ -151,6 +155,7 @@ angular
                             conditions = {$and: [
                                 {grade: {$gte: vm.campaign.minScore - 20}},
                                 {campaignId: vm.campaignId},
+                                {"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE},
                                 {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
                             ]};
                             break;
@@ -159,7 +164,7 @@ angular
                     }
                 }
                 else {
-                    conditions = {campaignId: vm.campaignId,"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                    conditions = {campaignId: vm.campaignId,"fraudType": ENUM.APPLICATION_FRUAD_TYPE.NONE,"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
                 }
 
 
@@ -248,9 +253,11 @@ angular
                 if ((!vm.campaign.revealedApplicants) || (vm.campaign.topApplicant > vm.campaign.revealedApplicants)) {
                     applicationRec.revealed = true;
                     vm.applicationId = applicationRec._id;
+                    // Delete the temp statistics summary table (see vm.calcAuditionResults function) before
+                    // the application is updated into the database
+                    delete applicationRec.auditionResults;
                     let copyApplication = angular.copy(applicationRec);
-
-
+                    
                     delete copyApplication._id;
                     //noinspection JSUnusedLocalSymbols
                     Applications.update({_id: vm.applicationId}, {$set: copyApplication}, function (errorArg, tempIdArg) {
@@ -281,7 +288,7 @@ angular
                 }
             };
 
-            //Provide a informational message if the realed applicant score is less then the minimum score
+            //Provide a informational message if the related applicant score is less then the minimum score
             if (applicationRec.grade < vm.campaign.minScore){
 
                 let msgArg = "This application has no minimum grade! Please confirm";
@@ -299,9 +306,46 @@ angular
             } else {
                 vm.reveal(applicationRec);
             }
-
-
         };
+
+
+        vm.viewAuditionResults = function(applicationArg) {
+            // Invoke the application process in a 'preview' mode to provide the recruiter with the ability
+            // to view the actual audition conducted by the Talent
+
+            vm.application = {};
+            vm.application = applicationArg;
+            vm.howItWorkLang = 'eng';
+            vm.application.sessions = [];
+            vm.application.sessions.push({
+                date: (new Date()),
+                states: vm.application.states ? vm.application.states : {}
+            });
+            vm.application.states.currentItem = 1;
+           
+            vm.auditionViewMode = ENUM.AUDITION_VIEW_MODE.RESULTS;
+            $scope.auditionViewMode = vm.auditionViewMode;
+
+            vm.modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'client/audition/view/auditionExecute.html',
+                controller: 'AuditionExecuteCtrl',
+                controllerAs: 'vm',
+                keyboard: false,
+                backdrop: 'static',
+                scope: $scope,
+                resolve: {
+                    auditionId: function () {
+                        return vm.campaign.auditionId;
+                    },
+                    applicationCtrl: function () {
+                        return vm;
+                    }
+                },
+                size: 'executeAudition'
+            });
+        };
+
 
         //Round grades for presentation
         vm.round = function(grade) {
@@ -312,72 +356,74 @@ angular
             }
         };
 
-        vm.calcGrade = function(application) {
-            if (!('gradePerSkill' in application)) {
-                //Build the table of empty grades per skill based on skills in campaign
-                vm.gradePerSkill = [];
-                if (vm.campaign.skills.length > 0) {
-                    for(let z = 0; z < vm.campaign.skills.length; z++) {
-                        vm.gradePerSkill[z] = {
-                            skill: vm.campaign.skills[z].type,
-                            grade: 0,
-                            count: 0,
-                            importance: vm.campaign.skills[z].importance
-                        }
-                    }
+        vm.calcAuditionResults = function(application) {
+            // initialize the statistics summary table
+            application.auditionResults = [];
+            vm.campaign.skills.every(function (skill) {
+                application.auditionResults.push({
+                    skill: skill.type,
+                    importance: skill.importance,
+                    maxScore: 0,
+                    score: 0,
+                    avgScore: 0, /*for all campaign's applications*/
+                    totalItems: 0,
+                    totalItemsAnswered: 0,
+                    avgApplicationsItemsAnswered: 0 /*for all campaign's applications*/
+                    })
+                return true;
+            });
+
+            // Update the summary table with the max score per skill and the total items defined per skill
+            // Zvika - TBD; its better to calculate this from the audition.items array
+            let itemsArray = Object.keys(application.states.itemsContent);
+            itemsArray.every(function (itemKey) {
+                let itemRec = Items.findOne({_id: itemKey});
+                // Locate the respective item's skill entry in the summary table
+                index = application.auditionResults.findIndex(findResultsPerSkill => findResultsPerSkill.skill == itemRec.skill);
+                if (index > -1) {
+                    application.auditionResults[index].maxScore += application.states.itemsContent[itemKey].state.maxScore;
+                    application.auditionResults[index].totalItems ++;
+                } else {
+                    // Zvika - TBD; this is "not possible"
                 }
+                return true;
+            });
 
 
-                let itemArray = Object.keys(application.states.itemsContent);
-                // vm.gradePerSkill = [];
-
-                for (let x = 0; x < itemArray.length; x++) {
-
-                    //Bring the relevant itemArray
-
-                    let itemRec = Items.findOne({_id: itemArray[x]});
-
-                    if (vm.gradePerSkill.length === 0) {
-                        vm.gradePerSkill[0] = {
-                            skill: itemRec.skill,
-                            grade: application.states.itemsContent[itemArray[x]].state.validity,
-                            // importance: itemRec.skill.importance,
-                            count: 1
-                        }
+            // for all campaign's applications:
+            vm.campaign.applications.every(function (applicationKey) {
+                // get an application
+                let applicationRec = Applications.findOne({_id: applicationKey})
+                // get the application's audition items
+                let itemsArray = Object.keys(applicationRec.states.itemsContent);
+                // for each application's audition item:
+                itemsArray.every(function (itemKey) {
+                    // get an item
+                    let itemRec = Items.findOne({_id: itemKey})
+                    // update the item's skill respective summary table record
+                    index = application.auditionResults.findIndex(findResultsPerSkill => findResultsPerSkill.skill == itemRec.skill);
+                    if (index > -1) {
+                        applicationRec.states.itemsContent[itemKey].state.clicks > 0 ? application.auditionResults[index].avgApplicationsItemsAnswered ++ : "",
+                        application.auditionResults[index].avgScore += applicationRec.states.itemsContent[itemKey].state.score;
+                        // get the statistics for the CURRENT application
+                        if (applicationKey === application._id) {
+                            applicationRec.states.itemsContent[itemKey].state.clicks > 0 ? application.auditionResults[index].totalItemsAnswered ++ : "",
+                            application.auditionResults[index].score += applicationRec.states.itemsContent[itemKey].state.score;
+                        };
                     } else {
-                        let skillIndex = -1;
-                        for (let i = 0; i < vm.gradePerSkill.length; i++) {
-                            if (vm.gradePerSkill[i].skill === itemRec.skill) {
-                                skillIndex = i;
-                            }
-                        }
-
-                        if (skillIndex > -1) {
-                            vm.gradePerSkill[skillIndex].grade += application.states.itemsContent[itemArray[x]].state.validity;
-                            vm.gradePerSkill[skillIndex].count++;
-                        } else {
-                            vm.gradePerSkill.push({
-                                skill: itemRec.skill,
-                                grade: application.states.itemsContent[itemArray[x]].state.validity,
-                                // importance: itemRec.skill.importance,
-                                count: 1
-                            })
-                        }
-                    }
-                }
-                //For skills with no challenge answered, make sure to total grade will be zero
-                if (vm.gradePerSkill.length > 0) {
-                    for (let zz = 0; zz < vm.campaign.skills.length; zz++) {
-                        if (vm.gradePerSkill[zz].grade === 0) {
-                            vm.gradePerSkill[zz].count = 1;
-                        }
-                    }
-                }
-
-                // $.extend(application,vm.gradePerSkill)
-                application.gradePerSkill = vm.gradePerSkill
-            }
-
+                        // Zvika - TBD; this is "not possible"
+                    };
+                    return true
+                });
+                return true
+            });
+            // Calculate the average per all campaign's applications
+            application.auditionResults.forEach(function (resultsPerSkill) {
+                resultsPerSkill.avgScore = (resultsPerSkill.avgScore / vm.campaign.applications.length);
+                resultsPerSkill.avgApplicationsItemsAnswered = (resultsPerSkill.avgApplicationsItemsAnswered / vm.campaign.applications.length);
+            });
         };
+
         vm.changeSelectedFilter(vm.selectedFilter);
+
     });

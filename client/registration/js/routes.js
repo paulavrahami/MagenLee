@@ -24,7 +24,7 @@ function routerConfig($stateProvider) {
       controllerAs: 'vm'
     })
     .state('talentSigningUp', {
-      url:'/talentSignUp',
+      url:'/talentSignUp/:type',
       templateUrl: 'client/registration/view/talentSignUp.html',
       controller: 'talentSignUpCtrl',
       controllerAs: 'vm'
@@ -33,6 +33,17 @@ function routerConfig($stateProvider) {
       url:'/updRecruiter',
       templateUrl: 'client/registration/view/recriuterRegistration.html',
       controller: 'recruiterRegistrationCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        "currentUser": ["$meteor", function($meteor){
+          return $meteor.waitForUser();
+        }]
+      }
+    })
+    .state('talentRegistration', {
+      url:'/updTalent',
+      templateUrl: 'client/registration/view/talentRegistration.html',
+      controller: 'talentRegistrationCtrl',
       controllerAs: 'vm',
       resolve: {
         "currentUser": ["$meteor", function($meteor){

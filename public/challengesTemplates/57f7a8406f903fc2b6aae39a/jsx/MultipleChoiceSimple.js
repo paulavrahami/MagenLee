@@ -132,6 +132,23 @@ Meteor.MultipleChoiceSimple = React.createClass({
                                 return React.createElement('span', null);
                             }
                         }(),
+
+                        function () {
+                            if (_this4.state['image'] && _this4.state['image'] !== "") {
+                                return React.createElement(
+                                    'div',
+                                    { className: 'md-col-12' + (_this4.state['image Float Right'] ? ' float-right': '') },
+                                    React.createElement('img', {
+                                            src: _this4.state['image'],
+                                            width: _this4.state['image Width'],
+                                            height: _this4.state['image Height']
+                                    }),
+                                );
+                            } else {
+                                return React.createElement('span', null);
+                            }
+                        }(),
+
                         React.createElement(
                             'div',
                             null,

@@ -18,7 +18,11 @@ if (Meteor.isServer) {
         {
         "_id":"company",
         "sequence_value": 399  
-        }
+        },
+        {
+          "_id":"talent",
+          "sequence_value": 499  
+          }
       ];
 
       for (var i = 0; i < sequences.length; i++) {
