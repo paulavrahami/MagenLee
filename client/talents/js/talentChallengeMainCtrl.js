@@ -228,7 +228,12 @@ angular
           return vm.getItem(itemIdArg);
       };
 
+      vm.writee = function () {
+        console.log('in vm write');
+    };
+
         vm.openEditItem = function (itemIdArg) {
+                        console.log('in open edit item');
             
                         vm.selectEditItem(itemIdArg);
             
