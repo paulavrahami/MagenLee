@@ -42,7 +42,8 @@ angular
         },
         ITEM_AUTHOR_TYPE : {
             RECRUITER:    'Recruiter',
-            DOMAIN_EXPERT:'Domain Expert'
+            DOMAIN_EXPERT:'Domain Expert',
+            TALENT:       'Talent'
         },
         ALERT : {
             SUCCESS:    'success',
@@ -137,6 +138,13 @@ angular
             IN_WORK:    'glyphicon glyphicon-cutlery',
             TERMINATED: 'glyphicon glyphicon-stop',
             VERIFIED:   'glyphicon glyphicon-thumbs-up'
+        },
+        ITEM_STATUS : {
+            TERMINATED: 'glyphicon glyphicon-trash',
+            NEW:        'glyphicon glyphicon-ok',
+            IN_WORK:    'glyphicon glyphicon-cutlery',
+            AVAILABLE:  'glyphicon glyphicon-play',
+            ASSIGNED:   'glyphicon glyphicon-ok-circle'
         },
         TALENT_STATUS : {
             CANCELED:  'glyphicon glyphicon-trash',

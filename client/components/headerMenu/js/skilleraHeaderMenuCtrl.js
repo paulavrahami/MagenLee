@@ -45,11 +45,11 @@ angular
                   case ENUM.USER.TALENT :
                       menu.items.push({
                           caption: 'My Applications',
-                          link: 'recruiter.dashboard'
+                          link: 'mainApplications'
                       });
                       menu.items.push({
                           caption: 'Marketplace',
-                          link: 'talent.challenges'
+                          link: 'mainChallenges'
                       });
                       break;
                   case ENUM.USER.SYSTEM_ADMIN :

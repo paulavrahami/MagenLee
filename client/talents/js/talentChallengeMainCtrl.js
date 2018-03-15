@@ -3,7 +3,7 @@ angular
     .controller('ChallengeMainCtrl', function($state,$scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
 
         let vm = this;
-        $reactive(vm).attach($scope);
+        let reactiveContext = $reactive(vm).attach($scope);
 
         vm.animationsEnabled = true;
         vm.isViewThumbnails  = true;
@@ -12,7 +12,14 @@ angular
         vm.ENUM = ENUM;
         vm.MAP = MAP;
 
+
         vm.dependency = new Deps.Dependency();
+
+        vm.talentChallenges = [];
+        vm.talentChallenge = {
+            skill: '',
+            challenges:[]
+        };
 
 
         /** get user previous selections */
@@ -36,16 +43,47 @@ angular
         /**
          * ReactiveContext;
          */
+
+        function doSubscription () {
+            
+                        if (Meteor.user() && Meteor.user().profile) {
+                            reactiveContext.subscribe('itemsByAuthorId', () => [Meteor.user()._id]);
+                        }
+
+                    }
+
         vm.helpers({
             /**
              * @desc Retrieve users campaigns by status;
              * @returns {*}
              */
-            campaigns () {
+            items () {
                 vm.dependency.depend();
+                doSubscription ();
 
-                return vm.campaigns;
+                (new Promise((resolve, reject) => {
+                    let applications;
+                    let conditions = {};
+                    conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
+        
+                    Meteor.call('items.getItemsSummary', conditions, (err, res) => {
+                        if (err) {
+                            reject();
+                        } else {
+                            resolve(res);
+                        }
+                    });
+                })).then(function(results){
+                    vm.items = results;
+                    
+                    vm.dependency.changed();
+                }).catch(function() {
+                    vm.items = [];
+                });
+               
+                return vm.items;
             },
+
             /**
              * @desc retrieve Meteor.user;
              * @returns {Meteor.user}
@@ -55,32 +93,7 @@ angular
             }
         });
 
-
-
-        /**
-         * @desc Check if the user is a recruiter;
-         * @returns {boolean}
-         */
-        vm.isTalent = function () {
-            if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type === 'Talent') {
-                //vm.subscribe('campaignsRecruiter',() => [Meteor.user().profile.companyName]);
-                if (Meteor.user().profile.accessMode) {
-                  vm.accessMode = Meteor.user().profile.accessMode
-                } else {
-                  vm.accessMode = 'Admin';
-                }
-
-                return true;
-            }
-            else {
-                return false;
-            }
-        };
-
-        /**
-         * User nav-bar selections & search:
-         */
-
+        
         /**
          * @desc Change the selected status and announce change;
          * @param statusArg
@@ -94,35 +107,8 @@ angular
                 vm.selectedStatus = undefined;
                 localStorage.removeItem('selectedStatus');
             }
-            (new Promise((resolve, reject) => {
-                let campaigns;
-                let conditions = {};
 
-                if (vm.selectedStatus) {
-                    conditions = {$and: [
-                        {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
-                        {status: vm.ENUM.CAMPAIGN_STATUS[vm.selectedStatus]}
-                    ]}
-                }
-                else {
-                    conditions = {$and: [
-                        {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
-                        {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETE}}
-                    ]}
-                }
-                Meteor.call('campaigns.getCampaignsSummery', conditions, (err, res) => {
-                    if (err) {
-                        reject();
-                    } else {
-                        resolve(res);
-                    }
-                });
-            })).then(function(results){
-                vm.campaigns = results;
-                vm.dependency.changed();
-            }).catch(function(error) {
-                vm.campaigns = [];
-            });
+            
         };
 
         /**
@@ -151,6 +137,8 @@ angular
             vm.isViewThumbnails = false;
             localStorage.setItem('isViewThumbnails', vm.isViewThumbnails);
         };
+
+    
 
         /**
          * @desc search (filter) campaigns;
@@ -215,6 +203,63 @@ angular
          */
 
         /**
+        * @desc Select the current edit item;
+        * @param itemIdArg
+        */
+       vm.selectEditItem = function (itemIdArg) {
+
+           if (itemIdArg instanceof Object) {
+               getItemId = itemIdArg.itemId;
+               vm.maxScore = itemIdArg.maxScore;
+           } else {
+               getItemId = itemIdArg;
+           };
+           vm.editItem = vm.getItem(getItemId);
+           vm.editTemplate = TemplatesCollection.findOne({_id:vm.editItem.templateId});
+           vm.editItemForCancel = angular.copy(vm.editItem);
+       };
+
+       /**
+       * @desc return  specific item;
+       * @param itemIdArg
+       * @returns {*}
+       */
+      vm.getItem = function (itemIdArg) {
+          return vm.getItem(itemIdArg);
+      };
+
+      vm.writee = function() {
+        console.log('in vm write');
+    };
+
+        vm.openEditItem = function (itemIdArg) {
+                        console.log('in open edit item');
+            
+                        vm.selectEditItem(itemIdArg);
+            
+                        function loadModal () {
+            
+                            auditionEdit.modalInstance = $uibModal.open({
+                                animation: true,
+                                templateUrl: 'client/talents/view/editItem.html',
+                                controller: 'editItemCtrl',
+                                controllerAs: 'editItem',
+                                keyboard: false,
+                                backdrop  : 'static',
+                                resolve: {
+                                    ChallengeMainCtrl : function () {
+            
+                                        return vm;
+                                    }
+                                },
+                                size: 'xl'
+                            });
+                        }
+                        loadModal();
+                        vm.dependency.changed();
+                    };
+
+        /**
          * @desc delete the campaign by changing its status;
          * @param campaignArg
          */
@@ -266,16 +311,11 @@ angular
                 });
         };
 
-        /**
-         * @desc test the campaign;
-         * @param campaignArg
-         */
-        vm.applyCampaign = function(campaignArg){
-            $state.go("campaignApply",{id:campaignArg._id});
-        };
+        
 
         /**
-         * By vm.changeSelectedStatus() we bring the campaigns
+         * By vm.changeSelectedStatus() we bring the challenges
          */
+        
         vm.changeSelectedStatus(vm.selectedStatus);
     });
