@@ -31,6 +31,8 @@ import 'angular-moment';
 import 'angular-chosen-localytics';
 import 'ngclipboard';
 import uiMask from 'angular-ui-mask';
+import 'chart.js'; 
+import 'angular-chart.js';
 
 //import uiRouter from 'angular-ui-router';
 //import 'bootstrap/dist/css/bootstrap.css';
@@ -49,7 +51,9 @@ function inIframe () {
 if (!inIframe()) {
     angular.module(
         'skillera',
-        [angularMeteor, angularUiRouter, 'ngclipboard', 'angularMoment', 'accounts.ui', 'angular.filter', uiMask, angularBootstrap, angularPromiser, 'localytics.directives']);
+        [angularMeteor, angularUiRouter, 'ngclipboard', 'angularMoment', 'accounts.ui', 
+        'angular.filter', uiMask, angularBootstrap, angularPromiser, 'localytics.directives',
+        'chart.js']);
 }
 else {
     angular.module(
