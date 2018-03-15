@@ -15,9 +15,9 @@ angular
         vm.MAP = MAP;
         vm.campaignId = $stateParams.id;
         vm.oneAtATime = true;
+        vm.displayGraphs = false;
 
         vm.dependency = new Deps.Dependency();
-
 
         /**
          * @desc Show a dialog with the error;
@@ -389,7 +389,6 @@ angular
                 return true;
             });
 
-
             // for all campaign's applications:
             vm.campaign.applications.every(function (applicationKey) {
                 // get an application
@@ -422,6 +421,163 @@ angular
                 resultsPerSkill.avgScore = (resultsPerSkill.avgScore / vm.campaign.applications.length);
                 resultsPerSkill.avgApplicationsItemsAnswered = (resultsPerSkill.avgApplicationsItemsAnswered / vm.campaign.applications.length);
             });
+        };
+
+        vm.graphs = function () {
+            if (vm.displayGraphs) {
+                vm.displayGraphs = false;
+                return;
+            } else {
+                vm.displayGraphs = true;
+            };
+            // set default graph type
+            vm.graphTotalSetTypeLine = true;
+            vm.graphPerSkillSetTypeBar = true;
+
+            // ------------------------------
+            // Graph - Applications Per Grade
+            // ------------------------------
+            // Initialize the application summary table
+            applicationsPerGared = [];
+            for (let i=0; i<10; i++) {
+                applicationsPerGared[i] = 0;
+            };
+
+            // Calculate the application summary table based on all campaign's applications
+            vm.campaign.applications.every(function (applicationKey) {
+                // get an application
+                let applicationRec = Applications.findOne({_id: applicationKey})
+                // if "rounded" grade (e.g., 80) - increment the previous range (e.g., 70-80)
+                if ((applicationRec.grade % 10) === 0 && applicationRec.grade !== 0 ) {
+                    var gradeRange = (applicationRec.grade / 10) - 1;
+                // if remainder for modulo 10 (e.g., 83) -> increment the current range (e.g., 80-90)
+                } else {
+                    var gradeRange = Math.trunc(applicationRec.grade / 10);
+                };
+                applicationsPerGared[gradeRange] += 1;
+                return true
+            });
+
+            // Prepare the graph
+            vm.graphTotal = {};
+            // chart-data
+            vm.graphTotal.data = [[]];
+            for (let i=0; i<10; i++) {
+                vm.graphTotal.data[0].push(applicationsPerGared[i]);
+            };
+            // chart-labels
+            vm.graphTotal.labels = ['0-10','11-20','21-30','31-40','41-50','51-60','61-70','71-80','81-90','91-100'];
+            // chart-series
+            vm.graphTotal.series = [];
+            // chart-options
+            vm.graphTotal.options = {
+                title: {
+                    display: true,
+                    text: "Audition's Grade"
+                },
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 10
+                    }
+                }
+            };
+
+            // --------------------------------------
+            // Graph - Applications per Skill's Grade
+            // --------------------------------------
+            // Initialize the applications per skills summary table
+            applicationsPerSkillGrade = [];
+            for (let i=0; i<vm.campaign.skills.length; i++) {
+                dataSetPerSkill = [];
+                for (let j=0; j<10; j++) {
+                    dataSetPerSkill[j] = 0;
+                };
+                applicationsPerSkillGrade[vm.campaign.skills[i].type] = dataSetPerSkill;
+                applicationsPerSkillGrade.length = vm.campaign.skills.length;
+            };
+
+            // Calculate the application per skill's grade summary table based on all campaign's applications
+            // TBD - Zvika; consider adding summary info per skill to the audition and the application collections
+            vm.campaign.applications.every(function (applicationKey) {
+                let applicationRec = Applications.findOne({_id: applicationKey})
+                vm.calcAuditionResults (applicationRec);
+                for (let i=0; i<applicationRec.auditionResults.length; i++) {
+                    gradePerSkill = (applicationRec.auditionResults[i].score / applicationRec.auditionResults[i].maxScore) * 100;
+                    if ((gradePerSkill % 10) === 0 && gradePerSkill !== 0 ) {
+                        var gradeRange = (gradePerSkill / 10) - 1;
+                    // if remainder for modulo 10 (e.g., 83) -> increment the current range (e.g., 80-90)
+                    } else {
+                        var gradeRange = Math.trunc(gradePerSkill / 10);
+                    };
+                    applicationsPerSkillGrade[applicationRec.auditionResults[i].skill][gradeRange] += 1;
+                };
+                return true
+            });
+
+            // Prepare the graph
+            vm.graphPerSkill = {};
+            // chart-date
+            vm.graphPerSkill.data = [];
+            for (let i=0; i<vm.campaign.skills.length; i++) {
+                vm.graphPerSkill.data[i] = applicationsPerSkillGrade[vm.campaign.skills[i].type];
+            };
+            // chart-labels
+            vm.graphPerSkill.labels = ['0-10','11-20','21-30','31-40','41-50','51-60','61-70','71-80','81-90','91-100'];
+            // chart-series
+            vm.graphPerSkill.series = [];
+            for (let i=0; i<vm.campaign.skills.length; i++) {
+                vm.graphPerSkill.series[i] = vm.campaign.skills[i].type;
+            };
+            // chart-options
+            vm.graphPerSkill.options = {
+                title: {
+                    display: true,
+                    text: "Skill's Grade"
+                },
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 10
+                    }
+                },
+                legend: {
+                    display: true
+                }
+            };
+        };
+
+        vm.graphTotalSetType = function(chartType) {
+            vm.graphTotalSetTypeBar = false;
+            vm.graphTotalSetTypeLine = false;
+
+            switch (chartType) {
+                case "bar":
+                    vm.graphTotalSetTypeBar = true;
+                    break;
+                case "line":
+                    vm.graphTotalSetTypeLine = true;
+                    break;
+                case "pie":
+            };
+        };
+
+        vm.graphPerSkillSetType = function(chartType) {
+            vm.graphPerSkillSetTypeBar = false;
+            vm.graphPerSkillSetTypeLine = false;
+
+            switch (chartType) {
+                case "bar":
+                    vm.graphPerSkillSetTypeBar = true;
+                    break;
+                case "line":
+                    vm.graphPerSkillSetTypeLine = true;
+                    break;
+            };
         };
 
         vm.changeSelectedFilter(vm.selectedFilter);
