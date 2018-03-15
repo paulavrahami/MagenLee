@@ -20,7 +20,7 @@ function routerConfig($stateProvider) {
     controllerAs: 'vm'
   })
   .state('talentCreateChallenge',{
-    url:'/talentChallenges/create',
+    url:'/talentChallengesCreate',
     templateUrl: 'client/talents/view/talentCreateChallenge.html',
     controller: 'createChallengeCtrl',
     controllerAs: 'vm'

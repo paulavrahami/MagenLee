@@ -228,7 +228,7 @@ angular
           return vm.getItem(itemIdArg);
       };
 
-      vm.writee = function () {
+      vm.writee = function() {
         console.log('in vm write');
     };
 
