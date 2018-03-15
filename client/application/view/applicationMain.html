@@ -1,5 +1,4 @@
 <!--applicatioMain.html-->
-<!--suppress HtmlUnknownTarget -->
 <div class="row">
   <div class="col-md-0-6"></div>
     <div class="col-md-11">
@@ -50,22 +49,91 @@
                 <input type="text" class="form-control" placeholder="Search" ng-model="vm.query">
               </div>
             </form>
+            <!-- sort by -->
             <form class="navbar-form navbar-left" role="search">
-<!--               <div class="form-group">
-                Sort by:
-              </div> -->
               <div class="form-group">
                 <div class="btn-group">
                   <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('grade')"><span ng-class="vm.getSort('grade')"></span>Grade</button>
                   <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('control.createDate')"><span ng-class="vm.getSort('control.createDate')"></span>Date</button>
                 </div>
               </div>
-            </form>        
+            </form>
+            <!-- graphs -->
+            <form class="navbar-form navbar-left" role="search">
+              <div class="form-group">
+                <div class="btn-group">
+                  <button class="btn btn-xs btn-default glyphicon glyphicon-signal" type="button" ng-click="vm.graphs()"></button>
+                </div>
+              </div>
+            </form>
           </div><!-- /.navbar-collapse -->
         </nav>
       </div>     
     <div>
   </div>
+</div>
+
+<!-- graphs canvas -->
+<div class="row canvas-area" ng-show="vm.displayGraphs">
+    <!-- Graph - Total applications per grade -->
+    <div class="col-md-6">
+      <div ng-show=vm.graphTotalSetTypeBar>
+        <canvas 
+          id="bar"
+          height="180"
+          class="chart chart-bar"
+          chart-data="vm.graphTotal.data"
+          chart-labels="vm.graphTotal.labels"
+          chart-series="vm.graphTotal.series"
+          chart-options="vm.graphTotal.options">
+        </canvas>
+      </div>
+      <div ng-show=vm.graphTotalSetTypeLine>
+        <canvas 
+          id="bar"
+          height="180"
+          class="chart chart-line"
+          chart-data="vm.graphTotal.data"
+          chart-labels="vm.graphTotal.labels"
+          chart-series="vm.graphTotal.series"
+          chart-options="vm.graphTotal.options">
+        </canvas>
+      </div>
+      <div class="btn-group chart-type-btn">
+        <button class="btn btn-xs btn-default" type="button" ng-click="vm.graphTotalSetType('bar')">Bar</button>
+        <button class="btn btn-xs btn-default" type="button" ng-click="vm.graphTotalSetType('line')">Line</button>
+      </div>
+    </div>
+    <div class="col-md-0-6"></div>
+    <!-- Graph - Total applications per skill's grade -->
+    <div class="col-md-6">
+      <div ng-show="vm.graphPerSkillSetTypeBar">
+        <canvas
+          id="bar"
+          height="180"
+          class="chart chart-bar"
+          chart-data="vm.graphPerSkill.data"
+          chart-labels="vm.graphPerSkill.labels"
+          chart-series="vm.graphPerSkill.series"
+          chart-options="vm.graphPerSkill.options">
+        </canvas>
+      </div>
+      <div ng-show="vm.graphPerSkillSetTypeLine">
+        <canvas
+          id="bar"
+          height="180"
+          class="chart chart-line"
+          chart-data="vm.graphPerSkill.data"
+          chart-labels="vm.graphPerSkill.labels"
+          chart-series="vm.graphPerSkill.series"
+          chart-options="vm.graphPerSkill.options">
+        </canvas>
+      </div>
+      <div class="btn-group chart-type-btn">
+        <button class="btn btn-xs btn-default" type="button" ng-click="vm.graphPerSkillSetType('bar')">Bar</button>
+        <button class="btn btn-xs btn-default" type="button" ng-click="vm.graphPerSkillSetType('line')">Line</button>
+      </div>
+    </div>
 </div>
 
 <div class="row">
