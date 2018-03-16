@@ -431,8 +431,10 @@ angular
                 vm.displayGraphs = true;
             };
             // set default graph type
+            vm.graphTotalSetTypeBar = false;
             vm.graphTotalSetTypeLine = true;
             vm.graphPerSkillSetTypeBar = true;
+            vm.graphPerSkillSetTypeLine = false;
 
             // ------------------------------
             // Graph - Applications Per Grade
@@ -554,7 +556,6 @@ angular
         vm.graphTotalSetType = function(chartType) {
             vm.graphTotalSetTypeBar = false;
             vm.graphTotalSetTypeLine = false;
-
             switch (chartType) {
                 case "bar":
                     vm.graphTotalSetTypeBar = true;
@@ -562,14 +563,12 @@ angular
                 case "line":
                     vm.graphTotalSetTypeLine = true;
                     break;
-                case "pie":
             };
         };
 
         vm.graphPerSkillSetType = function(chartType) {
             vm.graphPerSkillSetTypeBar = false;
             vm.graphPerSkillSetTypeLine = false;
-
             switch (chartType) {
                 case "bar":
                     vm.graphPerSkillSetTypeBar = true;
