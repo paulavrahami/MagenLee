@@ -123,6 +123,11 @@ angular
             vm.createChallengeInd = true;
         };
 
+        vm.cancelNewChallenge = function () {
+            vm.createChallengeInd = false;
+            vm.dependency.changed();
+        };
+
         /**
          * @desc Make sure all subscriptions are done.
          */
@@ -435,6 +440,7 @@ angular
             vm.editItem = null;
             if (vm.modalInstance) {
                 vm.modalInstance.close();
+                vm.changeSelectedStatus(vm.selectedStatus);
                 $state.go('mainChallenges');
             };
         };
@@ -451,6 +457,7 @@ angular
         vm.editItem = null;
         if (vm.modalInstance) {
             vm.modalInstance.close();
+            vm.changeSelectedStatus(vm.selectedStatus);
             $state.go('mainChallenges');
             };
         };
@@ -602,24 +609,41 @@ angular
          * @desc delete the campaign by changing its status;
          * @param campaignArg
          */
-        vm.deleteCampaign = function (campaignArg){
+        vm.deleteItem = function (itemArg){
 
             $UserAlerts.prompt(
                 'Are you sure?',
                 ENUM.ALERT.INFO,
                 true,
                 function () {
-                    let campaign = angular.copy(campaignArg);
-                    let tempId   = campaign._id;
+                    let item = angular.copy(itemArg);
+                    let tempId   = item._id;
 
-                    campaign.status     = ENUM.CAMPAIGN_STATUS.DELETE;
-                    campaign.skills     = angular.copy(campaign.skills);
-                    campaign.emailList  = angular.copy(campaign.emailList);
+                    item.status     = ENUM.ITEM_STATUS.TERMINATED;
 
-                    delete campaign._id;
-                    Campaigns.update({_id: tempId},{$set: campaign});
+                    delete item._id;
+                    Items.update({_id: tempId},{$set: item});
 
-                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETE, 'Campaign [' + campaign.num + '] Deleted');
+
+                    vm.changeSelectedStatus(vm.selectedStatus);
+            });
+        };
+
+        vm.allowItem = function (itemArg){
+
+            $UserAlerts.prompt(
+                'Are you sure?',
+                ENUM.ALERT.INFO,
+                true,
+                function () {
+                    let item = angular.copy(itemArg);
+                    let tempId   = item._id;
+
+                    item.status     = ENUM.ITEM_STATUS.AVAILABLE;
+
+                    delete item._id;
+                    Items.update({_id: tempId},{$set: item});
+
 
                     vm.changeSelectedStatus(vm.selectedStatus);
             });

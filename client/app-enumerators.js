@@ -38,7 +38,7 @@ angular
             IN_WORK:    'In Work',
             AVAILABLE:  'Available',
             ASSIGNED:   'Assigned',
-            TERMINATED: 'Terminated'
+            TERMINATED: 'Canceled'
         },
         ITEM_AUTHOR_TYPE : {
             RECRUITER:    'Recruiter',
