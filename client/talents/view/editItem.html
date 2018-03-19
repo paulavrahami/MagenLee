@@ -1,9 +1,9 @@
-<div class="row auditionEditItem" ng-if="editItem.createChallengeCtrl.subsciptionOk">
+<div class="row auditionEditItem" ng-if="editItem.ChallengeMainCtrl.subsciptionOk">
     <!-- Modal Header -->
     <div class="row modal-header">
-        <h3 id="modal-title" ng-if="(editItem.createChallengeCtrl.editItem.status === 'Assigned')">View Challenge</h3>
+        <h3 id="modal-title" ng-if="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')">View Challenge</h3>
         <h3 id="modal-title" ng-if="(auditionEditItem.auditionEditCtrl.editItem.status !== 'Assigned')">Add Challenge</h3>
-        <h5>{{editItem.createChallengeCtrl.editTemplate.name}} Template</h5>
+        <h5>{{editItem.ChallengeMainCtrl.editTemplate.name}} Template</h5>
     </div>
 
     <!-- Modal Body -->
@@ -15,25 +15,25 @@
                 <div class="form-group challenge-header-field">
                     <label for="" class="required">Skill</label>
                     <input
-                        ng-if="(editItem.createChallengeCtrl.editItem.status !== 'Assigned')"
+                        ng-if="(editItem.ChallengeMainCtrl.editItem.status !== 'Assigned')"
                         type="text"
-                        ng-model="editItem.createChallengeCtrl.editItem.skill"
-                        ng-change="editItem.createChallengeCtrl.saveEditItem()"
+                        ng-model="editItem.ChallengeMainCtrl.editItem.skill"
+                        ng-change="editItem.ChallengeMainCtrl.saveEditItem()"
                         class="form-control">
                 </div>
                 <div class="form-group challenge-header-field">
                     <label for="" class="required">Complexity</label>
                     <select
-                        ng-if="(editItem.createChallengeCtrl.editItem.status !== 'Assigned')"
-                        ng-model="editItem.createChallengeCtrl.editItem.complexity"
+                        ng-if="(editItem.ChallengeMainCtrl.editItem.status !== 'Assigned')"
+                        ng-model="editItem.ChallengeMainCtrl.editItem.complexity"
                         class="form-control"
-                        ng-change="editItem.createChallengeCtrl.saveEditItem()"
-                        ng-options="complexity as complexity for complexity in editItem.createChallengeCtrl.complexityArray">
+                        ng-change="editItem.ChallengeMainCtrl.saveEditItem()"
+                        ng-options="complexity as complexity for complexity in editItem.ChallengeMainCtrl.complexityArray">
                         <!-- <option value=""></option> -->
                     </select>
                     <input
-                        ng-if="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
-                        ng-model="editItem.createChallengeCtrl.editItem.complexity"
+                        ng-if="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
+                        ng-model="editItem.ChallengeMainCtrl.editItem.complexity"
                         class="form-control"
                         ng-disabled="true">
                 </div>
@@ -47,10 +47,10 @@
                 <div class="form-group challenge-header-field">
                     <label class="required">Duration (hh:mm:ss)</label>
                     <time-select
-                        ng-model="editItem.createChallengeCtrl.editItem"
+                        ng-model="editItem.ChallengeMainCtrl.editItem"
                         property="itemDuration"
-                        ng-change="editItem.createChallengeCtrl.saveEditItem"
-                        ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')">
+                        ng-change="editItem.ChallengeMainCtrl.saveEditItem"
+                        ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')">
                     </time-select>
                 </div>
             </div>
@@ -58,80 +58,81 @@
         </form>
         <hr>
         <!-- Challenge Detail -->
+
         <form class="form">
             <div class="col-md-0-6"></div>
             <div class="row col-md-11">
-                <div ng-repeat="(itemKey, itemValue) in editItem.createChallengeCtrl.editTemplate.dataStructure.structure">
+                <div ng-repeat="(itemKey, itemValue) in editItem.ChallengeMainCtrl.editTemplate.dataStructure.structure">
                     <!-- Boolean -->
-                    <div class="form-group" ng-if="editItem.createChallengeCtrl.isBoolean(itemValue)">
+                    <div class="form-group" ng-if="editItem.ChallengeMainCtrl.isBoolean(itemValue)">
                         <lable>{{_.upperFirst(itemKey)}}</lable>
                         <input 
                             type="checkbox"
                             ng-attr-id="{{itemKey}}"
-                            ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
-                            ng-model="editItem.createChallengeCtrl.editItem.content[itemKey]"
-                            ng-change="editItem.createChallengeCtrl.saveEditItem()"/>
+                            ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
+                            ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey]"
+                            ng-change="editItem.ChallengeMainCtrl.saveEditItem()"/>
                     </div>
                     <!-- String (implemented as textarea) -->
-                    <div class="form-group" ng-if="editItem.createChallengeCtrl.isString(itemValue)">
+                    <div class="form-group" ng-if="editItem.ChallengeMainCtrl.isString(itemValue)">
                         <lable><strong>{{_.upperFirst(itemKey)}}</strong></lable>
                         <textarea
                             class="form-control"
                             ng-attr-id="{{itemKey}}"
-                            ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
-                            ng-model="editItem.createChallengeCtrl.editItem.content[itemKey]"
-                            ng-change="editItem.createChallengeCtrl.saveEditItem()"></textarea>
+                            ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
+                            ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey]"
+                            ng-change="editItem.ChallengeMainCtrl.saveEditItem()"></textarea>
                     </div>
                     <!-- Number -->
-                    <div class="form-group" ng-if="editItem.createChallengeCtrl.isNumber(itemValue)">
+                    <div class="form-group" ng-if="editItem.ChallengeMainCtrl.isNumber(itemValue)">
                         <lable><strong>{{_.upperFirst(itemKey)}}</strong></lable>
                         <input
                             class="form-control"
                             ng-attr-id="{{itemKey}}"
-                            ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
+                            ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
                             type="number"
-                            ng-model="editItem.createChallengeCtrl.editItem.content[itemKey]"
-                            ng-change="editItem.createChallengeCtrl.saveEditItem()"/>
+                            ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey]"
+                            ng-change="editItem.ChallengeMainCtrl.saveEditItem()"/>
                     </div>
                     <!-- Array -->
-                    <div ng-if="editItem.createChallengeCtrl.isArray(itemValue)">
+                    <div ng-if="editItem.ChallengeMainCtrl.isArray(itemValue)">
                         <h5><strong>{{_.upperFirst(itemKey)}}</strong></h5>
-                        <div class="form-group" ng-repeat="value in editItem.createChallengeCtrl.editItem.content[itemKey] track by $index">
+                        <div class="form-group" ng-repeat="value in editItem.ChallengeMainCtrl.editItem.content[itemKey] track by $index">
                             <!-- <div class="form-group"> -->
                             <lable><strong>{{$index + 1}}</strong></lable>
-                            <div ng-if="editItem.createChallengeCtrl.isBoolean(itemValue.toString())">
+                            <div ng-if="editItem.ChallengeMainCtrl.isBoolean(itemValue.toString())">
                                 <input 
                                     type="checkbox"
                                     class="form-control"
                                     ng-attr-id="{{itemKey}}_{{$index}}"
-                                    ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
-                                    ng-model="editItem.createChallengeCtrl.editItem.content[itemKey][$index]"
-                                    ng-change="editItem.createChallengeCtrl.saveEditItem()"/>
+                                    ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
+                                    ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey][$index]"
+                                    ng-change="editItem.ChallengeMainCtrl.saveEditItem()"/>
                                 <!-- <div class="remove btn btn-default"
                                     ng-if="($index === auditionEditItem.auditionEditCtrl.editItem.content[itemKey].length-1) && (auditionEditItem.auditionEditCtrl.audition.status !== auditionEditItem.auditionEditCtrl.ENUM.AUDITION_STATUS.AVAILABLE)"
                                     ng-click="auditionEditItem.auditionEditCtrl.removeFromContentArray(itemKey)">Remove
                                 </div> -->
                             </div>
-                            <div ng-if="editItem.createChallengeCtrl.isString(itemValue.toString())">
+                            <div ng-if="editItem.ChallengeMainCtrl.isString(itemValue.toString())">
                                 <textarea
                                     class="form-control"
                                     ng-attr-id="{{itemKey}}_{{$index}}"
-                                    ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
-                                    ng-model="editItem.createChallengeCtrl.editItem.content[itemKey][$index]"
-                                    ng-change="editItem.createChallengeCtrl.saveEditItem()"></textarea>
+                                    ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
+                                    ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey][$index]"
+                                    ng-change="editItem.ChallengeMainCtrl.saveEditItem()"></textarea>
                                 <!-- <div class="remove-btn btn btn-info btn-sm"
                                     ng-if="($index === auditionEditItem.auditionEditCtrl.editItem.content[itemKey].length-1) && (auditionEditItem.auditionEditCtrl.audition.status !== auditionEditItem.auditionEditCtrl.ENUM.AUDITION_STATUS.AVAILABLE)"
                                     ng-click="auditionEditItem.auditionEditCtrl.removeFromContentArray(itemKey)">Remove
                                 </div> -->
                             </div>
-                            <div ng-if="editItem.createChallengeCtrl.isNumber(itemValue.toString())">
+                            <div ng-if="editItem.ChallengeMainCtrl.isNumber(itemValue.toString())">
                                 <input
                                     class="form-control"
                                     ng-attr-id="{{itemKey}}_{{$index}}"
-                                    ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
+                                    ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
                                     type="number"
-                                    ng-model="editItem.createChallengeCtrl.editItem.content[itemKey][$index]"
-                                    ng-change="editItem.createChallengeCtrl.saveEditItem()"/>
+                                    ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey][$index]"
+                                    ng-change="editItem.ChallengeMainCtrl.saveEditItem()"/>
                                 <!-- <div class="remove btn btn-default"
                                     ng-if="($index === auditionEditItem.auditionEditCtrl.editItem.content[itemKey].length-1) && (auditionEditItem.auditionEditCtrl.audition.status !== auditionEditItem.auditionEditCtrl.ENUM.AUDITION_STATUS.AVAILABLE)"
                                     ng-click="auditionEditItem.auditionEditCtrl.removeFromContentArray(itemKey)">Remove
@@ -141,46 +142,46 @@
                         </div>
                     </div>
                     <!-- Array Item action buttons -->
-                    <div ng-if="editItem.createChallengeCtrl.isArray(itemValue)">
-                        <button class="btn btn-info btn-sm" ng-click="editItem.createChallengeCtrl.addToContentArray(itemKey)" ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')">Add</button>
-                        <button class="btn btn-sm" ng-click="editItem.createChallengeCtrl.removeFromContentArray(itemKey)" ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')">Remove</button>
+                    <div ng-if="editItem.ChallengeMainCtrl.isArray(itemValue)">
+                        <button class="btn btn-info btn-sm" ng-click="editItem.ChallengeMainCtrl.addToContentArray(itemKey)" ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')">Add</button>
+                        <button class="btn btn-sm" ng-click="editItem.ChallengeMainCtrl.removeFromContentArray(itemKey)" ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')">Remove</button>
                     </div>
                     <!-- Object -->
-                    <div ng-if="editItem.createChallengeCtrl.isObject(itemValue)" class="is-object">
+                    <div ng-if="editItem.ChallengeMainCtrl.isObject(itemValue)" class="is-object">
                         <div ng-repeat="(itemObjectKey, itemObjectValue) in itemValue">
-                            <div ng-if="editItem.createChallengeCtrl.isBoolean(itemObjectValue)" class="object-checkbox">
+                            <div ng-if="editItem.ChallengeMainCtrl.isBoolean(itemObjectValue)" class="object-checkbox">
                                 <div class="form-group">
                                     <lable>{{_.upperFirst(itemObjectKey)}}</lable>
                                     <input 
                                         type="checkbox"
                                         class="form-control"
                                         ng-attr-id="{{itemObjectKey}}"
-                                        ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
-                                        ng-model="editItem.createChallengeCtrl.editItem.content[itemKey][itemObjectKey]"
-                                        ng-change="editItem.createChallengeCtrl.saveEditItem()"/>
+                                        ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
+                                        ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey][itemObjectKey]"
+                                        ng-change="editItem.ChallengeMainCtrl.saveEditItem()"/>
                                 </div>
                             </div>
-                            <div ng-if="editItem.createChallengeCtrl.isString(itemObjectValue)" class="object-textarea">
+                            <div ng-if="editItem.ChallengeMainCtrl.isString(itemObjectValue)" class="object-textarea">
                                 <div class="form-group">
                                     <lable><strong>{{_.upperFirst(itemObjectKey)}}</strong></lable>
                                     <textarea
                                         class="form-control"
                                         ng-attr-id="{{itemObjectKey}}"
-                                        ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
-                                        ng-model="editItem.createChallengeCtrl.editItem.content[itemKey][itemObjectKey]"
-                                        ng-change="editItem.createChallengeCtrl.saveEditItem()"></textarea>
+                                        ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
+                                        ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey][itemObjectKey]"
+                                        ng-change="editItem.ChallengeMainCtrl.saveEditItem()"></textarea>
                                 </div>
                             </div>
-                            <div ng-if="editItem.createChallengeCtrl.isNumber(itemObjectValue)" class="object-number">
+                            <div ng-if="editItem.ChallengeMainCtrl.isNumber(itemObjectValue)" class="object-number">
                                 <div class="form-group">
                                     <lable><strong>{{_.upperFirst(itemObjectKey)}}</strong></lable>
                                     <input
                                         class="form-control"
                                         ng-attr-id="{{itemObjectKey}}"
-                                        ng-disabled="(editItem.createChallengeCtrl.editItem.status === 'Assigned')"
+                                        ng-disabled="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')"
                                         type="number"
-                                        ng-model="editItem.createChallengeCtrl.editItem.content[itemKey][itemObjectKey]"
-                                        ng-change="editItem.createChallengeCtrl.saveEditItem()"/>
+                                        ng-model="editItem.ChallengeMainCtrl.editItem.content[itemKey][itemObjectKey]"
+                                        ng-change="editItem.ChallengeMainCtrl.saveEditItem()"/>
                                 </div>
                             </div>
                         </div>
@@ -192,11 +193,11 @@
     </div>
 
     <!-- Modal Footer -->
-    <div class="modal-footer" ng-if="(editItem.createChallengeCtrl.editItem.status !== 'Assigned')">
-        <button class="btn btn-primary" type="button" ng-click="editItem.createChallengeCtrl.cancelEditItem()">Cancel</button>
-        <button class="btn btn-primary" type="button" ng-click="editItem.createChallengeCtrl.registerEditItem()">Save</button>
+    <div class="modal-footer" ng-if="(editItem.ChallengeMainCtrl.editItem.status !== 'Assigned')">
+        <button class="btn btn-primary" type="button" ng-click="editItem.ChallengeMainCtrl.cancelEditItem()">Cancel</button>
+        <button class="btn btn-primary" type="button" ng-click="editItem.ChallengeMainCtrl.registerEditItem()">Save</button>
     </div>
-    <div class="modal-footer" ng-if="(editItem.createChallengeCtrl.editItem.status === 'Assigned')">
-        <button class="btn btn-primary" type="button" ng-click="editItem.createChallengeCtrl.closeEditItem()">Close</button>
+    <div class="modal-footer" ng-if="(editItem.ChallengeMainCtrl.editItem.status === 'Assigned')">
+        <button class="btn btn-primary" type="button" ng-click="editItem.ChallengeMainCtrl.closeEditItem()">Close</button>
     </div>
 </div>

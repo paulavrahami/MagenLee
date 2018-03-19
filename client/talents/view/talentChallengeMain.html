@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-0-6"></div>
     <div class="col-md-11">
-            <div class="row">
+            <div class="row" ng-show="vm.doSubscription()">
                 <div class="col-md-12">
                     <ul class="navbar-nav nav-header-menu">
                             <li class="nav-item marketplace-menu">
@@ -16,7 +16,7 @@
                     </ul>
                 </div>
                       
-                <div class="col-md-12">
+                <div class="col-md-12" ng-hide="vm.createChallengeInd">
                     <nav class="navbar navbar-default" role="navigation">
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
@@ -61,14 +61,36 @@
                             </form>
                             <form class="navbar-form navbar-right" role="search">
                                 <div class="form-group">
-                                    <button class="btn btn-sm btn-primary" type="button" ui-sref="talentCreateChallenge">New Challenge</button>
+                                    <button class="btn btn-sm btn-primary" type="button" ng-click ="vm.setCreateChallenge()">New Challenge</button>
+                                     <!-- <button class="btn btn-sm btn-primary" type="button" ui-sref = "talentCreateChallenge">New Challenge</button> -->
                                 </div>
                             </form>
                         </div><!-- /.navbar-collapse -->
                     </nav>
                 </div>
             </div>
-            <div class="row" ng-show="vm.isViewThumbnails">
+
+            <div class = "row" ng-show="vm.createChallengeInd">
+                    <div class = "col-md-4">
+                        <ul>
+                            <li
+                                ng-click="vm.setSelected(challengesType)"
+                                ng-repeat="(key, challengesType) in vm.challengesTypes"
+                                ng-class="challengesType.selected ? 'selected':''">{{key}}</li>
+                        </ul>
+                    </div>
+                
+                    <div class="col-md-8">
+                            <div class="templateItem" ng-repeat="template in vm.templates">
+                                <h4>{{template.name}}</h4>
+                                <div class="wrapIfram templateIframeZoom" ng-bind-html="trust(vm.getAuditionHtml($index, template._id))"></div>
+                                <button class="btn btn-primary" ng-click="vm.createNewItem(template._id)">Add</button>
+                            </div>
+                    </div>
+                
+                </div>
+
+            <div class="row" ng-show="vm.isViewThumbnails" ng-hide="vm.createChallengeInd">
                 <div class="col-md-3" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">
                     <div class="thumbnail">
                         
@@ -100,7 +122,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <p>
-                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ui-sref="vm.openEditItem(item)">Detail</a>
+                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
                                     <a ng-if="item.status !== vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" disabled>Detail</a>
                                     <a ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE)
                                                 && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)
@@ -111,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" ng-hide="vm.isViewThumbnails">
+            <div class="row" ng-hide="vm.isViewThumbnails || vm.createChallengeInd">
                 <div class="panel-group col-md-12">
                     <div class="panel panel-default" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">
                         <div>

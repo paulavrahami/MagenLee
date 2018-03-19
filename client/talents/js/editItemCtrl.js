@@ -9,5 +9,5 @@ angular
         /**
          * @desc Get the auditon edit controller;
          */
-        editItem.createChallengeCtrl = $scope.$resolve.createChallengeCtrl;
+        editItem.ChallengeMainCtrl = $scope.$resolve.ChallengeMainCtrl;
     });
