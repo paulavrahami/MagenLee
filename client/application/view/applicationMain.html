@@ -77,7 +77,7 @@
 <div class="row canvas-area" ng-show="vm.displayGraphs">
     <!-- Graph - Total applications per grade -->
     <div class="col-md-6">
-      <div ng-show=vm.graphTotalSetTypeBar>
+      <div ng-show="vm.graphTotalSetTypeBar">
         <canvas 
           id="bar"
           height="180"
@@ -88,9 +88,9 @@
           chart-options="vm.graphTotal.options">
         </canvas>
       </div>
-      <div ng-show=vm.graphTotalSetTypeLine>
+      <div ng-show="vm.graphTotalSetTypeLine">
         <canvas 
-          id="bar"
+          id="line"
           height="180"
           class="chart chart-line"
           chart-data="vm.graphTotal.data"
@@ -120,7 +120,7 @@
       </div>
       <div ng-show="vm.graphPerSkillSetTypeLine">
         <canvas
-          id="bar"
+          id="line"
           height="180"
           class="chart chart-line"
           chart-data="vm.graphPerSkill.data"
