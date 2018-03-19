@@ -221,15 +221,15 @@
                         <div class="row col-md-7">
                           <br>
                             <!-- Statistics summary table -->
-                            <table id="gradetbl" class="table" cellspacing="0" width="100%">
-                                  <col width="20%">
-                                  <col width="20%">
+                            <table id="gradetbl" class="table table-striped" cellspacing="0" width="100%">
+                                  <col width="21%">
+                                  <col width="15%">
                                   <col width="10%">
-                                  <col width="10%" class="summary-col-prime">
                                   <col width="10%">
-                                  <col width="10%" class="summary-col-prime">
-                                  <col width="10%" class="summary-col-prime">
                                   <col width="10%">
+                                  <col width="10%">
+                                  <col width="12%">
+                                  <col width="12%">
                                 <thead>
                                     <tr>
                                         <th>Skill</th>
@@ -238,8 +238,8 @@
                                         <th id="tooltip" data-toggle="tooltip" title="Total challenges completed by talent">Completed Challenges</th>
                                         <th id="tooltip" data-toggle="tooltip" title="Maximume score per skill">Max Score</th>
                                         <th id="tooltip" data-toggle="tooltip" title="Talent score per skill">Talent Score</th>
-                                        <th id="tooltip" data-toggle="tooltip" title="Talent score">% Score</th>
-                                        <th id="tooltip" data-toggle="tooltip" title="Applicants avarage score">Avg Score</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Talent score">Talent Score %</th>
+                                        <th id="tooltip" data-toggle="tooltip" title="Applicants avarage score">Avg Score %</th>
                                     </tr>
                                 </thead>
                                 <tbody >
@@ -263,14 +263,14 @@
                                         <td>
                                             {{vm.round(results.maxScore)}}
                                         </td>
-                                        <td ng-class="{'above-avg': (vm.round(results.score) >= vm.round(results.avgScore)), 'below-avg': (vm.round(results.score) < vm.round(results.avgScore))}">
+                                        <td>
                                             {{vm.round(results.score)}}
                                         </td>
                                         <td ng-class="{'above-avg': (vm.round(results.score) >= vm.round(results.avgScore)), 'below-avg': (vm.round(results.score) < vm.round(results.avgScore))}">
-                                            {{vm.round((results.score / results.maxScore) * 100)}}&#37;
+                                            {{vm.round((results.score / results.maxScore) * 100)}}
                                         </td>
                                         <td>
-                                            {{vm.round((results.avgScore / results.maxScore) * 100)}}&#37;
+                                            {{vm.round((results.avgScore / results.maxScore) * 100)}}
                                         </td>
                                     </tr>
                                 </tbody>

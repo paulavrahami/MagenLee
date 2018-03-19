@@ -350,7 +350,9 @@ angular
         //Round grades for presentation
         vm.round = function(grade) {
             if (grade){
-                return Math.round(grade);
+                // return Math.round(grade);
+                // return grade.toFixed(1)
+                return Number(Math.round(grade+'e'+1)+'e-'+1)
             } else {
                 return grade;
             }
