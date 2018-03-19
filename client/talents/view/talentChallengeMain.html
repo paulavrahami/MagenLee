@@ -71,7 +71,7 @@
             </div>
 
             <div class = "row" ng-show="vm.createChallengeInd">
-                    <div class = "col-md-4">
+                    <div class = "col-md-3">
                         <ul>
                             <li
                                 ng-click="vm.setSelected(challengesType)"
@@ -80,12 +80,16 @@
                         </ul>
                     </div>
                 
-                    <div class="col-md-8">
+                    <div class="col-md-7">
                             <div class="templateItem" ng-repeat="template in vm.templates">
                                 <h4>{{template.name}}</h4>
                                 <div class="wrapIfram templateIframeZoom" ng-bind-html="trust(vm.getAuditionHtml($index, template._id))"></div>
                                 <button class="btn btn-primary" ng-click="vm.createNewItem(template._id)">Add</button>
                             </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <p><a class="btn btn-primary btn-sm" ng-click="vm.cancelNewChallenge()">Cancel</a></p>
                     </div>
                 
                 </div>

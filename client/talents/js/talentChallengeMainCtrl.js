@@ -123,6 +123,11 @@ angular
             vm.createChallengeInd = true;
         };
 
+        vm.cancelNewChallenge = function () {
+            vm.createChallengeInd = false;
+            vm.dependency.changed();
+        };
+
         /**
          * @desc Make sure all subscriptions are done.
          */
@@ -435,6 +440,7 @@ angular
             vm.editItem = null;
             if (vm.modalInstance) {
                 vm.modalInstance.close();
+                vm.dependency.changed();
                 $state.go('mainChallenges');
             };
         };
@@ -451,6 +457,7 @@ angular
         vm.editItem = null;
         if (vm.modalInstance) {
             vm.modalInstance.close();
+            vm.dependency.changed();
             $state.go('mainChallenges');
             };
         };
