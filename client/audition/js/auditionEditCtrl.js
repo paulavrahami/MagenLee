@@ -1030,7 +1030,12 @@ angular
                 let itemsPerSkill = [];
                 let conditions = {};
                 // Get all items for the current skill, with status = assigned OR available, AND allowed to be shared
-                conditions = {$and:[{"$text": {"$search": skill.type}},
+                // conditions = {$and:[{skill: skill.type},
+                //                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
+                //                     {shareInd: true}]};
+
+                // Zvika - TBD; Currently the system is not geared for a non exact natch search. The following should be in used with Avieo SKI-59
+                conditions = {$and:[{$text: {$search: skill.type}},
                                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                     {shareInd: true}]};
 
@@ -1234,9 +1239,15 @@ angular
                 complexityParam = auditionEdit.addChallengeComplexity;
             };
 
+            // conditions = {$and:[{$or:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
+            //                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
+            //                     {skill: auditionEdit.addChallengeSkills},
+            //                     {complexity: complexityParam},
+            //                     {shareInd: true}]};
+            // Zvika - TBD; Currently the system is not geared for a non exact natch search. The following should be in used with Avieo SKI-59
             conditions = {$and:[{$or:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
                                 {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
-                                {"$text": {"$search": auditionEdit.addChallengeSkills}},
+                                {$text: {$search: auditionEdit.addChallengeSkills}},
                                 {complexity: complexityParam},
                                 {shareInd: true}]};
 
