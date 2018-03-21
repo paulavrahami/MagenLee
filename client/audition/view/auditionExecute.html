@@ -211,10 +211,10 @@
                 <div class="totals-area">
                     <div class="totals">Total<br>Applications</div>
                     <div class="totalsCorrect">Correct: {{vm.displayItemTotalsCorrect(vm.executeItem)}}</div>
-                    <div class="totalsIncorrect">Incorrect: {{vm.displayItemTotalsWrong(vm.executeItem)}}</div>
+                    <div class="totalsIncorrect">Wrong: {{vm.displayItemTotalsWrong(vm.executeItem)}}</div>
                     <div class="totalsIgnored">Ignored: {{vm.displayItemTotalsNotAnswered(vm.executeItem)}}</div>
                 </div>
-                <div class="mark-area">
+                <div class="mark-area" ng-show="vm.auditionViewModeResultsTalent">
                     <div class="correct-answer" ng-show="vm.correctAnswer(vm.executeItem) === true">
                         <span class="fa fa-check fa-2x"></span>
                     </div>

@@ -42,6 +42,7 @@ angular
             if (Meteor.user() && Meteor.user().profile) {
                 reactiveContext.subscribe('campaignsRecruiter', () => [Meteor.user().profile.companyName]);
                 reactiveContext.subscribe('applicationsCampaign', () => [vm.campaignId]);
+                reactiveContext.subscribe('auditionsCampaign', () => [vm.campaignId]);
                 reactiveContext.subscribe('items');
                 reactiveContext.subscribe('cv.files');
             }
@@ -57,7 +58,6 @@ angular
             },
             applications () {
                 vm.dependency.depend();
-
                 return vm.applications;
             }
 
@@ -312,19 +312,25 @@ angular
         vm.viewAuditionResults = function(applicationArg) {
             // Invoke the application process in a 'preview' mode to provide the recruiter with the ability
             // to view the actual audition conducted by the Talent
-
-            vm.application = {};
-            vm.application = applicationArg;
+            if (applicationArg) {
+                vm.application = applicationArg;
+                vm.auditionViewModeResultsTalent = true;
+            } else {
+                vm.application = {};
+                vm.auditionViewModeResultsTalent = false;
+            };
             vm.howItWorkLang = 'eng';
             vm.application.sessions = [];
             vm.application.sessions.push({
                 date: (new Date()),
                 states: vm.application.states ? vm.application.states : {}
             });
-            vm.application.states.currentItem = 1;
-           
+            if (applicationArg) {
+                vm.application.states.currentItem = 1;
+            };
             vm.auditionViewMode = ENUM.AUDITION_VIEW_MODE.RESULTS;
             $scope.auditionViewMode = vm.auditionViewMode;
+            $scope.auditionViewModeResultsTalent = vm.auditionViewModeResultsTalent;
 
             vm.modalInstance = $uibModal.open({
                 animation: true,
@@ -437,6 +443,8 @@ angular
             vm.graphTotalSetTypeLine = true;
             vm.graphPerSkillSetTypeBar = true;
             vm.graphPerSkillSetTypeLine = false;
+            vm.graphResponsePerChallengeBar = true;
+            vm.graphResponsePerChallengeLine = false;
 
             // ------------------------------
             // Graph - Applications Per Grade
@@ -553,6 +561,92 @@ angular
                     display: true
                 }
             };
+
+            // -----------------------------
+            // Graph - Results per challenge
+            // -----------------------------
+            // Initialize the item's totals table
+            let auditionRec = Auditions.findOne({_id: vm.campaign.auditionId});
+            totalsPerItem = [];
+            for (let i=0 ; i<auditionRec.items.length ; i++) {
+                totalsPerItem.push({itemId: auditionRec.items[i].itemId,
+                                       totalCorrect: 0,
+                                       totalWrong: 0,
+                                       totalNotAnswered: 0
+                });
+            };
+
+            // Build the item's totals table
+            vm.campaign.applications.every(function (applicationKey) {
+                // get an application
+                let applicationRec = Applications.findOne({_id: applicationKey})
+                // for all application's items:
+                for (let contentIndex in applicationRec.states.itemsContent) {
+                    // search the item in the totals table
+                    index = totalsPerItem.findIndex(itemTotals => itemTotals.itemId === contentIndex);
+                    // update the totals table
+                    if (applicationRec.states.itemsContent[contentIndex].state.validity === 100) {
+                        totalsPerItem[index].totalCorrect++;
+                    } else {
+                        if ((applicationRec.states.itemsContent[contentIndex].state.validity === 0) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
+                        totalsPerItem[index].totalWrong++;
+                        } else {
+                            if (applicationRec.states.itemsContent[contentIndex].state.clicks === 0) {
+                                totalsPerItem[index].totalNotAnswered++;
+                            }
+                        }
+                    }
+                };
+            return true
+            });
+
+            // Prepare the Graph
+            vm.graphResponsePerChallenge = {};
+
+            // chart-date
+            vm.graphResponsePerChallenge.data = [];
+            let ResponsePerChallenge = [];
+            for (let i=0; i<auditionRec.items.length; i++) {
+                ResponsePerChallenge[i] = totalsPerItem[i].totalCorrect;
+            };
+            vm.graphResponsePerChallenge.data.push(ResponsePerChallenge);
+            ResponsePerChallenge = [];
+            for (let i=0; i<auditionRec.items.length; i++) {
+                ResponsePerChallenge[i] = totalsPerItem[i].totalWrong;
+            };
+            vm.graphResponsePerChallenge.data.push(ResponsePerChallenge);
+            ResponsePerChallenge = [];
+            for (let i=0; i<auditionRec.items.length; i++) {
+                ResponsePerChallenge[i] = totalsPerItem[i].totalNotAnswered;
+            };
+            vm.graphResponsePerChallenge.data.push(ResponsePerChallenge);
+
+            // chart-labels
+            vm.graphResponsePerChallenge.labels = [];
+            for (let i=0; i<auditionRec.items.length; i++) {
+                vm.graphResponsePerChallenge.labels[i] = i+1;
+            };
+
+            // chart-series
+            vm.graphResponsePerChallenge.series = ["Correct", "Wrong", "Ignored"];
+            // chart-options
+            vm.graphResponsePerChallenge.options = {
+                title: {
+                    display: true,
+                    text: "Response per Challenge"
+                },
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 10
+                    }
+                },
+                legend: {
+                    display: true
+                }
+            };
         };
 
         vm.graphTotalSetType = function(chartType) {
@@ -577,6 +671,19 @@ angular
                     break;
                 case "line":
                     vm.graphPerSkillSetTypeLine = true;
+                    break;
+            };
+        };
+
+        vm.graphResponsePerChallengeSetType = function(chartType) {
+            vm.graphResponsePerChallengeBar = false;
+            vm.graphResponsePerChallengeLine = false;
+            switch (chartType) {
+                case "bar":
+                    vm.graphResponsePerChallengeBar = true;
+                    break;
+                case "line":
+                    vm.graphResponsePerChallengeLine = true;
                     break;
             };
         };

@@ -73,14 +73,13 @@
   </div>
 </div>
 
-<!-- graphs canvas -->
-<div class="row canvas-area" ng-show="vm.displayGraphs">
+<!-- graphs canvas - Row 1 -->
+<div class="row canvas-area-1" ng-show="vm.displayGraphs">
     <!-- Graph - Total applications per grade -->
     <div class="col-md-6">
       <div ng-show="vm.graphTotalSetTypeBar">
         <canvas 
           id="bar"
-          height="180"
           class="chart chart-bar"
           chart-data="vm.graphTotal.data"
           chart-labels="vm.graphTotal.labels"
@@ -91,7 +90,6 @@
       <div ng-show="vm.graphTotalSetTypeLine">
         <canvas 
           id="line"
-          height="180"
           class="chart chart-line"
           chart-data="vm.graphTotal.data"
           chart-labels="vm.graphTotal.labels"
@@ -110,7 +108,6 @@
       <div ng-show="vm.graphPerSkillSetTypeBar">
         <canvas
           id="bar"
-          height="180"
           class="chart chart-bar"
           chart-data="vm.graphPerSkill.data"
           chart-labels="vm.graphPerSkill.labels"
@@ -121,7 +118,6 @@
       <div ng-show="vm.graphPerSkillSetTypeLine">
         <canvas
           id="line"
-          height="180"
           class="chart chart-line"
           chart-data="vm.graphPerSkill.data"
           chart-labels="vm.graphPerSkill.labels"
@@ -133,6 +129,42 @@
         <button class="btn btn-xs btn-default" type="button" ng-click="vm.graphPerSkillSetType('bar')">Bar</button>
         <button class="btn btn-xs btn-default" type="button" ng-click="vm.graphPerSkillSetType('line')">Line</button>
       </div>
+    </div>
+</div>
+
+<!-- graphs canvas - Row 2 -->
+<div class="row canvas-area-2" ng-show="vm.displayGraphs">
+    <!-- Graph - Total applications per grade -->
+    <div class="col-md-6">
+      <div ng-show="vm.graphResponsePerChallengeBar">
+        <canvas
+          id="bar"
+          class="chart chart-bar"
+          chart-data="vm.graphResponsePerChallenge.data"
+          chart-labels="vm.graphResponsePerChallenge.labels"
+          chart-series="vm.graphResponsePerChallenge.series"
+          chart-options="vm.graphResponsePerChallenge.options">
+        </canvas>
+      </div>
+      <div ng-show="vm.graphResponsePerChallengeLine">
+        <canvas
+          id="line"
+          class="chart chart-line"
+          chart-data="vm.graphResponsePerChallenge.data"
+          chart-labels="vm.graphResponsePerChallenge.labels"
+          chart-series="vm.graphResponsePerChallenge.series"
+          chart-options="vm.graphResponsePerChallenge.options">
+        </canvas>
+      </div>
+      <div class="btn-group chart-type-btn">
+        <button class="btn btn-xs btn-default" type="button" ng-click="vm.graphResponsePerChallengeSetType('bar')">Bar</button>
+        <button class="btn btn-xs btn-default" type="button" ng-click="vm.graphResponsePerChallengeSetType('line')">Line</button>
+        <button class="btn btn-xs btn-default" type="button" ng-click="vm.viewAuditionResults()">View Audition</button>
+      </div>
+    </div>
+    <div class="col-md-0-6"></div>
+    <div class="col-md-6">
+      <!-- additional graph - tbd -->
     </div>
 </div>
 
