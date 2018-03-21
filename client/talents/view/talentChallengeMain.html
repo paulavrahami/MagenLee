@@ -129,11 +129,9 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <p>
-                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
-                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.TERMINATED" class="btn btn-primary btn-sm">View</a>
+                                    <a class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
                                     <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Allow</a>
-                                    <a ng-if="(item.status === vm.ENUM.ITEM_STATUS.IN_WORK)
-                                               || (item.status === vm.ENUM.ITEM_STATUS.AVAILABLE)" class="btn btn-primary btn-sm" ng-click="vm.deleteItem(item)">Delete</a>
+                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.deleteItem(item)">Delete</a>
                                 </p>
                             </div>
                         </div>
