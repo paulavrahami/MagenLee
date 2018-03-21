@@ -198,7 +198,20 @@ angular
             (new Promise((resolve, reject) => {
                 let items;
                 let conditions = {};
-                conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
+
+                if (vm.selectedStatus) {
+                    conditions = {$and: [
+                        {authorId: Meteor.user()._id},
+                        {status: vm.ENUM.ITEM_STATUS[vm.selectedStatus]}
+                    ]};
+                }
+                else {
+                    conditions = {$and: [
+                        {authorId: Meteor.user()._id},
+                        {$or:[{status: {$ne: ENUM.ITEM_STATUS.TERMINATED},status: {$ne: ENUM.ITEM_STATUS.NEW}}]}
+                    ]};
+                }
+                // conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
     
                 Meteor.call('items.getItemsSummary', conditions, (err, res) => {
                     if (err) {
@@ -451,10 +464,10 @@ angular
             //     vm.removeItem(vm.editItem._id);
             // }
             // else {
-            //     vm.editItem = vm.editItemForCancel;
+                 vm.editItem = vm.editItemForCancel;
                  vm.saveEditItem();
             //};
-        vm.editItem = null;
+        // vm.editItem = null;
         if (vm.modalInstance) {
             vm.modalInstance.close();
             vm.changeSelectedStatus(vm.selectedStatus);

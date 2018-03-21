@@ -70,29 +70,32 @@
                 </div>
             </div>
 
-            <div class = "row" ng-show="vm.createChallengeInd">
-                    <div class = "col-md-3">
-                        <ul>
-                            <li
+            <div class = "row itemCreate cts ctsArea q-border" id="btn-ctsArea" ng-show="vm.createChallengeInd">
+            
+                    <div class = "col-md-2 cts-types-holder">
+                        <div>
+                                    <a class="btn-cts-close btn btn-primary fa fa-arrow-left fa-1x"
+                                     ng-click="vm.cancelNewChallenge()"></a>
+                        </div>
+                        <hr style="border-color:#FFF">
+                        <ul class = "itemCreateUl">
+                            <li class = "itemCreateLi"
                                 ng-click="vm.setSelected(challengesType)"
                                 ng-repeat="(key, challengesType) in vm.challengesTypes"
                                 ng-class="challengesType.selected ? 'selected':''">{{key}}</li>
                         </ul>
                     </div>
                 
-                    <div class="col-md-7">
+                    <div class="cts-frames-holder col-md-8">
                             <div class="templateItem" ng-repeat="template in vm.templates">
                                 <h4>{{template.name}}</h4>
                                 <div class="wrapIfram templateIframeZoom" ng-bind-html="trust(vm.getAuditionHtml($index, template._id))"></div>
                                 <button class="btn btn-primary" ng-click="vm.createNewItem(template._id)">Add</button>
                             </div>
-                    </div>
 
-                    <div class="col-md-2">
-                        <p><a class="btn btn-primary btn-sm" ng-click="vm.cancelNewChallenge()">Cancel</a></p>
-                    </div>
-                
                 </div>
+                    
+            </div>
 
             <div class="row" ng-show="vm.isViewThumbnails" ng-hide="vm.createChallengeInd">
                 <div class="col-md-3" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">

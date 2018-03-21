@@ -28,6 +28,98 @@
   text-align: right;
 }
 
+.itemCreate {
+  padding: 0px;
+  margin-top: 5px;
+
+
+  .templateIframeZoom {
+    -ms-zoom: 0.5;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.5);
+    -webkit-transform-origin: 0 0;
+    width: 200%!important;
+    height: 300px!important;
+
+  }
+
+  .cts-frames-holder {
+    .btn-primary {
+      margin-top:-300px;
+    }
+  }
+
+  .wrapIfram {
+    margin: 5px;
+    overflow: hidden;
+    height:100px;
+
+  }
+  .templateItem {
+    border-bottom: 1px solid #d3d3d3;
+    max-height: 240px;
+  }
+
+  #btn-ctsArea {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .cts {
+    .ctsArea {
+      position: absolute;
+      top: 0;
+      width: 0;
+      height: 520px;
+      left: -1px;
+      overflow: hidden;
+      background-color: #FFF;
+      opacity: 0;
+      -webkit-transition: width 0.5s, opacity 0.5s; /* Safari */
+      transition: width 0.5s, opacity 0.5s;
+      &.show {
+        width: 430px;
+        opacity: 1;
+        z-index: 2;
+      }
+      &.showAddChallenge {
+        width: 430px;
+        opacity: 1;
+        z-index: 2;
+        padding-top:15px;
+      }
+    }
+    .cts-types-holder {
+      background: #169BD5;
+      height: 100%;
+    }
+    .cts-frames-holder {
+      overflow-x: hidden;
+      overflow-y: scroll;
+      height: 100%;
+    }
+  }
+}
+
+.itemCreateUl {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.itemCreateLi {
+    // color: #FFF;
+    cursor: pointer;
+    line-height: 2em;
+    &.selected {
+      background: #1274d5;
+    }
+  }
+
+
 /**
  *  Do not remove the comments below. It's the markers used by gulp-inject to inject
  *  all your less files automatically
