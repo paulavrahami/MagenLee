@@ -9,4 +9,7 @@ if (Meteor.isServer) {
   Meteor.publish('RecruiterAuditions', function(companyName) {
     return Auditions.find({"control.companyOwner": companyName});
   });
+  Meteor.publish('auditionsCampaign', function(campaignId) {
+    return Auditions.find({"campaignId": campaignId});
+  });
 }
