@@ -6,13 +6,13 @@ angular
         let vm = this;
         $reactive(vm).attach($scope);
         $window.auditionExecuteCtrl = vm;
-
-        vm.auditionViewMode = $scope.auditionViewMode;
-
+      
         vm.moment = moment;
         vm.itemsKeys = [];
         vm.doneItemsKeys = [];
-        // vm.howItWorkLang = 'heb';
+
+        vm.auditionViewModeResultsTalent = $scope.auditionViewModeResultsTalent;
+        vm.auditionViewMode = $scope.auditionViewMode;
         vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.auditionViewDisabled = true : vm.auditionViewDisabled = false;
         vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.auditionViewResults = true : vm.auditionViewResults = false;
 
@@ -28,7 +28,7 @@ angular
             vm.auditionId = $scope.$resolve.auditionId;
             vm.applicationCtrl = $scope.$resolve.applicationCtrl;
             vm.howItWorkLang = vm.applicationCtrl.howItWorkLang;
-            // In preview/results view mode donot use previous navigation info and rest the states table
+            // In preview/results view mode do not use previous navigation info and rest the states table
             vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.PREVIEW ? vm.states = {} : vm.states = vm.applicationCtrl.application.states || {};
             vm.applicationCtrl.application.states = vm.states;
 
@@ -251,11 +251,13 @@ angular
         };
         
         vm.correctAnswer = function (itemKey) {
-            if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 100) {
-                return true;
-            } else {
-                if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 0) {
-                    return false;
+            if (vm.auditionViewModeResultsTalent) {
+                if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 100) {
+                    return true;
+                } else {
+                    if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 0) {
+                        return false;
+                    };
                 };
             };
         }; 
