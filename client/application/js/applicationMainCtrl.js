@@ -16,7 +16,7 @@ angular
         vm.campaignId = $stateParams.id;
         vm.oneAtATime = true;
         vm.displayGraphs = false;
-
+        
         vm.dependency = new Deps.Dependency();
 
         /**
@@ -66,7 +66,7 @@ angular
 
         /** get user previous selections */
 
-        if (localStorage.getItem('selectedFilter') !== 'undefined') vm.selectedFilter = localStorage.getItem('selectedFilter');
+        if (localStorage.getItem('selectedFilvm.applicationster') !== 'undefined') vm.selectedFilter = localStorage.getItem('selectedFilter');
 
         if (!_.isNull(vm.selectedFilter) && vm.selectedFilter !== 'null') {
             localStorage.setItem('selectedFilter', vm.selectedFilter);
@@ -283,7 +283,7 @@ angular
                         }})
 
                 } else {
-                    //Nice message - you can not revel more
+                    //Nice message - you can not reveal more
                     showInfoMessage('All Top Applicants were revealed');
                 }
             };
@@ -685,6 +685,140 @@ angular
                 case "line":
                     vm.graphResponsePerChallengeLine = true;
                     break;
+            };
+        };
+
+        vm.applicationResulotion = function (applicationArg, resulotionStatusArg, panelIndexArg) {
+            switch (resulotionStatusArg) {
+                case ENUM.APPLICATION_RESOLUTION.NOT_RELEVANT:
+                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.RECRUITED) {
+                        if (applicationArg.feedbackEmployed || 
+                            applicationArg.feedbackProfessional ||
+                            applicationArg.feedbackPersonal ||
+                            applicationArg.feedbackOrganization) {
+                            showErrorMessage ('Feedback has already been provided for the talent. The resolution status cannot be changed')
+                        } else {
+                            let msgArg = 'Talent has already been recruited. Do you really want to modify the resolution to "Not Relevant"?';
+                            $UserAlerts.prompt(
+                                msgArg,
+                                ENUM.ALERT.INFO,
+                                false,
+                                function(){
+                                    updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
+                                },
+                                function(){
+                                }
+                            );
+                            return;
+                        };
+                    } else {
+                        updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
+                    };
+                    break;
+                case ENUM.APPLICATION_RESOLUTION.EVALUATION:
+                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.RECRUITED) {
+                        if (applicationArg.feedbackEmployed || 
+                            applicationArg.feedbackProfessional ||
+                            applicationArg.feedbackPersonal ||
+                            applicationArg.feedbackOrganization) {
+                            showErrorMessage ('Feedback has already been provided for the talent. The resolution status cannot be changed')
+                        } else {
+                            let msgArg = 'Talent has already been recruited. Do you really want to modify the resolution to "Evaluation"?';
+                            $UserAlerts.prompt(
+                                msgArg,
+                                ENUM.ALERT.INFO,
+                                false,
+                                function(){
+                                    updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
+                                },
+                                function(){
+                                }
+                            );
+                            return;
+                        };
+                    } else {
+                        updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
+                    };
+                    break;
+                case ENUM.APPLICATION_RESOLUTION.RECRUITED:
+                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.NOT_RELEVANT) {
+                        let msgArg = 'Talent has previously designated as "Not Relevant". Do you really want to modify the resolution to "Recruited"?';
+                        $UserAlerts.prompt(
+                            msgArg,
+                            ENUM.ALERT.INFO,
+                            false,
+                            function(){
+                                updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
+                            },
+                            function(){
+                            }
+                        );
+                        return
+                    };
+                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.NONE) {
+                        let msgArg = 'There is no previous resolution status. Do you really want to modify the resolution to "Recruited"?';
+                        $UserAlerts.prompt(
+                            msgArg,
+                            ENUM.ALERT.INFO,
+                            false,
+                            function(){
+                                updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
+                            },
+                            function(){
+                            }
+                        );
+                        return;
+                    } else {
+                        updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
+                    };
+                    break;
+                default:
+                    break;
+            };
+
+            function updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg) {
+                if (resulotionStatusArg === applicationArg.resolutionStatus) {
+                    return
+                };
+                applicationArg.resolutionStatus = resulotionStatusArg;
+                vm.currentDate = new Date();
+                applicationArg.resolutionStatusDate = vm.currentDate;
+                updateApplication(applicationArg, panelIndexArg);
+            };
+        };
+
+        vm.feedbackSave = function (applicationArg) {
+            updateApplication(applicationArg);
+        };
+
+        function updateApplication (applicationArg, panelIndexArg) {
+            let tempApplicationId = applicationArg._id;
+            let copyApplication = angular.copy(applicationArg);
+            delete copyApplication._id;
+            Applications.update({_id: tempApplicationId}, {$set: copyApplication}, function (errorArg, tempIdArg) {
+                if (errorArg) {
+                    showErrorMessage(errorArg.message);
+                }
+                else {
+                    if (panelIndexArg) {
+                        // close the expanded application panel
+                        let panelElement = 'panel-element-' + panelIndexArg;
+                        document.getElementById(panelElement).setAttribute("aria-expanded", false);
+                    };
+                }
+            });
+        };
+
+        vm.feedbackTab = function (applicationArg) {
+            if (applicationArg.resolutionStatus !== ENUM.APPLICATION_RESOLUTION.RECRUITED) {
+                showInfoMessage ('Feedback can be provided only to a recruited talent');
+                return;
+            };
+            let currentDate = new Date();
+            var feedbackAdvisedDate = moment(applicationArg.resolutionStatusDate);
+            feedbackAdvisedDate.add(3, 'months');
+            if (currentDate < feedbackAdvisedDate._d) {
+                showInfoMessage ('It is advised to provide feedback not earlier than 3 months from the employment date');
             };
         };
 

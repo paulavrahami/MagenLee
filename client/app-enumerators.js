@@ -116,6 +116,12 @@ angular
             PROACTIVE_CAMPAIGN : 'Proactive Campaign',
             TALENT : 'Talent'
         },
+        APPLICATION_RESOLUTION : {
+            NONE : '',
+            NOT_RELEVANT : 'Not Relevant',
+            EVALUATION : 'Evaluation',
+            RECRUITED : 'Recruited'
+        },
         TALENT_STATUS : {
             ACTIVE : 'Active',
             SUSPENDED : 'Suspended',
