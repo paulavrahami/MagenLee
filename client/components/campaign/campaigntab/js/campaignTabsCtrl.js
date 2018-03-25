@@ -129,6 +129,7 @@ angular
              */
             if (vm.campaign) {
                 vm.campaignPublished = vm.campaign.status === 'Dispatched';
+                vm.campaignClosed = vm.campaign.status === 'Closed';
                 vm.campaignActivityLog = vm.activity;
                 
                 vm.targetExternalTalents = vm.campaign.targetExternalTalents;
@@ -137,6 +138,7 @@ angular
                 vm.targetJobBoardsTalents = vm.campaign.targetJobBoards;
 
                 if ((vm.campaign.status == ENUM.CAMPAIGN_STATUS.IN_WORK) || 
+                    (vm.campaign.status == ENUM.CAMPAIGN_STATUS.VERIFIED) ||
                     (vm.campaign.status == ENUM.CAMPAIGN_STATUS.VERIFIED)) {
                     vm.targetManuallyURLDisabled = true;
                     vm.targetSpecificTalentDisabled = true;

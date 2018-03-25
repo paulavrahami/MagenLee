@@ -55,6 +55,7 @@
                 <div class="btn-group">
                   <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('grade')"><span ng-class="vm.getSort('grade')"></span>Grade</button>
                   <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('control.createDate')"><span ng-class="vm.getSort('control.createDate')"></span>Date</button>
+                  <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('resolutionStatus')"><span ng-class="vm.getSort('resolutionStatus')"></span>Resolution</button>
                 </div>
               </div>
             </form>
@@ -206,7 +207,7 @@
                           <h5>{{application.number}}</h5>
                       </div>
                       <div class="col-md-2">
-                          <h5>{{application.control.createDate | date}}</h5>
+                          <h5 ng-class="vm.afterCloseDate(application.control.createDate) === true ? 'after-closeDate' : ''">{{application.control.createDate | date}}</h5>
                       </div>
                       <div class="col-md-1 appl-formating">
                           <h5>{{vm.round(application.grade)}}</h5>
@@ -243,9 +244,9 @@
                       </div>
                       <div class="col-md-1 app-status" ng-hide="!application.revealed || (application.resolutionStatus === vm.ENUM.APPLICATION_RESOLUTION.NONE)">
                           <button type="button" class="btn  btn-rounded"
-                                  ng-class="{'not-relevant' : application.resolutionStatus === vm.ENUM.APPLICATION_RESOLUTION.NOT_RELEVANT,
-                                             'evaluation' : application.resolutionStatus === vm.ENUM.APPLICATION_RESOLUTION.EVALUATION,
-                                             'recruited' : application.resolutionStatus === vm.ENUM.APPLICATION_RESOLUTION.RECRUITED}">
+                                  ng-class="{'reject' : application.resolutionStatus === vm.ENUM.APPLICATION_RESOLUTION.REJECT,
+                                             'review' : application.resolutionStatus === vm.ENUM.APPLICATION_RESOLUTION.REVIEW,
+                                             'hired' : application.resolutionStatus === vm.ENUM.APPLICATION_RESOLUTION.HIRED}">
                           </button>
                       </div>
                   </div>
@@ -322,9 +323,9 @@
                         <!-- Audition preview -->
                           <div class="row">
                               <a class="btn btn-sm btn-primary" ng-click="vm.viewAuditionResults(application)">View Audition</a>
-                              <a class="btn btn-sm btn-success button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.RECRUITED, $index)">Recruited</a>
-                              <a class="btn btn-sm btn-warning button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.EVALUATION, $index)">Evaluation</a>
-                              <a class="btn btn-sm btn-danger button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.NOT_RELEVANT, $index)">Not Relevant</a>
+                              <a class="btn btn-sm btn-success button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.HIRED, $index)">Hired</a>
+                              <a class="btn btn-sm btn-warning button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REVIEW, $index)">Review</a>
+                              <a class="btn btn-sm btn-danger button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REJECT, $index)">Reject</a>
                           </div>
                     </div>
                   </div>
@@ -376,7 +377,7 @@
                     </div>
                   </div>
                   <!-- Feedback Tab -->
-                  <div id="menu2{{$index}}" class="tab-pane fade" ng-class="{'disable-div' : !application.revealed || (application.resolutionStatus !== vm.ENUM.APPLICATION_RESOLUTION.RECRUITED)}">
+                  <div id="menu2{{$index}}" class="tab-pane fade" ng-class="{'disable-div' : !application.revealed || (application.resolutionStatus !== vm.ENUM.APPLICATION_RESOLUTION.HIRED)}">
                     <br>
                     <div class="row col-md-12">
                       <div class="col-md-2">
