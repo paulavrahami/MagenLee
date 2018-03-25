@@ -16,6 +16,7 @@ angular
         vm.campaignId = $stateParams.id;
         vm.oneAtATime = true;
         vm.displayGraphs = false;
+        vm.currentDate = new Date();
         
         vm.dependency = new Deps.Dependency();
 
@@ -690,15 +691,15 @@ angular
 
         vm.applicationResulotion = function (applicationArg, resulotionStatusArg, panelIndexArg) {
             switch (resulotionStatusArg) {
-                case ENUM.APPLICATION_RESOLUTION.NOT_RELEVANT:
-                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.RECRUITED) {
+                case ENUM.APPLICATION_RESOLUTION.REJECT:
+                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.HIRED) {
                         if (applicationArg.feedbackEmployed || 
                             applicationArg.feedbackProfessional ||
                             applicationArg.feedbackPersonal ||
                             applicationArg.feedbackOrganization) {
                             showErrorMessage ('Feedback has already been provided for the talent. The resolution status cannot be changed')
                         } else {
-                            let msgArg = 'Talent has already been recruited. Do you really want to modify the resolution to "Not Relevant"?';
+                            let msgArg = 'Talent has already been hired. Do you really want to modify the resolution to "Reject"?';
                             $UserAlerts.prompt(
                                 msgArg,
                                 ENUM.ALERT.INFO,
@@ -715,15 +716,15 @@ angular
                         updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
                     };
                     break;
-                case ENUM.APPLICATION_RESOLUTION.EVALUATION:
-                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.RECRUITED) {
+                case ENUM.APPLICATION_RESOLUTION.REVIEW:
+                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.HIRED) {
                         if (applicationArg.feedbackEmployed || 
                             applicationArg.feedbackProfessional ||
                             applicationArg.feedbackPersonal ||
                             applicationArg.feedbackOrganization) {
                             showErrorMessage ('Feedback has already been provided for the talent. The resolution status cannot be changed')
                         } else {
-                            let msgArg = 'Talent has already been recruited. Do you really want to modify the resolution to "Evaluation"?';
+                            let msgArg = 'Talent has already been hired. Do you really want to modify the resolution to "Review"?';
                             $UserAlerts.prompt(
                                 msgArg,
                                 ENUM.ALERT.INFO,
@@ -740,9 +741,9 @@ angular
                         updateApplicationResolutionStatus (applicationArg, resulotionStatusArg, panelIndexArg);
                     };
                     break;
-                case ENUM.APPLICATION_RESOLUTION.RECRUITED:
-                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.NOT_RELEVANT) {
-                        let msgArg = 'Talent has previously designated as "Not Relevant". Do you really want to modify the resolution to "Recruited"?';
+                case ENUM.APPLICATION_RESOLUTION.HIRED:
+                    if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.REJECT) {
+                        let msgArg = 'Talent has previously designated as "Rejected". Do you really want to modify the resolution to "Hired"?';
                         $UserAlerts.prompt(
                             msgArg,
                             ENUM.ALERT.INFO,
@@ -756,7 +757,7 @@ angular
                         return
                     };
                     if (applicationArg.resolutionStatus === ENUM.APPLICATION_RESOLUTION.NONE) {
-                        let msgArg = 'There is no previous resolution status. Do you really want to modify the resolution to "Recruited"?';
+                        let msgArg = 'There is no previous resolution status. Do you really want to modify the resolution to "Hired"?';
                         $UserAlerts.prompt(
                             msgArg,
                             ENUM.ALERT.INFO,
@@ -781,7 +782,6 @@ angular
                     return
                 };
                 applicationArg.resolutionStatus = resulotionStatusArg;
-                vm.currentDate = new Date();
                 applicationArg.resolutionStatusDate = vm.currentDate;
                 updateApplication(applicationArg, panelIndexArg);
             };
@@ -810,8 +810,8 @@ angular
         };
 
         vm.feedbackTab = function (applicationArg) {
-            if (applicationArg.resolutionStatus !== ENUM.APPLICATION_RESOLUTION.RECRUITED) {
-                showInfoMessage ('Feedback can be provided only to a recruited talent');
+            if (applicationArg.resolutionStatus !== ENUM.APPLICATION_RESOLUTION.HIRED) {
+                showInfoMessage ('Feedback can be provided only to a hired talent');
                 return;
             };
             let currentDate = new Date();
@@ -819,6 +819,14 @@ angular
             feedbackAdvisedDate.add(3, 'months');
             if (currentDate < feedbackAdvisedDate._d) {
                 showInfoMessage ('It is advised to provide feedback not earlier than 3 months from the employment date');
+            };
+        };
+
+        vm.afterCloseDate = function (applicationCreateDateArg) {
+            if (applicationCreateDateArg > vm.campaign.endDate) {
+                return (true);
+            } else {
+                return (false);
             };
         };
 

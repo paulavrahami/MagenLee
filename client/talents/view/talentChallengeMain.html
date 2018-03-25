@@ -97,13 +97,13 @@
                           <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DELETE">&nbsp;</span>{{campaign.status}}</h3>
                           <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DISPATCHED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DISPATCHED">&nbsp;</span>On Air</h3>
                           <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.IN_WORK"><span ng-class="vm.MAP.CAMPAIGN_STATUS.IN_WORK">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.TERMINATED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.TERMINATED">&nbsp;</span>{{campaign.status}}</h3>
+                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.CLOSED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.CLOSED">&nbsp;</span>{{campaign.status}}</h3>
                           <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.VERIFIED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.VERIFIED">&nbsp;</span>{{campaign.status}}</h3>
 
                           <!-- <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DELETE">&nbsp;</span>{{campaign.status}}</h3>
                           <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DISPATCHED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DISPATCHED">&nbsp;</span>{{campaign.status}}</h3>
                           <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.IN_WORK"><span ng-class="vm.MAP.CAMPAIGN_STATUS.IN_WORK">&nbsp;</span>{{campaign.status}}</h3>
-                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.TERMINATED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.TERMINATED">&nbsp;</span>{{campaign.status}}</h3>
+                          <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.CLOSED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.CLOSED">&nbsp;</span>{{campaign.status}}</h3>
                           <h3 class="job-positionName" ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.VERIFIED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.VERIFIED">&nbsp;</span>{{campaign.status}}</h3> -->
                       </div>
               </div>
@@ -121,7 +121,7 @@
                     <a ng-if="campaign.applicationsCount" class="btn btn-primary btn-sm" ui-sref="recruiter.application({id:campaign._id})"><span ng-class="vm.MAP.BUTTONS.APPLICATION">&nbsp;</span>Application</a>
                     <a ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE)
                                 && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)
-                                && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.TERMINATED)" class="btn btn-primary btn-sm" ng-click="vm.deleteCampaign(campaign)"><span ng-class="vm.MAP.BUTTONS.DELETE">&nbsp;</span>Delete</a>
+                                && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.CLOSED)" class="btn btn-primary btn-sm" ng-click="vm.deleteCampaign(campaign)"><span ng-class="vm.MAP.BUTTONS.DELETE">&nbsp;</span>Delete</a>
                     <a ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary btn-sm" ng-click="vm.undeleteCampaign(campaign)" ><span ng-class="vm.MAP.BUTTONS.UNDELETE">&nbsp;</span>Undelete</a>
                     <!-- todo:  remove - TEMPRARY ADDITION FOR TESTING CAMPAIGN APPLICATION -->
                     <!-- <a ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DISPATCHED" class="btn btn-primary" ui-sref="campaignApply({id:campaign._id})" ><span >&nbsp;</span>Run</a> -->
@@ -156,7 +156,7 @@
                             <p><a class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id})">Edit</a>
                               <a class="btn btn-primary btn-sm" ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE)
                               && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DISPATCHED)
-                              && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.TERMINATED)" ng-click="vm.deleteCampaign(campaign)">Delete</a></p>
+                              && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.CLOSED)" ng-click="vm.deleteCampaign(campaign)">Delete</a></p>
                         </div>
 
                     </div>

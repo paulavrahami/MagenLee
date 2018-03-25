@@ -12,6 +12,7 @@ angular
         vm.now = moment();
         vm.currentDate = new Date();
 
+
         /**
          * @desc Show a dialog with the error;
          * @param msgArg
@@ -460,19 +461,38 @@ angular
         };
 
         /**
-         * @desc terminate the campaign;
+         * @desc Close the campaign;
          */
-        vm.terminateCampaign = function () {
+        vm.closeCampaign = function () {
 
             if  (vm.currentCampaign.status !== ENUM.CAMPAIGN_STATUS.DISPATCHED) {
-                showErrorMessage('Campaign must be published before terminating');
-            }
-            else {
+                showErrorMessage('The campaign was not published yet');
+                return;
+            };
+
+            let msgArg = "The campaign will be closed and could not be updated. Please confirm";
+            $UserAlerts.prompt(
+                msgArg,
+                ENUM.ALERT.INFO,
+                false,
+                function(){
+                    updateCampaign ()    
+                },
+                function(){
+                    return;
+                }
+            );
+
+            function updateCampaign () {
                 /** Copy the campaign to prevent angular's hashing; */
                 let campaign = angular.copy(vm.currentCampaign);
 
-                campaign.status = vm.currentCampaign.status = ENUM.CAMPAIGN_STATUS.TERMINATED;
+                campaign.status = vm.currentCampaign.status = ENUM.CAMPAIGN_STATUS.CLOSED;
+                campaign.statusDate = vm.currentDate;
+                campaign.actualEndDate = vm.currentDate;
 
+                let timeDiff = Math.abs(campaign.actualEndDate.getTime() - campaign.startDate.getTime());
+                campaign.actualDuration = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 
                 /** Update campaign; */
                 let tempId = campaign._id;
@@ -483,13 +503,31 @@ angular
                     if (errorArg) {
                         showErrorMessage(errorArg.message);
                     } else {
-                        dbhService.insertActivityLog('Campaign', vm.currentCampaign._id, 'Terminate', 'Campaign [' + vm.currentCampaign.num + '] was terminated successfully');
+                        dbhService.insertActivityLog('Campaign', vm.currentCampaign._id, 'Close', 'Campaign [' + vm.currentCampaign.num + '] was closed successfully');
 
-                        showInfoMessage('Campaign [' + vm.currentCampaign.num + '] was terminated successfully', function () {
+                        showInfoMessage('Campaign [' + vm.currentCampaign.num + '] was closed successfully', function () {
                             $state.go('recruiter.campaigns');
                         });
                     }
                 });
-            }
+            };
         };
+
+        vm.afterCloseDate = function () {
+            if  (vm.currentCampaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+                if (vm.currentDate > vm.currentCampaign.endDate) {
+                    return (true);
+                } else {
+                    return (false);
+                };
+            };
+        };
+
+        if  (vm.currentCampaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+            if (vm.currentDate > vm.currentCampaign.endDate) {
+                showInfoMessage("The campaign's end date has already over. Please close the campaign")
+            };
+        };
+
+
     });
