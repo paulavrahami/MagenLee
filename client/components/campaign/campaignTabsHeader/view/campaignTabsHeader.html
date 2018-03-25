@@ -7,7 +7,7 @@
     <div class="col-md-11">
         <div class="col-md-4">
             <div class="campaign-Header-Info">
-                <h4><strong>{{tabsHeader.title}}{{tabsHeader.status}}</strong></h4>
+                <h4><strong>{{tabsHeader.title}}<span ng-class="$parent.vm.afterCloseDate() === true ? 'after-closeDate' : ''">{{tabsHeader.status}}</span></strong></h4>
             </div>
         </div>
         <div class="col-md-7 navbar-right">
@@ -15,7 +15,7 @@
                 <button type="submit" class="btn btn-primary"><span class="fa fa-floppy-o fa-1x">&nbsp;</span>Save</button>
                 <a href="#" class="btn btn-info" ng-click="$parent.vm.verifyCampaign(vm.campaign)"><span class="fa fa-thumbs-up fa-1x">&nbsp;</span>Verify</a>
                 <a href="#" class="btn btn-success" ng-click="$parent.vm.dispatchCampaign(vm.campaign)"><span class="fa fa-paper-plane fa-1x">&nbsp;</span>Publish</a>
-                <a href="#" class="btn btn-default" ng-click="$parent.vm.terminateCampaign(vm.campaign)"><span class="fa fa-stop fa-1x">&nbsp;</span>Terminate</a>
+                <a href="#" class="btn btn-default" ng-click="$parent.vm.closeCampaign(vm.campaign)"><span class="fa fa-stop fa-1x">&nbsp;</span>Close</a>
             </div>
         </div>
     </div>    

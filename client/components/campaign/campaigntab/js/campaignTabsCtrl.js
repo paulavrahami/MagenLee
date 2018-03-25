@@ -129,6 +129,7 @@ angular
              */
             if (vm.campaign) {
                 vm.campaignPublished = vm.campaign.status === 'Dispatched';
+                vm.campaignClosed = vm.campaign.status === 'Closed';
                 vm.campaignActivityLog = vm.activity;
                 
                 vm.targetExternalTalents = vm.campaign.targetExternalTalents;
@@ -142,6 +143,14 @@ angular
                     vm.targetSpecificTalentDisabled = true;
                     vm.targetExternalTalentsDisabled = true;
                     vm.targetPoolTalentsDisabled = false;
+                    vm.targetSocialNetworksDisabled = true;
+                    vm.targetJobBoardsDisabled = true;
+                };
+                if (vm.campaign.status == ENUM.CAMPAIGN_STATUS.CLOSED) {
+                    vm.targetManuallyURLDisabled = true;
+                    vm.targetSpecificTalentDisabled = true;
+                    vm.targetExternalTalentsDisabled = true;
+                    vm.targetPoolTalentsDisabled = true;
                     vm.targetSocialNetworksDisabled = true;
                     vm.targetJobBoardsDisabled = true;
                 };

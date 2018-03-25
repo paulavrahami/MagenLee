@@ -21,10 +21,10 @@
 									 id="positionName"
 									 name="positioName"
 									 ng-model="vm.campaign.positionName"
-									 ng-disabled="vm.campaignPublished"
+									 ng-disabled="vm.campaignPublished || vm.campaignClosed"
 									 placeholder=""
 									 >
-							  <!-- <chosen-select ng-if="vm.isPositions" id="positionName" ng-disabled="vm.campaignPublished" ng-model="vm.campaign.positionName" data="vm.positions" property="title"></chosen-select> -->
+							  <!-- <chosen-select ng-if="vm.isPositions" id="positionName" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="vm.campaign.positionName" data="vm.positions" property="title"></chosen-select> -->
 							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.positionName.$error.required && newDemand.positionName.$dirty">Position name is required.</span>
 						  </div>
 						  <div class="form-group">
@@ -33,7 +33,7 @@
 										id="campaignDescription"
 										name="campaignDescription"
 										ng-model="vm.campaign.description"
-										ng-disabled = "vm.campaignPublished"
+										ng-disabled = "vm.campaignPublished || vm.campaignClosed"
 										rows="6"
 										cols="70"
 										placeholder="Enter Position Description & Responsibilities" >
@@ -45,14 +45,14 @@
 						  <div class="form-group">
 							  <label class="required" for="countrySelect">Location</label>
 							  <div class="dropdown">
-								  <chosen-select id="countrySelect" ng-disabled="vm.campaignPublished" ng-model="vm.campaign.location" data="vm.countries"></chosen-select>
+								  <chosen-select id="countrySelect" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="vm.campaign.location" data="vm.countries"></chosen-select>
 							  </div>
 							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.countrySelect.$error.required && newDemand.countrySelect.$dirty">Country is required</span>
 						  </div>
 						  <div class="form-group">
 							  <label class="required" for="positionType">Employment Type</label>
 							  <div class="dropdown">
-								  <chosen-select id="positionType" ng-disabled="vm.campaignPublished" ng-model="vm.campaign.positionType" data="vm.positionTypes"></chosen-select>
+								  <chosen-select id="positionType" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="vm.campaign.positionType" data="vm.positionTypes"></chosen-select>
 							  </div>
 							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.positionType.$error.required && newDemand.positionType.$dirty">Position type is required</span>
 						   </div>
@@ -63,7 +63,7 @@
 						  			 id="departmentName"
 						  			 name="departmentName"
 						  			 ng-model="vm.campaign.department"
-						  			 ng-disabled="vm.campaignPublished"
+						  			 ng-disabled="vm.campaignPublished || vm.campaignClosed"
 						  			 placeholder="Position Department"
 						  			 >
 						  	  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.departmentName.$error.required && newDemand.departmentName.$dirty">Department name is required</span>
@@ -75,7 +75,7 @@
 						  			 id="reportTo"
 						  			 name="reportTo"
 						  			 ng-model="vm.campaign.reportingTo"
-						  			 ng-disabled="vm.campaignPublished"
+						  			 ng-disabled="vm.campaignPublished || vm.campaignClosed"
 						  			 placeholder="Who the employee will report to"
 						  			 >
 						  	  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.reportTo.$error.required && newDemand.reportTo.$dirty">Reporting To is required</span>
@@ -111,11 +111,11 @@
 							<tbody >
 								<tr ng-repeat="skill in vm.campaign.skills">
 									<td>
-										<input ng-disabled="vm.campaignPublished" type="text" name='name' placeholder='Type' ng-model="skill.type" ng-click="vm.modifySkill(skill)" class="form-control"/>
+										<input ng-disabled="vm.campaignPublished || vm.campaignClosed" type="text" name='name' placeholder='Type' ng-model="skill.type" ng-click="vm.modifySkill(skill)" class="form-control"/>
 									</td>
 									<td>
 										<div>
-											<select class="form-control" ng-click="vm.modifySkill(skill)" id="skillImportance" ng-disabled="vm.campaignPublished" ng-model="skill.importance"
+											<select class="form-control" ng-click="vm.modifySkill(skill)" id="skillImportance" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="skill.importance"
 											  	ng-class="{'importance-nice' : skill.importance === 'Nice to have',
 														'importance-low' : skill.importance === 'Low',
 														'importance-normal' : skill.importance === 'Normal',
@@ -129,7 +129,7 @@
 											</select>
 										</div>
 										<!-- <div class="dropdown">
-											<chosen-select id="skillImportance" ng-disabled="vm.campaignPublished" ng-model="skill.importance" data="vm.skillsImportance"
+											<chosen-select id="skillImportance" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="skill.importance" data="vm.skillsImportance"
 											  ng-class="{'importance-nice' : skill.importance === 'Nice to have',
 														'importance-low' : skill.importance === 'Low',
 														'importance-normal' : skill.importance === 'Normal',
@@ -139,7 +139,7 @@
 									</td>
 									<td >
 										<div>
-											<select class="form-control" id="skillExperience" ng-disabled="vm.campaignPublished" ng-model="skill.experience">
+											<select class="form-control" id="skillExperience" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="skill.experience">
 												<option value="Beginner">Beginner</option>
 											 	<option value="Intermediate">Intermediate</option>
 											  	<option value="Advanced">Advanced</option>
@@ -147,16 +147,16 @@
 											</select>
 										</div>
 										<!-- <div class="dropdown">
-											<chosen-select id="skillExperience" ng-disabled="vm.campaignPublished" ng-model="skill.experience" data="vm.skillsExperience"></chosen-select>
+											<chosen-select id="skillExperience" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="skill.experience" data="vm.skillsExperience"></chosen-select>
 										</div> -->
 									</td>
 									<td>
-										<a class="removeIcon" ng-if="!vm.campaignPublished" ng-click="vm.removeSkill(skill)" href='#'><span class='glyphicon glyphicon-remove-circle'></span></a>
+										<a class="removeIcon" ng-if="!vm.campaignPublished || !vm.campaignClosed " ng-click="vm.removeSkill(skill)" href='#'><span class='glyphicon glyphicon-remove-circle'></span></a>
 									</td>
 								</tr>
 							</tbody>
 						</table>
-						<a id="add_row" ng-click="vm.addSkill()" ng-if="!vm.campaignPublished" class="btn btn-primary pull-left">Add Skill</a>
+						<a id="add_row" ng-click="vm.addSkill()" ng-if="!vm.campaignPublished || !vm.campaignClosed" class="btn btn-primary pull-left">Add Skill</a>
 					</div>
 				</div>
 				<ul class="list-unstyled list-inline pull-right">
@@ -251,7 +251,7 @@
 									id="willingToWorkPlace"
 									name="willingToWorkPlace"
 									ng-model="vm.campaign.goNoGo4.place"
-									ng-disabled="vm.campaignPublished"
+									ng-disabled="vm.campaignPublished || vm.campaignClosed"
 									placeholder="Please enter the work location">
 							<span class="field-error">&nbsp;</span>
 						</div>
@@ -263,7 +263,7 @@
 									id="firstQuestionText"
 									name="firstQuestionText"
 									ng-model="vm.campaign.goNoGo1.text"
-									ng-disabled="vm.campaignPublished"
+									ng-disabled="vm.campaignPublished || vm.campaignClosed"
 									placeholder="Please enter question">
 							 <span class="field-error">&nbsp;</span>
 						</div>
@@ -275,7 +275,7 @@
 									id="secondQuestionText"
 									name="secondQuestionText"
 									ng-model="vm.campaign.goNoGo2.text"
-									ng-disabled="vm.campaignPublished"
+									ng-disabled="vm.campaignPublished || vm.campaignClosed"
 									placeholder="Please enter question">
 							<span class="field-error">&nbsp;</span>
 						</div>
@@ -291,7 +291,7 @@
 					  			   	ng-model="vm.campaign.cv"
 					  			   	ng-disabled=true>
 					  			   <!-- Temp disabled - issue with uploading CVs -->
-					  			   <!-- ng-disabled="vm.campaignPublished"> -->
+					  			   <!-- ng-disabled="vm.campaignPublished || vm.campaignClosed"> -->
 					  		<span class="field-error">&nbsp;</span>
 					  		<label class="checkbox-padding" for="resume">Supply Resume</label>
 					  	</div>
@@ -302,7 +302,7 @@
 					  			   	id="linkedInProfile"
 					  			   	name="linkedInProfile"
 					  			   	ng-model="vm.campaign.linkedInProfileUrl"
-					  			   	ng-disabled="vm.campaignPublished">
+					  			   	ng-disabled="vm.campaignPublished || vm.campaignClosed">
 					  		<span class="field-error">&nbsp;</span>
 					  		<label class="checkbox-padding" for="linkedInProfile">Provide LinkedIn Profile</label>
 					  	</div>
@@ -313,11 +313,11 @@
 									id="thirdQuestionCheck"
 									name="secondQuestionCheck"
 									ng-model="vm.campaign.goNoGo3.enabled"
-									ng-disabled="vm.campaignPublished">
+									ng-disabled="vm.campaignPublished || vm.campaignClosed">
 							<span class="field-error">&nbsp;</span>
 							<label class="checkbox-padding" for="firstQuestionCheck">Provide Salary Expectation</label>
 					  		<label class="currency-type-margin" ng-show="vm.campaign.goNoGo3.enabled" for="salaryExpactationsCurr">Currency</label>
-					  		<select ng-show="vm.campaign.goNoGo3.enabled" ng-model="vm.campaign.salaryExpCurrency" class="select-field-lenght" ng-disabled="vm.campaignPublished">
+					  		<select ng-show="vm.campaign.goNoGo3.enabled" ng-model="vm.campaign.salaryExpCurrency" class="select-field-lenght" ng-disabled="vm.campaignPublished || vm.campaignClosed">
 					  			<option>NIS</option>
 					  			<option>USD</option>
 					  			<option>EUR</option>
@@ -334,7 +334,7 @@
 					  						name="salaryExpactationsFrom"
 					  						min="0"
 					  						ng-model="expectation.from"
-					  						ng-disabled="vm.campaignPublished">
+					  						ng-disabled="vm.campaignPublished || vm.campaignClosed">
 					  				<label class="salary-to-positioning" for="salaryExpactations">To</label>
 					  				<input class="select-field-lenght"
 					  						type="number"
@@ -342,7 +342,7 @@
 					  						name="salaryExpactationsTo"
 					  						min="0"
 					  						ng-model="expectation.to"
-					  						ng-disabled="vm.campaignPublished">
+					  						ng-disabled="vm.campaignPublished || vm.campaignClosed">
 					  				<a class="salary-remove-range" ng-if="!vm.campaignPublished" ng-click="vm.removeFromToSalaryExp(expectation)" href='#'><span class='glyphicon glyphicon-remove-circle'></span></a>
 					  			</div>
 					  			<span class="field-error">&nbsp;</span>
@@ -367,19 +367,20 @@
 					  </div>
 				  </div>
 				  <div class="row">
-					  <div class="col-md-3">
-						  <div class="form-group">
-							  <label  for="startDate">Start Date</label>
-							  <input class=" form-control"
-									 type="date"
-									 id="startDate"
-									 name="startDate"
-									 ng-model="vm.campaign.startDate"
-									 ng-disabled="true"
-									 ng-click="vm.calculateEndDate(vm.campaign)">
-							  <span class="field-error">&nbsp;</span>
-						  </div>
-						  <div class="form-group">
+					  <div class="col-md-4">
+						  <div class="form-group col-md-12">
+								  <label  for="startDate">Start Date</label>
+								  <input class=" form-control"
+										 type="date"
+										 id="startDate"
+										 name="startDate"
+										 ng-model="vm.campaign.startDate"
+										 ng-disabled="true"
+										 ng-click="vm.calculateEndDate(vm.campaign)">
+								  <span class="field-error">&nbsp;</span>
+							</div>
+
+						  <div class="form-group col-md-6">
 							  <label class="required" for="duration">Duration</label>
 							  <input class=" form-control"
 									 type="number"
@@ -388,20 +389,45 @@
 									 min="1"
 									 ng-model="vm.campaign.duration"
 									 ng-click="vm.calculateEndDate(vm.campaign)"
-									 placeholder="Campaign duration in days">
+									 ng-disabled="vm.campaignClosed"
+									 placeholder="In days">
 							  <span class="field-error">&nbsp;</span>
 						  </div>
-						  <div class="form-group">
+					  	<div class="form-group col-md-6">
 							  <label for="endDate">End Date</label>
 							  <input class=" form-control"
 									 type="date"
-									 -             id="endDate"
+									 id="endDate"
 									 name="endDate"
 									 ng-model="vm.campaign.endDate"
-									 ng-disabled="true"
+									 ng-disabled="vm.campaignClosed"
 									 ng-click="vm.clearDuration(vm.campaign)">
 							  <span class="field-error">&nbsp;</span>
+					  	</div>
+
+						  <div class="form-group col-md-6">
+						  	  <label for="duration">Actual Duration</label>
+						  	  <input class=" form-control"
+						  			 type="number"
+						  			 id="duration"
+						  			 name="duration"
+						  			 min="1"
+						  			 ng-model="vm.campaign.actualDuration"
+						  			 ng-disabled="true"
+						  			 ng-click="vm.calculateEndDate(vm.campaign)">
+						  	  <span class="field-error">&nbsp;</span>
 						  </div>
+					   	<div class="form-group col-md-6">
+					 		  <label for="endDate">Actual End Date</label>
+					 		  <input class=" form-control"
+					 				 type="date"
+					 				 id="endDate"
+					 				 name="endDate"
+					 				 ng-model="vm.campaign.actualEndDate"
+					 				 ng-disabled="true"
+					 				 ng-click="vm.clearDuration(vm.campaign)">
+					 		  <span class="field-error">&nbsp;</span>
+					   	</div>
 					  </div>                              
 
 					  <div class="col-md-1"></div>
@@ -417,6 +443,7 @@
 										 min="40"
 										 max="100"
 										 ng-model="vm.campaign.minScore"
+										 ng-disabled="vm.campaignClosed"
 										 ng-blur="vm.minScoreRange()"
 										 placeholder="Applicants Minimum Score">
 								  <span class="field-error">&nbsp;</span>
@@ -432,7 +459,7 @@
 										 min="1"
 										 max="10"
 										 ng-model="vm.campaign.topApplicant"
-										 ng-disabled="vm.campaignPublished"
+										 ng-disabled="vm.campaignPublished || vm.campaignClosed"
 										 ng-blur = "vm.topApplicantRange()"
 										 placeholder="Number of Top Applicant">
 								  <span class="field-error">&nbsp;</span>
@@ -442,7 +469,7 @@
 
 					  <div class="col-md-1"></div>
 
-					  <div class="col-md-4">
+					  <div class="col-md-3">
 						  <!-- Campaign target options -->
 						  <div class="col-md-12 form-group">
 							  <!-- <div class="form-group"> -->

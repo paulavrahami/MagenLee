@@ -38,11 +38,12 @@ angular
             IN_WORK:    'In Work',
             AVAILABLE:  'Available',
             ASSIGNED:   'Assigned',
-            TERMINATED: 'Terminated'
+            TERMINATED: 'Canceled'
         },
         ITEM_AUTHOR_TYPE : {
             RECRUITER:    'Recruiter',
-            DOMAIN_EXPERT:'Domain Expert'
+            DOMAIN_EXPERT:'Domain Expert',
+            TALENT:       'Talent'
         },
         ALERT : {
             SUCCESS:    'success',
@@ -54,7 +55,7 @@ angular
             DELETE:     'Delete',
             DISPATCHED: 'Dispatched',
             IN_WORK:    'In work',
-            TERMINATED: 'Terminated',
+            CLOSED:     'Closed',
             VERIFIED:   'Verified'
         },
         APPLICATION_FILTER : {
@@ -116,6 +117,12 @@ angular
             PROACTIVE_CAMPAIGN : 'Proactive Campaign',
             TALENT : 'Talent'
         },
+        APPLICATION_RESOLUTION : {
+            NONE : '',
+            REJECT : 'Reject',
+            REVIEW : 'Review',
+            HIRED : 'Hired'
+        },
         TALENT_STATUS : {
             ACTIVE : 'Active',
             SUSPENDED : 'Suspended',
@@ -135,8 +142,15 @@ angular
             DELETE:     'glyphicon glyphicon-trash',
             DISPATCHED: 'glyphicon glyphicon-send',
             IN_WORK:    'glyphicon glyphicon-cutlery',
-            TERMINATED: 'glyphicon glyphicon-stop',
+            CLOSED:     'glyphicon glyphicon-stop',
             VERIFIED:   'glyphicon glyphicon-thumbs-up'
+        },
+        ITEM_STATUS : {
+            TERMINATED: 'glyphicon glyphicon-trash',
+            NEW:        'glyphicon glyphicon-ok',
+            IN_WORK:    'glyphicon glyphicon-cutlery',
+            AVAILABLE:  'glyphicon glyphicon-play',
+            ASSIGNED:   'glyphicon glyphicon-ok-circle'
         },
         TALENT_STATUS : {
             CANCELED:  'glyphicon glyphicon-trash',

@@ -22,7 +22,7 @@ function routerConfig($stateProvider) {
   .state('mainApplications', {
     url:'/talentApplications',
     templateUrl: 'client/talents/view/talentApplicationMain.html',
-    controller: 'TalentCtrl',
+    controller: 'applicationMainCtrl',
     controllerAs: 'vm'
   })
 }
