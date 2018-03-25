@@ -1,6 +1,6 @@
 angular
   .module('skillera')
-  .controller('TalentCtrl', function($state,$scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
+  .controller('applicationMainCtrl', function($state,$scope,$reactive,dbhService, $UserAlerts, ENUM, MAP) {
 
     var vm = this;
     let reactiveContext = $reactive(vm).attach($scope);
