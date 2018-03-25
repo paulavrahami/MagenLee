@@ -164,6 +164,12 @@ angular
                     companyOwner : vm.audition.control.companyOwner
                 };
 
+                vm.application.resolutionStatus = "";
+                vm.application.feedbackEmployed = "";
+                vm.application.feedbackProfessional ="";
+                vm.application.feedbackPersonal = "";
+                vm.application.feedbackOrganization ="";
+
                 // New application record, no user information yet
 
                 Applications.insert(vm.application, function (errorArg, tempIdArg) {
