@@ -147,6 +147,14 @@ angular
                     vm.targetSocialNetworksDisabled = true;
                     vm.targetJobBoardsDisabled = true;
                 };
+                if (vm.campaign.status == ENUM.CAMPAIGN_STATUS.CLOSED) {
+                    vm.targetManuallyURLDisabled = true;
+                    vm.targetSpecificTalentDisabled = true;
+                    vm.targetExternalTalentsDisabled = true;
+                    vm.targetPoolTalentsDisabled = true;
+                    vm.targetSocialNetworksDisabled = true;
+                    vm.targetJobBoardsDisabled = true;
+                };
                 if (vm.campaign.status == ENUM.CAMPAIGN_STATUS.DISPATCHED) {
                     vm.targetManuallyURLDisabled = false;
                     vm.targetSpecificTalentDisabled = false;
