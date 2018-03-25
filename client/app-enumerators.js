@@ -55,7 +55,7 @@ angular
             DELETE:     'Delete',
             DISPATCHED: 'Dispatched',
             IN_WORK:    'In work',
-            TERMINATED: 'Terminated',
+            CLOSED:     'Closed',
             VERIFIED:   'Verified'
         },
         APPLICATION_FILTER : {
@@ -119,9 +119,9 @@ angular
         },
         APPLICATION_RESOLUTION : {
             NONE : '',
-            NOT_RELEVANT : 'Not Relevant',
-            EVALUATION : 'Evaluation',
-            RECRUITED : 'Recruited'
+            REJECT : 'Reject',
+            REVIEW : 'Review',
+            HIRED : 'Hired'
         },
         TALENT_STATUS : {
             ACTIVE : 'Active',
@@ -142,7 +142,7 @@ angular
             DELETE:     'glyphicon glyphicon-trash',
             DISPATCHED: 'glyphicon glyphicon-send',
             IN_WORK:    'glyphicon glyphicon-cutlery',
-            TERMINATED: 'glyphicon glyphicon-stop',
+            CLOSED:     'glyphicon glyphicon-stop',
             VERIFIED:   'glyphicon glyphicon-thumbs-up'
         },
         ITEM_STATUS : {
