@@ -443,6 +443,7 @@
 										 min="40"
 										 max="100"
 										 ng-model="vm.campaign.minScore"
+										 ng-disabled="vm.campaignClosed"
 										 ng-blur="vm.minScoreRange()"
 										 placeholder="Applicants Minimum Score">
 								  <span class="field-error">&nbsp;</span>
