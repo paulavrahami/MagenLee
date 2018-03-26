@@ -116,7 +116,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.CLOSED">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.CLOSED"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
+                                <!-- <h5 class="big-status">{{item.status}}&nbsp;&nbsp;<span></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5> -->
+                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.CANCELED">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.CANCELED"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.IN_WORK"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.ASSIGNED">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.ASSIGNED"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.AVAILABLE">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.AVAILABLE"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
@@ -130,7 +131,7 @@
                             <div class="col-md-12">
                                 <p>
                                     <a class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
-                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Allow</a>
+                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Publish</a>
                                     <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.deleteItem(item)">Delete</a>
                                 </p>
                             </div>
@@ -162,7 +163,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <p><a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
-                                           <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Allow</a>
+                                           <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Publish</a>
                                            <a ng-if="(item.status === vm.ENUM.ITEM_STATUS.IN_WORK)
                                             || (item.status === vm.ENUM.ITEM_STATUS.AVAILABLE)" class="btn btn-primary btn-sm" ng-click="vm.deleteItem(item)">Delete</a>
                                         </p>
