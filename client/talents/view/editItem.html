@@ -193,11 +193,11 @@
     </div>
 
     <!-- Modal Footer -->
-    <div class="modal-footer" ng-if="(editItem.ChallengeMainCtrl.editItem.status === 'In Work')">
+    <div class="modal-footer" ng-if="(editItem.ChallengeMainCtrl.editItem.status === 'In Work') || (editItem.ChallengeMainCtrl.editItem.status === 'New')">
         <button class="btn btn-primary" type="button" ng-click="editItem.ChallengeMainCtrl.cancelEditItem()">Cancel</button>
         <button class="btn btn-primary" type="button" ng-click="editItem.ChallengeMainCtrl.registerEditItem()">Save</button>
     </div>
-    <div class="modal-footer" ng-if="(editItem.ChallengeMainCtrl.editItem.status !== 'In Work')">
+    <div class="modal-footer" ng-if="(editItem.ChallengeMainCtrl.editItem.status !== 'In Work') && (editItem.ChallengeMainCtrl.editItem.status !== 'New')">
         <button class="btn btn-primary" type="button" ng-click="editItem.ChallengeMainCtrl.closeEditItem()">Close</button>
     </div>
 </div>
