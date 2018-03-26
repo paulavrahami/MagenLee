@@ -38,7 +38,7 @@ angular
             IN_WORK:    'In Work',
             AVAILABLE:  'Available',
             ASSIGNED:   'Assigned',
-            TERMINATED: 'Canceled'
+            CANCELED: 'Canceled'
         },
         ITEM_AUTHOR_TYPE : {
             RECRUITER:    'Recruiter',
@@ -146,7 +146,7 @@ angular
             VERIFIED:   'glyphicon glyphicon-thumbs-up'
         },
         ITEM_STATUS : {
-            TERMINATED: 'glyphicon glyphicon-trash',
+            CANCELED: 'glyphicon glyphicon-trash',
             NEW:        'glyphicon glyphicon-ok',
             IN_WORK:    'glyphicon glyphicon-cutlery',
             AVAILABLE:  'glyphicon glyphicon-play',

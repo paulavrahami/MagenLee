@@ -13,19 +13,17 @@ angular
         vm.animationsEnabled = true;
         vm.isViewThumbnails  = true;
         vm.selectedStatus    = undefined;
-        vm.orderBy           = 'positionName';
+        vm.orderBy           = 'skill';
         vm.createChallengeInd = false;
         vm.ENUM = ENUM;
         vm.MAP = MAP;
         vm.complexity = "";
         vm.complexityArray = [ENUM.EXPERIENCE.up1, ENUM.EXPERIENCE.up2, ENUM.EXPERIENCE.up3, ENUM.EXPERIENCE.up4];
-        vm.itemsOrderArray = [ENUM.AUDITION_ORDER.SEQUEL]; //ENUM.AUDITION_ORDER.RANDOM,
         vm.timeOffset = 0;
 
 
         vm.dependency = new Deps.Dependency();
 
-        vm.auditionGenerationOption = false;
         vm.addChallengeOption = false;
         vm.createChallengeOption = false;
 
@@ -208,7 +206,7 @@ angular
                 else {
                     conditions = {$and: [
                         {authorId: Meteor.user()._id},
-                        {$or:[{status: {$ne: ENUM.ITEM_STATUS.TERMINATED},status: {$ne: ENUM.ITEM_STATUS.NEW}}]}
+                        {$or:[{status: {$ne: ENUM.ITEM_STATUS.CANCELED},status: {$ne: ENUM.ITEM_STATUS.NEW}}]}
                     ]};
                 }
                 // conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
@@ -625,14 +623,14 @@ angular
         vm.deleteItem = function (itemArg){
 
             $UserAlerts.prompt(
-                'Are you sure?',
+                'Are you sure you want to delete the challenge?',
                 ENUM.ALERT.INFO,
                 true,
                 function () {
                     let item = angular.copy(itemArg);
                     let tempId   = item._id;
 
-                    item.status     = ENUM.ITEM_STATUS.TERMINATED;
+                    item.status     = ENUM.ITEM_STATUS.CANCELED;
 
                     delete item._id;
                     Items.update({_id: tempId},{$set: item});
@@ -645,7 +643,7 @@ angular
         vm.allowItem = function (itemArg){
 
             $UserAlerts.prompt(
-                'Are you sure?',
+                'Are you sure you want to publish the Challenge?',
                 ENUM.ALERT.INFO,
                 true,
                 function () {
@@ -662,30 +660,7 @@ angular
             });
         };
 
-        /**
-         * @desc undelete the campaign by changing its status;
-         * @param campaignArg
-         */
-        vm.undeleteCampaign = function (campaignArg) {
-            $UserAlerts.prompt(
-                'Are you sure?',
-                ENUM.ALERT.INFO,
-                true,
-                function () {
-                    let campaign = angular.copy(campaignArg);
-                    let tempId   = campaign._id;
 
-                    campaign.status     = ENUM.CAMPAIGN_STATUS.IN_WORK;
-                    campaign.skills     = angular.copy(campaign.skills);
-                    campaign.emailList  = angular.copy(campaign.emailList);
-
-                    delete campaign._id;
-                    Campaigns.update({_id: tempId},{$set: campaign});
-
-                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETE, 'Campaign [' + campaign.num + '] Deleted');
-                    vm.changeSelectedStatus(vm.selectedStatus);
-                });
-        };
 
                 /**
          * @desc The pseudo audition is used to display all current templates;
