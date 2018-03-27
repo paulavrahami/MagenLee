@@ -830,6 +830,11 @@ angular
             };
         };
 
+        vm.updateEmployedInfo = function (applicationArg) {
+            applicationArg.feedbackEmpolyedReason = "";
+            applicationArg.feedbackEmpolyedReasonDate = "";
+        };
+
         vm.changeSelectedFilter(vm.selectedFilter);
 
     });
