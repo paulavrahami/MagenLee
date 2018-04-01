@@ -306,12 +306,15 @@
                              
                              <div class="col-md-3">
 
+                            
+
                                  <!-- Skills -->
                                  <div class="form-group">
                                          <label for="inputTalentSkill1">Skill</label>
                                          <input type="text" 
                                                  ng-model="vm.newTalentRegister.profile.skill1" 
                                                  name="skill1"
+                                                 uib-typeahead="skill.name for skill in vm.skills | filter:$viewValue | limitTo:8"
                                                  class="form-control " 
                                                  placeholder="" 
                                                  required>

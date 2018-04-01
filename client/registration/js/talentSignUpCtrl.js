@@ -6,7 +6,8 @@ angular
 
         let vm = this;
 
-        $reactive(vm).attach($scope);
+        let reactiveContext = $reactive(vm).attach($scope);
+        // $reactive(vm).attach($scope);
         vm.talentType = $stateParams.type;
         vm.dependency = new Deps.Dependency();
         vm.newTalentRegister = {};
@@ -17,6 +18,8 @@ angular
         vm.talent = {};
         vm.userNameInd = false;
         vm.currentDate = new Date();
+        vm.ENUM = ENUM
+        vm.skills = {};
 
         // Always load the web page with no need to scroll up
         $(document).ready(function(){
@@ -24,6 +27,54 @@ angular
         });
 
         vm.currentUpload = new ReactiveVar(false);
+
+        function doSubscription () {
+      
+
+                reactiveContext.subscribe('skills');
+        }
+
+        
+        vm.helpers({
+        
+            skills () {
+              vm.dependency.depend();
+              doSubscription ();
+    
+              (new Promise((resolve, reject) => {
+                let skills;
+                vm.skillname = [];
+                let conditions = {};
+                conditions = {"status": ENUM.SKILL_STATUS.ACTIVE};
+    
+                Meteor.call('skills.getSkills', conditions, (err, res) => {
+                    if (err) {
+                        reject();
+                    } else {
+                        resolve(res);
+                    }
+                });
+            })).then(function(results){
+                vm.skills = results;
+                
+                vm.dependency.changed();
+            }).catch(function() {
+                vm.skills = [];
+            });
+
+            
+            
+            // for  (let z = 0 ; z < vm.skills.length ; z++) {
+            //     if (vm.skills[z].name){
+            //         vm.skillsName[z] = vm.skills[z].name;
+            //     }
+            // };
+            
+                                  
+              return vm.skills;
+          }
+        });
+
 
         /**
          * @desc Show a dialog with the error;
