@@ -22,7 +22,12 @@ angular
         auditionEdit.showCtsAreaAddChallenge = false;
         auditionEdit.showCtsAreaCreateChallenge = false;
 
+        auditionEdit.automaticGeneration = false;
+
+        auditionEdit.tbdFeature = true;
+
         auditionEdit.states = {};
+        
         auditionEdit.setConfiguration = function (itemIdArg, configuratonArg) {
 
         };
@@ -681,23 +686,53 @@ angular
                         return
                     };
                     if (!auditionEdit.editItem.content.answers || !auditionEdit.editItem.content.results) {
-                        showErrorMessage("The challenge's answers and results should be defined");
+                        showErrorMessage("The challenge's answers and scores should be defined");
                         return;
                     };
-                    if (
-                        auditionEdit.editItem.content.answers.length !== auditionEdit.editItem.content.results.length) {
-                        showErrorMessage("The challenge's number of answers and results should match");
+                    if (auditionEdit.editItem.content.answers.length !== auditionEdit.editItem.content.results.length) {
+                        showErrorMessage("The challenge's number of answers and scores should match");
                         return;
                     };
                     for (i=0; i < auditionEdit.editItem.content.results.length; i++) {
+                        if ((auditionEdit.editItem.content.answers[i] === "") && (auditionEdit.editItem.content.results[i] === "")) {
+                            showErrorMessage("The challenge can not have an empty answer");
+                            return;
+                        };
+                        if ((auditionEdit.editItem.content.answers[i] === "") && (auditionEdit.editItem.content.results[i] !== "")) {
+                            showErrorMessage("The challenge can not have an empty answer");
+                            return;
+                        };
+                        if ((auditionEdit.editItem.content.answers[i] !== "") && (auditionEdit.editItem.content.results[i] === "")) {
+                            showErrorMessage("All answers should be defined with score");
+                            return;
+                        };
                         if (auditionEdit.editItem.content.results[i] > 100) {
-                            showErrorMessage("Answer's result can not be greater than 100");
+                            showErrorMessage("Answer's score can not be greater than 100");
+                            return;
+                        };
+                        if (auditionEdit.editItem.content.results[i] < 0) {
+                            showErrorMessage("Answer's score can not be less than 0");
                             return;
                         };
                     };
+                    let answer100 = 0;
+                    for (i=0; i < auditionEdit.editItem.content.results.length; i++) {
+                        if (auditionEdit.editItem.content.results[i] === 100) {
+                            answer100++;
+                        };
+                    };
+                    if (answer100 === 0) {
+                        showErrorMessage("An answer with a 100 score should be defined");
+                        return;
+                    }
+                    if (answer100 > 1) {
+                        showErrorMessage("Only one answer should have a 100 score");
+                        return;
+                    }
                     break;
 
                 case "5814b536e288e1a685c7a451" :
+                    console.log("dummy")
                     if (!auditionEdit.editItem.content.question) {
                         showErrorMessage("The challenge's question should be defined");
                         return
@@ -716,9 +751,12 @@ angular
                         showErrorMessage("Button's score can not be greater than 100");
                         return;
                     };
-                    if ((auditionEdit.editItem.content['1st Button Score'] !== 100) &&
-                        (auditionEdit.editItem.content['2nd Button Score'] !== 100)) {
-                        showErrorMessage("At leaset one button's score should be equal to 100");
+                    if ((auditionEdit.editItem.content['1st Button Score'] === 100) && (auditionEdit.editItem.content['2nd Button Score'] === 100)) {
+                        showErrorMessage("Only one button's score should be equal to 100");
+                        return;
+                    };
+                    if ((auditionEdit.editItem.content['1st Button Score'] !== 100) && (auditionEdit.editItem.content['2nd Button Score'] !== 100)) {
+                        showErrorMessage("At least one button's score should be equal to 100");
                         return;
                     };
                     break;
@@ -833,22 +871,28 @@ angular
          * @desc Add an element to the content of an item build dynamically;
          * @param keyArg
          */
-        auditionEdit.addToContentArray = function(keyArg) {
+        auditionEdit.addToContentArray = function(keyArg1, keyArg2) {
 
-            if (!auditionEdit.editItem.content[keyArg]) {
-                auditionEdit.editItem.content[keyArg] = [];
+            if (!auditionEdit.editItem.content[keyArg1]) {
+                auditionEdit.editItem.content[keyArg1] = [];
+                auditionEdit.editItem.content[keyArg2] = [];
             }
-            auditionEdit.editItem.content[keyArg].push('');
+            auditionEdit.editItem.content[keyArg1].push('');
+            auditionEdit.editItem.content[keyArg2].push('');
             auditionEdit.saveEditItem();
         };
         /**
          * @desc Remove the last element from the content of an item build dynamically;
          * @param keyArg
          */
-        auditionEdit.removeFromContentArray = function(keyArg) {
+        auditionEdit.removeFromContentArray = function(keyArg1, keyArg2) {
 
-            if (auditionEdit.editItem.content[keyArg]) {
-                auditionEdit.editItem.content[keyArg].splice(-1);
+            if (auditionEdit.editItem.content[keyArg1]) {
+                auditionEdit.editItem.content[keyArg1].splice(-1);
+                auditionEdit.saveEditItem();
+            }
+            if (auditionEdit.editItem.content[keyArg2]) {
+                auditionEdit.editItem.content[keyArg2].splice(-1);
                 auditionEdit.saveEditItem();
             }
         };
@@ -1474,5 +1518,38 @@ angular
             });
         };
 
+        auditionEdit.correctAnswer = function (answerArg) {
+            // Clear previous defined correct answer
+            if (auditionEdit.editItem.content['1st Answer'] && auditionEdit.editItem.content['1st Answer'].correct) {
+                auditionEdit.editItem.content['1st Answer'].correct = false;
+            };
+            if (auditionEdit.editItem.content['2nd Answer'] && auditionEdit.editItem.content['2nd Answer'].correct) {
+                auditionEdit.editItem.content['2nd Answer'].correct = false;
+            };
+            if (auditionEdit.editItem.content['3rd Answer'] && auditionEdit.editItem.content['3rd Answer'].correct) {
+                auditionEdit.editItem.content['3rd Answer'].correct = false;
+            };
+            if (auditionEdit.editItem.content['4th Answer'] && auditionEdit.editItem.content['4th Answer'].correct) {
+                auditionEdit.editItem.content['4th Answer'].correct = false;
+            };
+            // Set the correct answer
+            switch (answerArg) {
+                case 1:
+                    auditionEdit.editItem.content['1st Answer'].correct = true;
+                    break;
+                case 2:
+                    auditionEdit.editItem.content['2nd Answer'].correct = true;
+                    break;
+                case 3:
+                    auditionEdit.editItem.content['3rd Answer'].correct = true;
+                    break;
+                case 4:
+                    auditionEdit.editItem.content['4th Answer'].correct = true;
+                    break;
+                default:
+                    break;
+            };
+            auditionEdit.saveEditItem();
+        };
              
     });
