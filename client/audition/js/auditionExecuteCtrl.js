@@ -220,7 +220,7 @@ angular
                         if (applicationRec.states.itemsContent[contentIndex].state.validity === 100) {
                             vm.totalsPerItem[index].totalCorrect++;
                         } else {
-                            if ((applicationRec.states.itemsContent[contentIndex].state.validity === 0) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
+                            if ((applicationRec.states.itemsContent[contentIndex].state.validity < 100) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
                             vm.totalsPerItem[index].totalWrong++;
                             } else {
                                 if (applicationRec.states.itemsContent[contentIndex].state.clicks === 0) {
@@ -236,18 +236,24 @@ angular
         };
 
         vm.displayItemTotalsCorrect = function (itemKey) {
-            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
-            return vm.totalsPerItem[index].totalCorrect;
+            if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS) {
+                index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+                return vm.totalsPerItem[index].totalCorrect;
+            };
         };
 
         vm.displayItemTotalsWrong = function (itemKey) {
-            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
-            return vm.totalsPerItem[index].totalWrong;
+            if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS) {
+                index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+                return vm.totalsPerItem[index].totalWrong;
+            };
         };
 
         vm.displayItemTotalsNotAnswered = function (itemKey) {
-            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
-            return vm.totalsPerItem[index].totalNotAnswered;
+            if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS) {
+                index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+                return vm.totalsPerItem[index].totalNotAnswered;
+            };
         };
         
         vm.correctAnswer = function (itemKey) {
@@ -255,7 +261,7 @@ angular
                 if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 100) {
                     return true;
                 } else {
-                    if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 0) {
+                    if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity < 100) {
                         return false;
                     };
                 };
