@@ -589,7 +589,7 @@ angular
                     if (applicationRec.states.itemsContent[contentIndex].state.validity === 100) {
                         totalsPerItem[index].totalCorrect++;
                     } else {
-                        if ((applicationRec.states.itemsContent[contentIndex].state.validity === 0) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
+                        if ((applicationRec.states.itemsContent[contentIndex].state.validity < 100) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
                         totalsPerItem[index].totalWrong++;
                         } else {
                             if (applicationRec.states.itemsContent[contentIndex].state.clicks === 0) {
