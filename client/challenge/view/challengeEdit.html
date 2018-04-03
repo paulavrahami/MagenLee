@@ -1,0 +1,798 @@
+
+<div class="modal-content" ng-if="challengeEdit.subsciptionOk">
+    <!-- Modal Header -->
+    <div class="modal-header">
+        <div class="row" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">
+            <div class="col-md-6">
+                <h3 class="modal-title">View Challenge ({{challengeEdit.editItem.status}})</h3>
+            </div>
+            <div>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal" ng-click="challengeEdit.closeEditItem()">
+                    <span aria-hidden="false">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="row" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')">
+            <div class="col-md-6">
+                <h3 class="modal-title">Add Challenge ({{challengeEdit.editItem.status}})</h3>
+            </div>
+            <div>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal" ng-click="challengeEdit.cancelEditItem()">
+                    <span aria-hidden="false">&times;</span>
+                </button>
+            </div>
+        </div> 
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+        <!-- Challenge Header Information -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="" class="required">Skill</label>
+                    <select
+                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')"
+                        class="form-control"
+                        ng-model="challengeEdit.editItem.skill"
+                        ng-change="challengeEdit.challengeEdit.()">
+                        <!-- ng-options="skill.type for skill in challengeEdit.skills"> -->
+                            <!-- <option value=""></option> -->
+                            <option ng-repeat="skill in challengeEdit.skills" value="{{skill.type}}">{{skill.type}}</option>
+                    </select>
+                    <input
+                        ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                        ng-model="challengeEdit.editItem.skill"
+                        class="form-control"
+                        ng-disabled="true">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="" class="required">Complexity</label>
+                    <select
+                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')"
+                        ng-model="challengeEdit.editItem.complexity"
+                        class="form-control"
+                        ng-change=" "
+                        ng-options="complexity as complexity for complexity in challengeEdit.complexityArray">
+                        <!-- <option value=""></option> -->
+                    </select>
+                    <input
+                        ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                        ng-model="challengeEdit.editItem.complexity"
+                        class="form-control"
+                        ng-disabled="true">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Score</label>
+                    <input 
+                        class="form-control"
+                        type="number"
+                        readonly
+                        value="{{challengeEdit.maxScore | number:2}}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="required">Duration (hh:mm:ss)</label>
+                    <time-select
+                        ng-model="challengeEdit.editItem"
+                        property="itemDuration"
+                        ng-change=" "
+                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">
+                    </time-select>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+        <!-- Challenge Detail -->
+        <!-- *** Challenge screen HARD-CODED generation -->
+        <div class="row" ng-if="!challengeEdit.automaticGeneration">
+
+            <!-- Multi-choice (Regular) template -->
+            <div ng-if="challengeEdit.editTemplate._id === '57f7a8406f903fc2b6aae39a'">
+                <!-- TABS Header -->
+                <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="#TMP001-challenge">Challenge</a></li>
+                  <li><a data-toggle="tab" href="#TMP001-usage">Usage</a></li>
+                  <button class="btn btn-info preview-button" type="button" ng-click="challengeEdit.previewChallenge()" ng-disabled="challengeEdit.editItem.status === 'New' || challengeEdit.tbdFeature">Preview</button>
+                  <span class="template-info">{{challengeEdit.editTemplate.name}} Template</span>
+                </ul>
+                <br>
+                <div class="tab-content">
+                    <!-- MAIN TAB Content - Question -->
+                    <div id="TMP001-challenge" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Question -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="required">Question</label>
+                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['question']"
+                                                ng-change=" "
+                                                placeholder=""></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Answer 1 -->
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="answer-checkbox">
+                                            <input type="checkbox" name="correct1" ng-model="challengeEdit.editItem.content['1st Answer'].correct" ng-click="challengeEdit.correctAnswer(1)">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 answer">
+                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                            class="form-control"
+                                            ng-model="challengeEdit.editItem.content['1st Answer'].answer"
+                                            ng-change=" "
+                                            ng-class="challengeEdit.editItem.content['1st Answer'].correct === true ? 'check-correct-answer' : ''"
+                                            placeholder="1st Answer"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Answer 2 -->
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="answer-checkbox">
+                                            <input type="checkbox" name="correct1" ng-model="challengeEdit.editItem.content['2nd Answer'].correct" ng-click="challengeEdit.correctAnswer(2)">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 answer">
+                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            class="form-control"
+                                            ng-model="challengeEdit.editItem.content['2nd Answer'].answer"
+                                            ng-change=" "
+                                            ng-class="challengeEdit.editItem.content['2nd Answer'].correct === true ? 'check-correct-answer' : ''"
+                                            placeholder="2nd Answer"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Answer 3 -->
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="answer-checkbox">
+                                            <input type="checkbox" name="correct1" ng-model="challengeEdit.editItem.content['3rd Answer'].correct" ng-click="challengeEdit.correctAnswer(3)">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 answer">
+                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            class="form-control"
+                                            ng-model="challengeEdit.editItem.content['3rd Answer'].answer"
+                                            ng-change=" "
+                                            ng-class="challengeEdit.editItem.content['3rd Answer'].correct === true ? 'check-correct-answer' : ''"
+                                            placeholder="3rd Answer"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Answer 4 -->
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="answer-checkbox">
+                                            <input type="checkbox" name="correct1" ng-model="challengeEdit.editItem.content['4th Answer'].correct" ng-click="challengeEdit.correctAnswer(4)">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 answer">
+                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            class="form-control"
+                                            ng-model="challengeEdit.editItem.content['4th Answer'].answer"
+                                            ng-change=" "
+                                            ng-class="challengeEdit.editItem.content['4th Answer'].correct === true ? 'check-correct-answer' : ''"
+                                            placeholder="4th Answer"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Hint -->
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="inputRecruiterAddress">Hint</label>
+                                        <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            class="form-control"
+                                            ng-model="challengeEdit.editItem.content['hint']"
+                                            ng-change=" "
+                                            placeholder="Will be presented to the talent during the audition"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
+                                <ul class="nav nav-tabs">
+                                  <li class="active"><a data-toggle="tab" href="#TMP003-text">Text</a></li>
+                                  <li><a data-toggle="tab" href="#TMP003-image">Image</a></li>
+                                  <li><a data-toggle="tab" href="#TMP003-video">Video</a></li>
+                                </ul>
+                                <br>
+                                <div class="tab-content">
+                                    <!-- TAB Content - Text -->
+                                    <div id="TMP003-text" class="tab-pane fade in active">
+                                        <!-- Statement -->
+                                        <div class="form-group">
+                                            <label>Free Text</label>
+                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['statement']"
+                                                ng-change=" "
+                                                placeholder="A free text for which the question relates to, e.g., statement, fact, lines of code"></textarea>
+                                        </div>
+                                        <!-- Statement - Position -->
+                                        <div class="form-group">
+                                            <label>Float to Right</label>
+                                            <input
+                                                type="checkbox"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-model="challengeEdit.editItem.content['float Right']"
+                                                ng-change=" "
+                                                placeholder=""/>
+                                        </div>
+                                    </div>
+                                    <!-- TAB Content - Image -->
+                                    <div id="TMP003-image" class="tab-pane fade">
+                                        <!-- Image -->
+                                        <div class="form-group">
+                                            <label>Image</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-model="challengeEdit.editItem.content['image']"
+                                                ng-change=" "
+                                                placeholder="Image URL">
+                                        </div>
+                                        <!-- Image - Size/Width -->
+                                        <div class="form-group">
+                                            <label>Width</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-model="challengeEdit.editItem.content['image Width']"
+                                                ng-change=" "
+                                                placeholder="The display area in pixels">
+                                        </div>
+                                        <!-- Image - Size/Height -->
+                                        <div class="form-group">
+                                            <label>Height</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-model="challengeEdit.editItem.content['image Height']"
+                                                ng-change=" "
+                                                placeholder="The display area in pixels">
+                                        </div>
+                                        <!-- Image - Position -->
+                                        <div class="form-group">
+                                            <label>Float to Right</label>
+                                            <input
+                                                type="checkbox"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-model="challengeEdit.editItem.content['image Float Right']"
+                                                ng-change=" "
+                                                placeholder=""/>
+                                        </div>
+                                    </div>
+                                    <!-- TAB Content - Video -->
+                                    <div id="TMP003-video" class="tab-pane fade">
+                                        <p>Coming Soon...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- MAIN TAB Content - Usage -->
+                    <div id="TMP001-usage" class="tab-pane fade">
+                        <div class="usage-tab-content">
+                            <p>Coming Soon...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi-choice (Reduced Score) template -->
+            <div ng-if="challengeEdit.editTemplate._id === '57f7a8406f903fc2b6aae49a'">
+                <!-- TABS Header -->
+                <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="#TMP002-challenge">Challenge</a></li>
+                  <li><a data-toggle="tab" href="#TMP002-usage">Usage</a></li>
+                  <button class="btn btn-info preview-button" type="button" ng-click="challengeEdit.previewChallenge()" ng-disabled="challengeEdit.editItem.status === 'New' || challengeEdit.tbdFeature">Preview</button>
+                  <span class="template-info">{{challengeEdit.editTemplate.name}} Template</span>
+                </ul>
+                <br>
+                <div class="tab-content">
+                    <!-- MAIN TAB Content - Question -->
+                    <div id="TMP002-challenge" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Question -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="required">Question</label>
+                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['question']"
+                                                ng-change=" "
+                                                placeholder=""></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Answers - the dynamic answers array -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="required">Answers</label>
+                                            <h5>Select the Add/Remove buttons to update the answers and their scores</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-repeat="value in challengeEdit.editItem.content.answers track by $index">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                            class="form-control"
+                                            ng-model="challengeEdit.editItem.content.answers[$index]"
+                                            ng-change=" "
+                                            ng-class="challengeEdit.editItem.content.results[$index] === 100 ? 'check-correct-answer' : ''"
+                                            placeholder="Answer {{$index+1}}"></textarea>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            type="number"
+                                            min="0"
+                                            max="100"
+                                            class="form-control score-field"
+                                            ng-model="challengeEdit.editItem.content.results[$index]"
+                                            ng-change=" "
+                                            ng-class="challengeEdit.editItem.content.results[$index] === 100 ? 'check-correct-answer' : ''"
+                                            placeholder="">
+                                        </div>
+                                    </div>
+                                </div>                              
+                                <div class="row add-remove-buttons">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addToContentArray('answers', 'results')" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Add</button>
+                                        
+                                        <button class="btn btn-sm" ng-click="challengeEdit.removeFromContentArray('answers', 'results')" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Remove</button>
+                                    </div>
+                                </div>
+                                <!-- Hint -->
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="inputRecruiterAddress">Hint</label>
+                                        <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                            class="form-control"
+                                            ng-model="challengeEdit.editItem.content['hint']"
+                                            ng-change=" "
+                                            placeholder="Will be presented to the talent during the audition"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
+                                <ul class="nav nav-tabs">
+                                  <li class="active"><a data-toggle="tab" href="#TMP003-text">Text</a></li>
+                                  <li><a data-toggle="tab" href="#TMP003-image">Image</a></li>
+                                  <li><a data-toggle="tab" href="#TMP003-video">Video</a></li>
+                                </ul>
+                                <br>
+                                <div class="tab-content">
+                                    <!-- TAB Content - Text -->
+                                    <div id="TMP003-text" class="tab-pane fade in active">
+                                        <!-- Statement -->
+                                        <div class="form-group">
+                                            <label>Free Text</label>
+                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['statement']"
+                                                ng-change=" "
+                                                placeholder="A free text for which the question relates to, e.g., statement, fact, lines of code"></textarea>
+                                        </div>
+                                        <!-- Statement - Position -->
+                                        <div class="form-group">
+                                            <label>Float to Right</label>
+                                            <input
+                                                type="checkbox"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['float Right']"
+                                                ng-change=" "
+                                                placeholder=""/>
+                                        </div>
+                                    </div>
+                                    <!-- TAB Content - Image -->
+                                    <div id="TMP003-image" class="tab-pane fade">
+                                        <!-- Image -->
+                                        <div class="form-group">
+                                            <label>Image</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['image']"
+                                                ng-change=" "
+                                                placeholder="Image URL">
+                                        </div>
+                                        <!-- Image - Size/Width -->
+                                        <div class="form-group">
+                                            <label>Width</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['image Width']"
+                                                ng-change=" "
+                                                placeholder="The display area in pixels">
+                                        </div>
+                                        <!-- Image - Size/Height -->
+                                        <div class="form-group">
+                                            <label>Height</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['image Height']"
+                                                ng-change=" "
+                                                placeholder="The display area in pixels">
+                                        </div>
+                                        <!-- Image - Position -->
+                                        <div class="form-group">
+                                            <label>Float to Right</label>
+                                            <input
+                                                type="checkbox"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['image Float Right']"
+                                                ng-change=" "
+                                                placeholder=""/>
+                                        </div>
+                                    </div>
+                                    <!-- TAB Content - Video -->
+                                    <div id="TMP003-video" class="tab-pane fade">
+                                        <p>Coming Soon...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- MAIN TAB Content - Usage -->
+                    <div id="TMP002-usage" class="tab-pane fade">
+                        <div class="usage-tab-content">
+                            <p>Coming Soon...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- True/False template -->
+            <div ng-if="challengeEdit.editTemplate._id === '5814b536e288e1a685c7a451'">
+                <!-- TABS Header -->
+                <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="#TMP003-challenge">Challenge</a></li>
+                  <li><a data-toggle="tab" href="#TMP003-usage">Usage</a></li>
+                  <button class="btn btn-info preview-button" type="button" ng-click="challengeEdit.previewChallenge()" ng-disabled="challengeEdit.editItem.status === 'New' || challengeEdit.tbdFeature">Preview</button>
+                  <span class="template-info">{{challengeEdit.editTemplate.name}} Template</span>
+                </ul>
+                <br>
+                <div class="tab-content">
+                    <!-- MAIN TAB Content - Question -->
+                    <div id="TMP003-challenge" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Question -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="required">Question</label>
+                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['question']"
+                                                ng-change=" "
+                                                placeholder=""></textarea>
+                                        </div>
+                                    </div>
+                                </div>         
+                                <!-- 1st Button -->
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label class="required">1st Button</label>
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                type="text"
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['1st Button Text']"
+                                                ng-change=" "
+                                                placeholder="e.g., True">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="required">Score</label>
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                type="number"
+                                                min="0"
+                                                max="100"
+                                                class="form-control score-field"
+                                                ng-model="challengeEdit.editItem.content['1st Button Score']"
+                                                ng-change=" "
+                                                placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 2nd Button -->
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label class="required">2nd Button</label>
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                type="text"
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['2nd Button Text']"
+                                                ng-change=" "
+                                                placeholder="e.g., False">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="required">Score</label>
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                type="number"
+                                                min="0"
+                                                max="100"
+                                                class="form-control score-field"
+                                                ng-model="challengeEdit.editItem.content['2nd Button Score']"
+                                                ng-change=" "
+                                                placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Hint -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Hint</label>
+                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['hint']"
+                                                ng-change=" "
+                                                placeholder="Will be presented to the talent during the audition"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
+                                <ul class="nav nav-tabs">
+                                  <li class="active"><a data-toggle="tab" href="#TMP003-text">Text</a></li>
+                                  <li><a data-toggle="tab" href="#TMP003-image">Image</a></li>
+                                  <li><a data-toggle="tab" href="#TMP003-video">Video</a></li>
+                                </ul>
+                                <br>
+                                <div class="tab-content">
+                                    <!-- TAB Content - Text -->
+                                    <div id="TMP003-text" class="tab-pane fade in active">
+                                        <!-- Statement -->
+                                        <div class="form-group">
+                                            <label>Free Text</label>
+                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                class="form-control"
+                                                ng-model="challengeEdit.editItem.content['statement']"
+                                                ng-change=" "
+                                                placeholder="A free text for which the question relates to, e.g., statement, fact, lines of code"></textarea>
+                                        </div>
+                                        <!-- Statement - Position -->
+                                        <div class="form-group">
+                                            <label>Float to Right</label>
+                                            <input
+                                                type="checkbox"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['float Right']"
+                                                ng-change=" "
+                                                placeholder=""/>
+                                        </div>
+                                    </div>
+                                    <!-- TAB Content - Image -->
+                                    <div id="TMP003-image" class="tab-pane fade">
+                                        <!-- Image -->
+                                        <div class="form-group">
+                                            <label>Image</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['image']"
+                                                ng-change=" "
+                                                placeholder="Image URL">
+                                        </div>
+                                        <!-- Image - Size/Width -->
+                                        <div class="form-group">
+                                            <label>Width</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['image Width']"
+                                                ng-change=" "
+                                                placeholder="The display area in pixels">
+                                        </div>
+                                        <!-- Image - Size/Height -->
+                                        <div class="form-group">
+                                            <label>Height</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['image Height']"
+                                                ng-change=" "
+                                                placeholder="The display area in pixels">
+                                        </div>
+                                        <!-- Image - Position -->
+                                        <div class="form-group">
+                                            <label>Float to Right</label>
+                                            <input
+                                                type="checkbox"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-model="challengeEdit.editItem.content['image Float Right']"
+                                                ng-change=" "
+                                                placeholder=""/>
+                                        </div>
+                                    </div>
+                                    <!-- TAB Content - Video -->
+                                    <div id="TMP003-video" class="tab-pane fade">
+                                        <p>Coming Soon...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- MAIN TAB Content - Usage -->
+                    <div id="TMP003-usage" class="tab-pane fade">
+                        <div class="usage-tab-content">
+                            <p>Coming Soon...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- *** Challenge screen AUTOMATIC generation (FOR FUTURE IMPLEMENTATION) -->
+        <form class="form" ng-if="challengeEdit.automaticGeneration">
+            <div class="row col-md-12">
+                <div ng-repeat="(itemKey, itemValue) in challengeEdit.editTemplate.dataStructure.structure">
+                    <!-- Boolean -->
+                    <div class="form-group" ng-if="challengeEdit.isBoolean(itemValue)">
+                        <lable>{{_.upperFirst(itemKey)}}</lable>
+                        <input 
+                            type="checkbox"
+                            ng-attr-id="{{itemKey}}"
+                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                            ng-model="challengeEdit.editItem.content[itemKey]"
+                            ng-change=" "/>
+                    </div>
+                    <!-- String (implemented as textarea) -->
+                    <div class="form-group" ng-if="challengeEdit.isString(itemValue)">
+                        <lable><strong>{{_.upperFirst(itemKey)}}</strong></lable>
+                        <textarea
+                            class="form-control"
+                            ng-attr-id="{{itemKey}}"
+                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                            ng-model="challengeEdit.editItem.content[itemKey]"
+                            ng-change=" "></textarea>
+                    </div>
+                    <!-- Number -->
+                    <div class="form-group" ng-if="challengeEdit.isNumber(itemValue)">
+                        <lable><strong>{{_.upperFirst(itemKey)}}</strong></lable>
+                        <input
+                            class="form-control"
+                            ng-attr-id="{{itemKey}}"
+                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                            type="number"
+                            ng-model="challengeEdit.editItem.content[itemKey]"
+                            ng-change=" "/>
+                    </div>
+                    <!-- Array -->
+                    <div ng-if="challengeEdit.isArray(itemValue)">
+                        <h5><strong>{{_.upperFirst(itemKey)}}</strong></h5>
+                        <div class="form-group" ng-repeat="value in challengeEdit.editItem.content[itemKey] track by $index">
+                            <!-- <div class="form-group"> -->
+                            <lable><strong>{{$index + 1}}</strong></lable>
+                            <div ng-if="challengeEdit.isBoolean(itemValue.toString())">
+                                <input 
+                                    type="checkbox"
+                                    class="form-control"
+                                    ng-attr-id="{{itemKey}}_{{$index}}"
+                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                    ng-model="challengeEdit.editItem.content[itemKey][$index]"
+                                    ng-change=" "/>
+                                <!-- <div class="remove btn btn-default"
+                                    ng-if="($index === challengeEdit.editItem.content[itemKey].length-1) && !challengeEdit.externalDisabledTriger"
+                                    ng-click="challengeEdit.removeFromContentArray(itemKey)">Remove
+                                </div> -->
+                            </div>
+                            <div ng-if="challengeEdit.isString(itemValue.toString())">
+                                <textarea
+                                    class="form-control"
+                                    ng-attr-id="{{itemKey}}_{{$index}}"
+                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                    ng-model="challengeEdit.editItem.content[itemKey][$index]"
+                                    ng-change=" "></textarea>
+                                <!-- <div class="remove-btn btn btn-info btn-sm"
+                                    ng-if="($index === challengeEdit.editItem.content[itemKey].length-1) && !challengeEdit.externalDisabledTriger"
+                                    ng-click="challengeEdit.removeFromContentArray(itemKey)">Remove
+                                </div> -->
+                            </div>
+                            <div ng-if="challengeEdit.isNumber(itemValue.toString())">
+                                <input
+                                    class="form-control"
+                                    ng-attr-id="{{itemKey}}_{{$index}}"
+                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                    type="number"
+                                    ng-model="challengeEdit.editItem.content[itemKey][$index]"
+                                    ng-change=" "/>
+                                <!-- <div class="remove btn btn-default"
+                                    ng-if="($index === challengeEdit.editItem.content[itemKey].length-1) && !challengeEdit.externalDisabledTriger"
+                                    ng-click="challengeEdit.removeFromContentArray(itemKey)">Remove
+                                </div> -->
+                            <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Array Item action buttons -->
+                    <div ng-if="challengeEdit.isArray(itemValue)">
+                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addToContentArray(itemKey)" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Add</button>
+                        <button class="btn btn-sm" ng-click="challengeEdit.removeFromContentArray(itemKey)" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Remove</button>
+                    </div>
+                    <!-- Object -->
+                    <div ng-if="challengeEdit.isObject(itemValue)" class="is-object">
+                        <div ng-repeat="(itemObjectKey, itemObjectValue) in itemValue">
+                            <div ng-if="challengeEdit.isBoolean(itemObjectValue)" class="object-checkbox">
+                                <div class="form-group">
+                                    <lable>{{_.upperFirst(itemObjectKey)}}</lable>
+                                    <input 
+                                        type="checkbox"
+                                        class="form-control"
+                                        ng-attr-id="{{itemObjectKey}}"
+                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        ng-model="challengeEdit.editItem.content[itemKey][itemObjectKey]"
+                                        ng-change=" "/>
+                                </div>
+                            </div>
+                            <div ng-if="challengeEdit.isString(itemObjectValue)" class="object-textarea">
+                                <div class="form-group">
+                                    <lable><strong>{{_.upperFirst(itemObjectKey)}}</strong></lable>
+                                    <textarea
+                                        class="form-control"
+                                        ng-attr-id="{{itemObjectKey}}"
+                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        ng-model="challengeEdit.editItem.content[itemKey][itemObjectKey]"
+                                        ng-change=" "></textarea>
+                                </div>
+                            </div>
+                            <div ng-if="challengeEdit.isNumber(itemObjectValue)" class="object-number">
+                                <div class="form-group">
+                                    <lable><strong>{{_.upperFirst(itemObjectKey)}}</strong></lable>
+                                    <input
+                                        class="form-control"
+                                        ng-attr-id="{{itemObjectKey}}"
+                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        type="number"
+                                        ng-model="challengeEdit.editItem.content[itemKey][itemObjectKey]"
+                                        ng-change=" "/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')">
+        <button class="btn btn-secondery" type="button" ng-click="challengeEdit.cancelEditItem()">Cancel</button>
+        <button class="btn btn-primary" type="button" ng-click="challengeEdit.registerEditItem()">Save</button>
+    </div>
+    <div class="modal-footer" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">
+        <button class="btn btn-secondery" type="button" ng-click="challengeEdit.closeEditItem()">Close</button>
+    </div>
+</div>
