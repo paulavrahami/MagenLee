@@ -45,6 +45,36 @@ if (Meteor.isServer) {
         },
         {
             "status":"Active",
+            "name": "Modern Design DSP",
+            "description" : "Modern Design DSP",
+            "verificationStatus" : "Approved",
+            "origin" : "Skillera",
+            "control" : {
+                "createDate" : statusDate
+            } 
+        },
+        {
+            "status":"Active",
+            "name": "Embedded Programming",
+            "description" : "Embedded Programming",
+            "verificationStatus" : "Approved",
+            "origin" : "Skillera",
+            "control" : {
+                "createDate" : statusDate
+            } 
+        },
+        {
+            "status":"Active",
+            "name": "Multi Threading",
+            "description" : "Multi Threading",
+            "verificationStatus" : "Approved",
+            "origin" : "Skillera",
+            "control" : {
+                "createDate" : statusDate
+            } 
+        },
+        {
+            "status":"Active",
             "name": "Software Testing",
             "description" : "Software Testing",
             "verificationStatus" : "Approved",

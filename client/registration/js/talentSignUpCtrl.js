@@ -20,6 +20,7 @@ angular
         vm.currentDate = new Date();
         vm.ENUM = ENUM
         vm.skills = {};
+        vm.skill = {};
 
         // Always load the web page with no need to scroll up
         $(document).ready(function(){
@@ -27,6 +28,24 @@ angular
         });
 
         vm.currentUpload = new ReactiveVar(false);
+
+        /**
+         * @desc Show a dialog with the error;
+         * @param msgArg
+         * @param callbackArg
+         */
+        function showErrorMessage(msgArg, callbackArg) {
+            $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true, callbackArg);
+        };
+
+        /**
+         * @desc show a dialog with the message;
+         * @param msgArg
+         * @param callbackArg
+         */
+        function showInfoMessage(msgArg, callbackArg) {
+            $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
+        };
 
         function doSubscription () {
       
@@ -55,44 +74,23 @@ angular
                     }
                 });
             })).then(function(results){
-                vm.skills = results;
+                vm.temp = results;
+                vm.skills = [];
+                for  (let z = 0 ; z < vm.temp.length ; z++) {
+                         if (vm.temp[z].name){
+                             vm.skills[z] = vm.temp[z].name;
+                         }
+                     };
                 
                 vm.dependency.changed();
             }).catch(function() {
                 vm.skills = [];
             });
-
-            
-            
-            // for  (let z = 0 ; z < vm.skills.length ; z++) {
-            //     if (vm.skills[z].name){
-            //         vm.skillsName[z] = vm.skills[z].name;
-            //     }
-            // };
-            
                                   
               return vm.skills;
           }
         });
 
-
-        /**
-         * @desc Show a dialog with the error;
-         * @param msgArg
-         * @param callbackArg
-         */
-        function showErrorMessage(msgArg, callbackArg) {
-            $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true, callbackArg);
-        };
-
-        /**
-         * @desc show a dialog with the message;
-         * @param msgArg
-         * @param callbackArg
-         */
-        function showInfoMessage(msgArg, callbackArg) {
-            $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
-        };
 
 
         // set the Contact Email to the Login Email as default
@@ -175,6 +173,46 @@ angular
 
         };
 
+        
+
+        vm.checkSkills = function (skillsArray,talentId) {
+
+            vm.pendingSkills = '';
+
+            for  (let z = 0 ; z < skillsArray.length ; z++) {
+
+                if (skillsArray[z]){
+                    //Check if the Skill is an active approved skill
+                    skillToCheck = skillsArray[z]
+                    Meteor.call('checkSkillAvailable', skillToCheck, function (err, result) {
+                        if (err) {
+                            alert('There is an error while checking your skills');
+                        } else {
+                            if (result === false) {
+                                //Notify the user for the new skill that are not active which is pending Skillera approval
+                                if (vm.pendingSkills) {
+                                    vm.pendingSkills = vm.pendingSkills + ' ' + skillToCheck;
+                                } else
+                                {
+                                    vm.pendingSkills = skillToCheck
+                                };
+                                //If the skill is not already pending, create a pending skill record
+                                createNewPendingSkill(skillToCheck,talentId);
+                            } else {
+                                
+                            }
+                            callbackArg(null,result);
+                        }
+                        });
+                    
+                };
+            };
+            
+            console.log (vm.pendingSkills);
+        };
+
+        
+
         vm.checkEmail = function (email) {
             Meteor.call('checkIfEmailExists', email, function (err, result) {
               if (err) {
@@ -200,6 +238,50 @@ angular
                 controller: 'ModalTcoCtrl',
                 size: sizeArg
             });
+        };
+
+        createNewPendingSkill = function (skill,talentId) {
+
+            vm.skillPendingFound = false
+            Meteor.call('checkSkillPending', skill, function (err, result) {
+                if (err) {
+                    alert('There is an error while checking your new skills');
+                } else {
+                    if (result === false) {
+                        
+                        //If the skill is not  pending, create a pending skill record
+
+                        vm.skill.status = 'Approved';
+                        vm.skill.name = skill;
+                        vm.skill.verficationStatus = 'Pending';
+                        vm.skill.verficationDate = vm.currentDate;
+                        vm.skill.origin = 'Talent';
+                        vm.skill.originId = talentId;
+
+                        /** Make sure it has control object; */
+                        if (!vm.skill.control) {
+                            vm.skill.control = {
+                                createDate: vm.currentDate
+                            };
+                        };
+                                
+                        let skillRec = angular.copy(vm.skill);
+        
+                        Skills.insert(skillRec, function (errorArg, tempIdArg) {
+                            if (errorArg) {
+                                showErrorMessage(errorArg.message);
+                            } else {
+                                vm.applicationId = tempIdArg;
+                            }
+                        });
+
+                    } else {
+                        
+                    }
+                    callbackArg(null,result);
+                }
+                })
+
         };
 
         vm.handleTalent = function (record) {
@@ -242,6 +324,32 @@ angular
                                     createDate: vm.currentDate
                                 };
                             };
+
+                            vm.skillsToCheck = [];
+                            tempIndex = 0;
+                            if (vm.talent.skill1) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill1;
+                                tempIndex++;
+                            };
+                            if (vm.talent.skill2) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill2;
+                                tempIndex++;
+                            };
+                            if (vm.talent.skill3) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill3;
+                                tempIndex++;
+                            };
+                            if (vm.talent.skill4) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill4;
+                                tempIndex++;
+                            };
+                            if (vm.talent.skill5) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill5;
+                                tempIndex++;
+                            };
+
+                            
+                            
             
                             let talentRec = angular.copy(vm.talent);
             
@@ -250,6 +358,7 @@ angular
                                     showErrorMessage(errorArg.message);
                                 } else {
                                     vm.applicationId = tempIdArg;
+                                    vm.checkSkills(vm.skillsToCheck,vm.applicationId);
                                 }
                             });
             

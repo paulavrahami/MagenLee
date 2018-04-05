@@ -23,29 +23,7 @@ let SkillsAPI = {
             }
         });
     },
-    // getApplicationsSummary (conditions) {
-    //     return new Promise((resolve, reject) => {
-
-    //         conditions = conditions || {};
-
-    //         try {
-    //             let applications = Applications.find(conditions);
-    //             let results = [];
-    //             let applicationRec = {};
-    //             applications.forEach(function (application) {
-    //                 applicationRec = Campaigns.findOne({_id: application.campaignId});
-    //                 application.positionName = applicationRec.positionName;
-    //                 application.companyName = applicationRec.control.companyOwner;
-    //                 results.push(application);
-    //             });
-
-    //             resolve(results);
-    //         }
-    //         catch (error) {
-    //             reject(error);
-    //         }
-    //     });
-    // }
+    
 };
 
 Meteor.methods({
@@ -53,9 +31,14 @@ Meteor.methods({
     'skills.getSkills' (conditions) {
 
         return SkillsAPI.getSkills(conditions);
+    },
+    'checkSkillAvailable': function (skill) {
+        return (Skills.find({$and: [{name: skill},{status: 'Active'},{verificationStatus: 'Approved'}]}, 
+        {limit: 1}).count()>0) ? true : false;
+    },
+    'checkSkillPending': function (skill) {
+        return (Skills.find({$and: [{name: skill},{status: 'Active'},{verificationStatus: 'Pending'}]}, 
+        {limit: 1}).count()>0) ? true : false;
     }
-    // 'applications.getApplicationsSummary' (conditions) {
-        
-    //     return ApplicationsAPI.getApplicationsSummary(conditions);
-    // }
+    
 });

@@ -314,51 +314,50 @@
                                          <input type="text" 
                                                  ng-model="vm.newTalentRegister.profile.skill1" 
                                                  name="skill1"
-                                                 uib-typeahead="skill.name for skill in vm.skills | filter:$viewValue | limitTo:8"
-                                                 class="form-control " 
+                                                 uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
+                                                 class="form-control typeahead"
                                                  placeholder="" 
-                                                 required>
-                                                 
+                                                 required>                                                 
                                  </div>
                                  <div class="form-group">
                                          <label for="inputTalentSkill2">Skill</label>
                                          <input type="text" 
                                                  ng-model="vm.newTalentRegister.profile.skill2" 
                                                  name="skill2"
+                                                 uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                                  class="form-control " 
                                                  placeholder="" 
-                                                 required>
-                                                 
+                                                 required>                                                 
                                  </div>
                                  <div class="form-group">
                                          <label for="inputTalentSkill1">Skill</label>
                                          <input type="text" 
                                                  ng-model="vm.newTalentRegister.profile.skill3" 
                                                  name="skill3"
+                                                 uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                                  class="form-control " 
                                                  placeholder="" 
-                                                 required>
-                                                 
+                                                 required>                                                 
                                  </div>
                                  <div class="form-group">
-                                                <label for="inputTalentSkill1">Skill</label>
-                                                <input type="text" 
-                                                        ng-model="vm.newTalentRegister.profile.skill4" 
-                                                        name="skill4"
-                                                        class="form-control " 
-                                                        placeholder="" 
-                                                        required>
-                                                        
+                                        <label for="inputTalentSkill1">Skill</label>
+                                        <input type="text" 
+                                                ng-model="vm.newTalentRegister.profile.skill4" 
+                                                name="skill4"
+                                                uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
+                                                class="form-control " 
+                                                placeholder="" 
+                                                required>                                                        
                                  </div>
                                  <div class="form-group">
-                                                <label for="inputTalentSkill1">Skill</label>
-                                                <input type="text" 
-                                                        ng-model="vm.newTalentRegister.profile.skill5" 
-                                                        name="skill5"
-                                                        class="form-control " 
-                                                        placeholder="" 
-                                                        required>
-                                                                
+                                        <label for="inputTalentSkill1">Skill</label>
+                                        <input type="text" 
+                                                ng-model="vm.newTalentRegister.profile.skill5" 
+                                                name="skill5"
+                                                uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
+                                                class="form-control " 
+                                                placeholder="" 
+                                                required>                                                                
                                  </div>
                              </div>
                         </div>
