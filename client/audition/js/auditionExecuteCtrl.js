@@ -472,6 +472,7 @@ angular
             Meteor.skillera.requestContent(vm.executeItem);
 
             $uibModalInstance.close();
+            // vm.modalInstance.close();
         };
 
         /**

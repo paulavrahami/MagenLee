@@ -4,16 +4,15 @@ angular
         $scope.trust = $sce.trustAsHtml;
         let auditionEdit = this;
         $reactive(auditionEdit).attach($scope);
-        $window.auditionExecuteCtrl = auditionEdit;
-
-        auditionEdit.ENUM = ENUM;
-        auditionEdit.MAP = MAP;
-        auditionEdit.complexity = "";
-        auditionEdit.complexityArray = [ENUM.EXPERIENCE.up1, ENUM.EXPERIENCE.up2, ENUM.EXPERIENCE.up3, ENUM.EXPERIENCE.up4];
-        auditionEdit.itemsOrderArray = [ENUM.AUDITION_ORDER.SEQUEL]; //ENUM.AUDITION_ORDER.RANDOM,
-        auditionEdit.timeOffset = 0;//(new Date()).getTimezoneOffset() * 60000;
+        $window.auditionExecuteCtrl = auditionEdit; /* Zvika ???*/
 
         auditionEdit.dependency = new Deps.Dependency();
+
+        auditionEdit.ENUM = ENUM;
+        auditionEdit.complexityArray = [ENUM.EXPERIENCE.up1, ENUM.EXPERIENCE.up2, ENUM.EXPERIENCE.up3, ENUM.EXPERIENCE.up4];
+
+        auditionEdit.itemsOrderArray = [ENUM.AUDITION_ORDER.SEQUEL];
+        auditionEdit.timeOffset = 0; //(new Date()).getTimezoneOffset() * 60000;
 
         auditionEdit.auditionGenerationOption = false;
         auditionEdit.addChallengeOption = false;
@@ -22,46 +21,33 @@ angular
         auditionEdit.showCtsAreaAddChallenge = false;
         auditionEdit.showCtsAreaCreateChallenge = false;
 
-        auditionEdit.automaticGeneration = false;
-
-        auditionEdit.tbdFeature = true;
-
         auditionEdit.states = {};
         
         auditionEdit.setConfiguration = function (itemIdArg, configuratonArg) {
-
+            /*Zvika ???*/
         };
 
-        /**
-         * @desc show a dialog with the message;
-         * @param msgArg
-         * @param callbackArg
-         */
         function showInfoMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
-        }
+        };
 
         function showErrorMessage(msgArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true);
         };
 
-        /** Get necessary from the campaign */
+        /* Get the Audition Id from the campaign */
         if ($stateParams && $stateParams.auditionId) {
             auditionEdit.auditionId = $stateParams.auditionId;
-        }
+        };
 
-        /**
-         * @desc Make sure all subscriptions are done.
-         */
+        // Make sure all subscriptions are done.
         function verifySubscribe() {
-
             if (
                 auditionEdit.templatesReady &&
                 auditionEdit.auditionsReady &&
                 auditionEdit.campaignsReady &&
                 auditionEdit.itemsReady
             ) {
-
                 if (auditionEdit.audition.items.length > 0) {
                     auditionEdit.selectCurrentItem(auditionEdit.audition.items[0].itemId);
                 }
@@ -87,15 +73,14 @@ angular
 
                 (function () {
                     auditionEdit.campaign = Campaigns.findOne({_id:auditionEdit.audition.campaignId});
-                    auditionEdit.skills = auditionEdit.campaign.skills;
-                    auditionEdit.audition.description = auditionEdit.campaign.description;
-                    auditionEdit.audition.name = auditionEdit.campaign.positionName;
                     auditionEdit.campaignStatus = auditionEdit.campaign.status;
+                    auditionEdit.skills = auditionEdit.campaign.skills;
+                    auditionEdit.audition.name = auditionEdit.campaign.positionName;
+                    auditionEdit.audition.description = auditionEdit.campaign.description;
                 })();
 
                 (function () {
                     window.onpopstate = function(event) {
-
                         if (document.location.href.indexOf(auditionEdit.campaign._id) === -1) {
                             document.location.href = document.location + auditionEdit.campaign._id;
                         }
@@ -106,17 +91,16 @@ angular
                 auditionEdit.selectedChallengesTypes = auditionEdit.challengesTypes[keysArray[0]];
                 auditionEdit.selectedChallengesTypes.selected = true;
 
-                auditionEdit.saveEditItem();
+                calculateAuditionSummary();
 
                 auditionEdit.dependency.changed();
-            }
-        }
+            };
+        };
 
-        /** Subscribe to necessary publishers */
+        // Subscribe to necessary publishers
         Meteor.subscribe('templates', () => [], {
             onReady: function () {
                 createPseudoAudition();
-
                 auditionEdit.templatesReady = true;
                 verifySubscribe();
             },
@@ -124,31 +108,18 @@ angular
                 console.log("onError", arguments);
             }
         });
+
         Meteor.subscribe('allAuditions', () => [], {
             onReady: function () {
-
                 auditionEdit.audition = Auditions.findOne({_id:auditionEdit.auditionId});
                 auditionEdit.auditionsReady = true;
-
-                // if (auditionEdit.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
-
-                //     let msgArg = "The audition has been finalized and can be viewed only";
-
-                //     function onAlert(){
-
-                //         //$state.go("recruiter.recruiterDemand",{id:auditionEdit.audition.campaignId});
-                //     }
-
-                //     $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, onAlert, onAlert);
-                // }
-
-
                 verifySubscribe();
             },
             onError: function () {
                 console.log("onError", arguments);
             }
         });
+
         Meteor.subscribe('items', () => [], {
             onReady: function () {
                 auditionEdit.itemsReady = true;
@@ -158,6 +129,7 @@ angular
                 console.log("onError", arguments);
             }
         });
+
         function subscribeCampaign () {
             if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.companyName) {
                 auditionEdit.subscribe('campaignsRecruiter', () => [Meteor.user().profile.companyName]);
@@ -178,8 +150,33 @@ angular
             else {
                 setTimeout(subscribeCampaign, 100);
             }
-        }
+        };
         subscribeCampaign();
+
+        auditionEdit.helpers({
+            /**
+             * @desc Retrieve users campaigns by status;
+             * @returns {*}
+             */
+            auditions () {
+                auditionEdit.dependency.depend();
+
+                return Auditions.find({});
+            },
+            templates () {
+                auditionEdit.dependency.depend();
+                if (auditionEdit.selectedChallengesTypes)
+                    return TemplatesCollection.find({type:auditionEdit.selectedChallengesTypes.type});
+            },
+
+            /**
+             * @desc retrieve Meteor.user;
+             * @returns {Meteor.user}
+             */
+            currentUser() {
+                return Meteor.user();
+            }
+        });
 
         auditionEdit.clearAudition = function () {
             let msgArg = "All challenges will be removed from the audition. Please confirm";
@@ -189,15 +186,12 @@ angular
                 false,
                 function(){
                     auditionEdit.audition.items = [];
-                    auditionEdit.saveEditItem();
+                    auditionEdit.saveAudition();
+                    calculateAuditionSummary();
             });
         };
 
-        /**
-         *
-         */
         function checkItemsForSkill () {
-
             let campaign = Campaigns.findOne({_id: auditionEdit.audition.campaignId});
             let noChallenges = false;
             // check for each campaign's skill if items are associated with
@@ -212,35 +206,10 @@ angular
         };
 
         auditionEdit.auditionDone = function () {
-            // function checkAudition () {
-            //     return new Promise((resolve, reject) => {
-            //         //todo: add check the audition
-            //         resolve(true);
-            //         //reject(false);
-            //     });
-            // }
-            //
-            // checkAudition().then(function(error, success){
-            //
-            //     let msgArg = "After setting the Audition as LOCK, you would not be able to modify it any more! Are you sure?";
-            //
-            //     $UserAlerts.prompt(
-            //         msgArg,
-            //         ENUM.ALERT.INFO,
-            //         false,
-            //         function(){
-            //             auditionEdit.audition.status = ENUM.AUDITION_STATUS.AVAILABLE;
-            //             auditionEdit.saveAuditionStatus();
-            //             $state.go("recruiter.recruiterDemand",{id:auditionEdit.audition.campaignId,'#':'panel-3'});
-            //         });
-            // }).catch(function(error, success){});
-
-            
             if (!auditionEdit.audition.items[0].itemId){
                   showInfoMessage('At least one challenge have to be defined for the audition', function () {});
             } else {
                   let msgArg = "The audition will be finalized. Please confirm";
-
                   $UserAlerts.prompt(
                       msgArg,
                       ENUM.ALERT.INFO,
@@ -251,10 +220,10 @@ angular
                             return;
                           };                   
                           auditionEdit.audition.status = ENUM.AUDITION_STATUS.AVAILABLE;
-                          auditionEdit.saveAuditionStatus();
+                          auditionEdit.saveAudition();
                           $state.go("recruiter.recruiterDemand",{id:auditionEdit.audition.campaignId,'#':'panel-3'});
                       });
-              };
+            };
         };
 
         auditionEdit.auditionRework = function () {
@@ -265,19 +234,15 @@ angular
                 false,
                 function(){
                     auditionEdit.audition.status = ENUM.AUDITION_STATUS.IN_WORK;
-                    auditionEdit.saveAuditionStatus();
+                    auditionEdit.saveAudition();
                 });
         };
-
-        /**
-         * @desc returns the templates url to load them in the UI;
-         * @param auditionItemIdArg
-         * @param templateIdArg
-         * @returns {string}
-         */
+       
+        // Returns the templates url to load them in the UI
         auditionEdit.getAuditionItemSrc = function (auditionItemIdArg, templateIdArg) {
             return '/iframeTemplate/' + auditionItemIdArg + '/' + templateIdArg;
         };
+
         auditionEdit.getAuditionHtml = function (auditionItemIdArg, templateIdArg) {
             let auditionItemId = auditionItemIdArg;
             let auditionChallengeId = templateIdArg;
@@ -339,9 +304,8 @@ angular
 
             return html;
         };
-        /**
-         * @desc The pseudo audition is used to display all current templates;
-         */
+        
+        // The pseudo audition is used to display all current templates
         function createPseudoAudition () {
             $window._audition = {
                 "_id" : "1",
@@ -361,18 +325,10 @@ angular
                 $window._audition.items.push({itemId:itemEntryId , maxScore:0});
             });
             //$window.loadAudition();
-        }
+        };
 
-        /**
-         * Items management area:
-         */
-
-        /**
-         * @desc Save the current edit item, calculate it's maxScore
-         * and the audition total time and update the audition.
-         */
-        auditionEdit.saveEditItem = () => {
-            //** Initialize the audition's summary table
+        function calculateAuditionSummary () {
+            // Initialize the audition summary table
             auditionEdit.summery = {
                 skills:{},
                 score:0,
@@ -394,6 +350,71 @@ angular
                 return true;
             });
 
+            //** Calculate the audition's summary table
+            auditionEdit.audition.items.every(function (singleItem) {
+
+                let item = auditionEdit.getItem(singleItem.itemId);
+                if (!item) {
+                    alert(`Cannot get item id: ${singleItem.itemId}`);
+                    return false;
+                }
+                if (!item.skill) {
+                    item.skill = "";
+                }
+
+                //** Sum the unclassified audition items
+                if (item.skill === "" && !auditionEdit.summery.skills["Unclassified"]) {
+                    auditionEdit.summery.skills["Unclassified"] = {};
+                    auditionEdit.complexityArray.every(function (complexity) {
+                        auditionEdit.summery.skills["Unclassified"][complexity] = 0;
+                        auditionEdit.summery.skills["Unclassified"].score = 0;
+                        auditionEdit.summery.skills["Unclassified"].total = 0;
+                        auditionEdit.summery.skills["Unclassified"].time = auditionEdit.timeOffset;
+                        return true;
+                    });
+                }
+
+                //** Sum audition items per skills
+                let skillName = item.skill || 'Unclassified';
+                try {
+                    if (item.complexity === ENUM.EXPERIENCE.up1) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up1]++;
+                        auditionEdit.summery[ENUM.EXPERIENCE.up1]++;
+                    }
+                    if (item.complexity === ENUM.EXPERIENCE.up2) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up2]++;
+                        auditionEdit.summery[ENUM.EXPERIENCE.up2]++;
+                    }
+                    if (item.complexity === ENUM.EXPERIENCE.up3) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up3]++;
+                        auditionEdit.summery[ENUM.EXPERIENCE.up3]++;
+                    }
+                    if (item.complexity === ENUM.EXPERIENCE.up4) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up4]++;
+                        auditionEdit.summery[ENUM.EXPERIENCE.up4]++;
+                    }
+                    auditionEdit.summery.skills[skillName.toLowerCase()].time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
+                    auditionEdit.summery.time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
+                    auditionEdit.summery.skills[skillName.toLowerCase()].score += singleItem.maxScore;
+                    auditionEdit.summery.skills[skillName.toLowerCase()].total++;
+                    auditionEdit.summery.score += singleItem.maxScore;
+                    auditionEdit.summery.total++;
+
+                    if ((auditionEdit.summery.skills[skillName.toLowerCase()].score + "").indexOf("999") > -1) {
+                        auditionEdit.summery.skills[skillName.toLowerCase()].score = Math.ceil(auditionEdit.summery.skills[skillName.toLowerCase()].score);
+                    }
+                    if ((auditionEdit.summery.score + "").indexOf("999") > -1) {
+                        auditionEdit.summery.score = Math.ceil(auditionEdit.summery.score);
+                    }
+                }
+                catch (e) {}
+
+                auditionEdit.summery.timeLeft = auditionEdit.audition.auditionDuration - auditionEdit.summery.time;
+                return true;
+            });
+        };
+
+        function calculateItemsMaxScore () {
             //** Calculate the items scoring weight based on the campaign's skills they are associated with
             let allWeight = 0;
             // for all items associated with the audition do:
@@ -471,96 +492,11 @@ angular
                     singleItem.maxScore = 0;
                 }
 
-                auditionEdit.saveItem(item);
-
                 return true;
             });
-
-            //** Calculate the audition's summary table
-            auditionEdit.audition.items.every(function (singleItem) {
-
-                let item = auditionEdit.getItem(singleItem.itemId);
-                if (!item) {
-                    alert(`Cannot get item id: ${singleItem.itemId}`);
-                    return false;
-                }
-                if (!item.skill) {
-                    item.skill = "";
-                }
-
-                //** Sum the unclassified audition items
-                if (item.skill === "" && !auditionEdit.summery.skills["Unclassified"]) {
-                    auditionEdit.summery.skills["Unclassified"] = {};
-                    auditionEdit.complexityArray.every(function (complexity) {
-                        auditionEdit.summery.skills["Unclassified"][complexity] = 0;
-                        auditionEdit.summery.skills["Unclassified"].score = 0;
-                        auditionEdit.summery.skills["Unclassified"].total = 0;
-                        auditionEdit.summery.skills["Unclassified"].time = auditionEdit.timeOffset;
-                        return true;
-                    });
-                }
-
-                //** Sum audition items per skills
-                let skillName = item.skill || 'Unclassified';
-                try {
-                    if (item.complexity === ENUM.EXPERIENCE.up1) {
-                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up1]++;
-                        auditionEdit.summery[ENUM.EXPERIENCE.up1]++;
-                    }
-                    if (item.complexity === ENUM.EXPERIENCE.up2) {
-                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up2]++;
-                        auditionEdit.summery[ENUM.EXPERIENCE.up2]++;
-                    }
-                    if (item.complexity === ENUM.EXPERIENCE.up3) {
-                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up3]++;
-                        auditionEdit.summery[ENUM.EXPERIENCE.up3]++;
-                    }
-                    if (item.complexity === ENUM.EXPERIENCE.up4) {
-                        auditionEdit.summery.skills[skillName.toLowerCase()][ENUM.EXPERIENCE.up4]++;
-                        auditionEdit.summery[ENUM.EXPERIENCE.up4]++;
-                    }
-                    auditionEdit.summery.skills[skillName.toLowerCase()].time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
-                    auditionEdit.summery.time += item.itemDuration.valueOf() - auditionEdit.timeOffset;
-                    auditionEdit.summery.skills[skillName.toLowerCase()].score += singleItem.maxScore;
-                    auditionEdit.summery.skills[skillName.toLowerCase()].total++;
-                    auditionEdit.summery.score += singleItem.maxScore;
-                    auditionEdit.summery.total++;
-
-                    if ((auditionEdit.summery.skills[skillName.toLowerCase()].score + "").indexOf("999") > -1) {
-                        auditionEdit.summery.skills[skillName.toLowerCase()].score = Math.ceil(auditionEdit.summery.skills[skillName.toLowerCase()].score);
-                    }
-                    if ((auditionEdit.summery.score + "").indexOf("999") > -1) {
-                        auditionEdit.summery.score = Math.ceil(auditionEdit.summery.score);
-                    }
-                }
-                catch (e) {}
-
-                auditionEdit.summery.timeLeft = auditionEdit.audition.auditionDuration - auditionEdit.summery.time;
-                return true;
-            });
-                     
-            //this.audition.auditionDuration = new Date(allTime);
-            this.saveAudition();
         };
-        /**
-         * @desc Save an item;
-         * @param item
-         */
-        auditionEdit.saveItem = function (item) {
 
-            if (auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) {
-                let tempId = item._id;
-                delete item._id;
-
-                //noinspection JSUnusedLocalSymbols
-                Items.update({_id: tempId}, {$set: angular.copy(item)});
-                item._id = tempId;
-            }
-        };
-        /**
-         * @desc move an item up;
-         * @param itemIdArg
-         */
+        // Move an item up
         auditionEdit.moveItemUp = function (itemIdArg) {
 
             let indexOf = auditionEdit.audition.items.indexOf(itemIdArg);
@@ -571,10 +507,8 @@ angular
                 auditionEdit.audition.items[indexOf] = angular.copy(tempItem);
             }
         };
-        /**
-         * @desc move an item down;
-         * @param itemIdArg
-         */
+
+        // Move an item down
         auditionEdit.moveItemDown = function (itemIdArg) {
 
             let indexOf = auditionEdit.audition.items.indexOf(itemIdArg);
@@ -585,222 +519,46 @@ angular
                 auditionEdit.audition.items[indexOf] = angular.copy(tempItem);
             }
         };
-        /**
-         * @desc remove an item from the audition;
-         * @param itemIdArg
-         */
+
+        // Remove an item from the audition
         auditionEdit.removeItem = function (itemIdArg) {
-
             if (auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) {
-                let indexOf = auditionEdit.audition.items.indexOf(itemIdArg);
-
-                auditionEdit.audition.items.splice(indexOf, 1);
+                removeItemFromAudition(itemIdArg);
+                calculateItemsMaxScore();
                 auditionEdit.saveAudition();
-
-                indexOf--;
-
-
-                if (indexOf < 0) {
-                    indexOf = 0;
-                }
-                if (indexOf < auditionEdit.audition.items.length) {
-                    auditionEdit.selectCurrentItem(auditionEdit.audition.items[indexOf].itemId);
-                }
-            }
-            auditionEdit.saveEditItem();
-        };
-        /**
-         * @desc edit an item of the audition;
-         * @param itemIdArg
-         */
-        auditionEdit.openEditItem = function (itemIdArg) {
-
-            auditionEdit.selectEditItem(itemIdArg);
-
-            function loadModal () {
-
-                auditionEdit.modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: 'client/audition/view/auditionEditItem.html',
-                    controller: 'AuditionEditItemCtrl',
-                    controllerAs: 'auditionEditItem',
-                    keyboard: false,
-                    backdrop  : 'static',
-                    resolve: {
-                        auditionEditCtrl : function () {
-
-                            return auditionEdit;
-                        }
-                    },
-                    size: 'xl'
-                });
-            }
-            loadModal();
-            auditionEdit.dependency.changed();
+                calculateAuditionSummary();
+            };
         };
 
+        function removeItemFromAudition (itemIdArg) {
+            let indexOf = auditionEdit.audition.items.indexOf(itemIdArg);
+            auditionEdit.audition.items.splice(indexOf, 1);
+            indexOf--;
+            if (indexOf < 0) {
+                indexOf = 0;
+            }
+            if (indexOf < auditionEdit.audition.items.length) {
+                auditionEdit.selectCurrentItem(auditionEdit.audition.items[indexOf].itemId);
+            };
+        };
+
+        auditionEdit.getItem = function (itemIdArg) {
+            return auditionEdit.getItem(itemIdArg);
+        };
         
-        auditionEdit.registerEditItem = function () {
-
-            if  (!auditionEdit.editItem.skill) {
-                showErrorMessage("The challenge's skill should be defined");
-                return
-            };
-            if  (!auditionEdit.editItem.complexity) {
-                showErrorMessage("The challenge's complexity should be defined");
-                return
-            };
-            
-            // Challenge content's checks according to the different templates
-            switch (auditionEdit.editTemplate._id) {
-                case "57f7a8406f903fc2b6aae39a" :
-                    if (!auditionEdit.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if ((!auditionEdit.editItem.content["1st Answer"] || auditionEdit.editItem.content["1st Answer"] && !auditionEdit.editItem.content["1st Answer"].answer) ||
-                        (!auditionEdit.editItem.content["2nd Answer"] || auditionEdit.editItem.content["2nd Answer"] && !auditionEdit.editItem.content["2nd Answer"].answer) ||
-                        (!auditionEdit.editItem.content["3rd Answer"] || auditionEdit.editItem.content["3rd Answer"] && !auditionEdit.editItem.content["3rd Answer"].answer) ||
-                        (!auditionEdit.editItem.content["4th Answer"] || auditionEdit.editItem.content["4th Answer"] && !auditionEdit.editItem.content["4th Answer"].answer)) {
-                        showErrorMessage("All answers should be defined");
-                        return
-                    };
-                    let i=0;
-                    auditionEdit.editItem.content["1st Answer"].correct ? i++ : i=i;
-                    auditionEdit.editItem.content["2nd Answer"].correct ? i++ : i=i;
-                    auditionEdit.editItem.content["3rd Answer"].correct ? i++ : i=i;
-                    auditionEdit.editItem.content["4th Answer"].correct ? i++ : i=i;
-                    if (i===0) {
-                        showErrorMessage("The Challenge's correct answer should be defined");
-                        return;
-                    };
-                    if (i>1) {
-                        showErrorMessage("Only one correct answer can be defined for the challenge");
-                        return;  
-                    };
-                    break;
-
-                case "57f7a8406f903fc2b6aae49a" :
-                    if (!auditionEdit.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if (!auditionEdit.editItem.content.answers || !auditionEdit.editItem.content.results) {
-                        showErrorMessage("The challenge's answers and scores should be defined");
-                        return;
-                    };
-                    if (auditionEdit.editItem.content.answers.length !== auditionEdit.editItem.content.results.length) {
-                        showErrorMessage("The challenge's number of answers and scores should match");
-                        return;
-                    };
-                    for (i=0; i < auditionEdit.editItem.content.results.length; i++) {
-                        if ((auditionEdit.editItem.content.answers[i] === "") && (auditionEdit.editItem.content.results[i] === "")) {
-                            showErrorMessage("The challenge can not have an empty answer");
-                            return;
-                        };
-                        if ((auditionEdit.editItem.content.answers[i] === "") && (auditionEdit.editItem.content.results[i] !== "")) {
-                            showErrorMessage("The challenge can not have an empty answer");
-                            return;
-                        };
-                        if ((auditionEdit.editItem.content.answers[i] !== "") && (auditionEdit.editItem.content.results[i] === "")) {
-                            showErrorMessage("All answers should be defined with score");
-                            return;
-                        };
-                        if (auditionEdit.editItem.content.results[i] > 100) {
-                            showErrorMessage("Answer's score can not be greater than 100");
-                            return;
-                        };
-                        if (auditionEdit.editItem.content.results[i] < 0) {
-                            showErrorMessage("Answer's score can not be less than 0");
-                            return;
-                        };
-                    };
-                    let answer100 = 0;
-                    for (i=0; i < auditionEdit.editItem.content.results.length; i++) {
-                        if (auditionEdit.editItem.content.results[i] === 100) {
-                            answer100++;
-                        };
-                    };
-                    if (answer100 === 0) {
-                        showErrorMessage("An answer with a 100 score should be defined");
-                        return;
-                    }
-                    if (answer100 > 1) {
-                        showErrorMessage("Only one answer should have a 100 score");
-                        return;
-                    }
-                    break;
-
-                case "5814b536e288e1a685c7a451" :
-                    console.log("dummy")
-                    if (!auditionEdit.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if ((!auditionEdit.editItem.content['1st Button Text']) ||
-                        (!auditionEdit.editItem.content['2nd Button Text']) ||
-                        (auditionEdit.editItem.content['1st Button Score'] === null) ||
-                        (auditionEdit.editItem.content['1st Button Score'] === undefined) ||
-                        (auditionEdit.editItem.content['2nd Button Score'] === null) ||
-                        (auditionEdit.editItem.content['2nd Button Score'] === undefined)) {
-                        showErrorMessage("All challenge's buttons should be defined");
-                        return;
-                    };
-                    if (((auditionEdit.editItem.content['1st Button Score']) && (auditionEdit.editItem.content['1st Button Score'] > 100)) ||
-                        ((auditionEdit.editItem.content['2nd Button Score']) && (auditionEdit.editItem.content['2nd Button Score'] > 100))) {
-                        showErrorMessage("Button's score can not be greater than 100");
-                        return;
-                    };
-                    if ((auditionEdit.editItem.content['1st Button Score'] === 100) && (auditionEdit.editItem.content['2nd Button Score'] === 100)) {
-                        showErrorMessage("Only one button's score should be equal to 100");
-                        return;
-                    };
-                    if ((auditionEdit.editItem.content['1st Button Score'] !== 100) && (auditionEdit.editItem.content['2nd Button Score'] !== 100)) {
-                        showErrorMessage("At least one button's score should be equal to 100");
-                        return;
-                    };
-                    break;
-            };
-
-            if (auditionEdit.editItem.status == ENUM.ITEM_STATUS.NEW) {
-                auditionEdit.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
-                auditionEdit.saveEditItem();
-            }
-            auditionEdit.editItem = null;
-            if (auditionEdit.modalInstance) {
-                auditionEdit.modalInstance.close();
-            };
-        };
-
-
-        auditionEdit.cancelEditItem = function () {
-            if (auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) {
-                if (auditionEdit.editItem.status == ENUM.ITEM_STATUS.NEW) {
-                    auditionEdit.removeItem(auditionEdit.editItem._id);
+        // Get the item from the collection unless it is the edit item
+        auditionEdit.getItem = function (itemIdArg) {
+            return (function () {
+                if (auditionEdit.editItem && itemIdArg === auditionEdit.editItem._id) {
+                    return auditionEdit.editItem;
                 }
                 else {
-                    auditionEdit.editItem = auditionEdit.editItemForCancel;
-                    auditionEdit.saveEditItem();
-                };
-            };
-            auditionEdit.editItem = null;
-            if (auditionEdit.modalInstance) {
-                auditionEdit.modalInstance.close();
-            };
+                    return Items.findOne({_id:itemIdArg});
+                }
+            })();
         };
-
-
-        auditionEdit.closeEditItem = function () {
-            if (auditionEdit.modalInstance) {
-                auditionEdit.modalInstance.close();
-            };
-        };
-
-
-        /**
-         * @desc Add a new item to the audition;
-         * @param templateIdArg 
-         */
+       
+        // Creat an empty item as prep for the create item modal
         auditionEdit.createNewItem = function (templateIdArg) {
             auditionEdit.editTemplate = TemplatesCollection.findOne({_id:templateIdArg});
 
@@ -818,7 +576,7 @@ angular
                 "usage" : 0,
                 "lastAssignedDate" : "",
                 "authorType" : ENUM.ITEM_AUTHOR_TYPE.RECRUITER,
-                "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID*/
+                "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID
                 "shareInd" : true, /*Zvika - Currently this is the default and cannot be changed. In the future it should be taken from the Recruiter profile*/
                 "control" : {
                     "createdBy" : Meteor.user()._id,
@@ -829,29 +587,69 @@ angular
             };
             if (auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) {
                 editItem._id = Items.insert(angular.copy(editItem));
-            }
-
+            };
+            // Update the audition.item array with the new item
             auditionItemArrayEntry = {itemId:editItem._id, maxScore:0};
             auditionEdit.audition.items.push(angular.copy(auditionItemArrayEntry));
             auditionEdit.saveAudition();
+            // Invoke the create/edit item modal
             auditionEdit.openEditItem(angular.copy(auditionItemArrayEntry));
-            //** close the cts area for the "create challenge" option
-            // auditionEdit.showCtsAreaCreateChallenge = false;
         };
-        /**
-         * @desc Select the current edit item;
-         * @param itemIdArg
-         */
+    
+        // Edit item modal
+        auditionEdit.openEditItem = function (itemIdArg) {
+            auditionEdit.selectEditItem(itemIdArg);
+            // Invoke the item modal in create audition mode
+            $scope.challengeCreateMode = ENUM.CHALLENGE_CREATE_MODE.AUDITION;
+
+            auditionEdit.modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'client/challenge/view/challengeEdit.html',
+                controller: 'challengeEditCtrl',
+                controllerAs: 'challengeEdit',
+                keyboard: false,
+                backdrop  : 'static',
+                scope: $scope,
+                resolve: {
+                    auditionEditCtrl : function () {
+                        return auditionEdit;
+                    }
+                },
+                size: 'xl'
+            });
+            // handle the modal promise
+            auditionEdit.modalInstance.result.then(function (results) {
+                switch (results) {
+                    case ENUM.MODAL_RESULT.SAVE: {
+                        calculateItemsMaxScore();
+                        auditionEdit.saveAudition();
+                        calculateAuditionSummary();
+                        break;
+                    };
+                    case ENUM.MODAL_RESULT.CANCEL: {
+                        if (auditionEdit.editItem.status === ENUM.ITEM_STATUS.NEW) {
+                            removeItemFromAudition(itemIdArg);
+                        } else if (auditionEdit.editItem.status === ENUM.ITEM_STATUS.IN_WORK) {
+                            auditionEdit.editItem = null;
+                        };
+                        break;
+                    };
+                    case ENUM.MODAL_RESULT.CLOSE: {
+                        break;
+                    };
+                    default:
+                        break;
+                };
+            });
+        };
+
+        // Select the current edit item
         auditionEdit.selectCurrentItem = function (itemIdArg) {
             auditionEdit.currentItem = auditionEdit.getItem(itemIdArg);
         };
-
-        /**
-         * @desc Select the current edit item;
-         * @param itemIdArg
-         */
+        
+        // prep before calling the create/edit item modal 
         auditionEdit.selectEditItem = function (itemIdArg) {
-
             if (itemIdArg instanceof Object) {
                 getItemId = itemIdArg.itemId;
                 auditionEdit.maxScore = itemIdArg.maxScore;
@@ -862,97 +660,14 @@ angular
             auditionEdit.editTemplate = TemplatesCollection.findOne({_id:auditionEdit.editItem.templateId});
             auditionEdit.editItemForCancel = angular.copy(auditionEdit.editItem);
         };
-
-        /**
-         * Items dynamic edit area:
-         */
-
-        /**
-         * @desc Add an element to the content of an item build dynamically;
-         * @param keyArg
-         */
-        auditionEdit.addToContentArray = function(keyArg1, keyArg2) {
-
-            if (!auditionEdit.editItem.content[keyArg1]) {
-                auditionEdit.editItem.content[keyArg1] = [];
-                auditionEdit.editItem.content[keyArg2] = [];
-            }
-            auditionEdit.editItem.content[keyArg1].push('');
-            auditionEdit.editItem.content[keyArg2].push('');
-            auditionEdit.saveEditItem();
-        };
-        /**
-         * @desc Remove the last element from the content of an item build dynamically;
-         * @param keyArg
-         */
-        auditionEdit.removeFromContentArray = function(keyArg1, keyArg2) {
-
-            if (auditionEdit.editItem.content[keyArg1]) {
-                auditionEdit.editItem.content[keyArg1].splice(-1);
-                auditionEdit.saveEditItem();
-            }
-            if (auditionEdit.editItem.content[keyArg2]) {
-                auditionEdit.editItem.content[keyArg2].splice(-1);
-                auditionEdit.saveEditItem();
-            }
-        };
-        /**
-         * @desc is array fn for UI;
-         * @param value
-         */
-        auditionEdit.isArray = function (value) {
-            return angular.isArray(value);
-        };
-        /**
-         * @desc is string fn for UI;
-         * @param value
-         */
-        auditionEdit.isString = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "string";
-        };
-        /**
-         * @desc is number fn for UI;
-         * @param value
-         */
-        auditionEdit.isNumber = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "number";
-        };
-        /**
-         * @desc is boolean fn for UI;
-         * @param value
-         */
-        auditionEdit.isBoolean = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "boolean";
-        };
-        /**
-         * @desc is object fn for UI;
-         * @param value
-         */
-        auditionEdit.isObject = function (value) {
-            return typeof(value) === "object" && String(value).toLowerCase() !== "string" && String(value).toLowerCase() !== "number" && String(value).toLowerCase() !== "boolean";
-        };
-        /**
-         * @desc return the title of specific item;
-         * @param itemIdArg
-         * @returns {*}
-         */
+       
+        // Return the title of specific item (the question)
         auditionEdit.itemToString = function (itemIdArg) {
             let item = auditionEdit.getItem(itemIdArg);
             return item.content.question; //_.upperFirst(JSON.stringify(item.content).replace(/([.*+?^$|{}\[\]"])/mg, "").replace(/,/mg, ", ").replace(/:/mg, ": "));
         };
-        /**
-         * @desc return  specific item;
-         * @param itemIdArg
-         * @returns {*}
-         */
-        auditionEdit.getItem = function (itemIdArg) {
-            return auditionEdit.getItem(itemIdArg);
-        };
-        /**
-         * @desc return the template name of specific item;
-         * @param itemIdArg
-         * @returns {*}
-         */
+
+        // Return the template name of specific item
         auditionEdit.templateName = function (itemIdArg) {
             let item = auditionEdit.getItem(itemIdArg);
             return TemplatesCollection.findOne({_id:item.templateId}).name;
@@ -961,78 +676,16 @@ angular
         auditionEdit.getContent = function (itemIdArg) {
             return Contents.findOne({_id:itemIdArg})
         };
-
-        /**
-         * @desc get the item from the collection unless it is the edit item;
-         * @param itemIdArg
-         */
-        auditionEdit.getItem = function (itemIdArg) {
-
-            return (function () {
-                if (auditionEdit.editItem && itemIdArg === auditionEdit.editItem._id) {
-                    return auditionEdit.editItem;
-                }
-                else {
-                    return Items.findOne({_id:itemIdArg});
-                }
-            })();
-        };
-        /**
-         * @desc Save the audition;
-         */
+       
         auditionEdit.saveAudition = function () {
+            let tempId = auditionEdit.audition._id;
+            delete auditionEdit.audition._id;
 
-            if (auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) {
-                let tempId = auditionEdit.audition._id;
-                delete auditionEdit.audition._id;
-
-                //noinspection JSUnusedLocalSymbols
-                Auditions.update({_id: tempId}, {$set: angular.copy(auditionEdit.audition)});
-                auditionEdit.audition._id = tempId;
-            }
+            //noinspection JSUnusedLocalSymbols
+            Auditions.update({_id: tempId}, {$set: angular.copy(auditionEdit.audition)});
+            auditionEdit.audition._id = tempId;
         };
-
-        /**
-         * @desc Save the audition;
-         */
-        auditionEdit.saveAuditionStatus = function () {
-
-                let tempId = auditionEdit.audition._id;
-                delete auditionEdit.audition._id;
-
-                //noinspection JSUnusedLocalSymbols
-                Auditions.update({_id: tempId}, {$set: angular.copy(auditionEdit.audition)});
-                auditionEdit.audition._id = tempId;
-        };
-
-        /**
-         * ReactiveContext;
-         */
-        auditionEdit.helpers({
-            /**
-             * @desc Retrieve users campaigns by status;
-             * @returns {*}
-             */
-            auditions () {
-                auditionEdit.dependency.depend();
-
-                return Auditions.find({});
-            },
-            templates () {
-                auditionEdit.dependency.depend();
-                if (auditionEdit.selectedChallengesTypes)
-                    return TemplatesCollection.find({type:auditionEdit.selectedChallengesTypes.type});
-            },
-
-            /**
-             * @desc retrieve Meteor.user;
-             * @returns {Meteor.user}
-             */
-            currentUser() {
-                return Meteor.user();
-            }
-        });
-
+    
         auditionEdit.setSelected = function (challengeTypeArg) {
             challengeTypeArg.selected = true;
             auditionEdit.selectedChallengesTypes = challengeTypeArg;
@@ -1045,10 +698,6 @@ angular
             auditionEdit.dependency.changed();
         };
 
-        // 
-        // Create Challenge Option
-        // 
-
         auditionEdit.createChallenge = function () {
             auditionEdit.createChallengeOption = true;
             auditionEdit.showCtsAreaCreateChallenge = true;
@@ -1059,11 +708,7 @@ angular
             auditionEdit.showCtsAreaCreateChallenge = false;
         };
 
-        // 
-        // Generate Audition Option
-        // 
-
-        generateAudition = function () {
+        function generateAudition() {
             auditionEdit.dependency.depend();
             // Remove the current items defined for the audition
             auditionEdit.audition.items = [];
@@ -1177,12 +822,14 @@ angular
                             foundItemPerSkill = false;
                             foundRetry = 0;
                         };
-                        if ((foundRetry > 5) || (itemsFoundCount >= itemsPerSkill.length)) {
+                        if ((foundRetry > 50) || (itemsFoundCount >= itemsPerSkill.length)) {
                             noMoreRelevantItems = true;
                         }
                     };
                     // Calculate the items max-score and update the items summary panel accordingly
-                    auditionEdit.saveEditItem();
+                    calculateItemsMaxScore();
+                    auditionEdit.saveAudition();
+                    calculateAuditionSummary();
                     auditionEdit.currentItem = {};
                 }).catch(function(error) {
                     itemsPerSkill = [];
@@ -1211,20 +858,16 @@ angular
                     ENUM.ALERT.INFO,
                     false,
                     function () {
-                        generateAudition ();                        
+                        generateAudition();                        
                     },
                     function () { 
                       return;
                     }
                 )
             } else {
-                generateAudition ();
+                generateAudition();
             };
         };
-
-        // 
-        // Add Challenge Option
-        // 
 
         auditionEdit.addChallenge = function () {
             auditionEdit.itemsAdded = false;
@@ -1366,7 +1009,10 @@ angular
                 auditionEdit.audition.items.push(angular.copy(auditionItemArrayEntry));
                 return true;
             });
-            auditionEdit.saveEditItem();
+            calculateItemsMaxScore();
+            auditionEdit.saveAudition();
+            calculateAuditionSummary();
+
             if (auditionEdit.addItems.length === 1) {
                 showInfoMessage(auditionEdit.addItems.length + ' challenge has been added to the audition');
             } else {
@@ -1395,7 +1041,7 @@ angular
                 });
                 return true;
             });
-        }
+        };
 
         function calculateAddBufferSummary () {
             // Initialize the audition's summary table
@@ -1471,7 +1117,6 @@ angular
         auditionEdit.previewAudition = function () {
             // Invoke the application process in a 'preview' mode to provide the recruiter with the ability
             // to preview the audition
-
             var vm = this;
             vm.howItWorkLang = 'eng';
 
@@ -1485,7 +1130,8 @@ angular
             vm.application.control = {
                 createDate: new Date(),
                 status: ENUM.APPLICATION_STATUS.IN_WORK,
-                companyOwner : vm.audition.control.companyOwner
+                companyOwner : 'DummyForPreview'
+                // companyOwner : vm.audition.control.companyOwner /*zvika*/
             };
             // Invoke the Audition Execution process - this is done via the auditionExecute modal
             // NOTE!!! - Keep this in-sync with the vm.auditionExecute in campaignApplyMailCtrl.js
@@ -1517,39 +1163,6 @@ angular
                 size: 'executeAudition'
             });
         };
-
-        auditionEdit.correctAnswer = function (answerArg) {
-            // Clear previous defined correct answer
-            if (auditionEdit.editItem.content['1st Answer'] && auditionEdit.editItem.content['1st Answer'].correct) {
-                auditionEdit.editItem.content['1st Answer'].correct = false;
-            };
-            if (auditionEdit.editItem.content['2nd Answer'] && auditionEdit.editItem.content['2nd Answer'].correct) {
-                auditionEdit.editItem.content['2nd Answer'].correct = false;
-            };
-            if (auditionEdit.editItem.content['3rd Answer'] && auditionEdit.editItem.content['3rd Answer'].correct) {
-                auditionEdit.editItem.content['3rd Answer'].correct = false;
-            };
-            if (auditionEdit.editItem.content['4th Answer'] && auditionEdit.editItem.content['4th Answer'].correct) {
-                auditionEdit.editItem.content['4th Answer'].correct = false;
-            };
-            // Set the correct answer
-            switch (answerArg) {
-                case 1:
-                    auditionEdit.editItem.content['1st Answer'].correct = true;
-                    break;
-                case 2:
-                    auditionEdit.editItem.content['2nd Answer'].correct = true;
-                    break;
-                case 3:
-                    auditionEdit.editItem.content['3rd Answer'].correct = true;
-                    break;
-                case 4:
-                    auditionEdit.editItem.content['4th Answer'].correct = true;
-                    break;
-                default:
-                    break;
-            };
-            auditionEdit.saveEditItem();
-        };
-             
+       
+       
     });

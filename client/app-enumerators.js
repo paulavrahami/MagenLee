@@ -14,7 +14,6 @@ angular
         AUDITION_STATUS : {
             IN_WORK:    'In Work',
             AVAILABLE:  'Assigned',
-            // ASSIGNED:   'Assigned',
             DELETED:    'Deleted'
         },
         AUDITION_DURATION : {
@@ -44,6 +43,10 @@ angular
             RECRUITER:    'Recruiter',
             DOMAIN_EXPERT:'Domain Expert',
             TALENT:       'Talent'
+        },
+        CHALLENGE_CREATE_MODE : {
+            AUDITION: 'Audition',
+            POOL: 'Pool'
         },
         ALERT : {
             SUCCESS:    'success',
@@ -136,6 +139,11 @@ angular
             DISPATCH_POOL_EMAIL : 'Dispatch Pool/Email',
             DISPATCH_EXTERNAL_FILE : 'Dispatch External',
             DISPATCH_SOCIAL_LINKEDIN : 'Dispatch LinkedIn' 
+        },
+        MODAL_RESULT : {
+            SAVE : 'Save',
+            CANCEL : 'Cancel',
+            CLOSE : 'Close'
         }
     });
 
