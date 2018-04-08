@@ -139,6 +139,9 @@ angular
             SAVE : 'Save',
             CANCEL : 'Cancel',
             CLOSE : 'Close'
+        },
+        DROPBOX_API : {
+            TOKEN : 'jNRAKI6EZHAAAAAAAAAB_IropCuolUgvwDlmIEBdaddvwmhULqUAdxfuNnU3fwwn'
         }
     });
 

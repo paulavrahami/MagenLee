@@ -35,7 +35,6 @@ angular
             if (vm.subscriptionCampaignOk &&
                 vm.subscriptionApplicationOk &&
                 vm.subscriptionAuditionOk &&
-                vm.subscriptionLogoOk &&
                 vm.subscriptionItemsOk &&
                 vm.subscriptionCompaniesOk &&
                 vm.subscriptionUsersOk) {
@@ -43,9 +42,6 @@ angular
                 vm.subscriptionOk = true;
 
                 vm.audition = Auditions.findOne({_id: vm.campaign.auditionId});
-
-                // vm.logoFile = LogoFiles.findOne(Meteor.users.findOne({}).profile.companyLogoId);
-                // vm.logoFile = LogoFiles.findOne(Companies.findOne({name: vm.audition.control.companyOwner}).companyLogoId);
 
                 vm.createApplication();
 
@@ -57,11 +53,20 @@ angular
                     }
                 });
 
-                // if (vm.application.states && vm.application.states.itemsContent) {
-                //     //alert('you already stated this application');
-                //     $UserAlerts.open("You already started this audition, you'll be redirect to the audition execution", ENUM.ALERT.INFO, false, vm.auditionExecute, vm.auditionExecute);
-                //     //vm.auditionExecute();
-                // }
+                var logoFile = Companies.findOne({name: vm.audition.control.companyOwner}).companyLogoId;
+                var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                dbx.filesGetThumbnail({
+                    path: '/img/logo/' + logoFile,
+                    format: 'png',
+                    size: 'w64h64'
+                    })
+                    .then(function(response) {
+                        document.getElementById('viewCompanyLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                });
+                
                 vm.dependency.changed();
             }
         };
@@ -69,16 +74,6 @@ angular
         vm.subscribe('items', () => [], {
             onReady: function () {
                 vm.subscriptionItemsOk = true;
-                vm.onSubscription();
-            },
-            onError: function () {
-                console.log("onError", arguments);
-            }
-        });
-
-        vm.subscribe('logo.files', () => [], {
-            onReady: function () {
-                vm.subscriptionLogoOk = true;
                 vm.onSubscription();
             },
             onError: function () {
@@ -198,10 +193,7 @@ angular
         };
 
         vm.helpers({
-            logoFileLink() {
-                vm.dependency.depend();
-                return vm.logoFile ? vm.logoFile.url() : "";
-            }
+
         });
 
         vm.applicationSave = function (itemsContentsArg, numberOfItemsArg) {

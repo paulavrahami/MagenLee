@@ -34,9 +34,6 @@ angular
         vm.uploadfile = 'test';
         vm.fileload = false;
         vm.campaign.salaryExpCurrency = 'NIS';
-        // temp fix; until the issue with CV upload will be fixed
-        vm.campaign.cv = false;
-
 
         vm.targetCampaignManuallyURL = function () {
             campaignURL = vm.campaign.applicationURL;
