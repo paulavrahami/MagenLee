@@ -1,4 +1,4 @@
- <!--campaignApplyInformation.html-->
+<!--campaignApplyInformation.html-->
 
 <div class="apply-home-page">
     <div class="row application-form">
@@ -74,7 +74,7 @@
                         <br>
                         <div class = "row">
                             <div class="form-group">
-                                <label for="countr" class="col-sm-4 control-label">Country</label>
+                                <label for="country" class="col-sm-4 control-label">Country</label>
                                 <div class="col-sm-8">
                                     <input class="form-control input-sm"
                                            type="text"
@@ -89,7 +89,7 @@
                         <br>
                         <div class = "row">
                             <div class="form-group">
-                                <label for="countr" class="col-sm-4 control-label">Language</label>
+                                <label for="language" class="col-sm-4 control-label">Language</label>
                                 <div class="col-sm-8">
                                     <input class="form-control input-sm"
                                            type="text"
@@ -104,31 +104,31 @@
                         <br>
                         <div class = "row">
                             <div class="form-group" ng-show = "vm.campaign.linkedInProfileUrl">
-                                <label for="countr" class="col-sm-4 control-label">LinkedIn Profile</label>
+                                <label for="linkedInUrl" class="col-sm-4 control-label">LinkedIn Profile</label>
                                 <div class="col-sm-8">
                                     <input class="form-control input-sm"
                                            type="text"
-                                           id="linkedInUr"
+                                           id="linkedInUrl"
                                            name="linkedInUrl"
                                            ng-model="vm.application.linkedInURL"
-                                           placeholder="Your LinkedIn profile URL"
-                                           >
+                                           placeholder="Your LinkedIn profile URL">
                                 </div>
                             </div>
                         </div>
                         <br>
-
-                        <!-- ** (zvika) This is temp blocking until the crass resulted from the upload will be solved -->
-                        <!-- <div class = "row">
+                        <div class="row">
                             <div class="form-group" ng-show = "vm.campaign.cv">
-                                <label for="countr" class="col-sm-4 control-label">Upload CV</label>
+                                <label for="cv" class="col-sm-4 control-label">CV</label>
                                 <div class="col-sm-8">
                                     <input class="form-control input-sm"
-                                        type="file"
-                                        onchange="angular.element(this).scope().onFileChange(this)">
+                                           type="file"
+                                           id="cv"
+                                           name="cv"
+                                           onchange="loadCV(event)">
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
+
                         <!-- Questionnaire -->
                         <div ng-show = "(vm.campaign.goNoGo1.text) || (vm.campaign.goNoGo2.text) || (vm.campaign.goNoGo4.place) || (vm.campaign.goNoGo3.enabled)">
                             <hr class="hr-application">

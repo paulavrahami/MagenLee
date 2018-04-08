@@ -116,6 +116,21 @@ angular
                 vm.subscriptionOk = true;
 
                 vm.loadAudition ();
+
+                var logoFile = Companies.findOne({name: $window._audition.control.companyOwner}).companyLogoId;
+                var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                dbx.filesGetThumbnail({
+                    path: '/img/logo/' + logoFile,
+                    format: 'png',
+                    size: 'w64h64'
+                    })
+                    .then(function(response) {
+                        document.getElementById('viewCompanyLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                });
+                    
                 vm.dependency.changed();
             }
         };
