@@ -576,7 +576,7 @@ angular
                 "usage" : 0,
                 "lastAssignedDate" : "",
                 "authorType" : ENUM.ITEM_AUTHOR_TYPE.RECRUITER,
-                "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID
+                "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID*/
                 "shareInd" : true, /*Zvika - Currently this is the default and cannot be changed. In the future it should be taken from the Recruiter profile*/
                 "control" : {
                     "createdBy" : Meteor.user()._id,
