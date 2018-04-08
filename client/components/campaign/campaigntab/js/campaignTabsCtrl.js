@@ -34,9 +34,6 @@ angular
         vm.uploadfile = 'test';
         vm.fileload = false;
         vm.campaign.salaryExpCurrency = 'NIS';
-        // temp fix; until the issue with CV upload will be fixed
-        vm.campaign.cv = false;
-
 
         vm.targetCampaignManuallyURL = function () {
             campaignURL = vm.campaign.applicationURL;
@@ -138,6 +135,7 @@ angular
                 vm.targetJobBoardsTalents = vm.campaign.targetJobBoards;
 
                 if ((vm.campaign.status == ENUM.CAMPAIGN_STATUS.IN_WORK) || 
+                    (vm.campaign.status == ENUM.CAMPAIGN_STATUS.VERIFIED) ||
                     (vm.campaign.status == ENUM.CAMPAIGN_STATUS.VERIFIED)) {
                     vm.targetManuallyURLDisabled = true;
                     vm.targetSpecificTalentDisabled = true;

@@ -5,7 +5,7 @@ angular
     .controller('recruiterSignUpCtrl', function($state, $scope, $reactive, $uibModal, dbhService, $UserAlerts,ENUM) {
 
         let vm = this;
-
+       
         $reactive(vm).attach($scope);
         vm.dependency = new Deps.Dependency();
         vm.countries = countries;
@@ -19,15 +19,13 @@ angular
         vm.companyExist = true;
         vm.companySignUp = 'N/A';
 
+        // var Dropbox = require("dropbox");
+
         // Always load the web page with no need to scroll up
         $(document).ready(function(){
             $(this).scrollTop(0);
         });
 
-        Meteor.subscribe('logo.files', {
-            onReady: function () { vm.loadLogo (); vm.dependency.changed();},
-            onError: function () { console.log("onError", arguments); }
-        });
 
         vm.currentUpload = new ReactiveVar(false);
 
@@ -49,42 +47,35 @@ angular
             $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
         }
 
-        $scope.onFileChange = (function (vm) {
-            return function (obj) {
-                let file = obj.files[0];
-                let progressInterval;
-                let fs = new FS.File(file);
-                progressInterval = setInterval(function () {
+        // Store the recruiter's logo 
+        loadLogo = function (event) {
+            var files = event.target.files;
+            file = files[0];
 
-                    vm.dependency.changed();
-                }, 100);
-                vm.currentUpload.set(fs);
-                let uploadedFile = LogoFiles.insert(fs, function(err, success) {
-
-                    clearInterval(progressInterval);
-                    vm.currentUpload.set(false);
-
-                    if (err) {
-                        setTimeout(function () {
-                            $UserAlerts.open("Please check the file size is less then 2Mb and the file is an image", ENUM.ALERT.DANGER, false);
-                        }, 0);
-                    }
-                    else {
-                        if (vm.newRecruiterRegister.profile.companyLogoId && vm.logoFile) {
-                            LogoFiles.remove({_id:vm.newRecruiterRegister.profile.companyLogoId});
-                        }
-                        vm.newRecruiterRegister.profile.companyLogoId = uploadedFile._id;
-
-                        let i = setInterval(function() {
-                            if (fs.url()) {
-                                clearInterval(i);
-                                setTimeout(vm.loadLogo, 100);
-                            }
-                        },100);
-                    }
-                });
-            }
-        })(vm);
+            var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+            dbx.filesUpload({
+                path: '/img/logo/' + file.name,
+                contents: file
+                })
+                .then(function(response) {
+                    vm.newRecruiterRegister.profile.companyLogoId = file.name;
+                    dbx.filesGetThumbnail({
+                        path: '/img/logo/' + file.name,
+                        format: 'png',
+                        size: 'w64h64'
+                        })
+                        .then(function(response) {
+                            document.getElementById('viewLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                    });
+                })
+                .catch(function(error) {
+                     console.log(error);
+            });
+        };
+       
 
         // set the Contact Email to the Login Email as default
         $scope.onEmailUpdate = function(){
@@ -165,8 +156,6 @@ angular
                     companyName: profileRec.companyName,
                     companyUserType: vm.companyUserType,
                     phoneNumber: profileRec.phoneNumber,
-                    // logo: profileRec.logo
-                    // companyLogoId: profileRec.companyLogoId
                     contactEmail: profileRec.contactEmail}
                 },
                 vm.$bindToContext((err) => {
@@ -336,7 +325,6 @@ angular
 
                 /* populate company attributes */
                 vm.company.name = record.profile.companyName;
-                vm.company.logo = record.profile.logo;
                 vm.company.address = record.profile.address;
                 vm.company.country = record.profile.country;
                 vm.company.url = record.profile.compURL;
@@ -380,25 +368,8 @@ angular
         };
 
         vm.helpers({
-            logoFileLink() {
-                vm.dependency.depend();
-                return vm.logoFile ? vm.logoFile.url() : "";
-            },
-            loadProgress() {
-                vm.dependency.depend();
-                let currentUpload = vm.currentUpload.get();
-                return currentUpload.progress ? currentUpload.progress.curValue: 0;
-            }
+
         });
-        vm.loadLogo = function () {
-
-            if (vm.newRecruiterRegister.profile.companyLogoId) {
-
-                vm.logoFile = LogoFiles.findOne(vm.newRecruiterRegister.profile.companyLogoId);
-                console.log(vm.logoFile);
-                vm.dependency.changed();
-            }
-        };
 
         // Sign-Up Tabs navigation
         $(function(){
