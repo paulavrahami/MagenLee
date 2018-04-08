@@ -104,6 +104,7 @@ angular
                     viewCVAnchor.setAttribute('href', window.URL.createObjectURL(response.fileBlob))
                     viewCVAnchor.setAttribute('id', 'viewCVButton');
                     viewCVAnchor.setAttribute('class', 'btn btn-sm btn-info');
+                    viewCVAnchor.setAttribute('target', '_blank');
                     viewCVAnchor.innerHTML = 'View CV';
                     document.getElementById('viewCV'+indexArg).appendChild(viewCVAnchor);
                 })
