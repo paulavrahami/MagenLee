@@ -10,6 +10,7 @@ angular
         challengeEdit.complexityArray = [ENUM.EXPERIENCE.up1, ENUM.EXPERIENCE.up2, ENUM.EXPERIENCE.up3, ENUM.EXPERIENCE.up4];
         challengeEdit.automaticGeneration = false;
         challengeEdit.tbdFeature = true;
+        challengeEdit.challangeCreateMode = '';
 
         if ($scope.challengeCreateMode === ENUM.CHALLENGE_CREATE_MODE.AUDITION) {
             // Get the auditonEdit controller
@@ -27,10 +28,25 @@ angular
             if (auditionEditCtrl.audition.status == ENUM.AUDITION_STATUS.AVAILABLE) {
                 challengeEdit.externalDisabledTriger = true;
             };
+
+            challengeEdit.challangeCreateMode = 'Audition';
+
         };
         
         if ($scope.challengeCreateMode === ENUM.CHALLENGE_CREATE_MODE.POOL) {
-            // Get the talent??? controller
+            // Get the talent controlle
+            var challengeMainCtrl = $scope.$resolve.ChallengeMainCtrl;
+            challengeEdit.subsciptionOk = challengeMainCtrl.subsciptionOk;
+            challengeEdit.modalInstance = challengeMainCtrl.modalInstance;
+
+            challengeEdit.editItem = challengeMainCtrl.editItem;
+            challengeEdit.editItemForCancel = challengeMainCtrl.editItemForCancel;
+            challengeEdit.editTemplate = challengeMainCtrl.editTemplate;
+
+            //The content of all skills in Skills collection will be loaded by
+            //challangeMainCtrl
+            challengeEdit.skills = challengeMainCtrl.skills;
+            challengeEdit.challangeCreateMode = 'Pool';
         };
 
         function showInfoMessage(msgArg, callbackArg) {
