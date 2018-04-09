@@ -366,83 +366,6 @@ angular
                 return
             };
             
-            // Challenge content's checks according to the different templates
-            switch (vm.editTemplate._id) {
-                case "57f7a8406f903fc2b6aae39a" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if ((!vm.editItem.content["1st Answer"] || vm.editItem.content["1st Answer"] && !vm.editItem.content["1st Answer"].answer) ||
-                        (!vm.editItem.content["2nd Answer"] || vm.editItem.content["2nd Answer"] && !vm.editItem.content["2nd Answer"].answer) ||
-                        (!vm.editItem.content["3rd Answer"] || vm.editItem.content["3rd Answer"] && !vm.editItem.content["3rd Answer"].answer) ||
-                        (!vm.editItem.content["4th Answer"] || vm.editItem.content["4th Answer"] && !vm.editItem.content["4th Answer"].answer)) {
-                        showErrorMessage("All answers should be defined");
-                        return
-                    };
-                    let i=0;
-                    vm.editItem.content["1st Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["2nd Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["3rd Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["4th Answer"].correct ? i++ : i=i;
-                    if (i===0) {
-                        showErrorMessage("The Challenge's correct answer should be defined");
-                        return;
-                    };
-                    if (i>1) {
-                        showErrorMessage("Only one correct answer can be defined for the challenge");
-                        return;  
-                    };
-                    break;
-
-                case "57f7a8406f903fc2b6aae49a" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if (!vm.editItem.content.answers || !vm.editItem.content.results) {
-                        showErrorMessage("The challenge's answers and results should be defined");
-                        return;
-                    };
-                    if (
-                        vm.editItem.content.answers.length !== vm.editItem.content.results.length) {
-                        showErrorMessage("The challenge's number of answers and results should match");
-                        return;
-                    };
-                    for (i=0; i < vm.editItem.content.results.length; i++) {
-                        if (vm.editItem.content.results[i] > 100) {
-                            showErrorMessage("Answer's result can not be greater than 100");
-                            return;
-                        };
-                    };
-                    break;
-
-                case "5814b536e288e1a685c7a451" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if ((!vm.editItem.content['1st Button Text']) ||
-                        (!vm.editItem.content['2nd Button Text']) ||
-                        (vm.editItem.content['1st Button Score'] === null) ||
-                        (vm.editItem.content['1st Button Score'] === undefined) ||
-                        (vm.editItem.content['2nd Button Score'] === null) ||
-                        (vm.editItem.content['2nd Button Score'] === undefined)) {
-                        showErrorMessage("All challenge's buttons should be defined");
-                        return;
-                    };
-                    if (((vm.editItem.content['1st Button Score']) && (vm.editItem.content['1st Button Score'] > 100)) ||
-                        ((vm.editItem.content['2nd Button Score']) && (vm.editItem.content['2nd Button Score'] > 100))) {
-                        showErrorMessage("Button's score can not be greater than 100");
-                        return;
-                    };
-                    if ((vm.editItem.content['1st Button Score'] !== 100) &&
-                        (vm.editItem.content['2nd Button Score'] !== 100)) {
-                        showErrorMessage("At leaset one button's score should be equal to 100");
-                        return;
-                    };
-                    break;
-            };
 
             if (vm.editItem.status == ENUM.ITEM_STATUS.NEW) {
                 vm.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
@@ -564,11 +487,9 @@ angular
             editItem._id = Items.insert(angular.copy(editItem));
 
              auditionItemArrayEntry = {itemId:editItem._id, maxScore:0};
-            // vm.audition.items.push(angular.copy(auditionItemArrayEntry));
-            // vm.saveAudition();
+            
             vm.openEditItem(angular.copy(auditionItemArrayEntry));
-            //** close the cts area for the "create challenge" option
-            // auditionEdit.showCtsAreaCreateChallenge = false;
+            
         };
 
        /**
@@ -590,19 +511,20 @@ angular
 
 
         vm.openEditItem = function (itemIdArg) {
-                        console.log('in open edit item');
+                        
             
                         vm.selectEditItem(itemIdArg);
-            
-                        function loadModal () {
+                        // Invoke the item modal in create audition mode
+                        $scope.challengeCreateMode = ENUM.CHALLENGE_CREATE_MODE.POOL;
             
                             vm.modalInstance = $uibModal.open({
                                 animation: true,
-                                templateUrl: 'client/talents/view/editItem.html',
-                                controller: 'editItemCtrl',
-                                controllerAs: 'editItem',
+                                templateUrl: 'client/challenge/view/challengeEdit.html',
+                                controller: 'challengeEditCtrl',
+                                controllerAs: 'challengeEdit',
                                 keyboard: false,
                                 backdrop  : 'static',
+                                scope: $scope,
                                 resolve: {
                                     ChallengeMainCtrl : function () {
             
@@ -611,9 +533,28 @@ angular
                                 },
                                 size: 'xl'
                             });
-                        }
-                        loadModal();
-                        vm.dependency.changed();
+                                        // handle the modal promise
+                            vm.modalInstance.result.then(function (results) {
+                                vm.changeSelectedStatus(vm.selectedStatus);
+                                switch (results) {
+                                    case ENUM.MODAL_RESULT.SAVE: {
+                                        break;
+                                    };
+                                    case ENUM.MODAL_RESULT.CANCEL: {
+                                         if (vm.editItem.status === ENUM.ITEM_STATUS.IN_WORK) {
+                                            vm.editItem = null;
+                                            // vm.editItem = vm.editItemForCancel;
+                                        };
+                                        break;
+                                    };
+                                    case ENUM.MODAL_RESULT.CLOSE: {
+                                        
+                                        break;
+                                    };
+                                    default:
+                                        break;
+                                };
+                            });
                     };
 
         /**

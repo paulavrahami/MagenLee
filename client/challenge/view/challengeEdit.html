@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label for="" class="required">Skill</label>
                     <select
-                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')"
+                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned') && (challengeEdit.challangeCreateMode === 'Audition')"
                         class="form-control"
                         ng-model="challengeEdit.editItem.skill"
                         ng-change="challengeEdit.challengeEdit.()">
@@ -45,6 +45,12 @@
                         ng-model="challengeEdit.editItem.skill"
                         class="form-control"
                         ng-disabled="true">
+                    <input
+                        ng-if="!challengeEdit.externalDisabledTriger && (editItem.ChallengeMainCtrl.editItem.status !== 'Assigned') && (challengeEdit.challangeCreateMode === 'Pool')"
+                        type="text"
+                        ng-model="challengeEdit.editItem.skill"
+                        ng-change="challengeEdit.challengeEdit.()"
+                        class="form-control">
                 </div>
             </div>
             <div class="col-md-3">
