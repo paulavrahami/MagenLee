@@ -250,6 +250,7 @@ angular
         };
 
         challengeEdit.cancelEditItem = function () {
+            console.log('in cancel');
             if (challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) {
                 Items.remove({_id:challengeEdit.editItem._id});
             }

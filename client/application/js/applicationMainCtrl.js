@@ -45,7 +45,6 @@ angular
                 reactiveContext.subscribe('applicationsCampaign', () => [vm.campaignId]);
                 reactiveContext.subscribe('auditionsCampaign', () => [vm.campaignId]);
                 reactiveContext.subscribe('items');
-                reactiveContext.subscribe('cv.files');
             }
         }
 
@@ -80,10 +79,38 @@ angular
             localStorage.removeItem('selectedFilter');
         }
 
-        vm.getCVLink = function(fileId) {
-            let cvFile = CVFiles.findOne(fileId);
+        
+        vm.viewCV = function (applicationArg, indexArg) {
+            // Note: the indexArg is the application entry in the applications list on the respective HTML
 
-            return cvFile ? cvFile : {url(){},original:{name:""}};
+            // If no CV attached to the application
+            if (!applicationArg.cv) {
+                return;
+            };
+            // If the questionnaire tab already accesses and the 'View CV' button already generated - remove the button
+            // as it will be regenerated. This is to avoid buttons duplication
+            var viewCVElement = document.getElementById('viewCV'+indexArg);
+            if (viewCVElement.innerText.search('View CV') !== -1) {
+                document.getElementById('viewCV'+indexArg).removeChild(document.getElementById('viewCVButton'));
+            };
+
+            var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+            dbx.filesGetPreview({
+                path: '/txt/cv/' + applicationArg.cv,
+                })
+                .then(function(response) {
+                    // Create the 'View CV' button dynamically
+                    var viewCVAnchor = document.createElement('a');
+                    viewCVAnchor.setAttribute('href', window.URL.createObjectURL(response.fileBlob))
+                    viewCVAnchor.setAttribute('id', 'viewCVButton');
+                    viewCVAnchor.setAttribute('class', 'btn btn-sm btn-info');
+                    viewCVAnchor.setAttribute('target', '_blank');
+                    viewCVAnchor.innerHTML = 'View CV';
+                    document.getElementById('viewCV'+indexArg).appendChild(viewCVAnchor);
+                })
+                .catch(function(error) {
+                    console.log(error);
+            });
         };
 
         /**

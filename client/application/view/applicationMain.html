@@ -1,4 +1,6 @@
 <!--applicatioMain.html-->
+<script src="js/Dropbox-sdk.js"></script>
+
 <div class="row">
   <div class="col-md-0-6"></div>
     <div class="col-md-11">
@@ -258,7 +260,7 @@
               <div class="panel-body" >
                 <ul class="nav nav-tabs">
                   <li class="active"><a data-toggle="tab" href="#home{{$index}}">Audition</a></li>
-                  <li><a data-toggle="tab" href="#menu1{{$index}}">Questionnaire</a></li>
+                  <li><a data-toggle="tab" href="#menu1{{$index}}" ng-click="vm.viewCV(application, $index)">Questionnaire</a></li>
                   <li><a data-toggle="tab" href="#menu2{{$index}}" ng-click="vm.feedbackTab(application)">Feedback</a></li>
                 </ul>
                 <p class="resolution-status-date" ng-hide="!application.resolutionStatusDate"> <strong>Resolution Status Date:</strong> {{application.resolutionStatusDate | date}}</p> 
@@ -323,7 +325,7 @@
                           </table>
                         <!-- Audition preview -->
                           <div class="row">
-                              <a class="btn btn-sm btn-primary" ng-click="vm.viewAuditionResults(application)">View Audition</a>
+                              <a class="btn btn-sm btn-info" ng-click="vm.viewAuditionResults(application)">View Audition</a>
                               <a class="btn btn-sm btn-success button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.HIRED, $index)">Hired</a>
                               <a class="btn btn-sm btn-warning button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REVIEW, $index)">Review</a>
                               <a class="btn btn-sm btn-danger button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REJECT, $index)">Reject</a>
@@ -371,9 +373,9 @@
                           <p ng-if="application.linkedInURL">
                             LinkedIn Profile : <strong>{{application.linkedInURL}}</strong>
                           </p>
-                          <p ng-if="application.fileId">
-                              <a href="{{vm.getCVLink(application.fileId).url()}}" download="{{vm.getCVLink(application.fileId).original.name}}" target="_blank"><strong>Download CV</strong></a>
-                          </p>
+                          <div id="viewCV{{$index}}">
+                              <!-- Button created dynamically in vm.viewCV function -->
+                          </div>
                       </div>
                     </div>
                   </div>
