@@ -794,11 +794,11 @@
     </div>
 
     <!-- Modal Footer -->
-    <div class="modal-footer" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')">
+    <div class="modal-footer" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned') && (challengeEdit.editItem.status !== 'Available')">
         <button class="btn btn-secondery" type="button" ng-click="challengeEdit.cancelEditItem()">Cancel</button>
         <button class="btn btn-primary" type="button" ng-click="challengeEdit.registerEditItem()">Save</button>
     </div>
-    <div class="modal-footer" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">
+    <div class="modal-footer" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned') || (challengeEdit.editItem.status === 'Available')">
         <button class="btn btn-secondery" type="button" ng-click="challengeEdit.closeEditItem()">Close</button>
     </div>
 </div>

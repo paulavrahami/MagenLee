@@ -450,14 +450,14 @@ angular
                                         // handle the modal promise
                             vm.modalInstance.result.then(function (results) {
                                 vm.changeSelectedStatus(vm.selectedStatus);
+                                vm.dependency.changed();
                                 switch (results) {
                                     case ENUM.MODAL_RESULT.SAVE: {
                                         break;
                                     };
                                     case ENUM.MODAL_RESULT.CANCEL: {
-                                         if (vm.editItem.status === ENUM.ITEM_STATUS.IN_WORK) {
+                                         if ((vm.editItem.status === ENUM.ITEM_STATUS.IN_WORK) || (vm.editItem.status === ENUM.ITEM_STATUS.AVAILABLE)) {
                                             vm.editItem = null;
-                                            // vm.editItem = vm.editItemForCancel;
                                         };
                                         break;
                                     };
