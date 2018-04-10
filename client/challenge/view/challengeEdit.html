@@ -1,3 +1,4 @@
+<script src="js/Dropbox-sdk.js"></script>
 
 <div class="modal-content" ng-if="challengeEdit.subsciptionOk">
     <!-- Modal Header -->
@@ -34,8 +35,7 @@
                     <select
                         ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned') && (challengeEdit.challangeCreateMode === 'Audition')"
                         class="form-control"
-                        ng-model="challengeEdit.editItem.skill"
-                        ng-change="challengeEdit.challengeEdit.()">
+                        ng-model="challengeEdit.editItem.skill">
                         <!-- ng-options="skill.type for skill in challengeEdit.skills"> -->
                             <!-- <option value=""></option> -->
                             <option ng-repeat="skill in challengeEdit.skills" value="{{skill.type}}">{{skill.type}}</option>
@@ -206,14 +206,14 @@
                             <div class="col-md-1"></div>
                             <div class="col-md-5">
                                 <ul class="nav nav-tabs">
-                                  <li class="active"><a data-toggle="tab" href="#TMP003-text">Text</a></li>
-                                  <li><a data-toggle="tab" href="#TMP003-image">Image</a></li>
-                                  <li><a data-toggle="tab" href="#TMP003-video">Video</a></li>
+                                  <li class="active"><a data-toggle="tab" href="#TMP001-text">Text</a></li>
+                                  <li><a data-toggle="tab" href="#TMP001-image" ng-click="challengeEdit.viewImage()">Image</a></li>
+                                  <li><a data-toggle="tab" href="#TMP001-video">Video</a></li>
                                 </ul>
                                 <br>
                                 <div class="tab-content">
                                     <!-- TAB Content - Text -->
-                                    <div id="TMP003-text" class="tab-pane fade in active">
+                                    <div id="TMP001-text" class="tab-pane fade in active">
                                         <!-- Statement -->
                                         <div class="form-group">
                                             <label>Free Text</label>
@@ -235,20 +235,19 @@
                                         </div>
                                     </div>
                                     <!-- TAB Content - Image -->
-                                    <div id="TMP003-image" class="tab-pane fade">
+                                    <div id="TMP001-image" class="tab-pane fade">
                                         <!-- Image -->
-                                        <div class="form-group">
-                                            <label>Image</label>
+                                        <div class="form-group col-md-12">
+                                            <label>File</label>
                                             <input
-                                                type="text"
+                                                type="file"
                                                 class="form-control"
                                                 ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
-                                                ng-model="challengeEdit.editItem.content['image']"
-                                                ng-change=" "
-                                                placeholder="Image URL">
+                                                onchange="loadImage(event)">
+                                            <img id="viewImage" class="view-image">
                                         </div>
                                         <!-- Image - Size/Width -->
-                                        <div class="form-group">
+                                        <div class="form-group col-md-6">
                                             <label>Width</label>
                                             <input
                                                 type="text"
@@ -256,10 +255,10 @@
                                                 ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
                                                 ng-model="challengeEdit.editItem.content['image Width']"
                                                 ng-change=" "
-                                                placeholder="The display area in pixels">
+                                                placeholder="In Pixels (e.g., 400)">
                                         </div>
                                         <!-- Image - Size/Height -->
-                                        <div class="form-group">
+                                        <div class="form-group col-md-6">
                                             <label>Height</label>
                                             <input
                                                 type="text"
@@ -267,21 +266,22 @@
                                                 ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
                                                 ng-model="challengeEdit.editItem.content['image Height']"
                                                 ng-change=" "
-                                                placeholder="The display area in pixels">
+                                                placeholder="In Pixels (e.g., 300)">
                                         </div>
                                         <!-- Image - Position -->
-                                        <div class="form-group">
+                                        <div class="form-group col-md-12">
                                             <label>Float to Right</label>
                                             <input
                                                 type="checkbox"
                                                 ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
-                                                ng-model="challengeEdit.editItem.content['image Float Right']"
-                                                ng-change=" "
-                                                placeholder=""/>
+                                                ng-model="challengeEdit.editItem.content['image Float Right']">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-sm remove-image-btn" type="button" ng-click="challengeEdit.removeImage()" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Remove Image</button>
                                         </div>
                                     </div>
                                     <!-- TAB Content - Video -->
-                                    <div id="TMP003-video" class="tab-pane fade">
+                                    <div id="TMP001-video" class="tab-pane fade">
                                         <p>Coming Soon...</p>
                                     </div>
                                 </div>
@@ -379,14 +379,14 @@
                             <div class="col-md-1"></div>
                             <div class="col-md-5">
                                 <ul class="nav nav-tabs">
-                                  <li class="active"><a data-toggle="tab" href="#TMP003-text">Text</a></li>
-                                  <li><a data-toggle="tab" href="#TMP003-image">Image</a></li>
-                                  <li><a data-toggle="tab" href="#TMP003-video">Video</a></li>
+                                  <li class="active"><a data-toggle="tab" href="#TMP002-text">Text</a></li>
+                                  <li><a data-toggle="tab" href="#TMP002-image">Image</a></li>
+                                  <li><a data-toggle="tab" href="#TMP002-video">Video</a></li>
                                 </ul>
                                 <br>
                                 <div class="tab-content">
                                     <!-- TAB Content - Text -->
-                                    <div id="TMP003-text" class="tab-pane fade in active">
+                                    <div id="TMP002-text" class="tab-pane fade in active">
                                         <!-- Statement -->
                                         <div class="form-group">
                                             <label>Free Text</label>
@@ -408,7 +408,7 @@
                                         </div>
                                     </div>
                                     <!-- TAB Content - Image -->
-                                    <div id="TMP003-image" class="tab-pane fade">
+                                    <div id="TMP002-image" class="tab-pane fade">
                                         <!-- Image -->
                                         <div class="form-group">
                                             <label>Image</label>
@@ -454,7 +454,7 @@
                                         </div>
                                     </div>
                                     <!-- TAB Content - Video -->
-                                    <div id="TMP003-video" class="tab-pane fade">
+                                    <div id="TMP002-video" class="tab-pane fade">
                                         <p>Coming Soon...</p>
                                     </div>
                                 </div>
