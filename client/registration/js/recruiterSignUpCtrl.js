@@ -19,8 +19,6 @@ angular
         vm.companyExist = true;
         vm.companySignUp = 'N/A';
 
-        // var Dropbox = require("dropbox");
-
         // Always load the web page with no need to scroll up
         $(document).ready(function(){
             $(this).scrollTop(0);
