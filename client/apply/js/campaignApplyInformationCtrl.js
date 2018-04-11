@@ -203,6 +203,10 @@ angular
             var files = event.target.files;
             file = files[0];
 
+            if (file.name) {
+                document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
+            };
+
             var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
             dbx.filesUpload({
                 path: '/txt/cv/' + file.name,
@@ -210,6 +214,7 @@ angular
                 })
                 .then(function(response) {
                     vm.application.cv = file.name;
+                    document.getElementById('uploadProgress').setAttribute("class", '')
                 })
                 .catch(function(error) {
                      console.log(error);

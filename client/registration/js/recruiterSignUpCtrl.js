@@ -50,6 +50,10 @@ angular
             var files = event.target.files;
             file = files[0];
 
+            if (file.name) {
+                document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
+            };
+
             var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
             dbx.filesUpload({
                 path: '/img/logo/' + file.name,
@@ -64,6 +68,7 @@ angular
                         })
                         .then(function(response) {
                             document.getElementById('viewLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                            document.getElementById('uploadProgress').setAttribute("class", '');
                         })
                         .catch(function(error) {
                             console.log(error);

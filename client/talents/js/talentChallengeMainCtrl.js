@@ -109,6 +109,7 @@ angular
 
          vm.doSubscription  = function () {
             
+                        vm.subscribe('allAuditions', () => []);
                         if (Meteor.user() && Meteor.user().profile) {
                             // reactiveContext.subscribe('itemsByAuthorId', () => [Meteor.user()._id]);
                             vm.subscribe('itemsByAuthorId',() => [Meteor.user()._id]);
@@ -206,7 +207,7 @@ angular
                 else {
                     conditions = {$and: [
                         {authorId: Meteor.user()._id},
-                        {$or:[{status: {$ne: ENUM.ITEM_STATUS.CANCELED},status: {$ne: ENUM.ITEM_STATUS.NEW}}]}
+                        {status: {$ne: ENUM.ITEM_STATUS.NEW}}
                     ]};
                 }
                 // conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
@@ -338,22 +339,7 @@ angular
 
        };
 
-       /**
-         * Items dynamic edit area:
-         */
 
-        /**
-         * @desc Add an element to the content of an item build dynamically;
-         * @param keyArg
-         */
-        vm.addToContentArray = function(keyArg) {
-
-            if (!vm.editItem.content[keyArg]) {
-                vm.editItem.content[keyArg] = [];
-            }
-            vm.editItem.content[keyArg].push('');
-            vm.saveEditItem();
-        };
 
         vm.registerEditItem = function () {
 
@@ -366,83 +352,6 @@ angular
                 return
             };
             
-            // Challenge content's checks according to the different templates
-            switch (vm.editTemplate._id) {
-                case "57f7a8406f903fc2b6aae39a" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if ((!vm.editItem.content["1st Answer"] || vm.editItem.content["1st Answer"] && !vm.editItem.content["1st Answer"].answer) ||
-                        (!vm.editItem.content["2nd Answer"] || vm.editItem.content["2nd Answer"] && !vm.editItem.content["2nd Answer"].answer) ||
-                        (!vm.editItem.content["3rd Answer"] || vm.editItem.content["3rd Answer"] && !vm.editItem.content["3rd Answer"].answer) ||
-                        (!vm.editItem.content["4th Answer"] || vm.editItem.content["4th Answer"] && !vm.editItem.content["4th Answer"].answer)) {
-                        showErrorMessage("All answers should be defined");
-                        return
-                    };
-                    let i=0;
-                    vm.editItem.content["1st Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["2nd Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["3rd Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["4th Answer"].correct ? i++ : i=i;
-                    if (i===0) {
-                        showErrorMessage("The Challenge's correct answer should be defined");
-                        return;
-                    };
-                    if (i>1) {
-                        showErrorMessage("Only one correct answer can be defined for the challenge");
-                        return;  
-                    };
-                    break;
-
-                case "57f7a8406f903fc2b6aae49a" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if (!vm.editItem.content.answers || !vm.editItem.content.results) {
-                        showErrorMessage("The challenge's answers and results should be defined");
-                        return;
-                    };
-                    if (
-                        vm.editItem.content.answers.length !== vm.editItem.content.results.length) {
-                        showErrorMessage("The challenge's number of answers and results should match");
-                        return;
-                    };
-                    for (i=0; i < vm.editItem.content.results.length; i++) {
-                        if (vm.editItem.content.results[i] > 100) {
-                            showErrorMessage("Answer's result can not be greater than 100");
-                            return;
-                        };
-                    };
-                    break;
-
-                case "5814b536e288e1a685c7a451" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if ((!vm.editItem.content['1st Button Text']) ||
-                        (!vm.editItem.content['2nd Button Text']) ||
-                        (vm.editItem.content['1st Button Score'] === null) ||
-                        (vm.editItem.content['1st Button Score'] === undefined) ||
-                        (vm.editItem.content['2nd Button Score'] === null) ||
-                        (vm.editItem.content['2nd Button Score'] === undefined)) {
-                        showErrorMessage("All challenge's buttons should be defined");
-                        return;
-                    };
-                    if (((vm.editItem.content['1st Button Score']) && (vm.editItem.content['1st Button Score'] > 100)) ||
-                        ((vm.editItem.content['2nd Button Score']) && (vm.editItem.content['2nd Button Score'] > 100))) {
-                        showErrorMessage("Button's score can not be greater than 100");
-                        return;
-                    };
-                    if ((vm.editItem.content['1st Button Score'] !== 100) &&
-                        (vm.editItem.content['2nd Button Score'] !== 100)) {
-                        showErrorMessage("At leaset one button's score should be equal to 100");
-                        return;
-                    };
-                    break;
-            };
 
             if (vm.editItem.status == ENUM.ITEM_STATUS.NEW) {
                 vm.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
@@ -454,78 +363,6 @@ angular
                 vm.changeSelectedStatus(vm.selectedStatus);
                 $state.go('mainChallenges');
             };
-        };
-        
-        vm.cancelEditItem = function () {
-        
-            // if (vm.editItem.status == ENUM.ITEM_STATUS.NEW) {
-            //     vm.removeItem(vm.editItem._id);
-            // }
-            // else {
-                 vm.editItem = vm.editItemForCancel;
-                 vm.saveEditItem();
-            //};
-        // vm.editItem = null;
-        if (vm.modalInstance) {
-            vm.modalInstance.close();
-            vm.changeSelectedStatus(vm.selectedStatus);
-            $state.go('mainChallenges');
-            };
-        };
-
-        /**
-         * @desc Remove the last element from the content of an item build dynamically;
-         * @param keyArg
-         */
-        vm.removeFromContentArray = function(keyArg) {
-
-            if (vm.editItem.content[keyArg]) {
-                vm.editItem.content[keyArg].splice(-1);
-                vm.saveEditItem();
-            }
-        };
-
-        vm.closeEditItem = function () {
-            if (vm.modalInstance) {
-                vm.modalInstance.close();
-                $state.go('mainChallenges');
-            };
-        };
-
-        /**
-         * @desc is array fn for UI;
-         * @param value
-         */
-        vm.isArray = function (value) {
-            return angular.isArray(value);
-        };
-        /**
-         * @desc is string fn for UI;
-         * @param value
-         */
-        vm.isString = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "string";
-        };
-        /**
-         * @desc is number fn for UI;
-         * @param value
-         */
-        vm.isNumber = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "number";
-        };
-        /**
-         * @desc is boolean fn for UI;
-         * @param value
-         */
-        vm.isBoolean = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "boolean";
-        };
-        /**
-         * @desc is object fn for UI;
-         * @param value
-         */
-        vm.isObject = function (value) {
-            return typeof(value) === "object" && String(value).toLowerCase() !== "string" && String(value).toLowerCase() !== "number" && String(value).toLowerCase() !== "boolean";
         };
 
 
@@ -564,11 +401,9 @@ angular
             editItem._id = Items.insert(angular.copy(editItem));
 
              auditionItemArrayEntry = {itemId:editItem._id, maxScore:0};
-            // vm.audition.items.push(angular.copy(auditionItemArrayEntry));
-            // vm.saveAudition();
+            
             vm.openEditItem(angular.copy(auditionItemArrayEntry));
-            //** close the cts area for the "create challenge" option
-            // auditionEdit.showCtsAreaCreateChallenge = false;
+            
         };
 
        /**
@@ -590,19 +425,20 @@ angular
 
 
         vm.openEditItem = function (itemIdArg) {
-                        console.log('in open edit item');
+                        
             
                         vm.selectEditItem(itemIdArg);
-            
-                        function loadModal () {
+                        // Invoke the item modal in create audition mode
+                        $scope.challengeCreateMode = ENUM.CHALLENGE_CREATE_MODE.POOL;
             
                             vm.modalInstance = $uibModal.open({
                                 animation: true,
-                                templateUrl: 'client/talents/view/editItem.html',
-                                controller: 'editItemCtrl',
-                                controllerAs: 'editItem',
+                                templateUrl: 'client/challenge/view/challengeEdit.html',
+                                controller: 'challengeEditCtrl',
+                                controllerAs: 'challengeEdit',
                                 keyboard: false,
                                 backdrop  : 'static',
+                                scope: $scope,
                                 resolve: {
                                     ChallengeMainCtrl : function () {
             
@@ -611,9 +447,28 @@ angular
                                 },
                                 size: 'xl'
                             });
-                        }
-                        loadModal();
-                        vm.dependency.changed();
+                                        // handle the modal promise
+                            vm.modalInstance.result.then(function (results) {
+                                vm.changeSelectedStatus(vm.selectedStatus);
+                                vm.dependency.changed();
+                                switch (results) {
+                                    case ENUM.MODAL_RESULT.SAVE: {
+                                        break;
+                                    };
+                                    case ENUM.MODAL_RESULT.CANCEL: {
+                                         if ((vm.editItem.status === ENUM.ITEM_STATUS.IN_WORK) || (vm.editItem.status === ENUM.ITEM_STATUS.AVAILABLE)) {
+                                            vm.editItem = null;
+                                        };
+                                        break;
+                                    };
+                                    case ENUM.MODAL_RESULT.CLOSE: {
+                                        
+                                        break;
+                                    };
+                                    default:
+                                        break;
+                                };
+                            });
                     };
 
         /**
@@ -622,22 +477,40 @@ angular
          */
         vm.deleteItem = function (itemArg){
 
-            $UserAlerts.prompt(
-                'Are you sure you want to delete the challenge?',
-                ENUM.ALERT.INFO,
-                true,
-                function () {
-                    let item = angular.copy(itemArg);
-                    let tempId   = item._id;
+            vm.readyToBeDeleted = false;
+            itemUsed = '';
+            //Check if the available item is already being used in a non published audition
+            if (itemArg.status === ENUM.ITEM_STATUS.AVAILABLE) {
+                itemUsed = Auditions.findOne({"items.itemId": itemArg._id});
+                if (itemUsed) {
+                    vm.readyToBeDeleted = false;    
+                } else {
+                    vm.readyToBeDeleted = true;
+                }
+            } else {
+                vm.readyToBeDeleted = true;
+            };
 
-                    item.status     = ENUM.ITEM_STATUS.CANCELED;
+            if (vm.readyToBeDeleted){
+                        $UserAlerts.prompt(
+                            'Are you sure you want to delete the challenge?',
+                            ENUM.ALERT.INFO,
+                            true,
+                            function () {
+                                let item = angular.copy(itemArg);
+                                // let tempId   = item._id;
 
-                    delete item._id;
-                    Items.update({_id: tempId},{$set: item});
+                                // item.status     = ENUM.ITEM_STATUS.CANCELED;
 
+                                // delete item._id;
+                                // Items.update({_id: tempId},{$set: item});
+                                Items.remove({_id:item._id});
 
-                    vm.changeSelectedStatus(vm.selectedStatus);
-            });
+                                vm.changeSelectedStatus(vm.selectedStatus);
+                        });
+                    } else {
+                        showErrorMessage("The challenge is in use, therefore can not be deleted");
+                    }
         };
 
         vm.allowItem = function (itemArg){

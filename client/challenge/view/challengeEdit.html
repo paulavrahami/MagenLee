@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label for="" class="required">Skill</label>
                     <select
-                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')"
+                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned') && (challengeEdit.challangeCreateMode === 'Audition')"
                         class="form-control"
                         ng-model="challengeEdit.editItem.skill">
                         <!-- ng-options="skill.type for skill in challengeEdit.skills"> -->
@@ -45,6 +45,12 @@
                         ng-model="challengeEdit.editItem.skill"
                         class="form-control"
                         ng-disabled="true">
+                    <input
+                        ng-if="!challengeEdit.externalDisabledTriger && (editItem.ChallengeMainCtrl.editItem.status !== 'Assigned') && (challengeEdit.challangeCreateMode === 'Pool')"
+                        type="text"
+                        ng-model="challengeEdit.editItem.skill"
+                        ng-change="challengeEdit.challengeEdit.()"
+                        class="form-control">
                 </div>
             </div>
             <div class="col-md-3">
@@ -238,6 +244,7 @@
                                                 class="form-control"
                                                 ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
                                                 onchange="loadImage(event)">
+                                            <span id="uploadProgress"></span>
                                             <img id="viewImage" class="view-image">
                                         </div>
                                         <!-- Image - Size/Width -->
@@ -788,11 +795,11 @@
     </div>
 
     <!-- Modal Footer -->
-    <div class="modal-footer" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')">
+    <div class="modal-footer" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned') && (challengeEdit.editItem.status !== 'Available')">
         <button class="btn btn-secondery" type="button" ng-click="challengeEdit.cancelEditItem()">Cancel</button>
         <button class="btn btn-primary" type="button" ng-click="challengeEdit.registerEditItem()">Save</button>
     </div>
-    <div class="modal-footer" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">
+    <div class="modal-footer" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned') || (challengeEdit.editItem.status === 'Available')">
         <button class="btn btn-secondery" type="button" ng-click="challengeEdit.closeEditItem()">Close</button>
     </div>
 </div>
