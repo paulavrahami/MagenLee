@@ -32,7 +32,7 @@ angular
             challengeEdit.challangeCreateMode = 'Audition';
 
         };
-        
+                   
         if ($scope.challengeCreateMode === ENUM.CHALLENGE_CREATE_MODE.POOL) {
             // Get the talent controlle
             var challengeMainCtrl = $scope.$resolve.ChallengeMainCtrl;
@@ -48,6 +48,7 @@ angular
             challengeEdit.skills = challengeMainCtrl.skills;
             challengeEdit.challangeCreateMode = 'Pool';
         };
+
 
         function showInfoMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
@@ -114,12 +115,17 @@ angular
         };
 
         challengeEdit.registerEditItem = function () {
-            if  (!challengeEdit.editItem.skill) {
+            console.log("Step into -> challengeEdit.registerEditItem function")
+            if (!challengeEdit.editItem.skill) {
                 showErrorMessage("The challenge's skill should be defined");
                 return
             };
-            if  (!challengeEdit.editItem.complexity) {
+            if (!challengeEdit.editItem.complexity) {
                 showErrorMessage("The challenge's complexity should be defined");
+                return
+            };
+            if (challengeEdit.editItem.itemDuration === 0) {
+                showErrorMessage("The challenge's duration should be defined");
                 return
             };
             
@@ -149,6 +155,13 @@ angular
                     if (i>1) {
                         showErrorMessage("Only one correct answer can be defined for the challenge");
                         return;  
+                    };
+                    if (challengeEdit.editItem.content['image']) {
+                        if ((!challengeEdit.editItem.content['image Width'] || challengeEdit.editItem.content['image Width'] === "" || challengeEdit.editItem.content['image Width'] === "0") ||
+                            (!challengeEdit.editItem.content['image Height'] || challengeEdit.editItem.content['image Height'] === "" || challengeEdit.editItem.content['image Height'] === "0")) {
+                            showErrorMessage("Please define a valid image size");
+                            return;
+                        };
                     };
                     break;
 
@@ -196,11 +209,11 @@ angular
                     if (answer100 === 0) {
                         showErrorMessage("An answer with a 100 score should be defined");
                         return;
-                    }
+                    };
                     if (answer100 > 1) {
                         showErrorMessage("Only one answer should have a 100 score");
                         return;
-                    }
+                    };
                     break;
 
                 case "5814b536e288e1a685c7a451" :
@@ -347,5 +360,67 @@ angular
             };
             // challengeEdit.saveEditItem();
         };
-      
+
+        // Store the recruiter's logo 
+        loadImage = function (event) {
+            var files = event.target.files;
+            file = files[0];
+
+            if (file.name) {
+                document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
+            };
+
+            var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+            dbx.filesUpload({
+                path: '/img/challenge/' + file.name,
+                contents: file
+                })
+                .then(function(response) {
+                    challengeEdit.editItem.content['image'] = file.name;
+                    dbx.filesGetThumbnail({
+                        path: '/img/Challenge/' + file.name,
+                        format: 'png',
+                        size: 'w640h480'
+                        })
+                        .then(function(response) {
+                            document.getElementById('viewImage').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                            document.getElementById('uploadProgress').setAttribute("class", '');
+
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                    });
+                })
+                .catch(function(error) {
+                     console.log(error);
+            });
+        };
+        
+        challengeEdit.viewImage = function () {
+            console.log("image: ", challengeEdit.editItem.content['image'])
+            if (challengeEdit.editItem.content['image']) {
+              var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+              dbx.filesGetThumbnail({
+                  path: '/img/Challenge/' + challengeEdit.editItem.content['image'],
+                  format: 'png',
+                  size: 'w640h480'
+                  })
+                  .then(function(response) {
+                      document.getElementById('viewImage').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                  })
+                  .catch(function(error) {
+                      console.log(error);
+              });
+            }; 
+        };
+
+        challengeEdit.removeImage = function () {
+            challengeEdit.editItem.content['image'] = "";
+            challengeEdit.editItem.content['image Width'] = "";
+            challengeEdit.editItem.content['image Height'] = "";
+            challengeEdit.editItem.content['image Float Right'] = "";
+            document.getElementById('viewImage').setAttribute("src", "");
+        };
+
+     
     });

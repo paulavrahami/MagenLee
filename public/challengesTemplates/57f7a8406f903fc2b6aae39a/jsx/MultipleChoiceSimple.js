@@ -69,6 +69,24 @@ Meteor.MultipleChoiceSimple = React.createClass({
         };
     },
 
+    componentDidMount: function () {
+        let _this4 = this;
+        if (_this4.state['image'] && _this4.state['image'] !== "") {
+            // get the file's dropbox url
+            var dbx = new Dropbox.Dropbox({accessToken: 'jNRAKI6EZHAAAAAAAAAB_IropCuolUgvwDlmIEBdaddvwmhULqUAdxfuNnU3fwwn'});
+            dbx.filesGetThumbnail({
+                path: '/img/challenge/' + _this4.state['image'],
+                format: 'png',
+                size: 'w1024h768'
+                })
+                .then(function(response) {debugger;
+                    _this4.refs["imageRef"].src = window.URL.createObjectURL(response.fileBlob);
+                })
+                .catch(function(error) {
+                    console.log(error);
+            });
+        }
+    },
 
     /**
      * @desc Render the element;
@@ -133,22 +151,25 @@ Meteor.MultipleChoiceSimple = React.createClass({
                             }
                         }(),
 
-                        function () {
-                            if (_this4.state['image'] && _this4.state['image'] !== "") {
-                                return React.createElement(
-                                    'div',
-                                    { className: 'md-col-12' + (_this4.state['image Float Right'] ? ' float-right': '') },
-                                    React.createElement('img', {
-                                            src: _this4.state['image'],
-                                            width: _this4.state['image Width'],
-                                            height: _this4.state['image Height']
-                                    }),
-                                );
-                            } else {
-                                return React.createElement('span', null);
-                            }
-                        }(),
+                        // return React.createElement(
+                        //     'div',
+                        //     { className: 'md-col-12' + (_this4.state['image Float Right'] ? ' float-right': '') },
+                        //     React.createElement('img', {
+                        //             src: _this4.state['image'],
+                        //             width: _this4.state['image Width'],
+                        //             height: _this4.state['image Height']
+                        //     }),
+                        // );
 
+                        React.createElement(
+                            'div',
+                                { className: 'md-col-12' + (_this4.state['image Float Right'] ? ' float-right': '') },
+                                React.createElement('img', {
+                                    ref: 'imageRef',
+                                    width: _this4.state['image Width'],
+                                    height: _this4.state['image Height']
+                                })
+                        ),
                         React.createElement(
                             'div',
                             null,
