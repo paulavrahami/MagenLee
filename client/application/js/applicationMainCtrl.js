@@ -376,7 +376,7 @@ angular
                         return vm;
                     }
                 },
-                size: 'executeAudition'
+                size: 'executeChallenge'
             });
         };
 
