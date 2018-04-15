@@ -1,4 +1,6 @@
-import countries from '/public/countries.js';
+//import countries from '/public/countries.js';
+import countriesCities from '/public/countriesCities.json';
+import languages from '/public/languages.json';
 
 angular
     .module('skillera')
@@ -12,10 +14,40 @@ angular
         vm.userPasswordNew = '******';
         vm.userPasswordConf = '';
 
+        //Load countries and cities
+        vm.countriesCities = countriesCities;
+        //Load languages
+        vm.languages = languages;
+
 
 
         //noinspection JSCheckFunctionSignatures
         vm.currentUpload = new ReactiveVar(false);
+
+        //Arguments for selecting countries and belonging cities
+        vm.country = {
+            name: '',
+            cities: []
+        };
+        vm.countryArray = [];
+        vm.countriesArray = [];
+        vm.citiesArray = [];
+        
+
+
+        //Building 2 arrays
+        //1. with all countries (vm.countriesArray)
+        //2. with all cities per each country (vm.countryArray)
+
+        Object.keys(vm.countriesCities.countries).forEach(function(key) {
+            
+            vm.country = {name:key,cities:vm.countriesCities.countries[key]}
+            vm.countryArray.push(vm.country);
+            vm.countriesArray.push(key);
+          
+        });
+
+
         /**
          * @desc Show a dialog with the error;
          * @param msgArg
@@ -36,6 +68,9 @@ angular
                 } else {
                   currentTalent = result;
                   vm.talentKey = currentTalent._id;
+                  if (currentTalent.country) {
+                      vm.selectCities(currentTalent.country)
+                  };
 
                   vm.talentRegistration = {
                     username: currentUser.username,
@@ -181,6 +216,12 @@ angular
             vm.userPasswordNew = '';
             vm.userPasswordConf = '';
         };
+
+        vm.selectCities = function(country) {
+            vm.citiesArray = [];;
+            index = vm.countriesArray.indexOf(country);
+            vm.citiesArray = vm.countryArray[index].cities;
+      };
 
 
         // Sign-Up Tabs navigation
