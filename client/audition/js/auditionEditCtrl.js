@@ -1141,8 +1141,7 @@ angular
                 states: vm.application.states ? vm.application.states : {}
             });
 
-            vm.auditionViewMode = ENUM.AUDITION_VIEW_MODE.PREVIEW;
-            $scope.auditionViewMode = vm.auditionViewMode;
+            $scope.auditionViewMode = ENUM.AUDITION_VIEW_MODE.PREVIEW;
 
             vm.modalInstance = $uibModal.open({
                 animation: true,
@@ -1160,7 +1159,7 @@ angular
                         return vm;
                     }
                 },
-                size: 'executeAudition'
+                size: 'executeChallenge'
             });
         };
        

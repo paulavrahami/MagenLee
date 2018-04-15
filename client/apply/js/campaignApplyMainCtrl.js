@@ -326,7 +326,7 @@ angular
                             return vm;
                         }
                     },
-                    size: 'executeAudition'
+                    size: 'executeChallenge'
                 });
             }
             //* do not allow an applicant to re-execute the audition in case it has been already

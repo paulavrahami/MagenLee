@@ -29,8 +29,9 @@ angular
             AUTOMATIC:  'Automatic'
         },
         AUDITION_VIEW_MODE : {
-            PREVIEW:     'Preview',
-            RESULTS:     'Results'
+            PREVIEW:   'Preview',
+            RESULTS:   'Results',
+            CHALLENGE: 'Challenge'
         },
         ITEM_STATUS : {
             NEW:        'New',

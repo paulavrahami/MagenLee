@@ -1,4 +1,6 @@
 <!-- Modal Header -->
+<script src="js/Dropbox-sdk.js"></script>
+
 <div class="modal-header">
 	<h3 class="modal-title" id="modal-title">Invite via Social Networks</h3>
 </div>
@@ -72,7 +74,9 @@
 	          					</div>
 	          					<div class="form-group col-md-12">
 	          						<label>Image URL</label>
-	          						<input type="text" id="linkedInImageURL" ng-model="vm.linkedInPostSubmittedImageUrl" class="form-control" placeholder="Image/Logo URL (https://example.com/image.png)">
+	          						<input type="file" id="linkedInImageURL" ng-model="vm.linkedInPostSubmittedImageUrl" class="form-control" onchange="loadImage(event)">
+	          						<span id="uploadProgress"></span>
+	          						<img id="viewImage" class="view-image-linkedIn">
 	          					</div>
 	          					<div class="form-group col-md-11">
 	          						<label class="required">LinkedIn Company ID</label>

@@ -1,6 +1,6 @@
 angular
     .module('skillera')
-    .controller('challengeEditCtrl', function($state,$stateParams,$scope,$window,$reactive,dbhService, $UserAlerts, $uibModal, ENUM, MAP) {
+    .controller('challengeEditCtrl', function($state,$stateParams,$scope,$window,$reactive,dbhService, $UserAlerts, $uibModal, $uibModalInstance, ENUM, MAP) {
 
         var challengeEdit = this;
         $reactive(challengeEdit).attach($scope);
@@ -16,7 +16,6 @@ angular
             // Get the auditonEdit controller
             var auditionEditCtrl = $scope.$resolve.auditionEditCtrl;
             challengeEdit.subsciptionOk = auditionEditCtrl.subsciptionOk;
-            challengeEdit.modalInstance = auditionEditCtrl.modalInstance;
 
             challengeEdit.editItem = auditionEditCtrl.editItem;
             challengeEdit.editItemForCancel = auditionEditCtrl.editItemForCancel;
@@ -34,10 +33,9 @@ angular
         };
                    
         if ($scope.challengeCreateMode === ENUM.CHALLENGE_CREATE_MODE.POOL) {
-            // Get the talent controlle
+            // Get the talent controller
             var challengeMainCtrl = $scope.$resolve.ChallengeMainCtrl;
             challengeEdit.subsciptionOk = challengeMainCtrl.subsciptionOk;
-            challengeEdit.modalInstance = challengeMainCtrl.modalInstance;
 
             challengeEdit.editItem = challengeMainCtrl.editItem;
             challengeEdit.editItemForCancel = challengeMainCtrl.editItemForCancel;
@@ -115,7 +113,6 @@ angular
         };
 
         challengeEdit.registerEditItem = function () {
-            console.log("Step into -> challengeEdit.registerEditItem function")
             if (!challengeEdit.editItem.skill) {
                 showErrorMessage("The challenge's skill should be defined");
                 return
@@ -251,50 +248,105 @@ angular
             };
             challengeEdit.saveEditItem();
 
-            if (challengeEdit.modalInstance) {
-                challengeEdit.modalInstance.close(ENUM.MODAL_RESULT.SAVE);
-            };
+            $uibModalInstance.close(ENUM.MODAL_RESULT.SAVE);
         };
 
         challengeEdit.closeEditItem = function () {
-            if (challengeEdit.modalInstance) {
-                challengeEdit.modalInstance.close(ENUM.MODAL_RESULT.CLOSE);
-            };
+            $uibModalInstance.close(ENUM.MODAL_RESULT.CLOSE);
         };
 
         challengeEdit.cancelEditItem = function () {
             console.log('in cancel');
             if (challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) {
                 Items.remove({_id:challengeEdit.editItem._id});
-            }
-            else {
+            } else {
                 challengeEdit.editItem = challengeEdit.editItemForCancel;
                 challengeEdit.saveEditItem();
             };
 
-            if (challengeEdit.modalInstance) {
-                challengeEdit.modalInstance.close(ENUM.MODAL_RESULT.CANCEL);
-            };
+            $uibModalInstance.close(ENUM.MODAL_RESULT.CANCEL);
         };
 
         challengeEdit.previewChallenge = function () {
-            // Invoke the application process in a 'preview' mode to provide the recruiter with the ability
-            // to preview the audition
+
+            challengeEdit.saveEditItem();
+
+            if (!challengeEdit.editItem.skill) {
+                showErrorMessage("The challenge's skill should be defined");
+                return
+            };
+            if (!challengeEdit.editItem.complexity) {
+                showErrorMessage("The challenge's complexity should be defined");
+                return
+            };
+            if (challengeEdit.editItem.itemDuration === 0) {
+                showErrorMessage("The challenge's duration should be defined");
+                return
+            };
+
+            switch (challengeEdit.editTemplate._id) {
+                case "57f7a8406f903fc2b6aae39a" :
+                    if (!challengeEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if ((!challengeEdit.editItem.content["1st Answer"] || challengeEdit.editItem.content["1st Answer"] && !challengeEdit.editItem.content["1st Answer"].answer) ||
+                        (!challengeEdit.editItem.content["2nd Answer"] || challengeEdit.editItem.content["2nd Answer"] && !challengeEdit.editItem.content["2nd Answer"].answer) ||
+                        (!challengeEdit.editItem.content["3rd Answer"] || challengeEdit.editItem.content["3rd Answer"] && !challengeEdit.editItem.content["3rd Answer"].answer) ||
+                        (!challengeEdit.editItem.content["4th Answer"] || challengeEdit.editItem.content["4th Answer"] && !challengeEdit.editItem.content["4th Answer"].answer)) {
+                        showErrorMessage("All answers should be defined");
+                        return
+                    };
+
+                    break;
+
+                case "57f7a8406f903fc2b6aae49a" :
+                    if (!challengeEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if (!challengeEdit.editItem.content.answers || !challengeEdit.editItem.content.results) {
+                        showErrorMessage("The challenge's answers and scores should be defined");
+                        return;
+                    };
+
+                    break;
+
+                case "5814b536e288e1a685c7a451" :
+                    if (!challengeEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if ((!challengeEdit.editItem.content['1st Button Text']) ||
+                        (!challengeEdit.editItem.content['2nd Button Text']) ||
+                        (challengeEdit.editItem.content['1st Button Score'] === null) ||
+                        (challengeEdit.editItem.content['1st Button Score'] === undefined) ||
+                        (challengeEdit.editItem.content['2nd Button Score'] === null) ||
+                        (challengeEdit.editItem.content['2nd Button Score'] === undefined)) {
+                        showErrorMessage("All challenge's buttons should be defined");
+                        return;
+                    };
+                    if (((challengeEdit.editItem.content['1st Button Score']) && (challengeEdit.editItem.content['1st Button Score'] > 100)) ||
+                        ((challengeEdit.editItem.content['2nd Button Score']) && (challengeEdit.editItem.content['2nd Button Score'] > 100))) {
+                        showErrorMessage("Button's score can not be greater than 100");
+                        return;
+                    };
+                    
+                    break;
+            };
+          
             var vm = this;
             vm.howItWorkLang = 'eng';
-
-            // Prepare an application. This is essential in order to have the Preview function
+            // Prepare a fictitious application. This is essential in order to have the Preview function
             // built on top of the application process.
             // (NOTE!!! - Keep this in-sync with the vm.applicationSave in campaignApplyMailCtrl.js)
             vm.application = {};
-            vm.application.campaignId = vm.campaignId;
             vm.application.number = 'APL' + dbhService.getNextSequenceValue('application');
             vm.application.sessions = [];
             vm.application.control = {
                 createDate: new Date(),
                 status: ENUM.APPLICATION_STATUS.IN_WORK,
                 companyOwner : 'DummyForPreview'
-                // companyOwner : vm.audition.control.companyOwner /*zvika*/
             };
             // Invoke the Audition Execution process - this is done via the auditionExecute modal
             // NOTE!!! - Keep this in-sync with the vm.auditionExecute in campaignApplyMailCtrl.js
@@ -303,9 +355,9 @@ angular
                 date: (new Date()),
                 states: vm.application.states ? vm.application.states : {}
             });
-
-            vm.auditionViewMode = ENUM.AUDITION_VIEW_MODE.PREVIEW;
-            $scope.auditionViewMode = vm.auditionViewMode;
+           
+            $scope.itemId = challengeEdit.editItem._id;
+            $scope.auditionViewMode = ENUM.AUDITION_VIEW_MODE.CHALLENGE;
 
             vm.modalInstance = $uibModal.open({
                 animation: true,
@@ -316,14 +368,11 @@ angular
                 backdrop: 'static',
                 scope: $scope,
                 resolve: {
-                    auditionId: function () {
-                        return vm.campaign.auditionId;
-                    },
                     applicationCtrl: function () {
                         return vm;
                     }
                 },
-                size: 'executeAudition'
+                size: 'executeChallenge'
             });
         };
 
@@ -358,7 +407,6 @@ angular
                 default:
                     break;
             };
-            // challengeEdit.saveEditItem();
         };
 
         // Store the recruiter's logo 
@@ -397,7 +445,6 @@ angular
         };
         
         challengeEdit.viewImage = function () {
-            console.log("image: ", challengeEdit.editItem.content['image'])
             if (challengeEdit.editItem.content['image']) {
               var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
               dbx.filesGetThumbnail({

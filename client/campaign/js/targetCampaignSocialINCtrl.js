@@ -24,10 +24,10 @@ angular
 
       // Handle the successful return from the API call
       function onSuccess(data) {
-        console.log("data -",data);
+        console.log("On Sucess/data -",data);
         // Insert Log record
         dbhService.insertActivityLog('Campaign', vm.campaign._id, ENUM.ACTIVITY_LOG.DISPATCH_SOCIAL_LINKEDIN, 'Post to LinkedIn');
-        vm.dependency.changed();
+        // vm.dependency.changed();
         // Indicates that Social Network has been used as one of the campaign's targets
         Campaigns.update({_id: vm.campaign._id}, {$set: {targetSocialNetworks: true}}, function (errorArg, tempIdArg) {
           if (errorArg) {
@@ -40,8 +40,8 @@ angular
 
       // Handle an error response from the API call
       function onError(error) {
-        console.log("error -",error);
-        showErrorMessage(error.message);
+        console.log("On Error/error -",error);
+        showErrorMessage("LinkedIn Error: " + error.message +"; Status " + error.status);
         $uibModalInstance.dismiss('cancel');
       };
 
@@ -62,6 +62,7 @@ angular
         };
         console.log("payload -",payload);
         console.log("$scope.linkedInId - ",$scope.linkedInId);
+        console.log("calling IN.API.Raw")
         IN.API.Raw("/companies/" + $scope.linkedInId + "/shares?format=json")
           .method("POST")
           .body(JSON.stringify(payload))
@@ -69,8 +70,8 @@ angular
           .error(onError);
       };
 
-      // vm.cancel = function () {
-      //   $uibModalInstance.dismiss('cancel');
-      // };
+      vm.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+      };
             
     });
