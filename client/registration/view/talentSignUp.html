@@ -187,14 +187,6 @@
                                         </div>
 
                                         <!-- City  -->
-                                        <!-- <div class="form-group">
-                                                <label for="inputTalentFirstName">City</label>
-                                                <input  type="text" 
-                                                        ng-model="vm.newTalentRegister.profile.city"
-                                                        name="city"
-                                                        class="form-control " 
-                                                        placeholder="" >
-                                        </div> -->
 
                                         <div class="form-group">
                                                 <label for="inputTalentCity">Country</label>
@@ -235,7 +227,7 @@
                                                         Female
                                         </div>
                                         <!-- Language -->
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                                 <label for="inputTalentLanguage">Language</label>
                                                 <input type="text" 
                                                         ng-model="vm.newTalentRegister.profile.language" 
@@ -243,6 +235,14 @@
                                                         class="form-control " 
                                                         placeholder="" 
                                                         required>
+                                        </div> -->
+                                        <div class="form-group">
+                                                <label for="inputTalentLanguage">Language</label>
+                                                <select ng-model="vm.newTalentRegister.profile.language" 
+                                                        name="language"
+                                                        class="form-control ">
+                                                        <option ng-repeat="language in vm.languages">{{language}}</option>
+                                                </select>
                                         </div>
                                         <!-- Picture URL -->
                                         <div class="form-group">

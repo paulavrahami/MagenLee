@@ -1,5 +1,6 @@
 //import countries from '/public/countries.js';
-import countriesCities from '/public/data.json';
+import countriesCities from '/public/countriesCities.json';
+import languages from '/public/languages.json';
 
 angular
     .module('skillera')
@@ -20,6 +21,8 @@ angular
         vm.currentDate = new Date();
         //Load countries and cities
         vm.countriesCities = countriesCities;
+        //Load languages
+        vm.languages = languages;
         
         //Arguments for selecting countries and belonging cities
         vm.country = {
