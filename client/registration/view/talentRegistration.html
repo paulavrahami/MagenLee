@@ -162,26 +162,26 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <!-- Address  -->
-                            <div class="form-group">
-                                    <label for="talentCity">City</label>
-                                    <textarea 
-                                            ng-model="vm.talentRegistration.address"
-                                            class="form-control " 
-                                            placeholder="">
-                                    </textarea>
-                            </div>
     
-                            <!-- Address Country -->
+                            <!-- Country -->
                             <div class="form-group">
                                     <label for="talentCountry">Country</label>
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.country" 
                                             name="country"
                                             class="form-control " 
-                                            placeholder="" 
-                                            required>
+                                            placeholder="">
                             </div>
+
+                            <!-- City  -->
+                            <div class="form-group">
+                                <label for="talentCity">City</label>
+                                <input type="text" 
+                                        ng-model="vm.talentRegistration.city"
+                                        name="city"
+                                        class="form-control " 
+                                        placeholder="">
+                        </div>
                             
 
                             

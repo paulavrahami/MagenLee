@@ -1,4 +1,5 @@
 //import countries from '/public/countries.js';
+import countriesCities from '/public/data.json';
 
 angular
     .module('skillera')
@@ -17,6 +18,32 @@ angular
         vm.talent = {};
         vm.userNameInd = false;
         vm.currentDate = new Date();
+        //Load countries and cities
+        vm.countriesCities = countriesCities;
+        
+        //Arguments for selecting countries and belonging cities
+        vm.country = {
+            name: '',
+            cities: []
+        };
+        vm.countryArray = [];
+        vm.countriesArray = [];
+        vm.citiesArray = [];
+        
+
+
+        //Building 2 arrays
+        //1. with all countries (vm.countriesArray)
+        //2. with all cities per each country (vm.countryArray)
+
+        Object.keys(vm.countriesCities.countries).forEach(function(key) {
+            
+            vm.country = {name:key,cities:vm.countriesCities.countries[key]}
+            vm.countryArray.push(vm.country);
+            vm.countriesArray.push(key);
+          
+        });
+        
 
         // Always load the web page with no need to scroll up
         $(document).ready(function(){
@@ -138,7 +165,11 @@ angular
             });
         };
 
-      
+      vm.selectCities = function(country) {
+            vm.citiesArray = [];;
+            index = vm.countriesArray.indexOf(country);
+            vm.citiesArray = vm.countryArray[index].cities;
+      };
        
 
         vm.displayLegal = function (sizeArg) {
@@ -163,7 +194,7 @@ angular
                             vm.talent.registrationStatusDate = vm.currentDate;
                             vm.talent.firstName = record.profile.firstName;
                             vm.talent.lastName = record.profile.lastName
-                            vm.talent.address = record.profile.address;
+                            vm.talent.city = record.profile.city;
                             vm.talent.country = record.profile.country;
                             vm.talent.contactPhone = record.profile.contactPhone;
                             vm.talent.contactEmail = record.profile.contactEmail;
