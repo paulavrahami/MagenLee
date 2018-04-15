@@ -79,7 +79,7 @@ Meteor.MultipleChoiceSimple = React.createClass({
                 format: 'png',
                 size: 'w1024h768'
                 })
-                .then(function(response) {debugger;
+                .then(function(response) {
                     _this4.refs["imageRef"].src = window.URL.createObjectURL(response.fileBlob);
                 })
                 .catch(function(error) {
