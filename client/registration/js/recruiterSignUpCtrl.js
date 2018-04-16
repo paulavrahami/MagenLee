@@ -25,25 +25,15 @@ angular
         });
 
 
-        vm.currentUpload = new ReactiveVar(false);
-
-        /**
-         * @desc Show a dialog with the error;
-         * @param msgArg
-         * @param callbackArg
-         */
         function showErrorMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true, callbackArg);
         }
 
-        /**
-         * @desc show a dialog with the message;
-         * @param msgArg
-         * @param callbackArg
-         */
+
         function showInfoMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
         }
+        
 
         // Store the recruiter's logo 
         loadLogo = function (event) {
