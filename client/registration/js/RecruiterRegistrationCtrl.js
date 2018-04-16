@@ -13,71 +13,64 @@ angular
         vm.setPassword = false;
         vm.userPasswordNew = '******';
         vm.userPasswordConf = '';
-      
-        //noinspection JSCheckFunctionSignatures
-        vm.currentUpload = new ReactiveVar(false);
-        /**
-         * @desc Show a dialog with the error;
-         * @param msgArg
-         * @param callbackArg
-         */
+
+     
         function showErrorMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true, callbackArg);
         };
 
-        //noinspection JSUnresolvedFunction
+
+        // get the recruiter information (i.e., company, admin, users, etc.)
         let currentUser = Accounts.user();
         let companyName = currentUser.profile.companyName;
-
-        //Get user company information
         Meteor.call('getCompanyByName', companyName, function (err, result) {
-                if (err) {
-                    alert('There is an error while fetching company information');
-                } else {
-                  currentCompany = result;
-                  vm.companyPassword = currentCompany.password;
-                  vm.companyKey = currentCompany._id;
-
-                  vm.recruiterRegistration = {
-                      username: currentUser.username,
-                      email: currentUser.emails[0].address,
-                      profile: {
-                          type: ENUM.USER.RECRUITER,
-                          firstName: currentUser.profile.firstName ? currentUser.profile.firstName : null,
-                          lastName: currentUser.profile.lastName ? currentUser.profile.lastName : null,
-                          role: currentUser.profile.role ? currentUser.profile.role : null,
-                          companyName: currentUser.profile.companyName ? currentUser.profile.companyName : null,
-                          companyUserType: currentUser.profile.companyUserType ? currentUser.profile.companyUserType : null,
-                          address: currentCompany.address ? currentCompany.address : null,
-                          phoneNumber: currentUser.profile.phoneNumber ? currentUser.profile.phoneNumber : null,
-                          country: currentCompany.country ? currentCompany.country : null,
-                          compURL: currentCompany.url ? currentCompany.url : null,
-                          linkedInId: currentCompany.linkedInId ? currentCompany.linkedInId : null,
-                          category: currentCompany.category ? currentCompany.category : null,
-                          subCategory: currentCompany.subCategory ? currentCompany.subCategory : null,
-                          size: currentCompany.size ? currentCompany.size : null,
-                          contactEmail: currentUser.profile.contactEmail ? currentUser.profile.contactEmail : currentUser.emails[0].address,
-                          tcAcknowledge: currentUser.profile.tcAcknowledge ? currentUser.profile.tcAcknowledge : null,
-                          companyLogoId: currentCompany.companyLogoId ? currentCompany.companyLogoId : null
-                      }
-                  };
-                  if (vm.recruiterRegistration.profile.companyLogoId) {
-                    var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
-                    dbx.filesGetThumbnail({
-                        path: '/img/logo/' + vm.recruiterRegistration.profile.companyLogoId,
-                        format: 'png',
-                        size: 'w64h64'
-                        })
-                        .then(function(response) {
-                            document.getElementById('viewLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                    });
-                  };
-                  vm.dependency.changed();
-                }
+            if (err) {
+                alert('There is an error while fetching company information');
+            } else {
+              currentCompany = result;
+              vm.companyPassword = currentCompany.password;
+              vm.companyKey = currentCompany._id;
+              vm.recruiterRegistration = {
+                  username: currentUser.username,
+                  email: currentUser.emails[0].address,
+                  profile: {
+                      type: ENUM.USER.RECRUITER,
+                      firstName: currentUser.profile.firstName ? currentUser.profile.firstName : null,
+                      lastName: currentUser.profile.lastName ? currentUser.profile.lastName : null,
+                      role: currentUser.profile.role ? currentUser.profile.role : null,
+                      companyName: currentUser.profile.companyName ? currentUser.profile.companyName : null,
+                      companyUserType: currentUser.profile.companyUserType ? currentUser.profile.companyUserType : null,
+                      address: currentCompany.address ? currentCompany.address : null,
+                      phoneNumber: currentUser.profile.phoneNumber ? currentUser.profile.phoneNumber : null,
+                      country: currentCompany.country ? currentCompany.country : null,
+                      compURL: currentCompany.url ? currentCompany.url : null,
+                      linkedInId: currentCompany.linkedInId ? currentCompany.linkedInId : null,
+                      category: currentCompany.category ? currentCompany.category : null,
+                      subCategory: currentCompany.subCategory ? currentCompany.subCategory : null,
+                      size: currentCompany.size ? currentCompany.size : null,
+                      contactEmail: currentUser.profile.contactEmail ? currentUser.profile.contactEmail : currentUser.emails[0].address,
+                      tcAcknowledge: currentUser.profile.tcAcknowledge ? currentUser.profile.tcAcknowledge : null,
+                      companyLogoId: currentCompany.companyLogoId ? currentCompany.companyLogoId : null
+                  }
+              };
+              if (vm.recruiterRegistration.profile.companyLogoId) {
+                var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                dbx.filesGetThumbnail({
+                    path: '/img/logo/' + vm.recruiterRegistration.profile.companyLogoId,
+                    format: 'png',
+                    size: 'w64h64'
+                    })
+                    .then(function(response) {
+                        document.getElementById('viewLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                });
+              };
+              vm.dependency.changed();
+            };
         });
+
 
         // Store the recruiter's logo 
         loadLogo = function (event) {
@@ -193,7 +186,7 @@ angular
                   else {
                   }
               });
-              vm.dependency.changed();
+              
         };
 
 
@@ -206,10 +199,12 @@ angular
               }
             });
         };
+              
 
-       
         vm.helpers({
-
+            recruiterUpload () {
+                vm.dependency.depend();
+            }
         });
 
 
