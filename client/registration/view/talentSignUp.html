@@ -63,7 +63,7 @@
                                                     ng-blur="vm.checkUserName(vm.newTalentRegister.name)" 
                                                     name="userName"
                                                     class="form-control " 
-                                                    placeholder="" 
+                                                    placeholder="Login Username" 
                                                     required>
                                             <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.company.$error.required">User Name is required</span>
                                     </div>
@@ -418,6 +418,17 @@
                                                         </div>
                                         </div>
                                 </div>
+                                <div class="sign-up-footer col-md-12">
+                                        <div>
+                                            <fieldset form="termsAndCond">
+                                                <!-- Terms -->
+                                                <input type="checkbox" ng-model="vm.newTalentRegister.legal" name="legal" required>
+                                                <label class="checkbox-terms"><a href='#' ng-click = "vm.displayLegal('lg')">I've read and accept the terms and conditions</a></label>
+                                                <span class="error-msg" ng-show="!vm.newTalentRegister.legal && talentSignUp.$submitted">You must accept the terms and conditions</span>
+                                            </fieldset>
+                                        </div>
+                                        <br>
+                                </div>
 
                      </div>
 
@@ -437,14 +448,6 @@
             </div>
 
     <div class="sign-up-footer col-md-12">
-        <div>
-            <fieldset form="termsAndCond">
-                <!-- Terms -->
-                <input type="checkbox" ng-model="vm.newTalentRegister.legal" name="legal" required>
-                <label class="checkbox-terms"><a href='#' ng-click = "vm.displayLegal('lg')">I've read and accept the terms and conditions</a></label>
-                <span class="error-msg" ng-show="!vm.newTalentRegister.legal && talentSignUp.$submitted">You must accept the terms and conditions</span>
-            </fieldset>
-        </div>
         <br>
 
         <div style="text-align:center" class="col-md-12">
