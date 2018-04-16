@@ -141,8 +141,24 @@ angular
                     vm.applicationId = fromLocalStorage[vm.audition._id];
                 }
             }
+            // audition retry (continue from the point the talent has stopped)
             if (vm.applicationId) {
                 vm.application = Applications.findOne({_id:vm.applicationId});
+                // load an array with all items to be executed. Items will be removed from this array when executed/visited. By the end of the 
+                // audition's execution we'll know what items were not touched at all
+                vm.itemsNotDone = [];
+                for (let i = 0; i < vm.audition.items.length ; i++) {
+                    vm.itemsNotDone[i] = vm.audition.items[i].itemId;
+                };
+                // remove from the 'items not done' table the items which were already executed
+                for (let contentIndex in vm.application.states.itemsContent) {
+                    if (vm.application.states.itemsContent.hasOwnProperty(contentIndex)) {
+                        let indexOf = vm.itemsNotDone.indexOf(contentIndex);
+                        if (indexOf !== -1) {
+                            vm.itemsNotDone.splice(indexOf, 1);
+                        };
+                    }
+                }
             }
             if (!vm.application) {
                 vm.application = {};
@@ -173,8 +189,8 @@ angular
                     } else {
                         vm.applicationId = tempIdArg;
 
-                        // load an array of all items to be executed. Items will be removed from this array when executed/visited. By the end of the 
-                        // audition's execution we'll now what items where not touched at all
+                        // load an array with all items to be executed. Items will be removed from this array when executed/visited. By the end of the 
+                        // audition's execution we'll know what items were not touched at all
                         vm.itemsNotDone = [];
                         for (let i = 0; i < vm.audition.items.length ; i++) {
                             vm.itemsNotDone[i] = vm.audition.items[i].itemId;
