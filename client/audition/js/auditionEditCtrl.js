@@ -960,10 +960,12 @@ angular
                     } else {
                         itemAlreadyInAudition = false;
                     };
-                    auditionItemArrayEntry = {itemId:singleItem._id, itemAlreadyInAudition:itemAlreadyInAudition};
+                    itemSelectedToAdd = false;
+                    auditionItemArrayEntry = {itemId: singleItem._id, itemAlreadyInAudition: itemAlreadyInAudition, itemSelectedToAdd: itemSelectedToAdd};
                     auditionEdit.searchItems.push(angular.copy(auditionItemArrayEntry));
                     return true;
                 });
+                auditionEdit.searchItems.sort(function(a, b){return a.itemAlreadyInAudition - b.itemAlreadyInAudition})
                 auditionEdit.dependency.changed();
             }).catch(function(error) {
                 itemsPerAddChallenges = [];
@@ -988,6 +990,8 @@ angular
                 // Reset the selected item in the searchItems buffer
                 index = auditionEdit.searchItems.findIndex(findItem => findItem.itemId == itemToClear);
                 auditionEdit.searchItems[index].itemAlreadyInAudition = false;
+                auditionEdit.searchItems[index].itemSelectedToAdd = false;
+                auditionEdit.searchItems[index].lastItemSelected = false;
                 return true;
             });
             auditionEdit.addItems = [];
@@ -1013,6 +1017,7 @@ angular
             };
 
             auditionEdit.addChallengeClear();
+            auditionEdit.addChallengeClose();
         };
 
         function clearAddBufferSummary() {
@@ -1086,9 +1091,23 @@ angular
             };
             // Add the item to the selected items buffer
             auditionEdit.addItems.push(angular.copy(itemIdArg));
+
             auditionEdit.itemsAdded = true;
             // Indicate the selected item in the searchItems buffer
-            auditionEdit.searchItems[indexArg].itemAlreadyInAudition = true;
+            auditionEdit.searchItems[indexArg].itemSelectedToAdd = true;
+            auditionEdit.searchItems.sort(function(a, b){return b.itemSelectedToAdd - a.itemSelectedToAdd});
+
+            for (let i=1; i<auditionEdit.searchItems.length; i++) {
+                if (!auditionEdit.searchItems[i].itemSelectedToAdd && auditionEdit.searchItems[i-1].itemSelectedToAdd) {
+                    auditionEdit.searchItems[i-1].lastItemSelected = true;
+                } else {
+                    auditionEdit.searchItems[i-1].lastItemSelected = false;
+                };
+                if (i === auditionEdit.searchItems.length - 1) {
+                    auditionEdit.searchItems[i].itemSelectedToAdd ? auditionEdit.searchItems[i].lastItemSelected = true :
+                                                                    auditionEdit.searchItems[i].lastItemSelected = false;
+                };
+            };
 
             calculateAddBufferSummary();
         };
@@ -1102,10 +1121,31 @@ angular
             };
             // Reset the selected item in the searchItems buffer
             index = auditionEdit.searchItems.findIndex(findItem => findItem.itemId == itemIdArg);
-            auditionEdit.searchItems[index].itemAlreadyInAudition = false;
+            auditionEdit.searchItems[index].itemSelectedToAdd = false;
+            auditionEdit.searchItems.sort(function(a, b){return b.itemSelectedToAdd - a.itemSelectedToAdd})
+
+            for (let i=1; i<auditionEdit.searchItems.length; i++) {
+                if (!auditionEdit.searchItems[i].itemSelectedToAdd && auditionEdit.searchItems[i-1].itemSelectedToAdd) {
+                    auditionEdit.searchItems[i-1].lastItemSelected = true;
+                } else {
+                    auditionEdit.searchItems[i-1].lastItemSelected = false;
+                };
+                if (i === auditionEdit.searchItems.length - 1) {
+                    auditionEdit.searchItems[i].itemSelectedToAdd ? auditionEdit.searchItems[i].lastItemSelected = true :
+                                                                    auditionEdit.searchItems[i].lastItemSelected = false;
+                };
+            };
 
             calculateAddBufferSummary();
         };
+
+        // auditionEdit.checkEndOfSelected = function (itemIndexArg) {
+        //     if (!auditionEdit.searchItems[itemIndexArg].itemSelectedToAdd && auditionEdit.searchItems[itemIndexArg-1].itemSelectedToAdd) {
+        //         auditionEdit.endOfSelected = true}
+        //     else {
+        //         auditionEdit.endOfSelected = false
+        //     };
+        // };
 
         auditionEdit.previewAudition = function () {
             // Invoke the application process in a 'preview' mode to provide the recruiter with the ability
