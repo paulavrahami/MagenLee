@@ -261,15 +261,15 @@ angular
 
             if (vm.audition) {
                 vm.campaign.skills.every(function (skill) {
-                    vm.summery.skills[skill.type] = {
+                    vm.summery.skills[skill.type.toLowerCase()] = {
                         time: 0,
                     };
                     vm.skillsExperience.every(function (complexity) {
-                        vm.summery.skills[skill.type][complexity] = 0;
+                        vm.summery.skills[skill.type.toLowerCase()][complexity] = 0;
                         vm.summery[complexity] = 0;
-                        vm.summery.skills[skill.type].score = 0;
-                        vm.summery.skills[skill.type].total = 0;
-                        vm.summery.skills[skill.type].time = vm.timeOffset;
+                        vm.summery.skills[skill.type.toLowerCase()].score = 0;
+                        vm.summery.skills[skill.type.toLowerCase()].total = 0;
+                        vm.summery.skills[skill.type.toLowerCase()].time = vm.timeOffset;
                         return true;
                     });
                     return true;
@@ -301,30 +301,30 @@ angular
                     let skillType = item.skill || 'Unclassified';
                     try {
                         if (item.complexity === ENUM.EXPERIENCE.up1) {
-                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up1]++;
+                            vm.summery.skills[skillType.toLowerCase()][ENUM.EXPERIENCE.up1]++;
                             vm.summery[ENUM.EXPERIENCE.up1]++;
                         }
                         if (item.complexity === ENUM.EXPERIENCE.up2) {
-                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up2]++;
+                            vm.summery.skills[skillType.toLowerCase()][ENUM.EXPERIENCE.up2]++;
                             vm.summery[ENUM.EXPERIENCE.up2]++;
                         }
                         if (item.complexity === ENUM.EXPERIENCE.up3) {
-                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up3]++;
+                            vm.summery.skills[skillType.toLowerCase()][ENUM.EXPERIENCE.up3]++;
                             vm.summery[ENUM.EXPERIENCE.up3]++;
                         }
                         if (item.complexity === ENUM.EXPERIENCE.up4) {
-                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up4]++;
+                            vm.summery.skills[skillType.toLowerCase()][ENUM.EXPERIENCE.up4]++;
                             vm.summery[ENUM.EXPERIENCE.up4]++;
                         }
-                        vm.summery.skills[skillType].time += item.itemDuration.valueOf() - vm.timeOffset;
+                        vm.summery.skills[skillType.toLowerCase()].time += item.itemDuration.valueOf() - vm.timeOffset;
                         vm.summery.time += item.itemDuration.valueOf() - vm.timeOffset;
-                        vm.summery.skills[skillType].score += singleItem.maxScore;
-                        vm.summery.skills[skillType].total++;
+                        vm.summery.skills[skillType.toLowerCase()].score += singleItem.maxScore;
+                        vm.summery.skills[skillType.toLowerCase()].total++;
                         vm.summery.score += singleItem.maxScore;
                         vm.summery.total++;
 
-                        if ((vm.summery.skills[skillType].score + "").indexOf("999") > -1) {
-                            vm.summery.skills[skillType].score = Math.ceil(vm.summery.skills[skillType].score);
+                        if ((vm.summery.skills[skillType.toLowerCase()].score + "").indexOf("999") > -1) {
+                            vm.summery.skills[skillType.toLowerCase()].score = Math.ceil(vm.summery.skills[skillType].score);
                         }
                         if ((vm.summery.score + "").indexOf("999") > -1) {
                             vm.summery.score = Math.ceil(vm.summery.score);
