@@ -718,12 +718,7 @@ angular
                 let auditionItemArrayEntry = {};
                 let itemsPerSkill = [];
                 let conditions = {};
-                // Get all items for the current skill, with status = assigned OR available, AND allowed to be shared
-                // conditions = {$and:[{skill: skill.type},
-                //                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
-                //                     {shareInd: true}]};
-
-                // Zvika - TBD; Currently the system is not geared for a non exact natch search. The following should be in used with Avieo SKI-59
+                
                 conditions = {$and:[{$text: {$search: skill.type}},
                                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                     {shareInd: true}]};
@@ -901,41 +896,38 @@ angular
                 showErrorMessage("Challenge skill has to be defined");
                 return;
             };
-            // Complexity has to be defined
-            if (!auditionEdit.addChallengeComplexity) {
-                showErrorMessage("Challenge complexity has to be defined");
-                return;
-            };
             // Set the Author Type selection criteria
+            currentUser = Meteor.user()._id;
             if (auditionEdit.myChallenges) {
-                authorTypeMyChallenges = Meteor.user()._id;
+                authorTypeMyChallenges = currentUser;
             } else {
-                // Dummy value for search purpose
-                authorTypeMyChallenges ="1234567890987654321"
+                authorTypeMyChallenges = {$ne: currentUser};
             };
-            if (auditionEdit.communityChallenges) {
-                authorTypeCommunityChallenges = "Recruiter";
+            // Set the Comuunity Type (other recruiters) selection criteria
+            if (auditionEdit.communityChallenges || auditionEdit.myChallenges) {
+                authorTypeCommunityChallenges = ENUM.ITEM_AUTHOR_TYPE.RECRUITER;
             } else {
-                // Dummy value for search purpose
-                authorTypeCommunityChallenges ="1234567890987654321";
+                authorTypeCommunityChallenges = {$ne: ENUM.ITEM_AUTHOR_TYPE.RECRUITER};
             };
             // Set the Complexity Type selection criteria
             if ((auditionEdit.addChallengeComplexity === '') || (auditionEdit.addChallengeComplexity === null) || (auditionEdit.addChallengeComplexity === undefined)) {
-                complexityParam = '';
+                complexityParam = {$ne: ""};
             } else {
                 complexityParam = auditionEdit.addChallengeComplexity;
             };
+            // Set the Template selection criteria
+            if ((auditionEdit.addChallengeTemplate === '') || (auditionEdit.addChallengeTemplate === null) || (auditionEdit.addChallengeTemplate === undefined)) {
+                templateIdParam = {$ne: ""};
+            } else {
+                let template = TemplatesCollection.findOne({name: auditionEdit.addChallengeTemplate});
+                templateIdParam = template._id;
+            };
 
-            // conditions = {$and:[{$or:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
-            //                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
-            //                     {skill: auditionEdit.addChallengeSkills},
-            //                     {complexity: complexityParam},
-            //                     {shareInd: true}]};
-            // Zvika - TBD; Currently the system is not geared for a non exact natch search. The following should be in used with Avieo SKI-59
-            conditions = {$and:[{$or:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
+            conditions = {$and:[{$and:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
                                 {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                 {$text: {$search: auditionEdit.addChallengeSkills}},
                                 {complexity: complexityParam},
+                                {templateId: templateIdParam},
                                 {shareInd: true}]};
 
             itemsPerAddChallenges = [];
