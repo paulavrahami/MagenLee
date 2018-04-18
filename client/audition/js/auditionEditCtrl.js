@@ -718,12 +718,7 @@ angular
                 let auditionItemArrayEntry = {};
                 let itemsPerSkill = [];
                 let conditions = {};
-                // Get all items for the current skill, with status = assigned OR available, AND allowed to be shared
-                // conditions = {$and:[{skill: skill.type},
-                //                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
-                //                     {shareInd: true}]};
-
-                // Zvika - TBD; Currently the system is not geared for a non exact natch search. The following should be in used with Avieo SKI-59
+                
                 conditions = {$and:[{$text: {$search: skill.type}},
                                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                     {shareInd: true}]};
@@ -827,6 +822,7 @@ angular
                         }
                     };
                     // Calculate the items max-score and update the items summary panel accordingly
+                    // auditionEdit.dependency.changed();
                     calculateItemsMaxScore();
                     auditionEdit.saveAudition();
                     calculateAuditionSummary();
@@ -834,9 +830,10 @@ angular
                 }).catch(function(error) {
                     itemsPerSkill = [];
                 });
-                auditionEdit.dependency.changed();
                 return true;
+                auditionEdit.dependency.changed();
             });
+            
         };
 
         auditionEdit.generateAudition = function () {
@@ -891,7 +888,8 @@ angular
             auditionEdit.dependency.depend();
             // An author type has to be defined
             if (!auditionEdit.myChallenges &&
-                !auditionEdit.communityChallenges &&
+                !auditionEdit.otherRecruitersChallenges &&
+                !auditionEdit.domainExpertsChallenges &&
                 !auditionEdit.domainExpertsChallenges) {
                 showErrorMessage("Challenge author has to be defined");
                 return;
@@ -901,41 +899,55 @@ angular
                 showErrorMessage("Challenge skill has to be defined");
                 return;
             };
-            // Complexity has to be defined
-            if (!auditionEdit.addChallengeComplexity) {
-                showErrorMessage("Challenge complexity has to be defined");
-                return;
-            };
+
             // Set the Author Type selection criteria
+            currentUser = Meteor.user()._id;
             if (auditionEdit.myChallenges) {
-                authorTypeMyChallenges = Meteor.user()._id;
+                authorTypeMyChallenges = currentUser;
+                authorTypeOtherRecruiters = ENUM.ITEM_AUTHOR_TYPE.RECRUITER;
             } else {
-                // Dummy value for search purpose
-                authorTypeMyChallenges ="1234567890987654321"
+                authorTypeMyChallenges = {$ne: ""};
             };
-            if (auditionEdit.communityChallenges) {
-                authorTypeCommunityChallenges = "Recruiter";
+
+            // Set the other recruiters selection criteria
+            if (auditionEdit.otherRecruitersChallenges) {
+                authorTypeOtherRecruiters = ENUM.ITEM_AUTHOR_TYPE.RECRUITER;
+                if (auditionEdit.myChallenges) {
+                    authorTypeMyChallenges = {$ne: ""};
+                } else {
+                    authorTypeMyChallenges = {$ne: currentUser};
+                };
             } else {
-                // Dummy value for search purpose
-                authorTypeCommunityChallenges ="1234567890987654321";
+                authorTypeOtherRecruiters = {$ne: ENUM.ITEM_AUTHOR_TYPE.RECRUITER};
             };
+      
+            // Set the talents (Domain Expert) selection criteria
+            if (auditionEdit.domainExpertsChallenges) {
+                authorTypeTalent = ENUM.ITEM_AUTHOR_TYPE.TALENT;
+            } else {
+                authorTypeTalent = {$ne: ENUM.ITEM_AUTHOR_TYPE.TALENT};
+            };
+
             // Set the Complexity Type selection criteria
             if ((auditionEdit.addChallengeComplexity === '') || (auditionEdit.addChallengeComplexity === null) || (auditionEdit.addChallengeComplexity === undefined)) {
-                complexityParam = '';
+                complexityParam = {$ne: ""};
             } else {
                 complexityParam = auditionEdit.addChallengeComplexity;
             };
 
-            // conditions = {$and:[{$or:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
-            //                     {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
-            //                     {skill: auditionEdit.addChallengeSkills},
-            //                     {complexity: complexityParam},
-            //                     {shareInd: true}]};
-            // Zvika - TBD; Currently the system is not geared for a non exact natch search. The following should be in used with Avieo SKI-59
-            conditions = {$and:[{$or:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
+            // Set the Template selection criteria
+            if ((auditionEdit.addChallengeTemplate === '') || (auditionEdit.addChallengeTemplate === null) || (auditionEdit.addChallengeTemplate === undefined)) {
+                templateIdParam = {$ne: ""};
+            } else {
+                let template = TemplatesCollection.findOne({name: auditionEdit.addChallengeTemplate});
+                templateIdParam = template._id;
+            };
+
+            conditions = {$and:[{$and:[{authorId: authorTypeMyChallenges}, {$or:[{authorType: authorTypeOtherRecruiters}, {authorType: authorTypeTalent}]} ]},
                                 {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                 {$text: {$search: auditionEdit.addChallengeSkills}},
                                 {complexity: complexityParam},
+                                {templateId: templateIdParam},
                                 {shareInd: true}]};
 
             itemsPerAddChallenges = [];
@@ -967,7 +979,8 @@ angular
                     } else {
                         itemAlreadyInAudition = false;
                     };
-                    auditionItemArrayEntry = {itemId:singleItem._id, itemAlreadyInAudition:itemAlreadyInAudition};
+                    itemSelectedToAdd = false;
+                    auditionItemArrayEntry = {itemId: singleItem._id, itemAlreadyInAudition: itemAlreadyInAudition, itemSelectedToAdd: itemSelectedToAdd};
                     auditionEdit.searchItems.push(angular.copy(auditionItemArrayEntry));
                     return true;
                 });
@@ -979,7 +992,8 @@ angular
 
         function addChallengeResetSelection () {
             auditionEdit.myChallenges = true;
-            auditionEdit.communityChallenges = true;
+            auditionEdit.otherRecruitersChallenges = true;
+            auditionEdit.domainExpertsChallenges = false;
             auditionEdit.addChallengeSkills = "";
             auditionEdit.addChallengeComplexity = "";
             auditionEdit.addChallengeTemplate = "";
@@ -995,6 +1009,8 @@ angular
                 // Reset the selected item in the searchItems buffer
                 index = auditionEdit.searchItems.findIndex(findItem => findItem.itemId == itemToClear);
                 auditionEdit.searchItems[index].itemAlreadyInAudition = false;
+                auditionEdit.searchItems[index].itemSelectedToAdd = false;
+                auditionEdit.searchItems[index].lastItemSelected = false;
                 return true;
             });
             auditionEdit.addItems = [];
@@ -1020,6 +1036,7 @@ angular
             };
 
             auditionEdit.addChallengeClear();
+            auditionEdit.addChallengeClose();
         };
 
         function clearAddBufferSummary() {
@@ -1093,9 +1110,24 @@ angular
             };
             // Add the item to the selected items buffer
             auditionEdit.addItems.push(angular.copy(itemIdArg));
+
             auditionEdit.itemsAdded = true;
-            // Indicate the selected item in the searchItems buffer
-            auditionEdit.searchItems[indexArg].itemAlreadyInAudition = true;
+            // Indicate the selected item in the search Items buffer
+            auditionEdit.searchItems[indexArg].itemSelectedToAdd = true;
+            // sort the buffer - selected items on top
+            auditionEdit.searchItems.sort(function(a, b){return b.itemSelectedToAdd - a.itemSelectedToAdd});
+            // find the last item selected in order to present a deviation line after it
+            for (let i=1; i<auditionEdit.searchItems.length; i++) {
+                if (!auditionEdit.searchItems[i].itemSelectedToAdd && auditionEdit.searchItems[i-1].itemSelectedToAdd) {
+                    auditionEdit.searchItems[i-1].lastItemSelected = true;
+                } else {
+                    auditionEdit.searchItems[i-1].lastItemSelected = false;
+                };
+                if (i === auditionEdit.searchItems.length - 1) {
+                    auditionEdit.searchItems[i].itemSelectedToAdd ? auditionEdit.searchItems[i].lastItemSelected = true :
+                                                                    auditionEdit.searchItems[i].lastItemSelected = false;
+                };
+            };
 
             calculateAddBufferSummary();
         };
@@ -1109,10 +1141,32 @@ angular
             };
             // Reset the selected item in the searchItems buffer
             index = auditionEdit.searchItems.findIndex(findItem => findItem.itemId == itemIdArg);
-            auditionEdit.searchItems[index].itemAlreadyInAudition = false;
+            auditionEdit.searchItems[index].itemSelectedToAdd = false;
+            // sort the buffer - selected items on top
+            auditionEdit.searchItems.sort(function(a, b){return b.itemSelectedToAdd - a.itemSelectedToAdd})
+
+            for (let i=1; i<auditionEdit.searchItems.length; i++) {
+                if (!auditionEdit.searchItems[i].itemSelectedToAdd && auditionEdit.searchItems[i-1].itemSelectedToAdd) {
+                    auditionEdit.searchItems[i-1].lastItemSelected = true;
+                } else {
+                    auditionEdit.searchItems[i-1].lastItemSelected = false;
+                };
+                if (i === auditionEdit.searchItems.length - 1) {
+                    auditionEdit.searchItems[i].itemSelectedToAdd ? auditionEdit.searchItems[i].lastItemSelected = true :
+                                                                    auditionEdit.searchItems[i].lastItemSelected = false;
+                };
+            };
 
             calculateAddBufferSummary();
         };
+
+        // auditionEdit.checkEndOfSelected = function (itemIndexArg) {
+        //     if (!auditionEdit.searchItems[itemIndexArg].itemSelectedToAdd && auditionEdit.searchItems[itemIndexArg-1].itemSelectedToAdd) {
+        //         auditionEdit.endOfSelected = true}
+        //     else {
+        //         auditionEdit.endOfSelected = false
+        //     };
+        // };
 
         auditionEdit.previewAudition = function () {
             // Invoke the application process in a 'preview' mode to provide the recruiter with the ability
