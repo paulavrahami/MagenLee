@@ -32,7 +32,7 @@
                                         <label class="checkbox-inline">My Challenges</label>
                                     </div>
                                     <div>
-                                        <input type="checkbox" ng-model="auditionEdit.communityChallenges">
+                                        <input type="checkbox" ng-model="auditionEdit.otherRecruitersChallenges">
                                         <label class="checkbox-inline">Other Recruiters</label>
                                     </div>
                                     <div>
@@ -91,11 +91,11 @@
                                     </div> -->
                                 </form>
                                 <div class="col-md-12">
-                                    <br><br><br><br>
-                                    <a class="btn btn-primary fa fa-arrow-left fa-1x" ng-click="auditionEdit.addChallengeClose()"></a>
-                                    <a class="btn btn-primary pull-right" ng-click="auditionEdit.addChallengeSearch()">Search</a>
-                                    <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.addItems.length===0" ng-click="auditionEdit.addChallengeAdd()">Add</a>
-                                    <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.addItems.length===0" ng-click="auditionEdit.addChallengeClear()">Clear</a>
+                                    <br>
+                                    <button type="button" class="btn btn-primary fa fa-arrow-left fa-1x" ng-click="auditionEdit.addChallengeClose()"></button>
+                                    <button type="button" class="btn btn-primary pull-right" ng-click="auditionEdit.addChallengeSearch()">Search</button>
+                                    <button type="button" class="btn btn-primary pull-right" ng-disabled="auditionEdit.addItems.length===0" ng-click="auditionEdit.addChallengeAdd()">Add</button>
+                                    <button type="button" class="btn btn-primary pull-right" ng-disabled="auditionEdit.addItems.length===0" ng-click="auditionEdit.addChallengeClear()">Clear</button>
                                 </div>
                                 <!-- <a class="btn btn-primary" ng-click="auditionEdit.addChallengeReset()">Reset</a> -->
                             </div>
@@ -354,6 +354,9 @@
                         </a>
                         <a class="removeItemIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE && auditionItem.itemSelectedToAdd" ng-click="auditionEdit.removeItemFromBuffer(auditionItem.itemId)" href='#'>
                             <span class='glyphicon glyphicon-minus'></span>
+                        </a>
+                        <a class="selectedItemIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE && auditionItem.itemAlreadyInAudition" ng-click="auditionEdit.addItemToBuffer(auditionItem.itemId, $index)" href='#'>
+                            <span class='glyphicon glyphicon-ok'></span>
                         </a>
                         <a class="editIcon" ng-click="auditionEdit.openEditItem(auditionItem.itemId)" href='#'>
                             <span class='glyphicon glyphicon-eye-open'></span>
