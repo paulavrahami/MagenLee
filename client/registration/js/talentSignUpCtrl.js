@@ -18,6 +18,8 @@ angular
         vm.newTalentRegister.profile.discreteInd = 'No';
         vm.talent = {};
         vm.userNameInd = false;
+        vm.profileTypeTalent = false;
+        vm.profileTypeDomainExpert = false;
         vm.currentDate = new Date();
         //Load countries and cities
         vm.countriesCities = countriesCities;
@@ -46,6 +48,13 @@ angular
             vm.countriesArray.push(key);
           
         });
+
+        //Set the profile type based on which option the user click
+        if (vm.talentType === 'TALENT'){
+            vm.profileTypeTalent = true;
+        } else {
+            vm.profileTypeDomainExpert = true;
+        }
         
 
         // Always load the web page with no need to scroll up
@@ -218,6 +227,8 @@ angular
                             vm.talent.skill3 = record.profile.skill3;
                             vm.talent.skill4 = record.profile.skill4;
                             vm.talent.skill5 = record.profile.skill5;
+                            vm.talent.profileTypeTalent = vm.profileTypeTalent;
+                            vm.talent.profileTypeDomainExpert = vm.profileTypeDomainExpert;
             
                             /** Make sure it has control object; */
                             if (!vm.talent.control) {

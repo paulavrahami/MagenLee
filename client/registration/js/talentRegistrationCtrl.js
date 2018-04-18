@@ -98,6 +98,8 @@ angular
                     skill3: currentTalent.skill3 ? currentTalent.skill3 : null,
                     skill4: currentTalent.skill4 ? currentTalent.skill4 : null,
                     skill5: currentTalent.skill5 ? currentTalent.skill5 : null,
+                    profileTypeTalent: currentTalent.profileTypeTalent ? currentTalent.profileTypeTalent : null,
+                    profileTypeDomainExpert: currentTalent.profileTypeDomainExpert ? currentTalent.profileTypeDomainExpert : null,
                     tcAcknowledge: currentTalent.tcAcknowledge ? currentTalent.tcAcknowledge : null
                       }
                   };
@@ -171,6 +173,8 @@ angular
                               'shareContact': talentRecord.shareContact,
                               'discreteInd': talentRecord.discreteInd,
                               'linkedin': talentRecord.linkedin,
+                              'profileTypeTalent' : talentRecord.profileTypeTalent,
+                              'profile.TypeDomainExpert' : talentRecord.profileTypeDomainExpert,
                               'skill1': talentRecord.skill1,
                               'skill2': talentRecord.skill2,
                               'skill3': talentRecord.skill3,
