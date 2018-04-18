@@ -358,48 +358,60 @@
                         </div>
 
                         <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-6">
 
                                         <!-- Receive Other Job Offering -->
-                                        <div class="form-group">
-                                                <label id="tooltip" data-toggle="tooltip" title="Do you want to receive Job offers from Skillera?">Receive Job Offering</label>
-                                                <input type="radio"
-                                                        value = "Yes"
-                                                        ng-model="vm.talentRegistration.receiveJobOffer"
-                                                        checked>
-                                                Yes
-                                                <input type="radio"
-                                                        value = "No"
-                                                        ng-model="vm.talentRegistration.receiveJobOffer">
-                                                No
+                                        <div class="form-group row">
+                                                <div class="col-md-6">
+                                                        <label id="tooltip" data-toggle="tooltip" title="Do you want to receive Job offers from Skillera?">Receive Job Offering</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                        <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.talentRegistration.receiveJobOffer"
+                                                                checked>
+                                                        Yes
+                                                        <input type="radio"
+                                                                value = "No"
+                                                                ng-model="vm.talentRegistration.receiveJobOffer">
+                                                        No
+                                                </div>
                                         </div>
 
                                         <!-- Share contact -->
-                                        <div class="form-group">
+                                        <div class="form-group row">
+                                                <div class="col-md-6">
                                                         <label id="tooltip" data-toggle="tooltip" title="Can Skillera share your information with other recruiters?">Share Contact</label>
+                                                </div>
+                                                <div class="col-md-6">
                                                         <input type="radio"
                                                                 value = "Yes"
                                                                 ng-model="vm.talentRegistration.shareContact"
                                                                 checked>
-                                                Yes
+                                                        Yes
                                                         <input type="radio"
-                                                                value = "No"
-                                                                ng-model="vm.talentRegistration.shareContact">
-                                                No
+                                                                        value = "No"
+                                                                        ng-model="vm.talentRegistration.shareContact">
+                                                        No
+                                                </div>
                                         </div>
 
                                         <!-- Discrete Ind -->
-                                        <div class="form-group">
+                                        <div class="form-group row">
+                                                <div class="col-md-6">        
                                                         <label id="tooltip" data-toggle="tooltip" title="Do you want to keep your information descrete when applying to jobs?">Discrete Indicator</label>
+                                                </div>
+                                                <div class="col-md-6">
                                                         <input type="radio"
                                                                 value = "Yes"
                                                                 ng-model="vm.talentRegistration.discreteInd"
                                                                 checked>
-                                                Yes
+                                                        Yes
                                                         <input type="radio"
-                                                                value = "No"
-                                                                ng-model="vm.talentRegistration.discreteInd">
-                                                No
+                                                                        value = "No"
+                                                                        ng-model="vm.talentRegistration.discreteInd">
+                                                        No
+                                                </div>
                                         </div>
                                 </div>
                         </div>
