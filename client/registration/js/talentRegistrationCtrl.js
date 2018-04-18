@@ -1,4 +1,6 @@
-import countries from '/public/countries.js';
+//import countries from '/public/countries.js';
+import countriesCities from '/public/countriesCities.json';
+import languages from '/public/languages.json';
 
 angular
     .module('skillera')
@@ -12,10 +14,40 @@ angular
         vm.userPasswordNew = '******';
         vm.userPasswordConf = '';
 
+        //Load countries and cities
+        vm.countriesCities = countriesCities;
+        //Load languages
+        vm.languages = languages;
+
 
 
         //noinspection JSCheckFunctionSignatures
         vm.currentUpload = new ReactiveVar(false);
+
+        //Arguments for selecting countries and belonging cities
+        vm.country = {
+            name: '',
+            cities: []
+        };
+        vm.countryArray = [];
+        vm.countriesArray = [];
+        vm.citiesArray = [];
+        
+
+
+        //Building 2 arrays
+        //1. with all countries (vm.countriesArray)
+        //2. with all cities per each country (vm.countryArray)
+
+        Object.keys(vm.countriesCities.countries).forEach(function(key) {
+            
+            vm.country = {name:key,cities:vm.countriesCities.countries[key]}
+            vm.countryArray.push(vm.country);
+            vm.countriesArray.push(key);
+          
+        });
+
+
         /**
          * @desc Show a dialog with the error;
          * @param msgArg
@@ -36,6 +68,9 @@ angular
                 } else {
                   currentTalent = result;
                   vm.talentKey = currentTalent._id;
+                  if (currentTalent.country) {
+                      vm.selectCities(currentTalent.country)
+                  };
 
                   vm.talentRegistration = {
                     username: currentUser.username,
@@ -43,7 +78,7 @@ angular
                     type: ENUM.USER.TALENT,
                     firstName: currentTalent.firstName ? currentTalent.firstName : null,
                     lastName: currentTalent.lastName ? currentTalent.lastName : null,
-                    address: currentTalent.address ? currentTalent.address : null,
+                    city: currentTalent.city ? currentTalent.city : null,
                     country: currentTalent.country ? currentTalent.country : null,
                     contactEmail: currentTalent.contactEmail  ? currentTalent.contactEmail  : null,
                     contactPhone: currentTalent.contactPhone ? currentTalent.contactPhone : null,
@@ -63,6 +98,8 @@ angular
                     skill3: currentTalent.skill3 ? currentTalent.skill3 : null,
                     skill4: currentTalent.skill4 ? currentTalent.skill4 : null,
                     skill5: currentTalent.skill5 ? currentTalent.skill5 : null,
+                    profileTypeTalent: currentTalent.profileTypeTalent ? currentTalent.profileTypeTalent : null,
+                    profileTypeDomainExpert: currentTalent.profileTypeDomainExpert ? currentTalent.profileTypeDomainExpert : null,
                     tcAcknowledge: currentTalent.tcAcknowledge ? currentTalent.tcAcknowledge : null
                       }
                   };
@@ -121,7 +158,7 @@ angular
               Talents.update({'_id': vm.talentKey},
                        {$set:{'firstName': talentRecord.firstName,
                               'lastName': talentRecord.lastName,
-                              'address'    : talentRecord.address,
+                              'city'    : talentRecord.city,
                               'country': talentRecord.country,
                               'contactPhone': talentRecord.contactPhone,
                               'contactEmail': talentRecord.contactEmail,
@@ -136,6 +173,8 @@ angular
                               'shareContact': talentRecord.shareContact,
                               'discreteInd': talentRecord.discreteInd,
                               'linkedin': talentRecord.linkedin,
+                              'profileTypeTalent' : talentRecord.profileTypeTalent,
+                              'profile.TypeDomainExpert' : talentRecord.profileTypeDomainExpert,
                               'skill1': talentRecord.skill1,
                               'skill2': talentRecord.skill2,
                               'skill3': talentRecord.skill3,
@@ -181,6 +220,12 @@ angular
             vm.userPasswordNew = '';
             vm.userPasswordConf = '';
         };
+
+        vm.selectCities = function(country) {
+            vm.citiesArray = [];;
+            index = vm.countriesArray.indexOf(country);
+            vm.citiesArray = vm.countryArray[index].cities;
+      };
 
 
         // Sign-Up Tabs navigation

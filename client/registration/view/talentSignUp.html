@@ -40,6 +40,23 @@
                 <div class="col-md-0-6"></div>
             </div>
 
+            <div class="row col-md-12">
+                
+                <div style="text-align:center">
+                        
+                                <label>User profile type :</label>
+                                <!-- <form> -->
+                                        <input type="checkbox" id="talentType" ng-model="vm.profileTypeTalent">
+                                        &nbsp;&nbsp;
+                                        <label for="talentType">Talent profile</label>
+                                        <input type="checkbox" id="domainExpertType" ng-model="vm.profileTypeDomainExpert">
+                                        &nbsp;&nbsp;
+                                        <label for="domainExpertType">Domain Expert profile</label>
+                                <!-- </form> -->
+                </div>
+                
+            </div>
+
 
             <!-- The signUp tabs' content -->
             <div class="row">
@@ -63,7 +80,7 @@
                                                     ng-blur="vm.checkUserName(vm.newTalentRegister.name)" 
                                                     name="userName"
                                                     class="form-control " 
-                                                    placeholder="" 
+                                                    placeholder="Login Username" 
                                                     required>
                                             <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.company.$error.required">User Name is required</span>
                                     </div>
@@ -173,24 +190,28 @@
                         <div class="row">
                                 
                                 <div class="col-md-3">
-                                        <!-- Address  -->
+                                        
+                                        <!-- Country -->
+                                        
                                         <div class="form-group">
-                                                <label for="inputTalentFirstName">Address</label>
-                                                <textarea 
-                                                        ng-model="vm.newTalentRegister.profile.address"
-                                                        class="form-control " 
-                                                        placeholder="" >
-                                                </textarea>
-                                        </div>
-                                        <!-- Address Country -->
-                                        <div class="form-group">
-                                                <label for="inputTalentFirstName">Country</label>
-                                                <input type="text" 
-                                                        ng-model="vm.newTalentRegister.profile.country" 
+                                                <label for="inputTalentCountry">Country</label>
+                                                <select ng-model="vm.newTalentRegister.profile.country" 
                                                         name="country"
-                                                        class="form-control " 
-                                                        placeholder="" 
-                                                        required>
+                                                        ng-change="vm.selectCities(vm.newTalentRegister.profile.country)"
+                                                        class="form-control ">
+                                                        <option ng-repeat="country in vm.countriesArray">{{country}}</option>
+                                                </select>
+                                        </div>
+
+                                        <!-- City  -->
+
+                                        <div class="form-group">
+                                                <label for="inputTalentCity">Country</label>
+                                                <select ng-model="vm.newTalentRegister.profile.city" 
+                                                        name="city"
+                                                        class="form-control ">
+                                                        <option ng-repeat="city in vm.citiesArray">{{city}}</option>
+                                                </select>
                                         </div>
                                         
 
@@ -225,21 +246,20 @@
                                         <!-- Language -->
                                         <div class="form-group">
                                                 <label for="inputTalentLanguage">Language</label>
-                                                <input type="text" 
-                                                        ng-model="vm.newTalentRegister.profile.language" 
+                                                <select ng-model="vm.newTalentRegister.profile.language" 
                                                         name="language"
-                                                        class="form-control " 
-                                                        placeholder="" 
-                                                        required>
+                                                        class="form-control ">
+                                                        <option ng-repeat="language in vm.languages">{{language}}</option>
+                                                </select>
                                         </div>
                                         <!-- Picture URL -->
                                         <div class="form-group">
-                                                        <label for="inputTalentPictureURL">Picture URL</label>
+                                                        <label for="inputTalentPictureURL">Picture</label>
                                                         <input type="text" 
                                                                 ng-model="vm.newTalentRegister.profile.pictureURL" 
                                                                 name="pictureURL"
                                                                 class="form-control " 
-                                                                placeholder="" 
+                                                                placeholder="URL  of your picture" 
                                                                 required>
                                                 </div>
                                         
@@ -266,7 +286,7 @@
                                                         ng-model="vm.newTalentRegister.profile.proffesion" 
                                                         name="proffesion"
                                                         class="form-control " 
-                                                        placeholder="" 
+                                                        placeholder="Your proffesion (Ex. Programmer)" 
                                                         required>
                                     </div>
                                     <!-- Expertize category -->
@@ -276,7 +296,7 @@
                                                         ng-model="vm.newTalentRegister.profile.expertizeCategory" 
                                                         name="expertiseCategory"
                                                         class="form-control " 
-                                                        placeholder="" 
+                                                        placeholder="Your expertize category (Ex. Telecom)"
                                                         required>
                                      </div>
                                      <!-- Expertize sub category -->
@@ -286,7 +306,7 @@
                                                         ng-model="vm.newTalentRegister.profile.expertizeSubCategory" 
                                                         name="expertiseSubCategory"
                                                         class="form-control " 
-                                                        placeholder="" 
+                                                        placeholder="Your specific expertize (ex. Mobile etc.)" 
                                                         required>
                                      </div>
                                      <!-- Linkedin profile URL -->
@@ -313,7 +333,7 @@
                                                  ng-model="vm.newTalentRegister.profile.skill1" 
                                                  name="skill1"
                                                  class="form-control " 
-                                                 placeholder="" 
+                                                 placeholder="Your skill (ex. Jave)" 
                                                  required>
                                                  
                                  </div>
@@ -323,7 +343,7 @@
                                                  ng-model="vm.newTalentRegister.profile.skill2" 
                                                  name="skill2"
                                                  class="form-control " 
-                                                 placeholder="" 
+                                                 placeholder="Your skill (ex. Automatic Testing)" 
                                                  required>
                                                  
                                  </div>
@@ -333,7 +353,7 @@
                                                  ng-model="vm.newTalentRegister.profile.skill3" 
                                                  name="skill3"
                                                  class="form-control " 
-                                                 placeholder="" 
+                                                 placeholder="Your skill (ex. HTML)" 
                                                  required>
                                                  
                                  </div>
@@ -343,7 +363,7 @@
                                                         ng-model="vm.newTalentRegister.profile.skill4" 
                                                         name="skill4"
                                                         class="form-control " 
-                                                        placeholder="" 
+                                                        placeholder="Your skill (ex. Accounting)" 
                                                         required>
                                                         
                                  </div>
@@ -353,7 +373,7 @@
                                                         ng-model="vm.newTalentRegister.profile.skill5" 
                                                         name="skill5"
                                                         class="form-control " 
-                                                        placeholder="" 
+                                                        placeholder="Your skill (ex. Graphic Design)" 
                                                         required>
                                                                 
                                  </div>
@@ -371,49 +391,72 @@
                                 </div>
 
                                 <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                                 <!-- Receive Other Job Offering -->
-                                                <div class="form-group">
-                                                        <label>Receive Job Offering</label>
-                                                        <input type="radio"
+                                                <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                                <label id="tooltip" data-toggle="tooltip" title="Do you want to receive Job offers from Skillera?">Receive Job Offering</label>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                                <input type="radio"
                                                                 value = "Yes"
                                                                 ng-model="vm.newTalentRegister.profile.receiveJobOffer"
                                                                 checked>
-                                                        Yes
-                                                        <input type="radio"
-                                                                value = "No"
-                                                                ng-model="vm.newTalentRegister.profile.receiveJobOffer">
-                                                        No
-                                                </div>
-
-                                                <!-- Share contact -->
-                                                <div class="form-group">
-                                                        <label>Share Contact</label>
-                                                        <input type="radio"
-                                                                value = "Yes"
-                                                                ng-model="vm.newTalentRegister.profile.shareContact"
-                                                                checked>
-                                                        Yes
-                                                        <input type="radio"
-                                                                value = "No"
-                                                                ng-model="vm.newTalentRegister.profile.shareContact">
-                                                        No
-                                                </div>
-
-                                                <!-- Discrete Indicator -->
-                                                <div class="form-group">
-                                                                <label>Discrete Indicator</label>
-                                                                <input type="radio"
-                                                                        value = "Yes"
-                                                                        ng-model="vm.newTalentRegister.profile.discreteInd"
-                                                                        checked>
                                                                 Yes
                                                                 <input type="radio"
                                                                         value = "No"
-                                                                        ng-model="vm.newTalentRegister.profile.discreteInd">
+                                                                        ng-model="vm.newTalentRegister.profile.receiveJobOffer">
                                                                 No
                                                         </div>
+                                                </div>
+
+                                                <!-- Share contact -->
+                                                <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                                <label id="tooltip" data-toggle="tooltip" title="Can Skillera share your information with other recruiters?">Share Contact</label>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                                <input type="radio"
+                                                                value = "Yes"
+                                                                ng-model="vm.newTalentRegister.profile.shareContact"
+                                                                checked>
+                                                                Yes
+                                                                <input type="radio"
+                                                                        value = "No"
+                                                                        ng-model="vm.newTalentRegister.profile.shareContact">
+                                                                No
+                                                        </div>
+                                                </div>
+
+                                                <!-- Discrete Indicator -->
+                                                <div class="form-group row">
+                                                                <div class="col-md-6">
+                                                                        <label id="tooltip" data-toggle="tooltip" title="Do you want to keep your information descrete when applying to jobs?">Discrete Indicator</label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                        <input type="radio"
+                                                                        value = "Yes"
+                                                                        ng-model="vm.newTalentRegister.profile.discreteInd"
+                                                                        checked>
+                                                                        Yes
+                                                                        <input type="radio"
+                                                                                value = "No"
+                                                                                ng-model="vm.newTalentRegister.profile.discreteInd">
+                                                                        No
+                                                                </div>
+                                                        </div>
                                         </div>
+                                </div>
+                                <div class="sign-up-footer col-md-12">
+                                        <div>
+                                            <fieldset form="termsAndCond">
+                                                <!-- Terms -->
+                                                <input type="checkbox" ng-model="vm.newTalentRegister.legal" name="legal" required>
+                                                <label class="checkbox-terms"><a href='#' ng-click = "vm.displayLegal('lg')">I've read and accept the terms and conditions</a></label>
+                                                <span class="error-msg" ng-show="!vm.newTalentRegister.legal && talentSignUp.$submitted">You must accept the terms and conditions</span>
+                                            </fieldset>
+                                        </div>
+                                        <br>
                                 </div>
 
                      </div>
@@ -434,14 +477,6 @@
             </div>
 
     <div class="sign-up-footer col-md-12">
-        <div>
-            <fieldset form="termsAndCond">
-                <!-- Terms -->
-                <input type="checkbox" ng-model="vm.newTalentRegister.legal" name="legal" required>
-                <label class="checkbox-terms"><a href='#' ng-click = "vm.displayLegal('lg')">I've read and accept the terms and conditions</a></label>
-                <span class="error-msg" ng-show="!vm.newTalentRegister.legal && talentSignUp.$submitted">You must accept the terms and conditions</span>
-            </fieldset>
-        </div>
         <br>
 
         <div style="text-align:center" class="col-md-12">
