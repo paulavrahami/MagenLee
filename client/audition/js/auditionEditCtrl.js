@@ -822,7 +822,7 @@ angular
                         }
                     };
                     // Calculate the items max-score and update the items summary panel accordingly
-                    auditionEdit.dependency.changed();
+                    // auditionEdit.dependency.changed();
                     calculateItemsMaxScore();
                     auditionEdit.saveAudition();
                     calculateAuditionSummary();
@@ -831,6 +831,7 @@ angular
                     itemsPerSkill = [];
                 });
                 return true;
+                auditionEdit.dependency.changed();
             });
             
         };
