@@ -887,7 +887,8 @@ angular
             auditionEdit.dependency.depend();
             // An author type has to be defined
             if (!auditionEdit.myChallenges &&
-                !auditionEdit.communityChallenges &&
+                !auditionEdit.otherRecruitersChallenges &&
+                !auditionEdit.domainExpertsChallenges &&
                 !auditionEdit.domainExpertsChallenges) {
                 showErrorMessage("Challenge author has to be defined");
                 return;
@@ -897,25 +898,42 @@ angular
                 showErrorMessage("Challenge skill has to be defined");
                 return;
             };
+
             // Set the Author Type selection criteria
             currentUser = Meteor.user()._id;
             if (auditionEdit.myChallenges) {
                 authorTypeMyChallenges = currentUser;
+                authorTypeOtherRecruiters = ENUM.ITEM_AUTHOR_TYPE.RECRUITER;
             } else {
-                authorTypeMyChallenges = {$ne: currentUser};
+                authorTypeMyChallenges = {$ne: ""};
             };
-            // Set the Comuunity Type (other recruiters) selection criteria
-            if (auditionEdit.communityChallenges || auditionEdit.myChallenges) {
-                authorTypeCommunityChallenges = ENUM.ITEM_AUTHOR_TYPE.RECRUITER;
+
+            // Set the other recruiters selection criteria
+            if (auditionEdit.otherRecruitersChallenges) {
+                authorTypeOtherRecruiters = ENUM.ITEM_AUTHOR_TYPE.RECRUITER;
+                if (auditionEdit.myChallenges) {
+                    authorTypeMyChallenges = {$ne: ""};
+                } else {
+                    authorTypeMyChallenges = {$ne: currentUser};
+                };
             } else {
-                authorTypeCommunityChallenges = {$ne: ENUM.ITEM_AUTHOR_TYPE.RECRUITER};
+                authorTypeOtherRecruiters = {$ne: ENUM.ITEM_AUTHOR_TYPE.RECRUITER};
             };
+      
+            // Set the talents (Domain Expert) selection criteria
+            if (auditionEdit.domainExpertsChallenges) {
+                authorTypeTalent = ENUM.ITEM_AUTHOR_TYPE.TALENT;
+            } else {
+                authorTypeTalent = {$ne: ENUM.ITEM_AUTHOR_TYPE.TALENT};
+            };
+
             // Set the Complexity Type selection criteria
             if ((auditionEdit.addChallengeComplexity === '') || (auditionEdit.addChallengeComplexity === null) || (auditionEdit.addChallengeComplexity === undefined)) {
                 complexityParam = {$ne: ""};
             } else {
                 complexityParam = auditionEdit.addChallengeComplexity;
             };
+
             // Set the Template selection criteria
             if ((auditionEdit.addChallengeTemplate === '') || (auditionEdit.addChallengeTemplate === null) || (auditionEdit.addChallengeTemplate === undefined)) {
                 templateIdParam = {$ne: ""};
@@ -924,7 +942,7 @@ angular
                 templateIdParam = template._id;
             };
 
-            conditions = {$and:[{$and:[{authorId: authorTypeMyChallenges},{authorType: authorTypeCommunityChallenges}]},
+            conditions = {$and:[{$and:[{authorId: authorTypeMyChallenges}, {$or:[{authorType: authorTypeOtherRecruiters}, {authorType: authorTypeTalent}]} ]},
                                 {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                 {$text: {$search: auditionEdit.addChallengeSkills}},
                                 {complexity: complexityParam},
@@ -965,7 +983,6 @@ angular
                     auditionEdit.searchItems.push(angular.copy(auditionItemArrayEntry));
                     return true;
                 });
-                auditionEdit.searchItems.sort(function(a, b){return a.itemAlreadyInAudition - b.itemAlreadyInAudition})
                 auditionEdit.dependency.changed();
             }).catch(function(error) {
                 itemsPerAddChallenges = [];
@@ -974,7 +991,8 @@ angular
 
         function addChallengeResetSelection () {
             auditionEdit.myChallenges = true;
-            auditionEdit.communityChallenges = true;
+            auditionEdit.otherRecruitersChallenges = true;
+            auditionEdit.domainExpertsChallenges = false;
             auditionEdit.addChallengeSkills = "";
             auditionEdit.addChallengeComplexity = "";
             auditionEdit.addChallengeTemplate = "";
@@ -1093,10 +1111,11 @@ angular
             auditionEdit.addItems.push(angular.copy(itemIdArg));
 
             auditionEdit.itemsAdded = true;
-            // Indicate the selected item in the searchItems buffer
+            // Indicate the selected item in the search Items buffer
             auditionEdit.searchItems[indexArg].itemSelectedToAdd = true;
+            // sort the buffer - selected items on top
             auditionEdit.searchItems.sort(function(a, b){return b.itemSelectedToAdd - a.itemSelectedToAdd});
-
+            // find the last item selected in order to present a deviation line after it
             for (let i=1; i<auditionEdit.searchItems.length; i++) {
                 if (!auditionEdit.searchItems[i].itemSelectedToAdd && auditionEdit.searchItems[i-1].itemSelectedToAdd) {
                     auditionEdit.searchItems[i-1].lastItemSelected = true;
@@ -1122,6 +1141,7 @@ angular
             // Reset the selected item in the searchItems buffer
             index = auditionEdit.searchItems.findIndex(findItem => findItem.itemId == itemIdArg);
             auditionEdit.searchItems[index].itemSelectedToAdd = false;
+            // sort the buffer - selected items on top
             auditionEdit.searchItems.sort(function(a, b){return b.itemSelectedToAdd - a.itemSelectedToAdd})
 
             for (let i=1; i<auditionEdit.searchItems.length; i++) {
