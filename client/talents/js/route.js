@@ -16,13 +16,13 @@ function routerConfig($stateProvider) {
   .state('mainChallenges',{
     url:'/talentChallenges',
     templateUrl: 'client/talents/view/talentChallengeMain.html',
-    controller: 'ChallengeMainCtrl',
+    controller: 'talentChallengeMainCtrl',
     controllerAs: 'vm'
   })
   .state('mainApplications', {
     url:'/talentApplications',
     templateUrl: 'client/talents/view/talentApplicationMain.html',
-    controller: 'applicationMainCtrl',
+    controller: 'talentApplicationMainCtrl',
     controllerAs: 'vm'
   })
 }

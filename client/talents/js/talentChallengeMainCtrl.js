@@ -1,6 +1,6 @@
 angular
     .module('skillera')
-    .controller('ChallengeMainCtrl', function($state,$stateParams,$scope,$reactive,$window, dbhService, $uibModal, $UserAlerts, ENUM, MAP,$promiser, $http,$sce,moment) {
+    .controller('talentChallengeMainCtrl', function($state,$stateParams,$scope,$reactive,$window, dbhService, $uibModal, $UserAlerts, ENUM, MAP,$promiser, $http,$sce,moment) {
         $scope.trust = $sce.trustAsHtml;
 
         let vm = this;
