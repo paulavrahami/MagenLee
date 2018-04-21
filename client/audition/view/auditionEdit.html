@@ -1,6 +1,7 @@
 <skillera-header></skillera-header>
 <div class="row auditionEdit" ng-if="auditionEdit.subsciptionOk">
     <div class="col-md-0-6">
+        <!-- The side pannel -->
         <div class="col-md-12">
             <div id="btn-ctsArea" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE">
                 <div class="cts">
@@ -138,7 +139,7 @@
         </div>
     </div>
     <div class="col-md-11">
-        <!-- Audition properties area -->
+        <!-- The Audition properties area -->
         <div class="col-md-4">
             <div class="q-border-padding">
                 <div class="audition-header">
@@ -173,7 +174,6 @@
                     </div> -->
                 </form>
                 <div>&nbsp;</div>
-
                 <a class="btn btn-primary fa fa-arrow-left fa-1x" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ui-sref="recruiter.recruiterDemand({id:auditionEdit.audition.campaignId,'#':'menu3'})"></a>
                 <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.auditionDone()">Done</a>
                 <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.clearAudition()">Clear</a>
@@ -184,6 +184,7 @@
                 <a class="btn btn-primary pull-right" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.previewAudition()">Preview</a>
             </div>
         </div>
+        <!-- The summary section -->
         <div class="col-md-8">
             <!-- Items summary area - Items already selected for the audition -->
             <div class="col-md-12" ng-if="!auditionEdit.addChallengeOption">
@@ -244,6 +245,7 @@
                     </table>
                 </div>
             </div>
+
             <!-- Items summary area - Add challenge option -->
             <div class="col-md-12" ng-if="auditionEdit.addChallengeOption">
                 <div class="q-border summery-area">
@@ -298,7 +300,20 @@
                     </table>
                 </div>
             </div>
+
             <!-- Items list area - Items already selected for the audition -->
+            <!-- the header -->
+            <div class="col-md-12" ng-if="!auditionEdit.addChallengeOption && auditionEdit.audition.items.length > 0">
+                <div class="col-md-12 add-Challenge-list-title">
+                    <h5 class="col-md-2"><strong>Skill</strong></h5>
+                    <h5 class="col-md-2"><strong>Complexity</strong></h5>
+                    <h5 class="col-md-2"><strong>Duration</strong></h5>
+                    <h5 class="col-md-2"><strong>Score</strong></h5>
+                    <h5 class="col-md-2"><strong>Template</strong></h5>
+                    <h5 class="col-md-2"><strong>Author</strong></h5>
+                </div>
+            </div>
+            <!-- the list -->
             <div class="col-md-12 items-list" ng-if="!auditionEdit.addChallengeOption">
                 <div
                     class="row auditionItem col-md-12"
@@ -307,10 +322,12 @@
                     ng-repeat="auditionItem in auditionEdit.audition.items">
                     <!-- ng-hide="auditionItem.itemId === auditionEdit.editItem._id" -->
                     <div class="row">
-                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3"><span>{{$index+1}}.</span> Skill: {{auditionEdit.getItem(auditionItem.itemId).skill}}</h5>
-                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Complexity: {{auditionEdit.getItem(auditionItem.itemId).complexity}}</h5>
-                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Duration: {{auditionEdit.getItem(auditionItem.itemId).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
-                        <h5 class=" col-md-3 ellipsis" style="border-bottom:1px dotted #d3d3d3">Score: {{auditionItem.maxScore | number:2}}</h5>
+                        <h5 class="col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3"><span>{{$index+1}}.</span> {{auditionEdit.getItem(auditionItem.itemId).skill}}</h5>
+                        <h5 class="col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3">{{auditionEdit.getItem(auditionItem.itemId).complexity}}</h5>
+                        <h5 class="col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3">{{auditionEdit.getItem(auditionItem.itemId).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
+                        <h5 class="col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3">{{auditionItem.maxScore | number:2}}</h5>
+                        <h5 class="col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3"> {{auditionEdit.templateName(auditionItem.itemId)}}</h5>
+                        <h5 class="col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3"> {{auditionEdit.authorType(auditionItem.itemId)}}</h5>
                     </div>
                     <div class="col-md-12 ellipsis"><span>{{auditionEdit.itemToString(auditionItem.itemId)}}</span></div>
                     <a  class="removeIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.removeItem(auditionItem)" href='#'>
@@ -327,13 +344,21 @@
                     </a>
                 </div>
             </div>
+
             <!-- Items list area - Add challenge/Search results -->
-            <div class="col-md-12 items-list" ng-if="auditionEdit.addChallengeOption && auditionEdit.itemsFound">
-                <div class = "col-md-12 add-Challenge-list-title">
-                    <span ng-if="!auditionEdit.itemsAdded && (auditionEdit.searchItems.length === 1)">Search Results - {{auditionEdit.searchItems.length}} challenge was found</span>
-                    <span ng-if="!auditionEdit.itemsAdded && (auditionEdit.searchItems.length > 1)">Search Results - {{auditionEdit.searchItems.length}} challenges were found</span>
-                    <span ng-if="auditionEdit.itemsAdded">Challenges Selected for the Audition</span>
+            <!-- the header -->
+            <div class="col-md-12" ng-if="auditionEdit.addChallengeOption && auditionEdit.itemsFound">
+                <div class="col-md-12 add-Challenge-list-title">
+                    <h5 class="col-md-2"><strong>Skill</strong></h5>
+                    <h5 class="col-md-2"><strong>Complexity</strong></h5>
+                    <h5 class="col-md-2"><strong>Duration</strong></h5>
+                    <h5 class="col-md-3"><strong>Template</strong></h5>
+                    <h5 class="col-md-1"><strong>Usage</strong></h5>
+                    <h5 class="col-md-2"><strong>Author</strong></h5>
                 </div>
+            </div>
+            <!-- the list -->
+            <div class="col-md-12 items-list" ng-if="auditionEdit.addChallengeOption && auditionEdit.itemsFound">
                 <div ng-repeat="auditionItem in auditionEdit.searchItems">
                     <div
                         class="row auditionItem col-md-12"
@@ -341,15 +366,19 @@
                         ng-click="auditionEdit.selectCurrentItem(auditionItem.itemId)">
                         <!-- ng-hide="auditionItem === auditionEdit.editItem._id" -->
                         <!-- ng-class="auditionItem.itemId === auditionEdit.currentItem._id ? 'selected' : ''" -->
+                        <!-- Item's first line -->
                         <div class="row">
-                            <h5 class="col-md-3 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">Skill: {{auditionEdit.getItem(auditionItem.itemId).skill}}</h5>
-                            <h5 class="col-md-3 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">Complexity: {{auditionEdit.getItem(auditionItem.itemId).complexity}}</h5>
-                            <h5 class="col-md-3 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">Duration: {{auditionEdit.getItem(auditionItem.itemId).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
-                            <h5 class="col-md-2 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">Type: {{auditionEdit.templateName(auditionItem.itemId)}}</h5>
+                            <h5 class="col-md-2 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">{{auditionEdit.getItem(auditionItem.itemId).skill}}</h5>
+                            <h5 class="col-md-2 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">{{auditionEdit.getItem(auditionItem.itemId).complexity}}</h5>
+                            <h5 class="col-md-2 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">{{auditionEdit.getItem(auditionItem.itemId).itemDuration | date:"HH:mm:ss" : 'UTC'}}</h5>
+                            <h5 class="col-md-3 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">{{auditionEdit.templateName(auditionItem.itemId)}}</h5>
+                            <h5 class="col-md-1 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">{{auditionEdit.getItem(auditionItem.itemId).usage}}</h5>
+                            <h5 class="col-md-2 ellipsis" ng-class="{'itemAlreadyInAudition' : auditionItem.itemAlreadyInAudition, 'itemSelectedToAdd' : auditionItem.itemSelectedToAdd}" style="border-bottom:1px dotted #d3d3d3">{{auditionEdit.authorType(auditionItem.itemId)}}</h5>
                         </div>
+                        <!-- Item's second line -->
                         <div class="col-md-12 ellipsis">{{auditionEdit.itemToString(auditionItem.itemId)}}</div>
-
-                        <a  class="addItemIcon" ng-if="(auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) && (!auditionItem.itemAlreadyInAudition && !auditionItem.itemSelectedToAdd)" ng-click="auditionEdit.addItemToBuffer(auditionItem.itemId, $index)" href='#'>
+                        <!-- Item's action buttons -->
+                        <a class="addItemIcon" ng-if="(auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) && (!auditionItem.itemAlreadyInAudition && !auditionItem.itemSelectedToAdd)" ng-click="auditionEdit.addItemToBuffer(auditionItem.itemId, $index)" href='#'>
                             <span class='glyphicon glyphicon-plus'></span>
                         </a>
                         <a class="removeItemIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE && auditionItem.itemSelectedToAdd" ng-click="auditionEdit.removeItemFromBuffer(auditionItem.itemId)" href='#'>
