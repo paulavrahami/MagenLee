@@ -111,8 +111,8 @@ angular
             
                         vm.subscribe('allAuditions', () => []);
                         if (Meteor.user() && Meteor.user().profile) {
-                            // reactiveContext.subscribe('itemsByAuthorId', () => [Meteor.user()._id]);
-                            vm.subscribe('itemsByAuthorId',() => [Meteor.user()._id]);
+                            // vm.subscribe('itemsByAuthorId',() => [Meteor.user()._id]);
+                            vm.subscribe('itemsByAuthorId',() => [Meteor.user().profile.talentId]);
                         }
                         return true;
 
@@ -200,13 +200,13 @@ angular
 
                 if (vm.selectedStatus) {
                     conditions = {$and: [
-                        {authorId: Meteor.user()._id},
+                        {authorId: Meteor.user().profile.talentId},
                         {status: vm.ENUM.ITEM_STATUS[vm.selectedStatus]}
                     ]};
                 }
                 else {
                     conditions = {$and: [
-                        {authorId: Meteor.user()._id},
+                        {authorId: Meteor.user().profile.talentId},
                         {status: {$ne: ENUM.ITEM_STATUS.NEW}}
                     ]};
                 }
@@ -388,7 +388,7 @@ angular
                 "usage" : 0,
                 "lastAssignedDate" : "",
                 "authorType" : ENUM.ITEM_AUTHOR_TYPE.TALENT,
-                "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID*/
+                "authorId" : Meteor.user().profile.talentId, /*Zvika - This should be changed in the future to be the Subscriber ID*/
                 "shareInd" : true, /*Zvika - Currently this is the default and cannot be changed. In the future it should be taken from the Recruiter profile*/
                 "control" : {
                     "createdBy" : Meteor.user()._id,
