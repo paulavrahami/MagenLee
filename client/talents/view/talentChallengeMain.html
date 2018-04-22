@@ -106,7 +106,8 @@
                                 {{item.complexity}}
                             </div>
                             <div class="col-md-6 item-time">
-                                <span>{{item.itemDuration | date:"HH:mm:ss" : 'UTC'}}</span>
+                                    <span ng-if="item.usage">({{item.usage}})</span>
+                                <!-- <span>{{item.itemDuration | date:"HH:mm:ss" : 'UTC'}}</span> -->
                             </div>
                         </div>
                         <div class="row col-md-12">
@@ -175,7 +176,9 @@
                         <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
                             <div class="panel-body" >
                               <div class="col-md-12">
-                                  <p>{{campaign.description}}</p>
+                                  <p><b>The challenge : </b>{{item.content.question}}</p>
+                                  <p ng-if="item.content.statement"><b>Free text :</b> {{item.content.statement}}</p>
+                                  <p ng-if="item.content.hint"><b>Hint :</b> {{item.content.hint}}</p>
                               </div>
                             </div>
                         </div>
