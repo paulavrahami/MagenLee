@@ -292,7 +292,92 @@
                     <!-- MAIN TAB Content - Usage -->
                     <div id="TMP001-usage" class="tab-pane fade">
                         <div class="usage-tab-content">
-                            <p>Coming Soon...</p>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <!-- Created Date -->
+                                    <div class="form-group">
+                                        <label>Created Date</label>
+                                            <input  type="date"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.editItem.control.createDate"
+                                                    disabled>
+                                    </div>
+                                    <!-- Author Type -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Author Type</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.authorType"
+                                                    disabled>
+                                    </div>
+                                    <!-- Author Name -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool' && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
+                                        <label>Author Name</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.authorName"
+                                                    disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-5">
+                                    <!-- Last Date in Use -->
+                                    <div class="form-group">
+                                        <label>Last Assigned Date</label>
+                                            <input  type="date"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.lastAssignedDate"
+                                                    disabled>
+                                    </div>
+                                    <!-- Used by My Auditions -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Total Usage - My Auditions</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.itemUsageMyAuditions"
+                                                    disabled>
+                                    </div>
+                                    <!-- Used by Others -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Total Usage - Other Recruiters</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.itemUsageOtherRecruiters"
+                                                    disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="challengeEdit.challangeCreateMode === 'Pool'">
+                                <div class="col-md-12">
+                                    <br><br>
+                                    <!-- Usage by companies table -->
+                                    <table id="usageTable" class="table table-striped" cellspacing="0" width="100%">
+                                        <col width="40%">
+                                        <col width="30%">
+                                        <col width="30%">
+                                        <thead>
+                                            <tr>
+                                                <th>Company</th>
+                                                <th>Usage</th>
+                                                <th>Last Assigned Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            <tr ng-repeat="recruiter in challengeEdit.itemUsagePerRecruiter">
+                                                <td>
+                                                    {{recruiter._id}}
+                                                </td>
+                                                <td>
+                                                    {{recruiter.totalUsage}}
+                                                </td>
+                                                <td>
+                                                    {{recruiter.lastAssignedDate | date}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -465,7 +550,92 @@
                     <!-- MAIN TAB Content - Usage -->
                     <div id="TMP002-usage" class="tab-pane fade">
                         <div class="usage-tab-content">
-                            <p>Coming Soon...</p>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <!-- Created Date -->
+                                    <div class="form-group">
+                                        <label>Created Date</label>
+                                            <input  type="date"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.editItem.control.createDate"
+                                                    disabled>
+                                    </div>
+                                    <!-- Author Type -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Author Type</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.authorType"
+                                                    disabled>
+                                    </div>
+                                    <!-- Author Name -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool' && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
+                                        <label>Author Name</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.authorName"
+                                                    disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-5">
+                                    <!-- Last Date in Use -->
+                                    <div class="form-group">
+                                        <label>Last Assigned Date</label>
+                                            <input  type="date"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.lastAssignedDate"
+                                                    disabled>
+                                    </div>
+                                    <!-- Used by My Auditions -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Total Usage - My Auditions</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.itemUsageMyAuditions"
+                                                    disabled>
+                                    </div>
+                                    <!-- Used by Others -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Total Usage - Other Recruiters</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.itemUsageOtherRecruiters"
+                                                    disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="challengeEdit.challangeCreateMode === 'Pool'">
+                                <div class="col-md-12">
+                                    <br><br>
+                                    <!-- Usage by companies table -->
+                                    <table id="usageTable" class="table table-striped" cellspacing="0" width="100%">
+                                        <col width="40%">
+                                        <col width="30%">
+                                        <col width="30%">
+                                        <thead>
+                                            <tr>
+                                                <th>Company</th>
+                                                <th>Usage</th>
+                                                <th>Last Assigned Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            <tr ng-repeat="recruiter in challengeEdit.itemUsagePerRecruiter">
+                                                <td>
+                                                    {{recruiter._id}}
+                                                </td>
+                                                <td>
+                                                    {{recruiter.totalUsage}}
+                                                </td>
+                                                <td>
+                                                    {{recruiter.lastAssignedDate | date}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -655,7 +825,92 @@
                     <!-- MAIN TAB Content - Usage -->
                     <div id="TMP003-usage" class="tab-pane fade">
                         <div class="usage-tab-content">
-                            <p>Coming Soon...</p>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <!-- Created Date -->
+                                    <div class="form-group">
+                                        <label>Created Date</label>
+                                            <input  type="date"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.editItem.control.createDate"
+                                                    disabled>
+                                    </div>
+                                    <!-- Author Type -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Author Type</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.authorType"
+                                                    disabled>
+                                    </div>
+                                    <!-- Author Name -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool' && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
+                                        <label>Author Name</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.authorName"
+                                                    disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-5">
+                                    <!-- Last Date in Use -->
+                                    <div class="form-group">
+                                        <label>Last Assigned Date</label>
+                                            <input  type="date"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.lastAssignedDate"
+                                                    disabled>
+                                    </div>
+                                    <!-- Used by My Auditions -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Total Usage - My Auditions</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.itemUsageMyAuditions"
+                                                    disabled>
+                                    </div>
+                                    <!-- Used by Others -->
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                        <label>Total Usage - Other Recruiters</label>
+                                            <input  type="text"
+                                                    class="form-control"
+                                                    ng-model="challengeEdit.itemUsageOtherRecruiters"
+                                                    disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="challengeEdit.challangeCreateMode === 'Pool'">
+                                <div class="col-md-12">
+                                    <br><br>
+                                    <!-- Usage by companies table -->
+                                    <table id="usageTable" class="table table-striped" cellspacing="0" width="100%">
+                                        <col width="40%">
+                                        <col width="30%">
+                                        <col width="30%">
+                                        <thead>
+                                            <tr>
+                                                <th>Company</th>
+                                                <th>Usage</th>
+                                                <th>Last Assigned Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            <tr ng-repeat="recruiter in challengeEdit.itemUsagePerRecruiter">
+                                                <td>
+                                                    {{recruiter._id}}
+                                                </td>
+                                                <td>
+                                                    {{recruiter.totalUsage}}
+                                                </td>
+                                                <td>
+                                                    {{recruiter.lastAssignedDate | date}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

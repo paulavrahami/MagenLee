@@ -673,6 +673,19 @@ angular
             return TemplatesCollection.findOne({_id:item.templateId}).name;
         };
 
+        // Return the item's author type
+        auditionEdit.authorType = function (itemIdArg) {
+            let item = auditionEdit.getItem(itemIdArg);
+
+            if ((item.authorType === ENUM.ITEM_AUTHOR_TYPE.RECRUITER) && (item.authorId === Meteor.user()._id)) { /*should be changed to the user's company Id*/
+                return 'Internal';
+            } else if (item.authorType === ENUM.ITEM_AUTHOR_TYPE.RECRUITER) {
+                return 'Recruiter';
+            } else if (item.authorType === ENUM.ITEM_AUTHOR_TYPE.TALENT) {
+                return 'Expert';
+            }
+        };
+
         auditionEdit.getContent = function (itemIdArg) {
             return Contents.findOne({_id:itemIdArg})
         };

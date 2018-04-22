@@ -6,16 +6,20 @@ angular
         $reactive(challengeEdit).attach($scope);
         $scope._ = _;
 
+        challengeEdit.dependency = new Deps.Dependency();
+
         challengeEdit.ENUM = ENUM;
         challengeEdit.complexityArray = [ENUM.EXPERIENCE.up1, ENUM.EXPERIENCE.up2, ENUM.EXPERIENCE.up3, ENUM.EXPERIENCE.up4];
         challengeEdit.automaticGeneration = false;
         challengeEdit.tbdFeature = true;
         challengeEdit.challangeCreateMode = '';
-
+        // Invoke the challente (item) "object" from the audition
         if ($scope.challengeCreateMode === ENUM.CHALLENGE_CREATE_MODE.AUDITION) {
             // Get the auditonEdit controller
             var auditionEditCtrl = $scope.$resolve.auditionEditCtrl;
             challengeEdit.subsciptionOk = auditionEditCtrl.subsciptionOk;
+
+            challengeEdit.companyOwner = auditionEditCtrl.audition.control.companyOwner; /*zvika change to companyId*/
 
             challengeEdit.editItem = auditionEditCtrl.editItem;
             challengeEdit.editItemForCancel = auditionEditCtrl.editItemForCancel;
@@ -27,11 +31,10 @@ angular
             if (auditionEditCtrl.audition.status == ENUM.AUDITION_STATUS.AVAILABLE) {
                 challengeEdit.externalDisabledTriger = true;
             };
-
             challengeEdit.challangeCreateMode = 'Audition';
-
         };
-                   
+
+        // Invoke the challente (item) "object" from the marketplace
         if ($scope.challengeCreateMode === ENUM.CHALLENGE_CREATE_MODE.POOL) {
             // Get the talent controller
             var challengeMainCtrl = $scope.$resolve.ChallengeMainCtrl;
@@ -41,12 +44,137 @@ angular
             challengeEdit.editItemForCancel = challengeMainCtrl.editItemForCancel;
             challengeEdit.editTemplate = challengeMainCtrl.editTemplate;
 
-            //The content of all skills in Skills collection will be loaded by
-            //challangeMainCtrl
+            //The content of all skills in Skills collection will be loaded by challangeMainCtrl
             challengeEdit.skills = challengeMainCtrl.skills;
             challengeEdit.challangeCreateMode = 'Pool';
         };
+       
+        challengeEdit.helpers({
+            totalUsagePerRecruiter () {
+                challengeEdit.dependency.depend();
+                (new Promise((resolve, reject) => {
+                    Meteor.call('items.getItemUsagePerRecruiter',
+                        {itemId: challengeEdit.editItem._id},
+                        (err, res) => {
+                            if (err) {
+                                console.log(err);
+                                reject(err);
+                            } else {
+                                resolve(res);
+                            }
+                        }
+                    )
+                }
+                )).then(function(results) {
+                    challengeEdit.itemUsagePerRecruiter = results;
+                    challengeEdit.dependency.changed();
+                    return challengeEdit.itemUsagePerRecruiter;
+                }).catch(function(error) {
+                    console.log(error);
+                });
+            },
 
+            authorType () {
+                if ((challengeEdit.editItem.authorType === ENUM.ITEM_AUTHOR_TYPE.RECRUITER) && (challengeEdit.editItem.authorId === Meteor.user()._id)) { /*should be changed to the user's company Id*/
+                    challengeEdit.authorType = 'Internal';
+                    return challengeEdit.authorType;
+                } else if (challengeEdit.editItem.authorType === ENUM.ITEM_AUTHOR_TYPE.RECRUITER) {
+                    challengeEdit.authorType = 'Other Recruiter';
+                    return challengeEdit.authorType;
+                } else if (challengeEdit.editItem.authorType === ENUM.ITEM_AUTHOR_TYPE.TALENT) {
+                    challengeEdit.authorType = 'Domain Expert';
+                    return challengeEdit.authorType;
+                }
+            },
+
+            authorName () {
+                if (challengeEdit.editItem.authorType === ENUM.ITEM_AUTHOR_TYPE.TALENT) {
+                    challengeEdit.subscribe('talents', () => [], {
+                        onReady: function () {
+                            var talentRec = Talents.findOne({talentId: challengeEdit.editItem.authorId}); /*authorId should be the talentId - Hadar to fix*/
+                            if (talentRec) {
+                                challengeEdit.authorName = talentRec.firstName + ' ' + talentRec.lastName;
+                            } else {
+                                challengeEdit.authorName = "err - not found"
+                            };
+                            return challengeEdit.authorName;
+                        },
+                        onError: function () {
+                            console.log("onError", arguments);
+                        }
+                    });
+                }
+            },
+
+            lastAssignedDate () {
+                (new Promise((resolve, reject) => {
+                    Meteor.call('items.getItemLastAssignedDate',
+                        {itemId: challengeEdit.editItem._id},
+                        (err, res) => {
+                            if (err) {
+                                console.log(err);
+                                reject(err);
+                            } else {
+                                resolve(res);
+                            }
+                        }
+                    )
+                }
+                )).then(function(results) {
+                    challengeEdit.lastAssignedDate = results;
+                    return challengeEdit.lastAssignedDate;
+                }).catch(function(error) {
+                    console.log(error);
+                });
+            },
+
+            totalUsageMyAuditions () {
+                (new Promise((resolve, reject) => {
+                    Meteor.call('items.getItemUsageMyAuditions',
+                        {itemId: challengeEdit.editItem._id,
+                         companyOwner: challengeEdit.companyOwner}, /*zvika change to companyId*/
+                        (err, res) => {
+                            if (err) {
+                                console.log(err);
+                                reject(err);
+                            } else {
+                                resolve(res);
+                            }
+                        }
+                    )
+                }
+                )).then(function(results) {
+                    challengeEdit.itemUsageMyAuditions = results;
+                    return challengeEdit.itemUsageMyAuditions;
+                }).catch(function(error) {
+                    console.log(error);
+                });
+            },
+
+            totalUsageOtherRecruiters () {
+                (new Promise((resolve, reject) => {
+                    Meteor.call('items.getItemUsageOtherRecruiters',
+                        {itemId: challengeEdit.editItem._id,
+                         companyOwner: challengeEdit.companyOwner}, /*zvika change to companyId*/
+                        (err, res) => {
+                            if (err) {
+                                console.log(err);
+                                reject(err);
+                            } else {
+                                resolve(res);
+                            }
+                        }
+                    )
+                }
+                )).then(function(results) {
+                    challengeEdit.itemUsageOtherRecruiters = results;
+                    return challengeEdit.itemUsageOtherRecruiters;
+                }).catch(function(error) {
+                    console.log(error);
+                });
+            }
+
+        });
 
         function showInfoMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
@@ -256,7 +384,6 @@ angular
         };
 
         challengeEdit.cancelEditItem = function () {
-            console.log('in cancel');
             if (challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) {
                 Items.remove({_id:challengeEdit.editItem._id});
             } else {
@@ -268,7 +395,6 @@ angular
         };
 
         challengeEdit.previewChallenge = function () {
-
             challengeEdit.saveEditItem();
 
             if (!challengeEdit.editItem.skill) {
@@ -468,6 +594,6 @@ angular
             challengeEdit.editItem.content['image Float Right'] = "";
             document.getElementById('viewImage').setAttribute("src", "");
         };
+      
 
-     
     });
