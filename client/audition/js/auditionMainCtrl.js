@@ -55,7 +55,7 @@ angular
             //         campaigns = Campaigns.find(
             //             {$and: [
             //                 {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
-            //                 {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETE}}
+            //                 {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETED}}
             //             ]}
             //         );
             //     }
@@ -202,14 +202,14 @@ angular
                     let campaign = angular.copy(campaignArg);
                     let tempId   = campaign._id;
 
-                    campaign.status     = ENUM.CAMPAIGN_STATUS.DELETE;
+                    campaign.status     = ENUM.CAMPAIGN_STATUS.DELETED;
                     campaign.skills     = angular.copy(campaign.skills);
                     campaign.emailList  = angular.copy(campaign.emailList);
 
                     delete campaign._id;
                     Campaigns.update({_id: tempId},{$set: campaign});
 
-                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETE, 'Campaign [' + campaign.num + '] Deleted');
+                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETED, 'Campaign [' + campaign.num + '] Deleted');
                 });
         };
 
@@ -233,7 +233,7 @@ angular
                     delete campaign._id;
                     Campaigns.update({_id: tempId},{$set: campaign});
 
-                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETE, 'Campaign [' + campaign.num + '] Deleted');
+                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETED, 'Campaign [' + campaign.num + '] Deleted');
                 });
         };
 

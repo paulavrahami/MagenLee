@@ -28,7 +28,7 @@ angular
             challengeEdit.skills = auditionEditCtrl.skills;
             challengeEdit.maxScore = auditionEditCtrl.maxScore;
 
-            if (auditionEditCtrl.audition.status == ENUM.AUDITION_STATUS.AVAILABLE) {
+            if (auditionEditCtrl.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
                 challengeEdit.externalDisabledTriger = true;
             };
             challengeEdit.challangeCreateMode = 'Audition';

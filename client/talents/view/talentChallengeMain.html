@@ -119,7 +119,7 @@
                             <div class="col-md-12">
                                 <!-- <h5 class="big-status">{{item.status}}&nbsp;&nbsp;<span></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5> -->
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.IN_WORK"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
-                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.ASSIGNED">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.ASSIGNED"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
+                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_USE">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.IN_USE"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.AVAILABLE">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.AVAILABLE"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.NEW">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.NEW"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                             </div>
