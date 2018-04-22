@@ -74,8 +74,8 @@
 <!-- <div class="row" ng-show="vm.isViewThumbnails">
     <div class="col-md-3" ng-repeat="audition in vm.auditions | filter:vm.search | orderBy: vm.orderBy">
         <div class="thumbnail">
-            <div class="big-status" ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.DELETE"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DELETE">&nbsp;</span>{{audition.status}}</div>
-            <div class="big-status" ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.DISPATCHED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DISPATCHED">&nbsp;</span>{{audition.status}}</div>
+            <div class="big-status" ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.DELETED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.DELETED">&nbsp;</span>{{audition.status}}</div>
+            <div class="big-status" ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.PUBLISHED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.PUBLISHED">&nbsp;</span>{{audition.status}}</div>
             <div class="big-status" ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.IN_WORK"><span ng-class="vm.MAP.CAMPAIGN_STATUS.IN_WORK">&nbsp;</span>{{audition.status}}</div>
             <div class="big-status" ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.CLOSED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.CLOSED">&nbsp;</span>{{audition.status}}</div>
             <div class="big-status" ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.VERIFIED"><span ng-class="vm.MAP.CAMPAIGN_STATUS.VERIFIED">&nbsp;</span>{{audition.status}}</div>
@@ -89,10 +89,10 @@
                     </div>
                 </div>
                 <p>
-                    <a ng-if="audition.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary" ui-sref="auditions.execute({auditionId:audition._id})"><span ng-class="vm.MAP.BUTTONS.EDIT">&nbsp;</span>Run</a>
-                    <a ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary" disabled><span ng-class="vm.MAP.BUTTONS.SAVE">&nbsp;</span>Edit</a>
-                    <a ng-if="audition.status !== vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn" ng-click="vm.deleteCampaign(audition)"><span ng-class="vm.MAP.BUTTONS.DELETE">&nbsp;</span>Delete</a>
-                    <a ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.DELETE" class="btn btn-primary" ng-click="vm.undeleteCampaign(audition)" ><span ng-class="vm.MAP.BUTTONS.UNDELETE">&nbsp;</span>Undelete</a>
+                    <a ng-if="audition.status !== vm.ENUM.CAMPAIGN_STATUS.DELETED" class="btn btn-primary" ui-sref="auditions.execute({auditionId:audition._id})"><span ng-class="vm.MAP.BUTTONS.EDIT">&nbsp;</span>Run</a>
+                    <a ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.DELETED" class="btn btn-primary" disabled><span ng-class="vm.MAP.BUTTONS.SAVE">&nbsp;</span>Edit</a>
+                    <a ng-if="audition.status !== vm.ENUM.CAMPAIGN_STATUS.DELETED" class="btn" ng-click="vm.deleteCampaign(audition)"><span ng-class="vm.MAP.BUTTONS.DELETE">&nbsp;</span>Delete</a>
+                    <a ng-if="audition.status === vm.ENUM.CAMPAIGN_STATUS.DELETED" class="btn btn-primary" ng-click="vm.undeleteCampaign(audition)" ><span ng-class="vm.MAP.BUTTONS.UNDELETE">&nbsp;</span>Undelete</a>
                 </p>
 
             </div>

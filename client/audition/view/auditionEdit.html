@@ -3,7 +3,7 @@
     <div class="col-md-0-6">
         <!-- The side pannel -->
         <div class="col-md-12">
-            <div id="btn-ctsArea" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE">
+            <div id="btn-ctsArea" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK">
                 <div class="cts">
                     <div>
                         <!-- Generate Audition option -->
@@ -143,45 +143,45 @@
         <div class="col-md-4">
             <div class="q-border-padding">
                 <div class="audition-header">
-                    <h4><strong>Edit Audition - {{auditionEdit.audition.status}}</strong></h4>
+                    <h4><strong>Edit Audition ({{auditionEdit.audition.friendlyId}}) - {{auditionEdit.audition.status}}</strong></h4>
                 </div>
                 <form class="col-md-12" role="form">
                     <div class="form-group">
                         <label class="required">Name</label>
-                        <input type="text" ng-model="auditionEdit.audition.name" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" class="form-control" id="auditionName" placeholder="Audition Name">
+                        <input type="text" ng-model="auditionEdit.audition.name" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" class="form-control" id="auditionName" placeholder="Audition Name">
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea ng-model="auditionEdit.audition.description" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" class="form-control" id="auditionDescription" placeholder="Audition Description" cols="20" rows="4"></textarea>
+                        <textarea ng-model="auditionEdit.audition.description" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" class="form-control" id="auditionDescription" placeholder="Audition Description" cols="20" rows="4"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Instructions</label>
-                        <textarea ng-model="auditionEdit.audition.instructions" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" class="form-control" id="auditionInstructions" placeholder="Audition Instructions" cols="20" rows="4"></textarea>
+                        <textarea ng-model="auditionEdit.audition.instructions" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" class="form-control" id="auditionInstructions" placeholder="Audition Instructions" cols="20" rows="4"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="required">Duration (hh:mm:ss)</label>
-                        <time-select ng-model="auditionEdit.audition" property="auditionDuration" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE"></time-select>
+                        <time-select ng-model="auditionEdit.audition" property="auditionDuration" ng-change="auditionEdit.saveAudition()" ng-disabled="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.IN_WORK"></time-select>
                     </div>
                     <!-- <div class="form-group">
                         <label>Challenges Order</label>
                         <select
                             id="auditionComplexity"
                             class="form-control"
-                            ng-disabled="auditionEdit.audition.status == auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE"
+                            ng-disabled="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.IN_WORK"
                             ng-change="auditionEdit.saveAudition()"
                             ng-model="auditionEdit.audition.itemsOrder"
                             ng-options="value as value for value in auditionEdit.itemsOrderArray"></select>
                     </div> -->
                 </form>
                 <div>&nbsp;</div>
-                <a class="btn btn-primary fa fa-arrow-left fa-1x" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ui-sref="recruiter.recruiterDemand({id:auditionEdit.audition.campaignId,'#':'menu3'})"></a>
-                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.auditionDone()">Done</a>
-                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.clearAudition()">Clear</a>
-                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.previewAudition()">Preview</a>
+                <a class="btn btn-primary fa fa-arrow-left fa-1x" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ui-sref="recruiter.recruiterDemand({id:auditionEdit.audition.campaignId,'#':'menu3'})"></a>
+                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ng-click="auditionEdit.auditionDone()">Done</a>
+                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ng-click="auditionEdit.clearAudition()">Clear</a>
+                <a class="btn btn-primary pull-right" ng-disabled="auditionEdit.audition.items.length ===0" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ng-click="auditionEdit.previewAudition()">Preview</a>
                 
-                <a class="btn btn-primary fa fa-arrow-left fa-1x" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ui-sref="recruiter.recruiterDemand({id:auditionEdit.audition.campaignId,'#':'menu3'})"></a>
-                <a class="btn btn-primary pull-right" aria-hidden="true" ng-if="(auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) && ((auditionEdit.campaignStatus === auditionEdit.ENUM.CAMPAIGN_STATUS.IN_WORK) || (auditionEdit.campaignStatus === auditionEdit.ENUM.CAMPAIGN_STATUS.VERIFIED))" ng-click="auditionEdit.auditionRework()">Rework</a>
-                <a class="btn btn-primary pull-right" aria-hidden="true" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.previewAudition()">Preview</a>
+                <a class="btn btn-primary fa fa-arrow-left fa-1x" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ui-sref="recruiter.recruiterDemand({id:auditionEdit.audition.campaignId,'#':'menu3'})"></a>
+                <a class="btn btn-primary pull-right" aria-hidden="true" ng-if="(auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.VERIFIED)" ng-click="auditionEdit.auditionRework()">Rework</a>
+                <a class="btn btn-primary pull-right" aria-hidden="true" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ng-click="auditionEdit.previewAudition()">Preview</a>
             </div>
         </div>
         <!-- The summary section -->
@@ -330,16 +330,16 @@
                         <h5 class="col-md-2 ellipsis" style="border-bottom:1px dotted #d3d3d3"> {{auditionEdit.authorType(auditionItem.itemId)}}</h5>
                     </div>
                     <div class="col-md-12 ellipsis"><span>{{auditionEdit.itemToString(auditionItem.itemId)}}</span></div>
-                    <a  class="removeIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.removeItem(auditionItem)" href='#'>
+                    <a  class="removeIcon" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ng-click="auditionEdit.removeItem(auditionItem)" href='#'>
                         <span class='glyphicon glyphicon-remove-circle'></span>
                     </a>
                     <a  class="editIcon"  ng-click="auditionEdit.openEditItem(auditionItem)" href='#'>
                         <span class='glyphicon glyphicon-pencil'></span>
                     </a>
-                    <a  class="arrowUpIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.moveItemDown(auditionItem)" href='#'>
+                    <a  class="arrowUpIcon" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ng-click="auditionEdit.moveItemDown(auditionItem)" href='#'>
                         <span class='glyphicon glyphicon-arrow-up'></span>
                     </a>
-                    <a  class="arrowDownIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE" ng-click="auditionEdit.moveItemUp(auditionItem)" href='#'>
+                    <a  class="arrowDownIcon" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK" ng-click="auditionEdit.moveItemUp(auditionItem)" href='#'>
                         <span class='glyphicon glyphicon-arrow-down'></span>
                     </a>
                 </div>
@@ -378,13 +378,13 @@
                         <!-- Item's second line -->
                         <div class="col-md-12 ellipsis">{{auditionEdit.itemToString(auditionItem.itemId)}}</div>
                         <!-- Item's action buttons -->
-                        <a class="addItemIcon" ng-if="(auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) && (!auditionItem.itemAlreadyInAudition && !auditionItem.itemSelectedToAdd)" ng-click="auditionEdit.addItemToBuffer(auditionItem.itemId, $index)" href='#'>
+                        <a class="addItemIcon" ng-if="(auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK) && (!auditionItem.itemAlreadyInAudition && !auditionItem.itemSelectedToAdd)" ng-click="auditionEdit.addItemToBuffer(auditionItem.itemId, $index)" href='#'>
                             <span class='glyphicon glyphicon-plus'></span>
                         </a>
-                        <a class="removeItemIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE && auditionItem.itemSelectedToAdd" ng-click="auditionEdit.removeItemFromBuffer(auditionItem.itemId)" href='#'>
+                        <a class="removeItemIcon" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK && auditionItem.itemSelectedToAdd" ng-click="auditionEdit.removeItemFromBuffer(auditionItem.itemId)" href='#'>
                             <span class='glyphicon glyphicon-minus'></span>
                         </a>
-                        <a class="selectedItemIcon" ng-if="auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE && auditionItem.itemAlreadyInAudition" ng-click="auditionEdit.addItemToBuffer(auditionItem.itemId, $index)" href='#'>
+                        <a class="selectedItemIcon" ng-if="auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK && auditionItem.itemAlreadyInAudition" ng-click="auditionEdit.addItemToBuffer(auditionItem.itemId, $index)" href='#'>
                             <span class='glyphicon glyphicon-ok'></span>
                         </a>
                         <a class="editIcon" ng-click="auditionEdit.openEditItem(auditionItem.itemId)" href='#'>

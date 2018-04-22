@@ -152,7 +152,7 @@ angular
                     vm.targetSocialNetworksDisabled = true;
                     vm.targetJobBoardsDisabled = true;
                 };
-                if (vm.campaign.status == ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+                if (vm.campaign.status == ENUM.CAMPAIGN_STATUS.PUBLISHED) {
                     vm.targetManuallyURLDisabled = false;
                     vm.targetSpecificTalentDisabled = false;
                     vm.targetExternalTalentsDisabled = false;
@@ -564,7 +564,7 @@ angular
         vm.clearDuration = function (campaign){
             campaign.duration = 0;
             //todo: the check should be else where
-            if (campaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED){
+            if (campaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED){
                 if (campaign.endDate < vm.now){
                     //todo: change to Modal
                     alert('Campaign can not end before today');
@@ -660,8 +660,8 @@ angular
          */
         vm.addSkill = function () {
 
-            if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
-                showErrorMessage('Skill cannot be added as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+            if (vm.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
+                showErrorMessage('Skill cannot be added as the audition has already been verified. Please change its state to "In-Work" in order to proceed');
                 return;
             };
 
@@ -754,8 +754,8 @@ angular
                 if (item.skill === skillArg.type) {
                     // item has been found for the skill
                     foundItemForSkill = true;
-                    if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
-                        showErrorMessage('The skill cannot be removed as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+                    if (vm.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
+                        showErrorMessage('The skill cannot be removed as the audition has already been verified. Please change its state to "In-Work" in order to proceed');
                         return;
                     } else {
                         if (vm.audition.status === ENUM.AUDITION_STATUS.IN_WORK) {
@@ -797,8 +797,8 @@ angular
                 if (item.skill === skillArg.type) {
                     // item has been found for the skill
                     foundItemForSkill = true;
-                    if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
-                        showErrorMessage('The skill cannot be modified as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+                    if (vm.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
+                        showErrorMessage('The skill cannot be modified as the audition has already been verified. Please change its state to "In-Work" in order to proceed');
                         return;
                     } else {
                         if (vm.audition.status === ENUM.AUDITION_STATUS.IN_WORK) {
