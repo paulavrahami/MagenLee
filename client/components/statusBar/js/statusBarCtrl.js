@@ -18,7 +18,7 @@ angular
 
         statusBar.getProgress = function () {
 
-            if (statusBar.ngModel.status === ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+            if (statusBar.ngModel.status === ENUM.CAMPAIGN_STATUS.PUBLISHED) {
 
                 let pastDate = (new Date(statusBar.ngModel.statusDate)).valueOf();
                 let nowDate = (new Date()).valueOf();
@@ -50,7 +50,7 @@ angular
                     progressTopApplicants = campaign.applicationsSuccess
                 }
 
-                if (campaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED && progress < 100) {
+                if (campaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED && progress < 100) {
 
                     if (progress > 60 && (progressTopApplicants / campaign.topApplicant < progress / 100)) {
                         return 'progress-bar-warning';
@@ -58,7 +58,7 @@ angular
 
                     return 'progress-bar-info';
                 }
-                else if (campaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED && progress === 100) {
+                else if (campaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED && progress === 100) {
 
                     if (campaign.applicationsSuccess < campaign.topApplicant) {
                         return 'progress-bar-danger';
@@ -102,7 +102,7 @@ angular
                 statusBar.dependency.depend();
                 let progress = statusBar.getProgress();
 
-                return (statusBar.ngModel.status === ENUM.CAMPAIGN_STATUS.DISPATCHED && progress > 0 && progress < 100);
+                return (statusBar.ngModel.status === ENUM.CAMPAIGN_STATUS.PUBLISHED && progress > 0 && progress < 100);
             }
         });
 

@@ -6,7 +6,7 @@ angular
       vm.displayLinkedInActivityLog = false;
       vm.dependency = new Deps.Dependency();
       vm.campaign = $scope.campaign;
-      vm.campaign.published = vm.campaign.status == ENUM.CAMPAIGN_STATUS.DISPATCHED;
+      vm.campaign.published = vm.campaign.status == ENUM.CAMPAIGN_STATUS.PUBLISHED;
       // Default LinkedIn post data
       var linkedInPostComment = "e.g., We are hiring!";
       var linkedInPostTitle = vm.campaign.positionName;
@@ -39,7 +39,7 @@ angular
       };
       
       vm.linkedInDispatch = function() {
-        if (vm.campaign.status !== ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+        if (vm.campaign.status !== ENUM.CAMPAIGN_STATUS.PUBLISHED) {
           showErrorMessage('LinkedIn posts can be shared only during the campaign period');
           vm.displayCheckMsg = false;
           return;
