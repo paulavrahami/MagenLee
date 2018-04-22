@@ -112,7 +112,7 @@ angular
                         vm.subscribe('allAuditions', () => []);
                         if (Meteor.user() && Meteor.user().profile) {
                             // vm.subscribe('itemsByAuthorId',() => [Meteor.user()._id]);
-                            vm.subscribe('itemsByAuthorId',() => [Meteor.user().PROFILE.talentId]);
+                            vm.subscribe('itemsByAuthorId',() => [Meteor.user().profile.talentId]);
                         }
                         return true;
 
