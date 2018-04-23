@@ -13,9 +13,9 @@ angular
         vm.dependency = new Deps.Dependency();
         vm.newTalentRegister = {};
         vm.newTalentRegister.profile = {};
-        vm.newTalentRegister.profile.receiveJobOffer = 'Yes';
-        vm.newTalentRegister.profile.shareContact = 'Yes';
-        vm.newTalentRegister.profile.discreteInd = 'No';
+        vm.newTalentRegister.profile.receiveJobOffer = 'true';
+        vm.newTalentRegister.profile.shareContact = 'true';
+        vm.newTalentRegister.profile.discreetInd = 'false';
         vm.talent = {};
         vm.userNameInd = false;
         vm.profileTypeTalent = false;
@@ -216,7 +216,7 @@ angular
                             vm.talent.pictureURL = record.profile.pictureURL;
                             vm.talent.receiveJobOffer = record.profile.receiveJobOffer;
                             vm.talent.shareContact = record.profile.shareContact;
-                            vm.talent.discreteInd = record.profile.discreteInd;
+                            vm.talent.discreetInd = record.profile.discreetInd;
                             vm.talent.linkedin = record.profile.linkedin;
                             vm.talent.talentId = record.talentId;
                             vm.talent.proffesion = record.profile.proffesion;
