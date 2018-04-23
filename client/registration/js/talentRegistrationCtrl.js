@@ -72,6 +72,25 @@ angular
                       vm.selectCities(currentTalent.country)
                   };
 
+                  vm.talentRegistration = {};
+                  if (currentTalent.receiveJobOffer){
+                    vm.receiveJobOfferView = 'true'    
+                  } else {
+                    vm.receiveJobOfferView = 'false'
+                  };
+
+                  if (currentTalent.shareContact){
+                    vm.shareContactView = 'true'    
+                  } else {
+                    vm.shareContactView = 'false'
+                  };
+
+                  if (currentTalent.discreetInd){
+                    vm.discreetIndView = 'true'    
+                  } else {
+                    vm.discreetIndView = 'false'
+                  };
+
                   vm.talentRegistration = {
                     username: currentUser.username,
                     email: currentUser.emails[0].address,
@@ -87,8 +106,11 @@ angular
                     language: currentTalent.language ? currentTalent.language : null,
                     pictureURL: currentTalent.pictureURL ? currentTalent.pictureURL : null,
                     receiveJobOffer: currentTalent.receiveJobOffer ? currentTalent.receiveJobOffer : null,
+                    receiveJobOfferView : vm.receiveJobOfferView,
                     shareContact: currentTalent.shareContact ? currentTalent.shareContact : null,
+                    shareContactView : vm.shareContactView,
                     discreetInd: currentTalent.discreetInd ? currentTalent.discreetInd : null,
+                    discreetIndView : vm.discreetIndView,
                     linkedin: currentTalent.linkedin ? currentTalent.linkedin : null,
                     proffesion: currentTalent.proffesion ? currentTalent.proffesion : null,
                     expertizeCategory: currentTalent.expertizeCategory ? currentTalent.expertizeCategory : null,
@@ -154,6 +176,24 @@ angular
 
         vm.updateTalentRec = function (talentRec) {
               let talentRecord = angular.copy(talentRec);
+
+              if (talentRec.receiveJobOfferView === 'true') {
+                talentRecord.receiveJobOffer = true
+              } else {
+                talentRecord.receiveJobOffer = false
+              };
+
+              if (talentRec.shareContactView === 'true') {
+                talentRecord.shareContact = true
+              } else {
+                talentRecord.shareContact = false
+              };
+
+              if (talentRec.discreetIndView === 'true') {
+                talentRecord.discreetInd = true
+              } else {
+                talentRecord.discreetInd = false
+              };
 
               Talents.update({'_id': vm.talentKey},
                        {$set:{'firstName': talentRecord.firstName,

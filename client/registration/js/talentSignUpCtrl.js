@@ -13,9 +13,12 @@ angular
         vm.dependency = new Deps.Dependency();
         vm.newTalentRegister = {};
         vm.newTalentRegister.profile = {};
-        vm.newTalentRegister.profile.receiveJobOffer = 'true';
-        vm.newTalentRegister.profile.shareContact = 'true';
-        vm.newTalentRegister.profile.discreetInd = 'false';
+        vm.newTalentRegister.profile.receiveJobOfferView = 'true';
+        vm.newTalentRegister.profile.receiveJobOffer = true;
+        vm.newTalentRegister.profile.shareContactView = 'true';
+        vm.newTalentRegister.profile.shareContact = true;
+        vm.newTalentRegister.profile.discreetIndView = 'false';
+        vm.newTalentRegister.profile.discreetInd = false;
         vm.talent = {};
         vm.userNameInd = false;
         vm.profileTypeTalent = false;
@@ -95,6 +98,25 @@ angular
             vm.newTalentRegister.status = 'Active';
             vm.newTalentRegister.origin = 'Registration';
             vm.newTalentRegister.registrationStatus = 'Registered';
+
+            if (vm.newTalentRegister.profile.receiveJobOfferView === 'true') {
+                vm.newTalentRegister.profile.receiveJobOffer = true
+            } else {
+                vm.newTalentRegister.profile.receiveJobOffer = false
+            };
+
+            if (vm.newTalentRegister.profile.shareContactView === 'true') {
+                vm.newTalentRegister.profile.shareContact = true
+            } else {
+                vm.newTalentRegister.profile.shareContact = false
+            };
+
+            if (vm.newTalentRegister.profile.shareContactView === 'true') {
+                vm.newTalentRegister.profile.shareContact = true
+            } else {
+                vm.newTalentRegister.profile.shareContact = false
+            };
+
             vm.userRegistration();
         };
 
