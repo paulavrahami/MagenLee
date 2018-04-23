@@ -219,7 +219,8 @@ angular
                           if (!itemsExist) {
                             return;
                           };                   
-                          auditionEdit.audition.status = ENUM.AUDITION_STATUS.AVAILABLE;
+                          auditionEdit.audition.status = ENUM.AUDITION_STATUS.VERIFIED;
+                          auditionEdit.audition.statusDate = new Date();
                           auditionEdit.saveAudition();
                           $state.go("recruiter.recruiterDemand",{id:auditionEdit.audition.campaignId,'#':'panel-3'});
                       });
@@ -234,6 +235,7 @@ angular
                 false,
                 function(){
                     auditionEdit.audition.status = ENUM.AUDITION_STATUS.IN_WORK;
+                    auditionEdit.audition.statusDate = new Date();
                     auditionEdit.saveAudition();
                 });
         };
@@ -522,7 +524,7 @@ angular
 
         // Remove an item from the audition
         auditionEdit.removeItem = function (itemIdArg) {
-            if (auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) {
+            if (auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK) {
                 removeItemFromAudition(itemIdArg);
                 calculateItemsMaxScore();
                 auditionEdit.saveAudition();
@@ -585,7 +587,7 @@ angular
                     "updateDate" : new Date()
                 }
             };
-            if (auditionEdit.audition.status !== auditionEdit.ENUM.AUDITION_STATUS.AVAILABLE) {
+            if (auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK) {
                 editItem._id = Items.insert(angular.copy(editItem));
             };
             // Update the audition.item array with the new item
@@ -733,7 +735,7 @@ angular
                 let conditions = {};
                 
                 conditions = {$and:[{$text: {$search: skill.type}},
-                                    {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
+                                    {$or:[{status: ENUM.ITEM_STATUS.IN_USE},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                     {shareInd: true}]};
 
                 (new Promise((resolve, reject) => {
@@ -957,7 +959,7 @@ angular
             };
 
             conditions = {$and:[{$and:[{authorId: authorTypeMyChallenges}, {$or:[{authorType: authorTypeOtherRecruiters}, {authorType: authorTypeTalent}]} ]},
-                                {$or:[{status: ENUM.ITEM_STATUS.ASSIGNED},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
+                                {$or:[{status: ENUM.ITEM_STATUS.IN_USE},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                 {$text: {$search: auditionEdit.addChallengeSkills}},
                                 {complexity: complexityParam},
                                 {templateId: templateIdParam},

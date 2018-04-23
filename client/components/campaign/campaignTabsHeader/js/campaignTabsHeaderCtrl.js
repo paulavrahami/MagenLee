@@ -13,7 +13,7 @@ angular
         tabsHeader.$onChanges = function () {
             if (tabsHeader.campaign && tabsHeader.campaign.num) {
                 tabsHeader.title = 'Campaign ' + tabsHeader.campaign.num +' - ';
-                if (tabsHeader.campaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED){
+                if (tabsHeader.campaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED){
                   tabsHeader.status = 'On Air';
                 } else {
                   tabsHeader.status = tabsHeader.campaign.status;
