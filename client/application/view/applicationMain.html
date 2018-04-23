@@ -371,7 +371,7 @@
                       </p>
                       <div class="row" ng-show="application.revealed">
                           <p ng-if="application.linkedInURL">
-                            LinkedIn Profile : <strong>{{application.linkedInURL}}</strong>
+                            LinkedIn Profile : <a href="https://{{application.linkedInURL}}" target="_blank">{{application.linkedInURL}}</a> <strong></strong>
                           </p>
                           <div id="viewCV{{$index}}">
                               <!-- Button created dynamically in vm.viewCV function -->
