@@ -125,8 +125,8 @@ angular
              * If campaign details is null then it's a new campaign;
              */
             if (vm.campaign) {
-                vm.campaignPublished = vm.campaign.status === 'Dispatched';
-                vm.campaignClosed = vm.campaign.status === 'Closed';
+                vm.campaignPublished = vm.campaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED;
+                vm.campaignClosed = vm.campaign.status === ENUM.CAMPAIGN_STATUS.CLOSED;
                 vm.campaignActivityLog = vm.activity;
                 
                 vm.targetExternalTalents = vm.campaign.targetExternalTalents;

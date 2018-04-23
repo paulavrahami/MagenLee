@@ -242,7 +242,7 @@ angular
          * @Set database status of Dispatch to On Air;
          */
         vm.statusFilter = function (statusArg) {
-            if (statusArg === 'Dispatched'){
+            if (statusArg === ENUM.CAMPAIGN_STATUS.PUBLISHED){
               return 'On Air'
             } else {
               return statusArg
