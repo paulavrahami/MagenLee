@@ -252,12 +252,6 @@ angular
                             vm.talent.profileTypeTalent = vm.profileTypeTalent;
                             vm.talent.profileTypeDomainExpert = vm.profileTypeDomainExpert;
             
-                            /** Make sure it has control object; */
-                            if (!vm.talent.control) {
-                                vm.talent.control = {
-                                    createDate: vm.currentDate
-                                };
-                            };
             
                             let talentRec = angular.copy(vm.talent);
             
