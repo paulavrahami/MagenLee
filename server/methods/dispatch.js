@@ -20,7 +20,7 @@ let DispatchAPI = {
                         {
                             firstName:talent.firstName,
                             lastName:talent.lastName,
-                            email:talent.email,
+                            email:talent.contactEmail,
                             position:dispatchArguments.position,
                             company:dispatchArguments.company,
                             applicationURL:dispatchArguments.applicationURL
