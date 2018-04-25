@@ -227,7 +227,7 @@ angular
                             showErrorMessage('Username already exist!');
                             vm.userNameInd = true;
                         }
-                        callbackArg(null,result);
+                        
                     }
             });
 
@@ -237,38 +237,15 @@ angular
 
         vm.checkSkills = function (skillsArray,talentId) {
 
-            vm.pendingSkills = '';
-
             for  (let z = 0 ; z < skillsArray.length ; z++) {
-
-                if (skillsArray[z]){
-                    //Check if the Skill is an active approved skill
-                    skillToCheck = skillsArray[z]
-                    Meteor.call('checkSkillAvailable', skillToCheck, function (err, result) {
-                        if (err) {
-                            alert('There is an error while checking your skills');
-                        } else {
-                            if (result === false) {
-                                //Notify the user for the new skill that are not active which is pending Skillera approval
-                                if (vm.pendingSkills) {
-                                    vm.pendingSkills = vm.pendingSkills + ' ' + skillToCheck;
-                                } else
-                                {
-                                    vm.pendingSkills = skillToCheck
-                                };
-                                //If the skill is not already pending, create a pending skill record
-                                createNewPendingSkill(skillToCheck,talentId);
-                            } else {
-                                
-                            }
-                            callbackArg(null,result);
-                        }
-                        });
-                    
-                };
+                
+                 if (vm.skills.indexOf(skillsArray[z]) < 0){
+                //Create a pending skill record
+                         createNewPendingSkill(skillsArray[z],talentId);
+                // Notify the user for the new skill that are not active which is pending Skillera approval
+                         showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
+                 };
             };
-            
-            console.log (vm.pendingSkills);
         };
 
         
@@ -306,45 +283,31 @@ angular
 
         createNewPendingSkill = function (skill,talentId) {
 
-            vm.skillPendingFound = false
-            Meteor.call('checkSkillPending', skill, function (err, result) {
-                if (err) {
-                    alert('There is an error while checking your new skills');
-                } else {
-                    if (result === false) {
-                        
-                        //If the skill is not  pending, create a pending skill record
+                vm.skill = {};
 
-                        vm.skill.status = 'Approved';
-                        vm.skill.name = skill;
-                        vm.skill.verficationStatus = 'Pending';
-                        vm.skill.verficationDate = vm.currentDate;
-                        vm.skill.origin = 'Talent';
-                        vm.skill.originId = talentId;
+                vm.skill.status = 'Approved';
+                vm.skill.name = skill;
+                vm.skill.verficationStatus = 'Pending';
+                vm.skill.verficationDate = vm.currentDate;
+                vm.skill.origin = 'Talent';
+                vm.skill.originId = talentId;
 
-                        /** Make sure it has control object; */
-                        if (!vm.skill.control) {
-                            vm.skill.control = {
-                                createDate: vm.currentDate
-                            };
-                        };
+                /** Make sure it has control object; */
+                if (!vm.skill.control) {
+                    vm.skill.control = {
+                        createDate: vm.currentDate
+                    };
+                };
                                 
-                        let skillRec = angular.copy(vm.skill);
+                let skillRec = angular.copy(vm.skill);
         
-                        Skills.insert(skillRec, function (errorArg, tempIdArg) {
-                            if (errorArg) {
-                                showErrorMessage(errorArg.message);
-                            } else {
-                                vm.applicationId = tempIdArg;
-                            }
-                        });
-
+                Skills.insert(skillRec, function (errorArg, tempIdArg) {
+                    if (errorArg) {
+                        showErrorMessage(errorArg.message);
                     } else {
-                        
+                        vm.applicationId = tempIdArg;
                     }
-                    callbackArg(null,result);
-                }
-                })
+                });
 
         };
 
@@ -352,14 +315,14 @@ angular
                             
                             /* populate talent attributes */
                             vm.talent.status = record.status;
-                            vm.talent.tcAcknowledge =  record.legal,
+                            vm.talent.tcAcknowledge =  record.legal;
                             vm.talent.statusDate = vm.currentDate;
                             vm.talent.origin = record.origin;
                             vm.talent.originDate = vm.currentDate;
                             vm.talent.registrationStatus = record.registrationStatus;
                             vm.talent.registrationStatusDate = vm.currentDate;
                             vm.talent.firstName = record.profile.firstName;
-                            vm.talent.lastName = record.profile.lastName
+                            vm.talent.lastName = record.profile.lastName;
                             vm.talent.city = record.profile.city;
                             vm.talent.country = record.profile.country;
                             vm.talent.contactPhone = record.profile.contactPhone;
@@ -417,7 +380,8 @@ angular
                                 if (errorArg) {
                                     showErrorMessage(errorArg.message);
                                 } else {
-                                    vm.applicationId = tempIdArg;
+                                    // vm.applicationId = tempIdArg;
+                                    vm.applicationId = vm.talent.talentId;
                                     vm.checkSkills(vm.skillsToCheck,vm.applicationId);
                                 }
                             });
