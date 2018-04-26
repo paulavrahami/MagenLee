@@ -89,8 +89,6 @@ angular
         };
 
         function doSubscription () {
-      
-
                 reactiveContext.subscribe('skills');
         }
 
@@ -105,7 +103,10 @@ angular
                 let skills;
                 vm.skillname = [];
                 let conditions = {};
-                conditions = {"status": ENUM.SKILL_STATUS.ACTIVE};
+                conditions = {$and:[
+                    {"status": ENUM.SKILL_STATUS.ACTIVE},
+                    {"verificationStatus": "Approved"}
+                    ]};
     
                 Meteor.call('skills.getSkills', conditions, (err, res) => {
                     if (err) {
@@ -243,7 +244,7 @@ angular
                 //Create a pending skill record
                          createNewPendingSkill(skillsArray[z],talentId);
                 // Notify the user for the new skill that are not active which is pending Skillera approval
-                         showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
+                        //  showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
                  };
             };
         };
@@ -285,7 +286,7 @@ angular
 
                 vm.skill = {};
 
-                vm.skill.status = 'Approved';
+                vm.skill.status = ENUM.SKILL_STATUS.ACTIVE;
                 vm.skill.name = skill;
                 vm.skill.verficationStatus = 'Pending';
                 vm.skill.verficationDate = vm.currentDate;
