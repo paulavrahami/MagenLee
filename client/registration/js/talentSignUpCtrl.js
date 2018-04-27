@@ -242,9 +242,9 @@ angular
                 
                  if (vm.skills.indexOf(skillsArray[z]) < 0){
                 //Create a pending skill record
-                         createNewPendingSkill(skillsArray[z],talentId);
+                        createNewPendingSkill(skillsArray[z],talentId);
                 // Notify the user for the new skill that are not active which is pending Skillera approval
-                        //  showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
+                        showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
                  };
             };
         };
@@ -288,8 +288,8 @@ angular
 
                 vm.skill.status = ENUM.SKILL_STATUS.ACTIVE;
                 vm.skill.name = skill;
-                vm.skill.verficationStatus = 'Pending';
-                vm.skill.verficationDate = vm.currentDate;
+                vm.skill.verificationStatus = 'Pending';
+                vm.skill.verificationDate = vm.currentDate;
                 vm.skill.origin = 'Talent';
                 vm.skill.originId = talentId;
 
