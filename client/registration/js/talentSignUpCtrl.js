@@ -8,7 +8,8 @@ angular
 
         let vm = this;
 
-        $reactive(vm).attach($scope);
+        let reactiveContext = $reactive(vm).attach($scope);
+        // $reactive(vm).attach($scope);
         vm.talentType = $stateParams.type;
         vm.dependency = new Deps.Dependency();
         vm.newTalentRegister = {};
@@ -24,6 +25,9 @@ angular
         vm.profileTypeTalent = false;
         vm.profileTypeDomainExpert = false;
         vm.currentDate = new Date();
+        vm.ENUM = ENUM
+        
+
         //Load countries and cities
         vm.countriesCities = countriesCities;
         //Load languages
@@ -57,8 +61,7 @@ angular
             vm.profileTypeTalent = true;
         } else {
             vm.profileTypeDomainExpert = true;
-        }
-        
+        };
 
         // Always load the web page with no need to scroll up
         $(document).ready(function(){
@@ -84,6 +87,52 @@ angular
         function showInfoMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
         };
+
+        function doSubscription () {
+                reactiveContext.subscribe('skills');
+        }
+
+        
+        vm.helpers({
+        
+            skills () {
+              vm.dependency.depend();
+              doSubscription ();
+    
+              (new Promise((resolve, reject) => {
+                let skills;
+                vm.skillname = [];
+                let conditions = {};
+                conditions = {$and:[
+                    {"status": ENUM.SKILL_STATUS.ACTIVE},
+                    {"verificationStatus": "Approved"}
+                    ]};
+    
+                Meteor.call('skills.getSkills', conditions, (err, res) => {
+                    if (err) {
+                        reject();
+                    } else {
+                        resolve(res);
+                    }
+                });
+            })).then(function(results){
+                vm.temp = results;
+                vm.skills = [];
+                for  (let z = 0 ; z < vm.temp.length ; z++) {
+                         if (vm.temp[z].name){
+                             vm.skills[z] = vm.temp[z].name;
+                         }
+                     };
+                
+                vm.dependency.changed();
+            }).catch(function() {
+                vm.skills = [];
+            });
+                                  
+              return vm.skills;
+          }
+        });
+
 
 
         // set the Contact Email to the Login Email as default
@@ -179,11 +228,28 @@ angular
                             showErrorMessage('Username already exist!');
                             vm.userNameInd = true;
                         }
-                        callbackArg(null,result);
+                        
                     }
             });
 
         };
+
+        
+
+        vm.checkSkills = function (skillsArray,talentId) {
+
+            for  (let z = 0 ; z < skillsArray.length ; z++) {
+                
+                 if (vm.skills.indexOf(skillsArray[z]) < 0){
+                //Create a pending skill record
+                         createNewPendingSkill(skillsArray[z],talentId);
+                // Notify the user for the new skill that are not active which is pending Skillera approval
+                        //  showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
+                 };
+            };
+        };
+
+        
 
         vm.checkEmail = function (email) {
             Meteor.call('checkIfEmailExists', email, function (err, result) {
@@ -216,18 +282,48 @@ angular
             });
         };
 
+        createNewPendingSkill = function (skill,talentId) {
+
+                vm.skill = {};
+
+                vm.skill.status = ENUM.SKILL_STATUS.ACTIVE;
+                vm.skill.name = skill;
+                vm.skill.verficationStatus = 'Pending';
+                vm.skill.verficationDate = vm.currentDate;
+                vm.skill.origin = 'Talent';
+                vm.skill.originId = talentId;
+
+                /** Make sure it has control object; */
+                if (!vm.skill.control) {
+                    vm.skill.control = {
+                        createDate: vm.currentDate
+                    };
+                };
+                                
+                let skillRec = angular.copy(vm.skill);
+        
+                Skills.insert(skillRec, function (errorArg, tempIdArg) {
+                    if (errorArg) {
+                        showErrorMessage(errorArg.message);
+                    } else {
+                        vm.applicationId = tempIdArg;
+                    }
+                });
+
+        };
+
         vm.handleTalent = function (record) {
                             
                             /* populate talent attributes */
                             vm.talent.status = record.status;
-                            vm.talent.tcAcknowledge =  record.legal,
+                            vm.talent.tcAcknowledge =  record.legal;
                             vm.talent.statusDate = vm.currentDate;
                             vm.talent.origin = record.origin;
                             vm.talent.originDate = vm.currentDate;
                             vm.talent.registrationStatus = record.registrationStatus;
                             vm.talent.registrationStatusDate = vm.currentDate;
                             vm.talent.firstName = record.profile.firstName;
-                            vm.talent.lastName = record.profile.lastName
+                            vm.talent.lastName = record.profile.lastName;
                             vm.talent.city = record.profile.city;
                             vm.talent.country = record.profile.country;
                             vm.talent.contactPhone = record.profile.contactPhone;
@@ -252,6 +348,32 @@ angular
                             vm.talent.profileTypeTalent = vm.profileTypeTalent;
                             vm.talent.profileTypeDomainExpert = vm.profileTypeDomainExpert;
             
+
+
+                            vm.skillsToCheck = [];
+                            tempIndex = 0;
+                            if (vm.talent.skill1) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill1;
+                                tempIndex++;
+                            };
+                            if (vm.talent.skill2) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill2;
+                                tempIndex++;
+                            };
+                            if (vm.talent.skill3) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill3;
+                                tempIndex++;
+                            };
+                            if (vm.talent.skill4) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill4;
+                                tempIndex++;
+                            };
+                            if (vm.talent.skill5) {
+                                vm.skillsToCheck[tempIndex] = vm.talent.skill5;
+                                tempIndex++;
+                            };
+
+                            
             
                             let talentRec = angular.copy(vm.talent);
             
@@ -259,7 +381,9 @@ angular
                                 if (errorArg) {
                                     showErrorMessage(errorArg.message);
                                 } else {
-                                    vm.applicationId = tempIdArg;
+                                    // vm.applicationId = tempIdArg;
+                                    vm.applicationId = vm.talent.talentId;
+                                    vm.checkSkills(vm.skillsToCheck,vm.applicationId);
                                 }
                             });
             
