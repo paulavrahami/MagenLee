@@ -9,7 +9,7 @@ angular
 
         vm.animationsEnabled = true;
         vm.isViewThumbnails  = true;
-        vm.selectedFilter    = 'MIN_SCORE';
+        vm.selectedFilter    = '';
         vm.orderBy           = 'grade';
         vm.ENUM = ENUM;
         vm.MAP = MAP;
@@ -118,17 +118,6 @@ angular
          * @returns {boolean}
          */
         vm.isRecruiter = function () {
-            // Calculate number of applicants passing minimum score
-            vm.applicantPassMinScore = 0;
-            vm.campaign = Campaigns.findOne({_id: vm.campaignId});
-            if (vm.campaign.applications.length) {
-                for  (let z = 0 ; z < vm.campaign.applications.length ; z++) {
-                    if (vm.applications[z].grade >= vm.campaign.minScore){
-                        vm.applicantPassMinScore ++;
-                    }
-                }
-            }
-
             if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type === 'Recruiter') {
                 vm.subscribe('campaignsRecruiter',() => [Meteor.user().profile.companyName]);
                 if (Meteor.user().profile.accessMode) {
@@ -205,6 +194,15 @@ angular
                 });
             })).then(function(results){
                 vm.applications = results;
+                // Calculate number of applicants passing minimum score
+                vm.applicantPassMinScore = 0;
+                if (results.length) {
+                    for  (let i = 0 ; i < results.length ; i++) {
+                        if (vm.applications[i].grade >= vm.campaign.minScore){
+                            vm.applicantPassMinScore ++;
+                        }
+                    }
+                }
                 vm.dependency.changed();
             }).catch(function() {
                 vm.applications = [];
@@ -849,17 +847,28 @@ angular
             };
         };
 
-        vm.afterCloseDate = function (applicationCreateDateArg) {
-            if (applicationCreateDateArg > vm.campaign.endDate) {
-                return (true);
-            } else {
-                return (false);
-            };
-        };
-
         vm.updateEmployedInfo = function (applicationArg) {
             applicationArg.feedbackEmpolyedReason = "";
             applicationArg.feedbackEmpolyedReasonDate = "";
+        };
+
+        vm.formatLinkedInUrl = function (linkedInUrlArg, indexArg) {
+            var wwwPosition = linkedInUrlArg.indexOf('www');
+            if (wwwPosition > -1) {
+                vm.formatedlinkedInURL = 'https://' + linkedInUrlArg.substring(wwwPosition);
+                var linkedInUrlPlacholder = document.getElementById('viewLinkedInUrl'+indexArg);
+                linkedInUrlPlacholder.setAttribute('href', vm.formatedlinkedInURL);
+            } else {
+                var linkedinPosition = linkedInUrlArg.toLowerCase().indexOf('linkedin');
+                if (linkedinPosition > -1) {
+                    vm.formatedlinkedInURL = 'https://www.' + linkedInUrlArg.substring(linkedinPosition);
+                    var linkedInUrlPlacholder = document.getElementById('viewLinkedInUrl'+indexArg);
+                    linkedInUrlPlacholder.setAttribute('href', vm.formatedlinkedInURL);
+                } else {
+                    showErrorMessage ('Wrong LinkedIn address has been defined by the talent');
+                    return;
+                };
+            };
         };
 
         vm.changeSelectedFilter(vm.selectedFilter);

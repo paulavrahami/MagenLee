@@ -95,6 +95,11 @@ angular
             HIGH:   'High',
             MUST:   'Must have'
         },
+        SKILL_STATUS : {
+            ACTIVE: 'Active',
+            CANCELED:   'Canceled'
+        },
+
         USER : {
             RECRUITER : 'Recruiter',
             APPLICANT : 'Applicant',
