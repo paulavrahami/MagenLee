@@ -7,7 +7,8 @@ angular
     .controller('talentRegistrationCtrl', function($state, $scope, $reactive,$UserAlerts,ENUM ) {
 
         let vm = this;
-        $reactive(vm).attach($scope);
+        let reactiveContext = $reactive(vm).attach($scope);
+        //$reactive(vm).attach($scope);
         vm.dependency = new Deps.Dependency();
         vm.ENUM = ENUM
         vm.setPassword = false;
@@ -55,6 +56,15 @@ angular
          */
         function showErrorMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true, callbackArg);
+        };
+
+        /**
+         * @desc show a dialog with the message;
+         * @param msgArg
+         * @param callbackArg
+         */
+        function showInfoMessage(msgArg, callbackArg) {
+            $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
         };
 
         //noinspection JSUnresolvedFunction
@@ -128,6 +138,56 @@ angular
                   vm.dependency.changed();
                 }
         );
+
+        function doSubscription () {
+            reactiveContext.subscribe('skills');
+        }
+
+        vm.helpers({
+        
+            skills () {
+              vm.dependency.depend();
+              doSubscription ();
+    
+              (new Promise((resolve, reject) => {
+                let skills;
+                vm.skillname = [];
+                let conditions = {};
+                  conditions = {$or: [
+                      {$and:[
+                      {"status": ENUM.SKILL_STATUS.ACTIVE},
+                      {"verificationStatus": "Approved"}
+                      ]},
+                      {$and: [
+                      {"verficationStatus": "Pending"},
+                      {"originId": talentId}
+                      ]}
+                  ]};
+
+                Meteor.call('skills.getSkills', conditions, (err, res) => {
+                    if (err) {
+                        reject();
+                    } else {
+                        resolve(res);
+                    }
+                });
+            })).then(function(results){
+                vm.temp = results;
+                vm.skills = [];
+                for  (let z = 0 ; z < vm.temp.length ; z++) {
+                         if (vm.temp[z].name){
+                             vm.skills[z] = vm.temp[z].name;
+                         }
+                     };
+                
+                vm.dependency.changed();
+            }).catch(function() {
+                vm.skills = [];
+            });
+                                  
+              return vm.skills;
+          }
+        });
      
 
         vm.cancelTalent = function () {
@@ -175,6 +235,26 @@ angular
 
 
         vm.updateTalentRec = function (talentRec) {
+
+            //Check skills for unidentified values
+            
+              if (talentRec.skill1 === undefined){               
+                talentRec.skill1 = '';
+              };
+              if (talentRec.skill2 === undefined){               
+                talentRec.skill2 = '';
+              };
+              if (talentRec.skill3 === undefined){               
+                talentRec.skill3 = '';
+              };
+              if (talentRec.skill4 === undefined){               
+                talentRec.skill4 = '';
+              };
+              if (talentRec.skill5 === undefined){               
+                talentRec.skill5 = '';
+              };
+
+
               let talentRecord = angular.copy(talentRec);
 
               if (talentRec.receiveJobOfferView === 'true') {
@@ -193,6 +273,29 @@ angular
                 talentRecord.discreetInd = true
               } else {
                 talentRecord.discreetInd = false
+              };
+
+              vm.skillsToCheck = [];
+              tempIndex = 0;
+              if (talentRecord.skill1) {
+                    vm.skillsToCheck[tempIndex] = talentRecord.skill1;
+                    tempIndex++;
+              };
+              if (talentRecord.skill2) {
+                    vm.skillsToCheck[tempIndex] = talentRecord.skill2;
+                    tempIndex++;
+              };
+              if (talentRecord.skill3) {
+                    vm.skillsToCheck[tempIndex] = talentRecord.skill3;
+                    tempIndex++;
+              };
+              if (talentRecord.skill4) {
+                    vm.skillsToCheck[tempIndex] = talentRecord.skill4;
+                    tempIndex++;
+              };
+              if (talentRecord.skill5) {
+                    vm.skillsToCheck[tempIndex] = talentRecord.skill5;
+                    tempIndex++;
               };
 
               Talents.update({'_id': vm.talentKey},
@@ -225,10 +328,55 @@ angular
                       showErrorMessage(errorArg.message);
                   }
                   else {
+                    vm.checkSkills(vm.skillsToCheck,talentId);
                   }
               });
               vm.dependency.changed();
         };
+
+        vm.checkSkills = function (skillsArray,talentId) {
+
+            for  (let z = 0 ; z < skillsArray.length ; z++) {
+                
+                 if (vm.skills.indexOf(skillsArray[z]) < 0){
+                //Create a pending skill record
+                         createNewPendingSkill(skillsArray[z],talentId);
+                // Notify the user for the new skill that are not active which is pending Skillera approval
+                         showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
+                 };
+            };
+        };
+
+
+        createNewPendingSkill = function (skill,talentId) {
+
+            vm.skill = {};
+
+            vm.skill.status = ENUM.SKILL_STATUS.ACTIVE;
+            vm.skill.name = skill;
+            vm.skill.verficationStatus = 'Pending';
+            vm.skill.verficationDate = vm.currentDate;
+            vm.skill.origin = 'Talent';
+            vm.skill.originId = talentId;
+
+            /** Make sure it has control object; */
+            if (!vm.skill.control) {
+                vm.skill.control = {
+                    createDate: vm.currentDate
+                };
+            };
+                            
+            let skillRec = angular.copy(vm.skill);
+    
+            Skills.insert(skillRec, function (errorArg, tempIdArg) {
+                if (errorArg) {
+                    showErrorMessage(errorArg.message);
+                } else {
+                    vm.applicationId = tempIdArg;
+                }
+            });
+
+    };
 
 
     

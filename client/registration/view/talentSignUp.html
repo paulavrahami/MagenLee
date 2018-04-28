@@ -326,56 +326,61 @@
                              
                              <div class="col-md-3">
 
+                            
+
                                  <!-- Skills -->
+                                
                                  <div class="form-group">
                                          <label for="inputTalentSkill1">Skill</label>
                                          <input type="text" 
                                                  ng-model="vm.newTalentRegister.profile.skill1" 
                                                  name="skill1"
-                                                 class="form-control " 
+                                                 uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
+                                                 class="form-control typeahead"
                                                  placeholder="Your skill (ex. Jave)" 
-                                                 required>
-                                                 
+                                                 required>                                                 
+
                                  </div>
                                  <div class="form-group">
                                          <label for="inputTalentSkill2">Skill</label>
                                          <input type="text" 
                                                  ng-model="vm.newTalentRegister.profile.skill2" 
                                                  name="skill2"
-                                                 class="form-control " 
+                                                 uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
+                                                 class="form-control typeahead"
                                                  placeholder="Your skill (ex. Automatic Testing)" 
-                                                 required>
-                                                 
+                                                 required>                                                 
+
                                  </div>
                                  <div class="form-group">
-                                         <label for="inputTalentSkill1">Skill</label>
+                                         <label for="inputTalentSkill3">Skill</label>
                                          <input type="text" 
                                                  ng-model="vm.newTalentRegister.profile.skill3" 
                                                  name="skill3"
-                                                 class="form-control " 
+                                                 uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
+                                                 class="form-control typeahead"
                                                  placeholder="Your skill (ex. HTML)" 
-                                                 required>
-                                                 
+                                                 required>                                                 
                                  </div>
                                  <div class="form-group">
-                                                <label for="inputTalentSkill1">Skill</label>
-                                                <input type="text" 
-                                                        ng-model="vm.newTalentRegister.profile.skill4" 
-                                                        name="skill4"
-                                                        class="form-control " 
-                                                        placeholder="Your skill (ex. Accounting)" 
-                                                        required>
-                                                        
+                                        <label for="inputTalentSkill4">Skill</label>
+                                        <input type="text" 
+                                                ng-model="vm.newTalentRegister.profile.skill4" 
+                                                name="skill4"
+                                                uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
+                                                class="form-control typeahead" 
+                                                placeholder="Your skill (ex. Accounting)" 
+                                                required>                                                        
                                  </div>
                                  <div class="form-group">
-                                                <label for="inputTalentSkill1">Skill</label>
-                                                <input type="text" 
-                                                        ng-model="vm.newTalentRegister.profile.skill5" 
-                                                        name="skill5"
-                                                        class="form-control " 
-                                                        placeholder="Your skill (ex. Graphic Design)" 
-                                                        required>
-                                                                
+                                        <label for="inputTalentSkill5">Skill</label>
+                                        <input type="text" 
+                                                ng-model="vm.newTalentRegister.profile.skill5" 
+                                                name="skill5"
+                                                uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
+                                                class="form-control typeahead" 
+                                                placeholder="Your skill (ex. Graphic Design)" 
+                                                required>
                                  </div>
                              </div>
                         </div>
