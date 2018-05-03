@@ -88,6 +88,41 @@ angular
             $UserAlerts.open(msgArg, ENUM.ALERT.INFO, true, callbackArg);
         };
 
+                // Store the talent's or DE picture 
+                loadPic = function (event) {
+                    var files = event.target.files;
+                    file = files[0];
+        
+                    if (file.name) {
+                        document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
+                    };
+        
+                    var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                    dbx.filesUpload({
+                        path: '/img/pic/' + file.name,
+                        contents: file
+                        })
+                        .then(function(response) {
+                            vm.newTalentRegister.profile.picId = file.name;
+                            
+                            dbx.filesGetThumbnail({
+                                path: '/img/pic/' + file.name,
+                                format: 'png',
+                                size: 'w64h64'
+                                })
+                                .then(function(response) {
+                                    document.getElementById('viewPic').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                                    document.getElementById('uploadProgress').setAttribute("class", '');
+                                })
+                                .catch(function(error) {
+                                    console.log(error);
+                            });
+                        })
+                        .catch(function(error) {
+                             console.log(error);
+                    });
+                };
+
         function doSubscription () {
                 reactiveContext.subscribe('skills');
         }
@@ -331,7 +366,7 @@ angular
                             vm.talent.birthDate = record.profile.birthDate;
                             vm.talent.gender = record.profile.gender;
                             vm.talent.language = record.profile.language;
-                            vm.talent.pictureURL = record.profile.pictureURL;
+                            vm.talent.picId = record.profile.picId;
                             vm.talent.receiveJobOffer = record.profile.receiveJobOffer;
                             vm.talent.shareContact = record.profile.shareContact;
                             vm.talent.discreetInd = record.profile.discreetInd;

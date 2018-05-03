@@ -1,3 +1,5 @@
+<script src="js/Dropbox-sdk.js"></script>
+
 <form class="row" id="talentRegistration" name="talentRegistration" novalidate>
     <!-- The signUp information Header -->
     <div class="row">
@@ -235,16 +237,16 @@
                                         <option ng-repeat="language in vm.languages">{{language}}</option>
                                 </select>
                         </div>
-                            <!-- Picture URL -->
+                            <!-- Picture -->
                             <div class="form-group">
                                     <label for="talentPictureURL">Picture</label>
-                                    <input type="text" 
-                                            ng-model="vm.talentRegistration.pictureURL" 
-                                            name="pictureURL"
-                                            class="form-control" 
-                                            placeholder="URL  of your picture" 
-                                            required>
+                                    <input type="file"
+                                           class="form-control" 
+                                           onchange="loadPic(event)">
+                                    <span id="uploadProgress"></span>
+                                    <img id="viewPic" class="view-logo">       
                             </div>
+
                             
 
                         
