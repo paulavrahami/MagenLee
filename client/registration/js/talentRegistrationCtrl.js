@@ -114,7 +114,7 @@ angular
                     birthDate: currentTalent.birthDate ? currentTalent.birthDate : null,
                     gender: currentTalent.gender ? currentTalent.gender : null,
                     language: currentTalent.language ? currentTalent.language : null,
-                    pictureURL: currentTalent.pictureURL ? currentTalent.pictureURL : null,
+                    picId: currentTalent.picId ? currentTalent.picId    : null,
                     receiveJobOffer: currentTalent.receiveJobOffer ? currentTalent.receiveJobOffer : null,
                     receiveJobOfferView : vm.receiveJobOfferView,
                     shareContact: currentTalent.shareContact ? currentTalent.shareContact : null,
@@ -133,11 +133,59 @@ angular
                     profileTypeTalent: currentTalent.profileTypeTalent ? currentTalent.profileTypeTalent : null,
                     profileTypeDomainExpert: currentTalent.profileTypeDomainExpert ? currentTalent.profileTypeDomainExpert : null,
                     tcAcknowledge: currentTalent.tcAcknowledge ? currentTalent.tcAcknowledge : null
-                      }
+                      }   
+                  };
+                  if (vm.talentRegistration.picId) {
+                    var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                    dbx.filesGetThumbnail({
+                        path: '/img/pic/' + vm.talentRegistration.picId,
+                        format: 'png',
+                        size: 'w64h64'
+                        })
+                        .then(function(response) {
+                            document.getElementById('viewPic').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                    });
                   };
                   vm.dependency.changed();
                 }
         );
+
+                // Store the recruiter's logo 
+                loadPic = function (event) {
+                    var files = event.target.files;
+                    file = files[0];
+        
+                    if (file.name) {
+                        document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
+                    };
+        
+                    var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                    dbx.filesUpload({
+                        path: '/img/pic/' + file.name,
+                        contents: file
+                        })
+                        .then(function(response) {
+                            vm.talentRegistration.picId = file.name;
+                            dbx.filesGetThumbnail({
+                                path: '/img/pic/' + file.name,
+                                format: 'png',
+                                size: 'w64h64'
+                                })
+                                .then(function(response) {
+                                    document.getElementById('viewPic').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                                    document.getElementById('uploadProgress').setAttribute("class", '');
+                                })
+                                .catch(function(error) {
+                                    console.log(error);
+                            });
+                        })
+                        .catch(function(error) {
+                             console.log(error);
+                    });
+                };
 
         function doSubscription () {
             reactiveContext.subscribe('skills');
@@ -311,7 +359,7 @@ angular
                               'birthDate': talentRecord.birthDate,
                               'gender': talentRecord.gender,
                               'language': talentRecord.language,
-                              'pictureURL':talentRecord.pictureURL,
+                              'picId':talentRecord.picId,
                               'receiveJobOffer': talentRecord.receiveJobOffer,
                               'shareContact': talentRecord.shareContact,
                               'discreetInd': talentRecord.discreetInd,
