@@ -1,5 +1,5 @@
 <!-- talentSignUp.html -->
-
+<script src="js/Dropbox-sdk.js"></script>
 <!-- <div class="container margintop"> -->
 <form class="row" id="talentSignUp" name="talentSignUp" novalidate>
 
@@ -254,14 +254,13 @@
                                         </div>
                                         <!-- Picture URL -->
                                         <div class="form-group">
-                                                        <label for="inputTalentPictureURL">Picture</label>
-                                                        <input type="text" 
-                                                                ng-model="vm.newTalentRegister.profile.pictureURL" 
-                                                                name="pictureURL"
-                                                                class="form-control " 
-                                                                placeholder="URL  of your picture" 
-                                                                required>
-                                                </div>
+                                                <label for="inputTalentPictureURL">Picture</label>
+                                                <input type="file"
+                                                     class="form-control " 
+                                                     onchange="loadPic(event)">
+                                                <span id="uploadProgress"></span>
+                                                <img id="viewPic" class="view-logo">
+                                        </div>
                                         
                                 </div>
 
