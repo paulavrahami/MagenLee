@@ -31,7 +31,7 @@ angular
             if (auditionEditCtrl.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
                 challengeEdit.externalDisabledTriger = true;
             };
-            challengeEdit.challangeCreateMode = 'Audition';
+            challengeEdit.challangeCreateMode = ENUM.CHALLENGE_CREATE_MODE.AUDITION;
         };
 
         // Invoke the challente (item) "object" from the marketplace
@@ -44,10 +44,33 @@ angular
             challengeEdit.editItemForCancel = challengeMainCtrl.editItemForCancel;
             challengeEdit.editTemplate = challengeMainCtrl.editTemplate;
 
+            challengeEdit.templateName = challengeEdit.editTemplate.name; /*the default template name to be displayed in the dropdown*/
+
             //The content of all skills in Skills collection will be loaded by challangeMainCtrl
             challengeEdit.skills = challengeMainCtrl.skills;
-            challengeEdit.challangeCreateMode = 'Pool';
+            challengeEdit.challangeCreateMode = ENUM.CHALLENGE_CREATE_MODE.POOL;
         };
+
+        Meteor.subscribe('templates', () => [], {
+            onReady: function () {
+                // Build the challenges templates list for the dropdown
+                let t = TemplatesCollection.find({});
+                templateInfo = {};
+                challengeEdit.templateNames = [];
+                if (t.count()) {
+                    t.forEach(function (template) {
+                        templateInfo = {
+                            id: template._id,
+                            name: template.name
+                        };
+                        challengeEdit.templateNames.push(templateInfo);
+                    });
+                };
+            },
+            onError: function () {
+                console.log("onError", arguments);
+            }
+        });
        
         challengeEdit.helpers({
             totalUsagePerRecruiter () {
@@ -595,5 +618,16 @@ angular
             document.getElementById('viewImage').setAttribute("src", "");
         };
       
+        challengeEdit.changeTemplate = function (templateNameArg) {
+            challengeEdit.editTemplate = TemplatesCollection.findOne({name:templateNameArg});
+
+            challengeEdit.editItem.templateId = challengeEdit.editTemplate._id;
+            challengeEdit.editItem.content = {};
+
+            let tempId = challengeEdit.editItem._id;
+            delete challengeEdit.editItem._id;
+            Items.update({_id: tempId}, {$set: angular.copy(challengeEdit.editItem)});
+            challengeEdit.editItem._id = tempId;
+        };
 
     });
