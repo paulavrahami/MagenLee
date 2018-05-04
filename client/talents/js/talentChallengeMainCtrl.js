@@ -370,20 +370,22 @@ angular
          * @desc Add a new item to the audition;
          * @param templateIdArg 
          */
-        vm.createNewItem = function (templateIdArg) {
+        vm.createNewItem = function () {
+            var defaultTemplateId = '57f7a8406f903fc2b6aae39a'; /*This is the default template to be displayed*/
+            vm.editTemplate = TemplatesCollection.findOne({_id:defaultTemplateId});
             vm.createChallengeInd = false;
-            vm.editTemplate = TemplatesCollection.findOne({_id:templateIdArg});
 
             let editItem = {
                 "status" : ENUM.ITEM_STATUS.NEW,
                 "statusDate" : new Date(),
                 "skill" : "",
                 "complexity" : "",
+                "maxScore" : 0,
                 "itemDuration" : 30000,
                 "title": "",
                 "description": "",
                 "tags" : [],
-                "templateId" : templateIdArg,
+                "templateId" : defaultTemplateId, /*defualt template*/
                 "content" : {},
                 "usage" : 0,
                 "lastAssignedDate" : "",
@@ -400,7 +402,7 @@ angular
             
             editItem._id = Items.insert(angular.copy(editItem));
 
-             auditionItemArrayEntry = {itemId:editItem._id, maxScore:0};
+            auditionItemArrayEntry = {itemId:editItem._id, maxScore:0};
             
             vm.openEditItem(angular.copy(auditionItemArrayEntry));
             
