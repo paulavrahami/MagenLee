@@ -465,6 +465,9 @@ angular
                                     };
                                     case ENUM.MODAL_RESULT.CLOSE: {
                                         
+                                        if ((vm.editItem.status === ENUM.ITEM_STATUS.IN_WORK) || (vm.editItem.status === ENUM.ITEM_STATUS.AVAILABLE)) {
+                                            vm.editItem = null;
+                                        };
                                         break;
                                     };
                                     default:

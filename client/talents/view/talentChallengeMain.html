@@ -68,7 +68,8 @@
                     </nav>
                 </div>
             </div>
-            <div class="row" ng-show="vm.isViewThumbnails" ng-hide="vm.createChallengeInd">
+
+            <div class="row" ng-show="vm.isViewThumbnails && !vm.createChallengeInd">
                 <div class="col-md-3" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">
                     <div class="thumbnail">
                         <div class="row">
@@ -110,7 +111,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" ng-hide="vm.isViewThumbnails || vm.createChallengeInd">
+            <div class="row" ng-show="!vm.isViewThumbnails && !vm.createChallengeInd">
                 <div class="panel-group col-md-12">
                     <div class="panel panel-default" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">
                         <div>
