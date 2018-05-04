@@ -3,7 +3,7 @@
 <div class="modal-content" ng-if="challengeEdit.subsciptionOk">
     <!-- Modal Header -->
     <div class="modal-header">
-        <div class="row" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">
+        <div class="row" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">
             <div class="col-md-6">
                 <h3 class="modal-title">View Challenge ({{challengeEdit.editItem.status}})</h3>
             </div>
@@ -13,7 +13,7 @@
                 </button>
             </div>
         </div>
-        <div class="row" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')">
+        <div class="row" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.IN_USE)">
             <div class="col-md-6">
                 <h3 class="modal-title">Add Challenge ({{challengeEdit.editItem.status}})</h3>
             </div>
@@ -29,11 +29,30 @@
     <div class="modal-body">
         <!-- Challenge Header Information -->
         <div class="row">
+            <div class="col-md-3" ng-show="challengeEdit.challangeCreateMode === challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
+                <div class="form-group">
+                    <label for="" class="required">Template</label>
+                    <select
+                        ng-disabled="challengeEdit.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.NEW"
+                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
+                        class="form-control"
+                        ng-change="challengeEdit.changeTemplate(challengeEdit.templateName)"
+                        ng-model="challengeEdit.templateName">
+                            <option ng-repeat="templateName in challengeEdit.templateNames" value="{{templateName.name}}">{{templateName.name}}</option>
+                        <!-- <option value=""></option> -->
+                    </select>
+                    <input
+                        ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
+                        ng-model="challengeEdit.editTemplate.name"
+                        class="form-control"
+                        ng-disabled="true">
+                </div>
+            </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="" class="required">Skill</label>
                     <select
-                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned') && (challengeEdit.challangeCreateMode === 'Audition')"
+                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.IN_USE) && (challengeEdit.challangeCreateMode === challengeEdit.ENUM.CHALLENGE_CREATE_MODE.AUDITION)"
                         class="form-control"
                         ng-model="challengeEdit.editItem.skill">
                         <!-- ng-options="skill.type for skill in challengeEdit.skills"> -->
@@ -41,15 +60,15 @@
                             <option ng-repeat="skill in challengeEdit.skills" value="{{skill.type}}">{{skill.type}}</option>
                     </select>
                     <input
-                        ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                        ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                         ng-model="challengeEdit.editItem.skill"
                         class="form-control"
                         ng-disabled="true">
                     <input
-                        ng-if="!challengeEdit.externalDisabledTriger && (editItem.ChallengeMainCtrl.editItem.status !== 'Assigned') && (challengeEdit.challangeCreateMode === 'Pool')"
+                        ng-if="!challengeEdit.externalDisabledTriger && (editItem.ChallengeMainCtrl.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.IN_USE) && (challengeEdit.challangeCreateMode === challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL)"
                         type="text"
                         ng-model="challengeEdit.editItem.skill"
-                        ng-change="challengeEdit.challengeEdit.()"
+                        ng-change="challengeEdit.challengeEdit()"
                         class="form-control">
                 </div>
             </div>
@@ -57,7 +76,7 @@
                 <div class="form-group">
                     <label for="" class="required">Complexity</label>
                     <select
-                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned')"
+                        ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                         ng-model="challengeEdit.editItem.complexity"
                         class="form-control"
                         ng-change=" "
@@ -65,13 +84,13 @@
                         <!-- <option value=""></option> -->
                     </select>
                     <input
-                        ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                        ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                         ng-model="challengeEdit.editItem.complexity"
                         class="form-control"
                         ng-disabled="true">
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                 <div class="form-group">
                     <label>Score</label>
                     <input 
@@ -88,7 +107,7 @@
                         ng-model="challengeEdit.editItem"
                         property="itemDuration"
                         ng-change=" "
-                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">
+                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">
                     </time-select>
                 </div>
             </div>
@@ -119,7 +138,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="required">Question</label>
-                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)" 
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['question']"
                                                 ng-change=" "
@@ -135,7 +154,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11 answer">
-                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)" 
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content['1st Answer'].answer"
                                             ng-change=" "
@@ -151,7 +170,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11 answer">
-                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content['2nd Answer'].answer"
                                             ng-change=" "
@@ -167,7 +186,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11 answer">
-                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content['3rd Answer'].answer"
                                             ng-change=" "
@@ -183,7 +202,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11 answer">
-                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content['4th Answer'].answer"
                                             ng-change=" "
@@ -195,7 +214,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="inputRecruiterAddress">Hint</label>
-                                        <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content['hint']"
                                             ng-change=" "
@@ -217,7 +236,7 @@
                                         <!-- Statement -->
                                         <div class="form-group">
                                             <label>Free Text</label>
-                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['statement']"
                                                 ng-change=" "
@@ -228,7 +247,7 @@
                                             <label>Float to Right</label>
                                             <input
                                                 type="checkbox"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 ng-model="challengeEdit.editItem.content['float Right']"
                                                 ng-change=" "
                                                 placeholder=""/>
@@ -242,7 +261,7 @@
                                             <input
                                                 type="file"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 onchange="loadImage(event)">
                                             <span id="uploadProgress"></span>
                                             <img id="viewImage" class="view-image">
@@ -253,7 +272,7 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 ng-model="challengeEdit.editItem.content['image Width']"
                                                 ng-change=" "
                                                 placeholder="In Pixels (e.g., 400)">
@@ -264,7 +283,7 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 ng-model="challengeEdit.editItem.content['image Height']"
                                                 ng-change=" "
                                                 placeholder="In Pixels (e.g., 300)">
@@ -274,11 +293,11 @@
                                             <label>Float to Right</label>
                                             <input
                                                 type="checkbox"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 ng-model="challengeEdit.editItem.content['image Float Right']">
                                         </div>
                                         <div class="col-md-12">
-                                            <button class="btn btn-sm remove-image-btn" type="button" ng-click="challengeEdit.removeImage()" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Remove Image</button>
+                                            <button class="btn btn-sm remove-image-btn" type="button" ng-click="challengeEdit.removeImage()" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Remove Image</button>
                                         </div>
                                     </div>
                                     <!-- TAB Content - Video -->
@@ -303,7 +322,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Author Type -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Author Type</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -311,7 +330,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Author Name -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool' && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
                                         <label>Author Name</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -330,7 +349,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Used by My Auditions -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Total Usage - My Auditions</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -338,7 +357,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Used by Others -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Total Usage - Other Recruiters</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -347,7 +366,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" ng-show="challengeEdit.challangeCreateMode === 'Pool'">
+                            <div class="row" ng-show="challengeEdit.challangeCreateMode === challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                 <div class="col-md-12">
                                     <br><br>
                                     <!-- Usage by companies table -->
@@ -403,7 +422,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="required">Question</label>
-                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)" 
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['question']"
                                                 ng-change=" "
@@ -423,7 +442,7 @@
                                 <div class="form-group" ng-repeat="value in challengeEdit.editItem.content.answers track by $index">
                                     <div class="row">
                                         <div class="col-md-10">
-                                            <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                            <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)" 
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content.answers[$index]"
                                             ng-change=" "
@@ -431,7 +450,7 @@
                                             placeholder="Answer {{$index+1}}"></textarea>
                                         </div>
                                         <div class="col-md-2">
-                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                             type="number"
                                             min="0"
                                             max="100"
@@ -445,16 +464,16 @@
                                 </div>                              
                                 <div class="row add-remove-buttons">
                                     <div class="col-md-12">
-                                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addToContentArray('answers', 'results')" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Add</button>
+                                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addToContentArray('answers', 'results')" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Add</button>
                                         
-                                        <button class="btn btn-sm" ng-click="challengeEdit.removeFromContentArray('answers', 'results')" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Remove</button>
+                                        <button class="btn btn-sm" ng-click="challengeEdit.removeFromContentArray('answers', 'results')" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Remove</button>
                                     </div>
                                 </div>
                                 <!-- Hint -->
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="inputRecruiterAddress">Hint</label>
-                                        <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                        <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content['hint']"
                                             ng-change=" "
@@ -476,7 +495,7 @@
                                         <!-- Statement -->
                                         <div class="form-group">
                                             <label>Free Text</label>
-                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['statement']"
                                                 ng-change=" "
@@ -487,7 +506,7 @@
                                             <label>Float to Right</label>
                                             <input
                                                 type="checkbox"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['float Right']"
                                                 ng-change=" "
                                                 placeholder=""/>
@@ -501,7 +520,7 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['image']"
                                                 ng-change=" "
                                                 placeholder="Image URL">
@@ -512,7 +531,7 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['image Width']"
                                                 ng-change=" "
                                                 placeholder="The display area in pixels">
@@ -523,7 +542,7 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['image Height']"
                                                 ng-change=" "
                                                 placeholder="The display area in pixels">
@@ -533,7 +552,7 @@
                                             <label>Float to Right</label>
                                             <input
                                                 type="checkbox"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['image Float Right']"
                                                 ng-change=" "
                                                 placeholder=""/>
@@ -561,7 +580,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Author Type -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Author Type</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -569,7 +588,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Author Name -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool' && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
                                         <label>Author Name</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -588,7 +607,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Used by My Auditions -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Total Usage - My Auditions</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -596,7 +615,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Used by Others -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Total Usage - Other Recruiters</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -605,7 +624,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" ng-show="challengeEdit.challangeCreateMode === 'Pool'">
+                            <div class="row" ng-show="challengeEdit.challangeCreateMode === challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                 <div class="col-md-12">
                                     <br><br>
                                     <!-- Usage by companies table -->
@@ -661,7 +680,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="required">Question</label>
-                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')" 
+                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)" 
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['question']"
                                                 ng-change=" "
@@ -674,7 +693,7 @@
                                     <div class="col-md-10">
                                         <div class="form-group">
                                             <label class="required">1st Button</label>
-                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 type="text"
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['1st Button Text']"
@@ -685,7 +704,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="required">Score</label>
-                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 type="number"
                                                 min="0"
                                                 max="100"
@@ -701,7 +720,7 @@
                                     <div class="col-md-10">
                                         <div class="form-group">
                                             <label class="required">2nd Button</label>
-                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 type="text"
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['2nd Button Text']"
@@ -712,7 +731,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="required">Score</label>
-                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 type="number"
                                                 min="0"
                                                 max="100"
@@ -728,7 +747,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Hint</label>
-                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                            <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['hint']"
                                                 ng-change=" "
@@ -751,7 +770,7 @@
                                         <!-- Statement -->
                                         <div class="form-group">
                                             <label>Free Text</label>
-                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                            <textarea rows="9" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                                 class="form-control"
                                                 ng-model="challengeEdit.editItem.content['statement']"
                                                 ng-change=" "
@@ -762,7 +781,7 @@
                                             <label>Float to Right</label>
                                             <input
                                                 type="checkbox"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['float Right']"
                                                 ng-change=" "
                                                 placeholder=""/>
@@ -776,7 +795,7 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['image']"
                                                 ng-change=" "
                                                 placeholder="Image URL">
@@ -787,7 +806,7 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['image Width']"
                                                 ng-change=" "
                                                 placeholder="The display area in pixels">
@@ -798,7 +817,7 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['image Height']"
                                                 ng-change=" "
                                                 placeholder="The display area in pixels">
@@ -808,7 +827,7 @@
                                             <label>Float to Right</label>
                                             <input
                                                 type="checkbox"
-                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned' || challengeEdit.tbdFeature)"
+                                                ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
                                                 ng-model="challengeEdit.editItem.content['image Float Right']"
                                                 ng-change=" "
                                                 placeholder=""/>
@@ -836,7 +855,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Author Type -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Author Type</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -844,7 +863,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Author Name -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool' && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL && challengeEdit.editItem.authorType === challengeEdit.ENUM.ITEM_AUTHOR_TYPE.TALENT">
                                         <label>Author Name</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -863,7 +882,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Used by My Auditions -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Total Usage - My Auditions</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -871,7 +890,7 @@
                                                     disabled>
                                     </div>
                                     <!-- Used by Others -->
-                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== 'Pool'">
+                                    <div class="form-group" ng-show="challengeEdit.challangeCreateMode !== challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                         <label>Total Usage - Other Recruiters</label>
                                             <input  type="text"
                                                     class="form-control"
@@ -880,7 +899,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" ng-show="challengeEdit.challangeCreateMode === 'Pool'">
+                            <div class="row" ng-show="challengeEdit.challangeCreateMode === challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL">
                                 <div class="col-md-12">
                                     <br><br>
                                     <!-- Usage by companies table -->
@@ -927,7 +946,7 @@
                         <input 
                             type="checkbox"
                             ng-attr-id="{{itemKey}}"
-                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                             ng-model="challengeEdit.editItem.content[itemKey]"
                             ng-change=" "/>
                     </div>
@@ -937,7 +956,7 @@
                         <textarea
                             class="form-control"
                             ng-attr-id="{{itemKey}}"
-                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                             ng-model="challengeEdit.editItem.content[itemKey]"
                             ng-change=" "></textarea>
                     </div>
@@ -947,7 +966,7 @@
                         <input
                             class="form-control"
                             ng-attr-id="{{itemKey}}"
-                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                            ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                             type="number"
                             ng-model="challengeEdit.editItem.content[itemKey]"
                             ng-change=" "/>
@@ -963,7 +982,7 @@
                                     type="checkbox"
                                     class="form-control"
                                     ng-attr-id="{{itemKey}}_{{$index}}"
-                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                     ng-model="challengeEdit.editItem.content[itemKey][$index]"
                                     ng-change=" "/>
                                 <!-- <div class="remove btn btn-default"
@@ -975,7 +994,7 @@
                                 <textarea
                                     class="form-control"
                                     ng-attr-id="{{itemKey}}_{{$index}}"
-                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                     ng-model="challengeEdit.editItem.content[itemKey][$index]"
                                     ng-change=" "></textarea>
                                 <!-- <div class="remove-btn btn btn-info btn-sm"
@@ -987,7 +1006,7 @@
                                 <input
                                     class="form-control"
                                     ng-attr-id="{{itemKey}}_{{$index}}"
-                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                    ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                     type="number"
                                     ng-model="challengeEdit.editItem.content[itemKey][$index]"
                                     ng-change=" "/>
@@ -1001,8 +1020,8 @@
                     </div>
                     <!-- Array Item action buttons -->
                     <div ng-if="challengeEdit.isArray(itemValue)">
-                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addToContentArray(itemKey)" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Add</button>
-                        <button class="btn btn-sm" ng-click="challengeEdit.removeFromContentArray(itemKey)" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')">Remove</button>
+                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addToContentArray(itemKey)" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Add</button>
+                        <button class="btn btn-sm" ng-click="challengeEdit.removeFromContentArray(itemKey)" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Remove</button>
                     </div>
                     <!-- Object -->
                     <div ng-if="challengeEdit.isObject(itemValue)" class="is-object">
@@ -1014,7 +1033,7 @@
                                         type="checkbox"
                                         class="form-control"
                                         ng-attr-id="{{itemObjectKey}}"
-                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                         ng-model="challengeEdit.editItem.content[itemKey][itemObjectKey]"
                                         ng-change=" "/>
                                 </div>
@@ -1025,7 +1044,7 @@
                                     <textarea
                                         class="form-control"
                                         ng-attr-id="{{itemObjectKey}}"
-                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                         ng-model="challengeEdit.editItem.content[itemKey][itemObjectKey]"
                                         ng-change=" "></textarea>
                                 </div>
@@ -1036,7 +1055,7 @@
                                     <input
                                         class="form-control"
                                         ng-attr-id="{{itemObjectKey}}"
-                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned')"
+                                        ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                         type="number"
                                         ng-model="challengeEdit.editItem.content[itemKey][itemObjectKey]"
                                         ng-change=" "/>
@@ -1050,11 +1069,11 @@
     </div>
 
     <!-- Modal Footer -->
-    <div class="modal-footer" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== 'Assigned') && (challengeEdit.editItem.status !== 'Available')">
+    <div class="modal-footer" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.IN_USE) && (challengeEdit.editItem.status !== 'Available')">
         <button class="btn btn-secondery" type="button" ng-click="challengeEdit.cancelEditItem()">Cancel</button>
         <button class="btn btn-primary" type="button" ng-click="challengeEdit.registerEditItem()">Save</button>
     </div>
-    <div class="modal-footer" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === 'Assigned') || (challengeEdit.editItem.status === 'Available')">
+    <div class="modal-footer" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE) || (challengeEdit.editItem.status === 'Available')">
         <button class="btn btn-secondery" type="button" ng-click="challengeEdit.closeEditItem()">Close</button>
     </div>
 </div>
