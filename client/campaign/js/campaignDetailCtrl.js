@@ -440,7 +440,7 @@ angular
                               let auditionRec = Auditions.findOne({_id:campaign.auditionId});
                               auditionRec.status = ENUM.AUDITION_STATUS.PUBLISHED;
                               auditionRec.statusDate = new Date();
-                              Auditions.update({_id: tempId}, {$set: angular.copy(auditionRec)});
+                              Auditions.update({_id: auditionRec._id}, {$set: angular.copy(auditionRec)});
 
                               // Update the items (challenges) status to "In Use"
                               updateCampaignAuditionItems(campaign.auditionId);
