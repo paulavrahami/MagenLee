@@ -26,7 +26,7 @@ let ItemsAPI = {
                 let assignedDate = Auditions.aggregate([
                     {$unwind:'$items'},
                     {$match : { $and: [ {'items.itemId': itemId},
-                                        {'status': "In Use"}]}},
+                                        {'status': "Published"}]}},
                     {$group : {_id: null , lastAssignedDate: {$max: '$statusDate'}}}
                 ]);
                 if (assignedDate.length === 0) {
@@ -51,7 +51,7 @@ let ItemsAPI = {
                     {$unwind:'$items'},
                     {$match : { $and: [ {'control.companyOwner': companyOwner},
                                         {'items.itemId': itemId},
-                                        {'status': "In Use"}]}},
+                                        {'status': "Published"}]}},
                     {$group : {_id: null, total: {$sum:1}}}
                 ]);
                 if (itemUsage.length === 0) {
@@ -76,7 +76,7 @@ let ItemsAPI = {
                     {$unwind:'$items'},
                     {$match : { $and: [ {'control.companyOwner': {$ne : companyOwner}}, 
                                         {'items.itemId': itemId},
-                                        {'status': "In Use"}]}},
+                                        {'status': "Published"}]}},
                     {$group : {_id: null, total: {$sum:1}}}
                 ]);
                 if (itemUsage.length === 0) {
@@ -99,7 +99,7 @@ let ItemsAPI = {
                 let itemUsage = Auditions.aggregate([
                     {$unwind:'$items'},
                     {$match : { $and: [ {'items.itemId': itemId},
-                                        {'status': "In Use"}]}},
+                                        {'status': "Published"}]}},
                     {$group : {_id: '$control.companyOwner' , totalUsage: {$sum:1} , lastAssignedDate: {$max: '$statusDate'}}}
                 ]);
                 var results = itemUsage;
