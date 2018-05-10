@@ -488,7 +488,9 @@ angular
                                     // vm.applicationId = tempIdArg;
                                     vm.applicationId = vm.talent.talentId;
                                     vm.checkSkills(vm.skillsToCheck,vm.applicationId);
-                                    vm.checkProfession(talentRec.profession,vm.applicationId)
+                                    if (talentRec.profession) {
+                                        vm.checkProfession(talentRec.profession,vm.applicationId)
+                                    };
                                 }
                             });
             
