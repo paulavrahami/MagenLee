@@ -284,9 +284,11 @@
                                                 <input type="text" 
                                                         ng-model="vm.newTalentRegister.profile.profession" 
                                                         name="profession"
-                                                        class="form-control " 
+                                                        uib-typeahead="profession for profession in vm.professions | filter:$viewValue"
+                                                        class="form-control typeahead" 
                                                         placeholder="Your profsesion (Ex. Programmer)" 
                                                         required>
+
                                     </div>
                                     <!-- Expertize category -->
                                     <div class="form-group">
