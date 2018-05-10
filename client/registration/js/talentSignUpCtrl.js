@@ -372,7 +372,7 @@ angular
                             vm.talent.discreetInd = record.profile.discreetInd;
                             vm.talent.linkedin = record.profile.linkedin;
                             vm.talent.talentId = record.talentId;
-                            vm.talent.proffesion = record.profile.proffesion;
+                            vm.talent.profession = record.profile.profession;
                             vm.talent.expertizeCategory = record.profile.expertizeCategory;
                             vm.talent.expertizeSubCategory = record.profile.expertizeSubCategory;
                             vm.talent.skill1 = record.profile.skill1;
