@@ -125,6 +125,7 @@ angular
 
         function doSubscription () {
                 reactiveContext.subscribe('skills');
+                reactiveContext.subscribe('professions');
         }
 
         

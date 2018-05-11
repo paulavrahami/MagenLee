@@ -153,7 +153,7 @@
                                             ng-model="vm.talentRegistration.contactEmail" 
                                             name="contactEmail"
                                             class="form-control"  
-                                            required>
+                                            >
                             </div>
 
                             <!-- Contact Phone -->
@@ -269,9 +269,10 @@
                                         <input type="text" 
                                                 ng-model="vm.talentRegistration.profession" 
                                                 name="profession"
+                                                uib-typeahead="profession for profession in vm.professions | filter:$viewValue"
                                                 class="form-control " 
                                                 placeholder="Your profession (Ex. Programmer)" 
-                                                required>
+                                                >
                                 </div>
 
                                 <!-- Expertise category -->
@@ -282,7 +283,7 @@
                                             name="expertiseCategory"
                                             class="form-control " 
                                             placeholder="Your expertize category (Ex. Telecom)" 
-                                            required>
+                                            >
                                 </div>
 
                                 <!-- Expertize sub category -->
@@ -290,10 +291,9 @@
                                     <label for="talentExpertizeSubCategory">Expertise Sub Category</label>
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.expertizeSubCategory" 
-                                            name="expertiseSubCategory"
-                                            class="form-control " 
+                                            class="form-control" 
                                             placeholder="Your specific expertize (ex. Mobile etc.)" 
-                                            required>
+                                            >
                                 </div>
                                 <!-- Linkedin profile -->
                                 <div class="form-group">
@@ -303,7 +303,7 @@
                                                 name="linkedin"
                                                 class="form-control " 
                                                 placeholder="" 
-                                                required>
+                                                >
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -318,7 +318,7 @@
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
                                             placeholder="Your skill (ex. Jave)" 
-                                            required>                                                    
+                                            >                                                    
                                 </div>
 
                                 <div class="form-group">
@@ -329,7 +329,7 @@
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
                                             placeholder="Your skill (ex. Automatic Testing)" 
-                                            required>
+                                            >
                                                     
                                 </div>
 
@@ -341,7 +341,7 @@
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
                                             placeholder="Your skill (ex. HTML)" 
-                                            required>
+                                            >
                                                     
                                 </div>
                                 <div class="form-group">
@@ -352,7 +352,7 @@
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
                                             placeholder="Your skill (ex. Accounting)" 
-                                            required>
+                                            >
                                                         
                                 </div>
                                 <div class="form-group">
@@ -363,7 +363,7 @@
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
                                             placeholder="Your skill (ex. Graphic Design)" 
-                                            required>
+                                            >
                                                         
                                 </div>
                             </div>
@@ -456,7 +456,7 @@
             <br>
             <div class="submit-footer">
                 <button type="submit" ng-click="vm.updateTalent()" class="btn btn-primary">Save</button>
-                <button type="submit" ng-click="vm.cancelTalent()" class="btn btn-primary">Cancel</button>
+                <button type="button" ng-click="vm.cancelTalent()" class="btn btn-primary">Cancel</button>
             </div>
         </div>
         <div class="col-md-0-6"></div>
