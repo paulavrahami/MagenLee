@@ -281,6 +281,7 @@
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.expertizeCategory" 
                                             name="expertiseCategory"
+                                            uib-typeahead="expertise for expertise in vm.expertise | filter:$viewValue"
                                             class="form-control " 
                                             placeholder="Your expertize category (Ex. Telecom)" 
                                             >
