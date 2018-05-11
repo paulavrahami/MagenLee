@@ -435,7 +435,7 @@ angular
                 // The following line of code tries to find the related object the item has been assigned to.
                 index = auditionEdit.skills.findIndex(findItem => findItem.type.toLowerCase() == item.skill.toLowerCase());
                 if (index === -1) {
-                    alert(`The skill associated with the item is not defined for the campaign - ${item.skill}`);
+                    alert(`The challenge's skill "${item.skill}" is not defined for the campaign`);
                     return false;
                 };
                 // calculate the weight by adding the related skill factor. This is the skill the item is linked to.
@@ -471,7 +471,7 @@ angular
 
                 index = auditionEdit.skills.findIndex(findItem => findItem.type.toLowerCase() == item.skill.toLowerCase());
                 if (index === -1) {
-                     alert(`The skill associated with the item is not defined for the campaign - ${item.skill}`);
+                    alert(`The challenge's skill "${item.skill}" is not defined for the campaign`);
                     return false;
                 };
 
@@ -804,18 +804,21 @@ angular
                     let foundItemPerSkill = false;
                     let noMoreRelevantItems = false;
                     while ((actualDurationPerSkill < totalDurationPerSkill) && (!noMoreRelevantItems)) {
-                        randomItem = itemsPerSkill[Math.floor(Math.random() * itemsPerSkill.length)];
+                        var randomItem = itemsPerSkill[Math.floor(Math.random() * itemsPerSkill.length)];
+                        // Check that the randomly selected item has not chosen before
                         let itemAlreadySelected = tempSelectedItems.indexOf(randomItem._id);
                         if (((randomItem.itemDuration + actualDurationPerSkill) <= totalDurationPerSkill) &&
-                         (itemAlreadySelected === -1)) {
+                             (itemAlreadySelected === -1) &&
+                             (randomItem.skill.toLowerCase() === skill.type.toLowerCase())) {
                             foundItemPerSkill = true;
                         } else {
                             // If the item doesn't satisfy the criteria, retry for x times to find proper item
                             while ((!foundItemPerSkill && (foundRetry <= 50)) && (itemsFoundCount < itemsPerSkill.length)) {
-                                randomItem = itemsPerSkill[Math.floor(Math.random() * itemsPerSkill.length)];
+                                var randomItem = itemsPerSkill[Math.floor(Math.random() * itemsPerSkill.length)];
                                 let itemAlreadySelected = tempSelectedItems.indexOf(randomItem._id);
                                 if (((randomItem.itemDuration + actualDurationPerSkill) <= totalDurationPerSkill) &&
-                                 (itemAlreadySelected === -1)) {
+                                     (itemAlreadySelected === -1) &&
+                                     (randomItem.skill.toLowerCase() === skill.type.toLowerCase())) {
                                     foundItemPerSkill = true;
                                 } else {
                                     foundRetry++;
