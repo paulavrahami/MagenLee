@@ -515,8 +515,8 @@ angular
                             vm.talent.linkedin = record.profile.linkedin;
                             vm.talent.talentId = record.talentId;
                             vm.talent.profession = record.profile.profession;
-                            vm.talent.expertizeCategory = record.profile.expertizeCategory;
-                            vm.talent.expertizeSubCategory = record.profile.expertizeSubCategory;
+                            vm.talent.expertiseCategory = record.profile.expertiseCategory;
+                            vm.talent.expertiseSubCategory = record.profile.expertiseSubCategory;
                             vm.talent.skill1 = record.profile.skill1;
                             vm.talent.skill2 = record.profile.skill2;
                             vm.talent.skill3 = record.profile.skill3;

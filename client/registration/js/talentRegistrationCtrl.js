@@ -119,8 +119,8 @@ angular
                     discreetIndView : vm.discreetIndView,
                     linkedin: currentTalent.linkedin ? currentTalent.linkedin : null,
                     profession: currentTalent.profession ? currentTalent.profession : null,
-                    expertizeCategory: currentTalent.expertizeCategory ? currentTalent.expertizeCategory : null,
-                    expertizeSubCategory: currentTalent.expertizeSubCategory ? currentTalent.expertizeSubCategory : null,
+                    expertiseCategory: currentTalent.expertiseCategory ? currentTalent.expertiseCategory : null,
+                    expertiseSubCategory: currentTalent.expertiseSubCategory ? currentTalent.expertiseSubCategory : null,
                     skill1: currentTalent.skill1 ? currentTalent.skill1 : null,
                     skill2: currentTalent.skill2 ? currentTalent.skill2 : null,
                     skill3: currentTalent.skill3 ? currentTalent.skill3 : null,
@@ -395,8 +395,8 @@ angular
                               'contactPhone': talentRecord.contactPhone,
                               'contactEmail': talentRecord.contactEmail,
                               'profession': talentRecord.profession,
-                              'expertizeCategory': talentRecord.expertizeCategory,
-                              'expertizeSubCategory': talentRecord.expertizeSubCategory,
+                              'expertiseCategory': talentRecord.expertiseCategory,
+                              'expertiseSubCategory': talentRecord.expertiseSubCategory,
                               'birthDate': talentRecord.birthDate,
                               'gender': talentRecord.gender,
                               'language': talentRecord.language,
@@ -421,8 +421,8 @@ angular
                     if (talentRecord.profession){
                         vm.checkProfession(talentRecord.profession,talentId);
                     };
-                    if (talentRecord.expertise){
-                        vm.checkExpertise(talentRecord.expertise,talentId);
+                    if (talentRecord.expertiseCategory){
+                        vm.checkExpertise(talentRecord.expertiseCategory,talentId);
                     };
                   }
               });
@@ -486,7 +486,7 @@ angular
                 vm.expertiseTopic = {};
 
                 vm.expertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
-                vm.expertiseTopic.name = profession;
+                vm.expertiseTopic.name = expertise;
                 vm.expertiseTopic.verficationStatus = 'Pending';
                 vm.expertiseTopic.verficationDate = vm.currentDate;
                 vm.expertiseTopic.origin = 'Talent';
