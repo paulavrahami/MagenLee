@@ -126,6 +126,7 @@ angular
         function doSubscription () {
                 reactiveContext.subscribe('skills');
                 reactiveContext.subscribe('professions');
+                reactiveContext.subscribe('expertise');
         }
 
         
@@ -168,7 +169,7 @@ angular
           },
           professions () {
             vm.dependency.depend();
-            doSubscription ();
+            
   
             (new Promise((resolve, reject) => {
               let conditions = {};
@@ -199,6 +200,40 @@ angular
           });
                                 
             return vm.professions;
+        },
+        expertrise () {
+            vm.dependency.depend();
+            
+  
+            (new Promise((resolve, reject) => {
+              let conditions = {};
+              conditions = {$and:[
+                  {"status": ENUM.SKILL_STATUS.ACTIVE},
+                  {"verificationStatus": "Approved"}
+                  ]};
+  
+              Meteor.call('expertise.getExpertise', conditions, (err, res) => {
+                  if (err) {
+                      reject();
+                  } else {
+                      resolve(res);
+                  }
+              });
+          })).then(function(results){
+              vm.temp = results;
+              vm.expertise = [];
+              for  (let z = 0 ; z < vm.temp.length ; z++) {
+                       if (vm.temp[z].name){
+                           vm.expertise[z] = vm.temp[z].name;
+                       }
+                   };
+              
+              vm.dependency.changed();
+          }).catch(function() {
+              vm.expertise = [];
+          });
+                                
+            return vm.expertise;
         }
         });
 
@@ -322,7 +357,7 @@ angular
 
                 
                  if (vm.professions.indexOf(profession) < 0){
-                        //Create a pending skill record
+                        //Create a pending profession record
                         vm.profession = {};
 
                         vm.profession.status = ENUM.SKILL_STATUS.ACTIVE;
@@ -348,11 +383,48 @@ angular
                                 vm.applicationId = tempIdArg;
                             }
                         });
-                        // Notify the user for the new skill that are not active which is pending Skillera approval
+                        // Notify the user for the new profession that are not active which is pending Skillera approval
                                 showInfoMessage('Profession '+profession+' pending Skillera Admin approval', function () {});
                  };
            
         };
+
+
+        vm.checkExpertise = function (expertise,talentId) {
+
+                
+            if (vm.expertise.indexOf(expertise) < 0){
+                   //Create a pending expertise record
+                   vm.expertiseTopic = {};
+
+                   vm.expertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
+                   vm.expertiseTopic.name = profession;
+                   vm.expertiseTopic.verificationStatus = 'Pending';
+                   vm.expertiseTopic.verificationDate = vm.currentDate;
+                   vm.expertiseTopic.origin = 'Talent';
+                   vm.expertiseTopic.originId = talentId;
+
+                   /** Make sure it has control object; */
+                   if (!vm.expertiseTopic.control) {
+                       vm.expertiseTopic.control = {
+                           createDate: vm.currentDate
+                       };
+                   };
+                           
+                   let expertiseRec = angular.copy(vm.expertiseTopic);
+           
+                   Expertise.insert(expertiseRec, function (errorArg, tempIdArg) {
+                       if (errorArg) {
+                           showErrorMessage(errorArg.message);
+                       } else {
+                           vm.applicationId = tempIdArg;
+                       }
+                   });
+                   // Notify the user for the new expertise that are not active which is pending Skillera approval
+                           showInfoMessage('Expertise '+expertise+' pending Skillera Admin approval', function () {});
+            };
+      
+   };
 
         
 
@@ -491,6 +563,9 @@ angular
                                     vm.checkSkills(vm.skillsToCheck,vm.applicationId);
                                     if (talentRec.profession) {
                                         vm.checkProfession(talentRec.profession,vm.applicationId)
+                                    };
+                                    if (talentRec.expertise) {
+                                        vm.checkExpertise(talentRec.expertise,vm.applicationId)
                                     };
                                 }
                             });
