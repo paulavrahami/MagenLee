@@ -479,8 +479,6 @@ angular
                  if (vm.skills.indexOf(skillsArray[z]) < 0){
                 //Create a pending skill record
                          createNewPendingSkill(skillsArray[z],talentId);
-                // Notify the user for the new skill that are not active which is pending Skillera approval
-                         showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
                  };
             };
         };
@@ -514,9 +512,6 @@ angular
                         vm.applicationId = tempIdArg;
                     }
                 });
-
-                // Notify the user for the new profession that are not active which is pending Skillera approval
-                showInfoMessage('Profession '+profession+' pending Skillera Admin approval', function () {});
 
             }
 
@@ -552,9 +547,6 @@ angular
                     }
                 });
 
-                // Notify the user for the new expertise that are not active which is pending Skillera approval
-                showInfoMessage('Expertise category '+expertise+' pending Skillera Admin approval', function () {});
-
             }
 
         };
@@ -588,9 +580,6 @@ angular
                         vm.applicationId = tempIdArg;
                     }
                 });
-
-                // Notify the user for the new sub expertise that are not active which is pending Skillera approval
-                showInfoMessage('Sub Expertise category '+subExpertise+' pending Skillera Admin approval', function () {});
 
             }
 
