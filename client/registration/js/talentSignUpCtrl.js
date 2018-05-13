@@ -50,7 +50,7 @@ angular
 
         Object.keys(vm.countriesCities.countries).forEach(function(key) {
             
-            vm.country = {name:key,cities:vm.countriesCities.countries[key]}
+            vm.country = {name:key,cities:vm.countriesCities.countries[key]};
             vm.countryArray.push(vm.country);
             vm.countriesArray.push(key);
           
@@ -125,6 +125,9 @@ angular
 
         function doSubscription () {
                 reactiveContext.subscribe('skills');
+                reactiveContext.subscribe('professions');
+                reactiveContext.subscribe('expertise');
+                reactiveContext.subscribe('subExpertise');
         }
 
         
@@ -136,7 +139,6 @@ angular
     
               (new Promise((resolve, reject) => {
                 let skills;
-                vm.skillname = [];
                 let conditions = {};
                 conditions = {$and:[
                     {"status": ENUM.SKILL_STATUS.ACTIVE},
@@ -165,7 +167,109 @@ angular
             });
                                   
               return vm.skills;
-          }
+          },
+          professions () {
+            vm.dependency.depend();
+            
+  
+            (new Promise((resolve, reject) => {
+              let conditions = {};
+              conditions = {$and:[
+                  {"status": ENUM.SKILL_STATUS.ACTIVE},
+                  {"verificationStatus": "Approved"}
+                  ]};
+  
+              Meteor.call('professions.getProfessions', conditions, (err, res) => {
+                  if (err) {
+                      reject();
+                  } else {
+                      resolve(res);
+                  }
+              });
+          })).then(function(results){
+              vm.temp = results;
+              vm.professions = [];
+              for  (let z = 0 ; z < vm.temp.length ; z++) {
+                       if (vm.temp[z].name){
+                           vm.professions[z] = vm.temp[z].name;
+                       }
+                   };
+              
+              vm.dependency.changed();
+          }).catch(function() {
+              vm.professions = [];
+          });
+                                
+            return vm.professions;
+        },
+        expertise () {
+            vm.dependency.depend();
+            
+  
+            (new Promise((resolve, reject) => {
+              let conditions = {};
+              conditions = {$and:[
+                  {"status": ENUM.SKILL_STATUS.ACTIVE},
+                  {"verificationStatus": "Approved"}
+                  ]};
+  
+              Meteor.call('expertise.getExpertise', conditions, (err, res) => {
+                  if (err) {
+                      reject();
+                  } else {
+                      resolve(res);
+                  }
+              });
+          })).then(function(results){
+              vm.temp = results;
+              vm.expertise = [];
+              for  (let z = 0 ; z < vm.temp.length ; z++) {
+                       if (vm.temp[z].name){
+                           vm.expertise[z] = vm.temp[z].name;
+                       }
+                   };
+              
+              vm.dependency.changed();
+          }).catch(function() {
+              vm.expertise = [];
+          });
+                                
+            return vm.expertise;
+        },
+        subExpertise () {
+            vm.dependency.depend();
+            
+  
+            (new Promise((resolve, reject) => {
+              let conditions = {};
+              conditions = {$and:[
+                  {"status": ENUM.SKILL_STATUS.ACTIVE},
+                  {"verificationStatus": "Approved"}
+                  ]};
+  
+              Meteor.call('subExpertise.getSubExpertise', conditions, (err, res) => {
+                  if (err) {
+                      reject();
+                  } else {
+                      resolve(res);
+                  }
+              });
+          })).then(function(results){
+              vm.temp = results;
+              vm.subExpertise = [];
+              for  (let z = 0 ; z < vm.temp.length ; z++) {
+                       if (vm.temp[z].name){
+                           vm.subExpertise[z] = vm.temp[z].name;
+                       }
+                   };
+              
+              vm.dependency.changed();
+          }).catch(function() {
+              vm.subExpertise = [];
+          });
+                                
+            return vm.subExpertise;
+        }
         });
 
 
@@ -278,11 +382,112 @@ angular
                  if (vm.skills.indexOf(skillsArray[z]) < 0){
                 //Create a pending skill record
                         createNewPendingSkill(skillsArray[z],talentId);
-                // Notify the user for the new skill that are not active which is pending Skillera approval
-                        showInfoMessage('The skill '+skillsArray[z]+' pending Skillera Admin approval', function () {});
                  };
             };
         };
+
+        vm.checkProfession = function (profession,talentId) {
+
+                
+                 if (vm.professions.indexOf(profession) < 0){
+                        //Create a pending profession record
+                        vm.profession = {};
+
+                        vm.profession.status = ENUM.SKILL_STATUS.ACTIVE;
+                        vm.profession.name = profession;
+                        vm.profession.verificationStatus = 'Pending';
+                        vm.profession.verificationDate = vm.currentDate;
+                        vm.profession.origin = 'Talent';
+                        vm.profession.originId = talentId;
+
+                        /** Make sure it has control object; */
+                        if (!vm.profession.control) {
+                            vm.profession.control = {
+                                createDate: vm.currentDate
+                            };
+                        };
+                                
+                        let professionRec = angular.copy(vm.profession);
+                
+                        Professions.insert(professionRec, function (errorArg, tempIdArg) {
+                            if (errorArg) {
+                                showErrorMessage(errorArg.message);
+                            } else {
+                                vm.applicationId = tempIdArg;
+                            }
+                        });
+                 };
+           
+        };
+
+
+        vm.checkExpertise = function (expertise,talentId) {
+
+                
+            if (vm.expertise.indexOf(expertise) < 0){
+                   //Create a pending expertise record
+                   vm.expertiseTopic = {};
+
+                   vm.expertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
+                   vm.expertiseTopic.name = expertise;
+                   vm.expertiseTopic.verificationStatus = 'Pending';
+                   vm.expertiseTopic.verificationDate = vm.currentDate;
+                   vm.expertiseTopic.origin = 'Talent';
+                   vm.expertiseTopic.originId = talentId;
+
+                   /** Make sure it has control object; */
+                   if (!vm.expertiseTopic.control) {
+                       vm.expertiseTopic.control = {
+                           createDate: vm.currentDate
+                       };
+                   };
+                           
+                   let expertiseRec = angular.copy(vm.expertiseTopic);
+           
+                   Expertise.insert(expertiseRec, function (errorArg, tempIdArg) {
+                       if (errorArg) {
+                           showErrorMessage(errorArg.message);
+                       } else {
+                           vm.applicationId = tempIdArg;
+                       }
+                   });
+            };
+      
+   };
+
+   vm.checkSubExpertise = function (subExpertise,talentId) {
+
+                
+    if (vm.subExpertise.indexOf(subExpertise) < 0){
+           //Create a pending subExpertise record
+           vm.subExpertiseTopic = {};
+
+           vm.subExpertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
+           vm.subExpertiseTopic.name = subExpertise;
+           vm.subExpertiseTopic.verificationStatus = 'Pending';
+           vm.subExpertiseTopic.verificationDate = vm.currentDate;
+           vm.subExpertiseTopic.origin = 'Talent';
+           vm.subExpertiseTopic.originId = talentId;
+
+           /** Make sure it has control object; */
+           if (!vm.subExpertiseTopic.control) {
+               vm.suExpertiseTopic.control = {
+                   createDate: vm.currentDate
+               };
+           };
+                   
+           let subExpertiseRec = angular.copy(vm.subExpertiseTopic);
+   
+           SubExpertise.insert(subExpertiseRec, function (errorArg, tempIdArg) {
+               if (errorArg) {
+                   showErrorMessage(errorArg.message);
+               } else {
+                   vm.applicationId = tempIdArg;
+               }
+           });
+    };
+
+};
 
         
 
@@ -373,8 +578,8 @@ angular
                             vm.talent.linkedin = record.profile.linkedin;
                             vm.talent.talentId = record.talentId;
                             vm.talent.profession = record.profile.profession;
-                            vm.talent.expertizeCategory = record.profile.expertizeCategory;
-                            vm.talent.expertizeSubCategory = record.profile.expertizeSubCategory;
+                            vm.talent.expertiseCategory = record.profile.expertiseCategory;
+                            vm.talent.expertiseSubCategory = record.profile.expertiseSubCategory;
                             vm.talent.skill1 = record.profile.skill1;
                             vm.talent.skill2 = record.profile.skill2;
                             vm.talent.skill3 = record.profile.skill3;
@@ -410,7 +615,8 @@ angular
 
                             
             
-                            let talentRec = angular.copy(vm.talent);
+                            //let talentRec = angular.copy(vm.talent);
+                            let talentRec = vm.talent;
             
                             Talents.insert(talentRec, function (errorArg, tempIdArg) {
                                 if (errorArg) {
@@ -419,6 +625,15 @@ angular
                                     // vm.applicationId = tempIdArg;
                                     vm.applicationId = vm.talent.talentId;
                                     vm.checkSkills(vm.skillsToCheck,vm.applicationId);
+                                    if (talentRec.profession) {
+                                        vm.checkProfession(talentRec.profession,vm.applicationId)
+                                    };
+                                    if (talentRec.expertiseCategory) {
+                                        vm.checkExpertise(talentRec.expertiseCategory,vm.applicationId)
+                                    };
+                                    if (talentRec.expertiseSubCategory) {
+                                        vm.checkExpertise(talentRec.expertiseSubCategory,vm.applicationId)
+                                    };
                                 }
                             });
             
