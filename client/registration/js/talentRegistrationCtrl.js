@@ -654,7 +654,7 @@ angular
       };
 
 
-        // Sign-Up Tabs navigation
+        // Talent profile update Tabs navigation
         $(function(){
          $('.btn-circle-tab').on('click',function(){
            $('.btn-circle-tab.btn-info').removeClass('btn-info').addClass('btn-default');
