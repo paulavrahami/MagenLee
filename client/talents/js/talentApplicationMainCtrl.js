@@ -47,11 +47,11 @@ angular
      */
     vm.helpers({
         
-        campaigns () {
-            vm.dependency.depend();
-            doSubscription ();
-            return vm.campaigns;
-        },
+        // campaigns () {
+        //     vm.dependency.depend();
+        //     doSubscription ();
+        //     return vm.campaigns;
+        // },
         /**
          * @desc retrieve Meteor.user;
          * @returns {Meteor.user}
@@ -61,6 +61,7 @@ angular
         },
         applications () {
           vm.dependency.depend();
+          doSubscription ();
 
           (new Promise((resolve, reject) => {
             let applications;
