@@ -264,13 +264,13 @@ angular
          * @param campaignArg
          * @returns {boolean}
          */
-        vm.search = function(campaignArg){
+        vm.search = function(itemArg){
             if (!vm.query) {
                 return true;
             }
             else {
                 let wordsString = '^(?=.*' + vm.query.toLowerCase().split(" ").join(')(?=.*') + ')';
-                let testString  = (campaignArg.num + ' ' + campaignArg.title + ' ' + campaignArg.positionName + ' ' + campaignArg.status).toLowerCase();
+                let testString  = (itemArg.complexity + ' ' + itemArg.skill + ' ' + itemArg.description + ' ' + itemArg.status).toLowerCase();
                 return (new RegExp(wordsString).test(testString));
             }
         };
