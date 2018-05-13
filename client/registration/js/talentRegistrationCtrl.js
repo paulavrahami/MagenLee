@@ -187,6 +187,7 @@ angular
             reactiveContext.subscribe('skills');
             reactiveContext.subscribe('professions');
             reactiveContext.subscribe('expertise');
+            reactiveContext.subscribe('subExpertise')
         }
 
         vm.helpers({
@@ -310,6 +311,45 @@ angular
           });
                                 
             return vm.expertise;
+        },
+        subExpertise () {
+            vm.dependency.depend();
+  
+            (new Promise((resolve, reject) => {
+              let conditions = {};
+                conditions = {$or: [
+                    {$and:[
+                    {"status": ENUM.SKILL_STATUS.ACTIVE},
+                    {"verificationStatus": "Approved"}
+                    ]},
+                    {$and: [
+                    {"verficationStatus": "Pending"},
+                    {"originId": talentId}
+                    ]}
+                ]};
+
+              Meteor.call('subExpertise.getSubExpertise', conditions, (err, res) => {
+                  if (err) {
+                      reject();
+                  } else {
+                      resolve(res);
+                  }
+              });
+          })).then(function(results){
+              vm.temp = results;
+              vm.subExpertise = [];
+              for  (let z = 0 ; z < vm.temp.length ; z++) {
+                       if (vm.temp[z].name){
+                           vm.subExpertise[z] = vm.temp[z].name;
+                       }
+                   };
+              
+              vm.dependency.changed();
+          }).catch(function() {
+              vm.subExpertise = [];
+          });
+                                
+            return vm.subExpertise;
         }
         });
      
@@ -424,6 +464,9 @@ angular
                     if (talentRecord.expertiseCategory){
                         vm.checkExpertise(talentRecord.expertiseCategory,talentId);
                     };
+                    if (talentRecord.expertiseSubCategory){
+                        vm.checkSubExpertise(talentRecord.expertiseSubCategory,talentId);
+                    };
                   }
               });
               vm.dependency.changed();
@@ -510,7 +553,44 @@ angular
                 });
 
                 // Notify the user for the new expertise that are not active which is pending Skillera approval
-                showInfoMessage('Expertise '+expertise+' pending Skillera Admin approval', function () {});
+                showInfoMessage('Expertise category '+expertise+' pending Skillera Admin approval', function () {});
+
+            }
+
+        };
+
+        vm.checkSubExpertise = function (subExpertise,talentId) {
+
+            if (vm.subExpertise.indexOf(subExpertise) < 0) {
+                //Create pending sub expertise record
+                vm.subExpertiseTopic = {};
+
+                vm.subExpertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
+                vm.subExpertiseTopic.name = subExpertise;
+                vm.subExpertiseTopic.verficationStatus = 'Pending';
+                vm.subExpertiseTopic.verficationDate = vm.currentDate;
+                vm.subExpertiseTopic.origin = 'Talent';
+                vm.subExpertiseTopic.originId = talentId;
+
+                /** Make sure it has control object; */
+                if (!vm.subExpertiseTopic.control) {
+                    vm.subExpertiseTopic.control = {
+                        createDate: vm.currentDate
+                    };
+                };
+                                
+                let subExpertiseRec = angular.copy(vm.subExpertiseTopic);
+        
+                SubExpertise.insert(subExpertiseRec, function (errorArg, tempIdArg) {
+                    if (errorArg) {
+                        showErrorMessage(errorArg.message);
+                    } else {
+                        vm.applicationId = tempIdArg;
+                    }
+                });
+
+                // Notify the user for the new sub expertise that are not active which is pending Skillera approval
+                showInfoMessage('Sub Expertise category '+subExpertise+' pending Skillera Admin approval', function () {});
 
             }
 

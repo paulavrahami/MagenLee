@@ -307,7 +307,8 @@
                                                 <input type="text" 
                                                         ng-model="vm.newTalentRegister.profile.expertiseSubCategory" 
                                                         name="expertiseSubCategory"
-                                                        class="form-control " 
+                                                        uib-typeahead="subExpertise for subExpertise in vm.subExpertise | filter:$viewValue"
+                                                        class="form-control typeahead" 
                                                         placeholder="Your specific expertise (ex. Mobile etc.)" 
                                                         required>
                                      </div>

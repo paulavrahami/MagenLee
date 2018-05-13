@@ -50,7 +50,7 @@ angular
 
         Object.keys(vm.countriesCities.countries).forEach(function(key) {
             
-            vm.country = {name:key,cities:vm.countriesCities.countries[key]}
+            vm.country = {name:key,cities:vm.countriesCities.countries[key]};
             vm.countryArray.push(vm.country);
             vm.countriesArray.push(key);
           
@@ -127,6 +127,7 @@ angular
                 reactiveContext.subscribe('skills');
                 reactiveContext.subscribe('professions');
                 reactiveContext.subscribe('expertise');
+                reactiveContext.subscribe('subExpertise');
         }
 
         
@@ -201,7 +202,7 @@ angular
                                 
             return vm.professions;
         },
-        expertrise () {
+        expertise () {
             vm.dependency.depend();
             
   
@@ -234,6 +235,40 @@ angular
           });
                                 
             return vm.expertise;
+        },
+        subExpertise () {
+            vm.dependency.depend();
+            
+  
+            (new Promise((resolve, reject) => {
+              let conditions = {};
+              conditions = {$and:[
+                  {"status": ENUM.SKILL_STATUS.ACTIVE},
+                  {"verificationStatus": "Approved"}
+                  ]};
+  
+              Meteor.call('subExpertise.getSubExpertise', conditions, (err, res) => {
+                  if (err) {
+                      reject();
+                  } else {
+                      resolve(res);
+                  }
+              });
+          })).then(function(results){
+              vm.temp = results;
+              vm.subExpertise = [];
+              for  (let z = 0 ; z < vm.temp.length ; z++) {
+                       if (vm.temp[z].name){
+                           vm.subExpertise[z] = vm.temp[z].name;
+                       }
+                   };
+              
+              vm.dependency.changed();
+          }).catch(function() {
+              vm.subExpertise = [];
+          });
+                                
+            return vm.subExpertise;
         }
         });
 
@@ -398,7 +433,7 @@ angular
                    vm.expertiseTopic = {};
 
                    vm.expertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
-                   vm.expertiseTopic.name = profession;
+                   vm.expertiseTopic.name = expertise;
                    vm.expertiseTopic.verificationStatus = 'Pending';
                    vm.expertiseTopic.verificationDate = vm.currentDate;
                    vm.expertiseTopic.origin = 'Talent';
@@ -425,6 +460,42 @@ angular
             };
       
    };
+
+   vm.checkSubExpertise = function (subExpertise,talentId) {
+
+                
+    if (vm.subExpertise.indexOf(subExpertise) < 0){
+           //Create a pending subExpertise record
+           vm.subExpertiseTopic = {};
+
+           vm.subExpertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
+           vm.subExpertiseTopic.name = subExpertise;
+           vm.subExpertiseTopic.verificationStatus = 'Pending';
+           vm.subExpertiseTopic.verificationDate = vm.currentDate;
+           vm.subExpertiseTopic.origin = 'Talent';
+           vm.subExpertiseTopic.originId = talentId;
+
+           /** Make sure it has control object; */
+           if (!vm.subExpertiseTopic.control) {
+               vm.suExpertiseTopic.control = {
+                   createDate: vm.currentDate
+               };
+           };
+                   
+           let subExpertiseRec = angular.copy(vm.subExpertiseTopic);
+   
+           SubExpertise.insert(subExpertiseRec, function (errorArg, tempIdArg) {
+               if (errorArg) {
+                   showErrorMessage(errorArg.message);
+               } else {
+                   vm.applicationId = tempIdArg;
+               }
+           });
+           // Notify the user for the new sub expertise that are not active which is pending Skillera approval
+                   showInfoMessage('Sub Expertise '+subExpertise+' pending Skillera Admin approval', function () {});
+    };
+
+};
 
         
 
@@ -552,7 +623,8 @@ angular
 
                             
             
-                            let talentRec = angular.copy(vm.talent);
+                            //let talentRec = angular.copy(vm.talent);
+                            let talentRec = vm.talent;
             
                             Talents.insert(talentRec, function (errorArg, tempIdArg) {
                                 if (errorArg) {
@@ -564,8 +636,11 @@ angular
                                     if (talentRec.profession) {
                                         vm.checkProfession(talentRec.profession,vm.applicationId)
                                     };
-                                    if (talentRec.expertise) {
-                                        vm.checkExpertise(talentRec.expertise,vm.applicationId)
+                                    if (talentRec.expertiseCategory) {
+                                        vm.checkExpertise(talentRec.expertiseCategory,vm.applicationId)
+                                    };
+                                    if (talentRec.expertiseSubCategory) {
+                                        vm.checkExpertise(talentRec.expertiseSubCategory,vm.applicationId)
                                     };
                                 }
                             });
