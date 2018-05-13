@@ -38,19 +38,17 @@
         <div class="col-md-0-6"></div>
     </div>
 
-    <div class="row col-md-12">            
+    <!-- <div class="row col-md-12">            
                 <div style="text-align:center">                       
                                 <label>User profile type :</label>
-                                <!-- <form> -->
                                         <input type="checkbox" id="talentType" ng-model="vm.talentRegistration.profileTypeTalent">
                                         &nbsp;&nbsp;
                                         <label for="talentType">Talent profile</label>
                                         <input type="checkbox" id="domainExpertType" ng-model="vm.talentRegistration.profileTypeDomainExpert">
                                         &nbsp;&nbsp;
                                         <label for="domainExpertType">Domain Expert profile</label>
-                                <!-- </form> -->
                 </div>               
-     </div>
+     </div> -->
 
 
     <!-- The tabs' content -->
@@ -271,7 +269,7 @@
                                                 name="profession"
                                                 uib-typeahead="profession for profession in vm.professions | filter:$viewValue"
                                                 class="form-control " 
-                                                placeholder="Your profession (Ex. Programmer)" 
+                                                placeholder="Your profession (e.g. Programmer)" 
                                                 >
                                 </div>
 
@@ -283,7 +281,7 @@
                                             name="expertiseCategory"
                                             uib-typeahead="expertise for expertise in vm.expertise | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="Your expertise category (Ex. Telecom)" 
+                                            placeholder="Your expertise category (e.g. Telecom)" 
                                             >
                                 </div>
 
@@ -294,7 +292,7 @@
                                             ng-model="vm.talentRegistration.expertiseSubCategory"
                                             uib-typeahead="subExpertise for subExpertise in vm.subExpertise | filter:$viewValue" 
                                             class="form-control" 
-                                            placeholder="Your specific expertise (ex. Mobile etc.)" 
+                                            placeholder="Your specific expertise (e.g. Mobile etc.)" 
                                             >
                                 </div>
                                 <!-- Linkedin profile -->
@@ -319,7 +317,7 @@
                                             name="skill1"
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="Your skill (ex. Jave)" 
+                                            placeholder="Your skill (e.g. Jave)" 
                                             >                                                    
                                 </div>
 
@@ -330,7 +328,7 @@
                                             name="skill2"
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="Your skill (ex. Automatic Testing)" 
+                                            placeholder="Your skill (e.g. Automatic Testing)" 
                                             >
                                                     
                                 </div>
@@ -342,7 +340,7 @@
                                             name="skill3"
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="Your skill (ex. HTML)" 
+                                            placeholder="Your skill (e.g. HTML)" 
                                             >
                                                     
                                 </div>
@@ -353,7 +351,7 @@
                                             name="skill4"
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="Your skill (ex. Accounting)" 
+                                            placeholder="Your skill (e.g. Accounting)" 
                                             >
                                                         
                                 </div>
@@ -364,7 +362,7 @@
                                             name="skill5"
                                             uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="Your skill (ex. Graphic Design)" 
+                                            placeholder="Your skill (e.g. Graphic Design)" 
                                             >
                                                         
                                 </div>
