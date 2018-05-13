@@ -263,7 +263,8 @@ angular
             challengeEdit.editItem._id = tempId;
         };
 
-        challengeEdit.registerEditItem = function () {
+        challengeEdit.checkEditItem = function() {
+
             if (!challengeEdit.editItem.skill) {
                 showErrorMessage("The challenge's skill should be defined");
                 return
@@ -393,6 +394,11 @@ angular
                     };
                     break;
             };
+        };
+
+        challengeEdit.registerEditItem = function () {
+
+            challengeEdit.checkEditItem();
 
             if (challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) {
                 challengeEdit.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
@@ -400,6 +406,25 @@ angular
             challengeEdit.saveEditItem();
 
             $uibModalInstance.close(ENUM.MODAL_RESULT.SAVE);
+        };
+
+        challengeEdit.publishEditItem = function () {
+
+            challengeEdit.checkEditItem();
+            $UserAlerts.prompt(
+                'Are you sure you want to publish the Challenge?',
+                ENUM.ALERT.INFO,
+                true,
+                function () {
+                    if ((challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) ||
+                        (challengeEdit.editItem.status === ENUM.ITEM_STATUS.IN_WORK)) {
+                             challengeEdit.editItem.status = ENUM.ITEM_STATUS.AVAILABLE;
+                        };
+                    challengeEdit.saveEditItem();
+                    $uibModalInstance.close(ENUM.MODAL_RESULT.SAVE);
+                    
+            });
+
         };
 
         challengeEdit.closeEditItem = function () {
