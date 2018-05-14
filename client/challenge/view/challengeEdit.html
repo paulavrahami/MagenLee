@@ -3,7 +3,7 @@
 <div class="modal-content" ng-if="challengeEdit.subsciptionOk">
     <!-- Modal Header -->
     <div class="modal-header">
-        <div class="row" ng-if="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">
+        <div class="row" ng-if="challengeEdit.externalDisabledTriger">
             <div class="col-md-6">
                 <h3 class="modal-title">View Challenge ({{challengeEdit.editItem.status}})</h3>
             </div>
@@ -13,7 +13,7 @@
                 </button>
             </div>
         </div>
-        <div class="row" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.IN_USE)">
+        <div class="row" ng-if="(challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.NEW)">
             <div class="col-md-6">
                 <h3 class="modal-title">Add Challenge ({{challengeEdit.editItem.status}})</h3>
             </div>
@@ -22,7 +22,17 @@
                     <span aria-hidden="false">&times;</span>
                 </button>
             </div>
-        </div> 
+        </div>
+        <div class="row" ng-if="!challengeEdit.externalDisabledTriger && (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_WORK)">
+                <div class="col-md-6">
+                    <h3 class="modal-title">Update Challenge ({{challengeEdit.editItem.status}})</h3>
+                </div>
+                <div>
+                    <button type="button" class="close" aria-label="Close" data-dismiss="modal" ng-click="challengeEdit.cancelEditItem()">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
+                </div>
+            </div>  
     </div>
 
     <!-- Modal Body -->
