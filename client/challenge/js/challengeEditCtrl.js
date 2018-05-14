@@ -29,7 +29,9 @@ angular
             challengeEdit.skills = auditionEditCtrl.skills;
             challengeEdit.maxScore = auditionEditCtrl.maxScore;
 
-            if (auditionEditCtrl.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
+            if ((auditionEditCtrl.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) ||
+               ((auditionEditCtrl.editItem.status !== ENUM.ITEM_STATUS.IN_WORK) &&
+               (auditionEditCtrl.editItem.status !== ENUM.ITEM_STATUS.NEW))) {
                 challengeEdit.externalDisabledTriger = true;
             };
             challengeEdit.challangeCreateMode = ENUM.CHALLENGE_CREATE_MODE.AUDITION;
@@ -45,7 +47,10 @@ angular
             challengeEdit.editItemForCancel = challengeMainCtrl.editItemForCancel;
             challengeEdit.editTemplate = challengeMainCtrl.editTemplate;
 
-            //challengeEdit.maxScore = 0;
+            if ((challengeMainCtrl.editItem.status !== ENUM.ITEM_STATUS.IN_WORK) &&
+                (challengeMainCtrl.editItem.status !== ENUM.ITEM_STATUS.NEW)) {
+                challengeEdit.externalDisabledTriger = true;
+            };
 
             challengeEdit.templateName = challengeEdit.editTemplate.name; /*the default template name to be displayed in the dropdown*/
 
