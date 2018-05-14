@@ -13,6 +13,7 @@ angular
         challengeEdit.automaticGeneration = false;
         challengeEdit.tbdFeature = true;
         challengeEdit.challangeCreateMode = '';
+        challengeEdit.challengeActivity = '';
         // Invoke the challente (item) "object" from the audition
         if ($scope.challengeCreateMode === ENUM.CHALLENGE_CREATE_MODE.AUDITION) {
             // Get the auditonEdit controller
@@ -43,6 +44,8 @@ angular
             challengeEdit.editItem = challengeMainCtrl.editItem;
             challengeEdit.editItemForCancel = challengeMainCtrl.editItemForCancel;
             challengeEdit.editTemplate = challengeMainCtrl.editTemplate;
+
+            //challengeEdit.maxScore = 0;
 
             challengeEdit.templateName = challengeEdit.editTemplate.name; /*the default template name to be displayed in the dropdown*/
 
@@ -263,7 +266,7 @@ angular
             challengeEdit.editItem._id = tempId;
         };
 
-        challengeEdit.checkEditItem = function() {
+        challengeEdit.checkAndSaveEditItem = function (activity) {
 
             if (!challengeEdit.editItem.skill) {
                 showErrorMessage("The challenge's skill should be defined");
@@ -394,37 +397,45 @@ angular
                     };
                     break;
             };
+            if (activity === 'Publish') {
+                $UserAlerts.prompt(
+                    'Are you sure you want to publish the Challenge?',
+                    ENUM.ALERT.INFO,
+                    true,
+                    function () {
+                        if ((challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) ||
+                            (challengeEdit.editItem.status === ENUM.ITEM_STATUS.IN_WORK)) {
+                                 challengeEdit.editItem.status = ENUM.ITEM_STATUS.AVAILABLE;
+                            };
+                        challengeEdit.saveEditItem();
+                        $uibModalInstance.close(ENUM.MODAL_RESULT.SAVE);
+                        
+                });
+            } else { if (activity === 'Save') {
+                if (challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) {
+                    challengeEdit.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
+                };
+                challengeEdit.saveEditItem();
+    
+                $uibModalInstance.close(ENUM.MODAL_RESULT.SAVE);
+             }; 
+            };
         };
 
         challengeEdit.registerEditItem = function () {
 
-            challengeEdit.checkEditItem();
+            challengeEdit.challengeActivity = 'Save';
+            challengeEdit.checkAndSaveEditItem(challengeEdit.challengeActivity);
 
-            if (challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) {
-                challengeEdit.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
-            };
-            challengeEdit.saveEditItem();
-
-            $uibModalInstance.close(ENUM.MODAL_RESULT.SAVE);
+           
         };
 
         challengeEdit.publishEditItem = function () {
 
-            challengeEdit.checkEditItem();
-            $UserAlerts.prompt(
-                'Are you sure you want to publish the Challenge?',
-                ENUM.ALERT.INFO,
-                true,
-                function () {
-                    if ((challengeEdit.editItem.status === ENUM.ITEM_STATUS.NEW) ||
-                        (challengeEdit.editItem.status === ENUM.ITEM_STATUS.IN_WORK)) {
-                             challengeEdit.editItem.status = ENUM.ITEM_STATUS.AVAILABLE;
-                        };
-                    challengeEdit.saveEditItem();
-                    $uibModalInstance.close(ENUM.MODAL_RESULT.SAVE);
-                    
-            });
+            challengeEdit.challengeActivity = 'Publish';
+            challengeEdit.checkAndSaveEditItem(challengeEdit.challengeActivity);
 
+           
         };
 
         challengeEdit.closeEditItem = function () {
