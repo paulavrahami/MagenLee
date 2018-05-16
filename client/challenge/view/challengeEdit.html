@@ -78,7 +78,7 @@
                         ng-if="!challengeEdit.externalDisabledTriger && (editItem.ChallengeMainCtrl.editItem.status !== challengeEdit.ENUM.ITEM_STATUS.IN_USE) && (challengeEdit.challangeCreateMode === challengeEdit.ENUM.CHALLENGE_CREATE_MODE.POOL)"
                         type="text"
                         ng-model="challengeEdit.editItem.skill"
-                        ng-change="challengeEdit.challengeEdit()"
+                        uib-typeahead="skill for skill in challengeEdit.skills | filter:$viewValue"
                         class="form-control">
                 </div>
             </div>
