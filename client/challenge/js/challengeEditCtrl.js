@@ -14,6 +14,7 @@ angular
         challengeEdit.tbdFeature = true;
         challengeEdit.challangeCreateMode = '';
         challengeEdit.challengeActivity = '';
+        challengeEdit.currentDate = new Date();
         // Invoke the challente (item) "object" from the audition
         if ($scope.challengeCreateMode === ENUM.CHALLENGE_CREATE_MODE.AUDITION) {
             // Get the auditonEdit controller
@@ -46,6 +47,7 @@ angular
             challengeEdit.editItem = challengeMainCtrl.editItem;
             challengeEdit.editItemForCancel = challengeMainCtrl.editItemForCancel;
             challengeEdit.editTemplate = challengeMainCtrl.editTemplate;
+           
 
             if ((challengeMainCtrl.editItem.status !== ENUM.ITEM_STATUS.IN_WORK) &&
                 (challengeMainCtrl.editItem.status !== ENUM.ITEM_STATUS.NEW)) {
@@ -54,8 +56,7 @@ angular
 
             challengeEdit.templateName = challengeEdit.editTemplate.name; /*the default template name to be displayed in the dropdown*/
 
-            //The content of all skills in Skills collection will be loaded by challangeMainCtrl
-            challengeEdit.skills = challengeMainCtrl.skills;
+            
             challengeEdit.challangeCreateMode = ENUM.CHALLENGE_CREATE_MODE.POOL;
         };
 
@@ -203,7 +204,48 @@ angular
                 }).catch(function(error) {
                     console.log(error);
                 });
-            }
+            },
+             skills () {
+      
+                 (new Promise((resolve, reject) => {
+                   let skills;
+                   let conditions = {};
+                   conditions = {$or: [
+                     {$and:[
+                     {"status": ENUM.SKILL_STATUS.ACTIVE},
+                     {"verificationStatus": "Approved"}
+                     ]},
+                     {$and: [
+                     {"verificationStatus": "Pending"},
+                     {"originId": Accounts.user().profile.talentId}
+                     ]}
+                 ]}
+                
+      
+                   Meteor.call('skills.getSkills', conditions, (err, res) => {
+                       if (err) {
+                           reject();
+                       } else {
+                           resolve(res);
+                       }
+                   });
+               })).then(function(results){
+                   challengeEdit.temp = results;
+                   console.log(challengeEdit.temp);
+                   challengeEdit.skills = [];
+                   for  (let z = 0 ; z < challengeEdit.temp.length ; z++) {
+                            if (challengeEdit.temp[z].name){
+                             challengeEdit.skills[z] = challengeEdit.temp[z].name;
+                            }
+                        };
+                        
+                        
+               }).catch(function() {
+                 challengeEdit.skills = [];
+               });
+                                    
+                 return challengeEdit.skills;
+             }
 
         });
 
@@ -402,6 +444,9 @@ angular
                     };
                     break;
             };
+
+            challengeEdit.checkSkill();
+
             if (activity === 'Publish') {
                 $UserAlerts.prompt(
                     'Are you sure you want to publish the Challenge?',
@@ -426,6 +471,42 @@ angular
              }; 
             };
         };
+
+        
+        challengeEdit.checkSkill = function () {
+
+            if (challengeEdit.skills.indexOf(challengeEdit.editItem.skill) < 0){
+                //Create a pending skill record
+                challengeEdit.skill = {};
+
+                challengeEdit.skill.status = ENUM.SKILL_STATUS.ACTIVE;
+                challengeEdit.skill.name = challengeEdit.editItem.skill;
+                challengeEdit.skill.verificationStatus = 'Pending';
+                challengeEdit.skill.verificationDate = challengeEdit.currentDate;
+                challengeEdit.skill.origin = 'Talent';
+                challengeEdit.skill.originId = Accounts.user().profile.talentId;
+
+                /** Make sure it has control object; */
+                if (!challengeEdit.skill.control) {
+                    challengeEdit.skill.control = {
+                        createDate: challengeEdit.currentDate
+                    };
+                };
+                        
+                let skillRec = angular.copy(challengeEdit.skill);
+        
+                Skills.insert(skillRec, function (errorArg, tempIdArg) {
+                    if (errorArg) {
+                        showErrorMessage(errorArg.message);
+                    } else {
+                        challengeEdit.applicationId = tempIdArg;
+                    }
+                });
+         };
+
+
+        };
+
 
         challengeEdit.registerEditItem = function () {
 
