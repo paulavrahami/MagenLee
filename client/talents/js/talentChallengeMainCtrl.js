@@ -15,6 +15,7 @@ angular
         vm.selectedStatus    = undefined;
         vm.orderBy           = 'skill';
         vm.createChallengeInd = false;
+        vm.challengesPerSkill = true;
         vm.ENUM = ENUM;
         vm.MAP = MAP;
         vm.complexity = "";
@@ -32,6 +33,8 @@ angular
 
         vm.states = {};
         vm.skills = [];
+        vm.challengesPerSkillArray = [];
+        vm.challengesPerSkillArray1 = [];
 
         /**
          * @desc show a dialog with the message;
@@ -75,10 +78,15 @@ angular
              * @returns {*}
              */
             items () {
-                vm.dependency.depend();
+                vm.dependency.depend();              
                 
-               
                 return vm.items;
+            },
+            challengesPerSkillArray () {
+                vm.dependency.depend();
+
+                
+                return vm.challengesPerSkillArray;
             },
             templates () {
                 vm.dependency.depend();
@@ -120,6 +128,14 @@ angular
 
         vm.setCreateChallenge = function () {
             vm.createChallengeInd = true;
+        };
+
+        vm.setChallengesPerSkill = function () {
+            vm.challengesPerSkill = true;
+        };
+
+        vm.setAllChallenges = function () {
+            vm.challengesPerSkill = false;
         };
 
         vm.cancelNewChallenge = function () {
@@ -194,8 +210,11 @@ angular
                 localStorage.removeItem('selectedStatus');
             }
 
+           
+
             (new Promise((resolve, reject) => {
                 let items;
+                let challengesPerSkillArray;
                 let conditions = {};
 
                 if (vm.selectedStatus) {
@@ -209,8 +228,7 @@ angular
                         {authorId: Meteor.user().profile.talentId},
                         {status: {$ne: ENUM.ITEM_STATUS.NEW}}
                     ]};
-                }
-                // conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
+                };
     
                 Meteor.call('items.getItemsSummary', conditions, (err, res) => {
                     if (err) {
@@ -221,13 +239,44 @@ angular
                 });
             })).then(function(results){
                 vm.items = results;
-                
+
+                vm.tempSkills = [];
+                vm.challengesPerSkillArray1 = [];
+                vm.challengesPerSkillArray = [];
+                 if (vm.items.length) {
+
+                     for  (let z = 0 ; z < vm.items.length ; z++) {
+                        if (vm.tempSkills.length) {
+                            vm.skillFound = false;
+                            for  (let x = 0 ; x < vm.tempSkills.length ; x++) {
+                                if (vm.tempSkills[x].skill === vm.items[z].skill) {
+                                    vm.tempSkills[x].count = vm.tempSkills[x].count + 1
+                                    vm.skillFound = true;
+                                };
+                            };
+                            if (!vm.skillFound) {
+                                vm.tempSkills[vm.tempSkills.length] = {
+                                    skill : vm.items[z].skill,
+                                    count : 1
+                                };
+                            };
+                        } else {
+                            vm.tempSkills[0] = {
+                                skill : vm.items[z].skill,
+                                count : 1
+                            };
+                        }
+                     };
+                   
+                 };
+                vm.challengesPerSkillArray = vm.tempSkills;
                 vm.dependency.changed();
             }).catch(function() {
                 vm.items = [];
+                
             });
 
-            
+           
         };
 
         /**
