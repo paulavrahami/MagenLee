@@ -79,25 +79,31 @@
                     </nav>
                 </div>
             </div>
-
             <div class="row" ng-show="vm.isViewThumbnails && !vm.createChallengeInd && vm.challengesPerSkill">
                     <div class="col-md-3" ng-repeat="skill in vm.challengesPerSkillArray | filter:vm.search | orderBy: vm.orderBy">
                             <div class="thumbnail">
+                                <div class="row">
+                                    <div class="col-md-6 camaign-number" ng-if="skill.count > 1">
+                                        ({{skill.count}} challenges)
+                                    </div>
+                                    <div class="col-md-6 camaign-number" ng-if="skill.count === 1">
+                                            ({{skill.count}} challenge)
+                                        </div>
+                                </div>
                                 <div class="row col-md-12">
                                     <div class="job-positionName">
                                         {{skill.skill}}
                                     </div>
                                 </div>
+                                <div class="row col-md-12">
+                                        <p class="job-description">{{skill.description}}&nbsp;</p>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        {{skill.count}}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
                                         <p>
-                                            <a class="btn btn-primary btn-sm" ng-click="">Detail</a>
+                                            <a class="btn btn-primary btn-sm" ng-click="">Add</a>
+                                            <a class="btn btn-primary btn-sm" ng-click="">View</a>
                                         </p>
                                     </div>
                                 </div> 

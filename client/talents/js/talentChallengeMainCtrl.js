@@ -93,6 +93,40 @@ angular
                 if (vm.selectedChallengesTypes)
                     return TemplatesCollection.find({type:vm.selectedChallengesTypes.type});
             },
+            skills (){
+                vm.dependency.depend();
+      
+                (new Promise((resolve, reject) => {
+                  let skills;
+                  let conditions = {};
+                  conditions = {$and:[
+                      {"status": ENUM.SKILL_STATUS.ACTIVE}
+                      ]};
+      
+                  Meteor.call('skills.getSkills', conditions, (err, res) => {
+                      if (err) {
+                          reject();
+                      } else {
+                          resolve(res);
+                      }
+                  });
+              })).then(function(results){
+                  vm.skillsRef = results;
+                //    vm.skills = [];
+                //    for  (let z = 0 ; z < vm.temp.length ; z++) {
+                //             if (vm.temp[z].name){
+                //                 vm.skills[z].skill = vm.temp[z].name;
+                //                 vm.skills[z].description = vm.temp[z].decsription;
+                //             };
+                //         };
+                  
+                  vm.dependency.changed();
+              }).catch(function() {
+                  vm.skillsRef = [];
+              });
+                                    
+                return vm.skillsRef;
+            },
 
             /**
              * @desc retrieve Meteor.user;
@@ -118,6 +152,7 @@ angular
          vm.doSubscription  = function () {
             
                         vm.subscribe('allAuditions', () => []);
+                        vm.subscribe('skills', () => [])
                         if (Meteor.user() && Meteor.user().profile) {
                             // vm.subscribe('itemsByAuthorId',() => [Meteor.user()._id]);
                             vm.subscribe('itemsByAuthorId',() => [Meteor.user().profile.talentId]);
@@ -243,11 +278,17 @@ angular
                 vm.tempSkills = [];
                 vm.challengesPerSkillArray1 = [];
                 vm.challengesPerSkillArray = [];
+
+                console.log(vm.items);
+                console.log(vm.items.length);
+               
+                
                  if (vm.items.length) {
 
                      for  (let z = 0 ; z < vm.items.length ; z++) {
                         if (vm.tempSkills.length) {
                             vm.skillFound = false;
+                            console.log('not empty');
                             for  (let x = 0 ; x < vm.tempSkills.length ; x++) {
                                 if (vm.tempSkills[x].skill === vm.items[z].skill) {
                                     vm.tempSkills[x].count = vm.tempSkills[x].count + 1
@@ -255,14 +296,38 @@ angular
                                 };
                             };
                             if (!vm.skillFound) {
+                                //Find skill description
+                                console.log('in find desc');
+                                vm.skillDesc = ''
+                                for (let y = 0;y<vm.skillsRef.length;y++){
+                                    console.log(y);
+                                    console.log(vm.skillsRef[y].name);
+                                    console.log(vm.items[z].skill);
+                                    if (vm.skillsRef[y].name === vm.items[z].skill){
+                                        console.log('find desc');
+                                          vm.skillDesc = vm.skillsRef[y].description;
+                                    };
+                                };
                                 vm.tempSkills[vm.tempSkills.length] = {
                                     skill : vm.items[z].skill,
+                                    description : vm.skillDesc,
                                     count : 1
                                 };
                             };
                         } else {
+                            //Find skill description
+                            vm.skillDesc = '';
+                            
+                            for (let y = 0;y<vm.skillsRef.length;y++){
+                                    
+                                    if (vm.skillsRef[y].name === vm.items[z].skill){
+                                        
+                                        vm.skillDesc = vm.skillsRef[y].description;
+                                        };
+                                };
                             vm.tempSkills[0] = {
                                 skill : vm.items[z].skill,
+                                description : vm.skillDesc,
                                 count : 1
                             };
                         }
