@@ -206,7 +206,7 @@ angular
                       {"verificationStatus": "Approved"}
                       ]},
                       {$and: [
-                      {"verficationStatus": "Pending"},
+                      {"verificationStatus": "Pending"},
                       {"originId": talentId}
                       ]}
                   ]};
@@ -245,7 +245,7 @@ angular
                     {"verificationStatus": "Approved"}
                     ]},
                     {$and: [
-                    {"verficationStatus": "Pending"},
+                    {"verificationStatus": "Pending"},
                     {"originId": talentId}
                     ]}
                 ]};
@@ -284,7 +284,7 @@ angular
                     {"verificationStatus": "Approved"}
                     ]},
                     {$and: [
-                    {"verficationStatus": "Pending"},
+                    {"verificationStatus": "Pending"},
                     {"originId": talentId}
                     ]}
                 ]};
@@ -323,7 +323,7 @@ angular
                     {"verificationStatus": "Approved"}
                     ]},
                     {$and: [
-                    {"verficationStatus": "Pending"},
+                    {"verificationStatus": "Pending"},
                     {"originId": talentId}
                     ]}
                 ]};
@@ -491,7 +491,7 @@ angular
 
                 vm.profession.status = ENUM.SKILL_STATUS.ACTIVE;
                 vm.profession.name = profession;
-                vm.profession.verficationStatus = 'Pending';
+                vm.profession.verificationStatus = 'Pending';
                 vm.profession.verficationDate = vm.currentDate;
                 vm.profession.origin = 'Talent';
                 vm.profession.originId = talentId;
@@ -525,7 +525,7 @@ angular
 
                 vm.expertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
                 vm.expertiseTopic.name = expertise;
-                vm.expertiseTopic.verficationStatus = 'Pending';
+                vm.expertiseTopic.verificationStatus = 'Pending';
                 vm.expertiseTopic.verficationDate = vm.currentDate;
                 vm.expertiseTopic.origin = 'Talent';
                 vm.expertiseTopic.originId = talentId;
@@ -559,7 +559,7 @@ angular
 
                 vm.subExpertiseTopic.status = ENUM.SKILL_STATUS.ACTIVE;
                 vm.subExpertiseTopic.name = subExpertise;
-                vm.subExpertiseTopic.verficationStatus = 'Pending';
+                vm.subExpertiseTopic.verificationStatus = 'Pending';
                 vm.subExpertiseTopic.verficationDate = vm.currentDate;
                 vm.subExpertiseTopic.origin = 'Talent';
                 vm.subExpertiseTopic.originId = talentId;
@@ -592,7 +592,7 @@ angular
 
             vm.skill.status = ENUM.SKILL_STATUS.ACTIVE;
             vm.skill.name = skill;
-            vm.skill.verficationStatus = 'Pending';
+            vm.skill.verificationStatus = 'Pending';
             vm.skill.verficationDate = vm.currentDate;
             vm.skill.origin = 'Talent';
             vm.skill.originId = talentId;
