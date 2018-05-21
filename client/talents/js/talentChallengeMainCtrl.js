@@ -15,6 +15,8 @@ angular
         vm.selectedStatus    = undefined;
         vm.orderBy           = 'skill';
         vm.createChallengeInd = false;
+        vm.challengesPerSkill = true;
+        vm.viewPerSkillInd = false;
         vm.ENUM = ENUM;
         vm.MAP = MAP;
         vm.complexity = "";
@@ -32,6 +34,8 @@ angular
 
         vm.states = {};
         vm.skills = [];
+        vm.challengesPerSkillArray = [];
+        vm.challengesPerSkillArray1 = [];
 
         /**
          * @desc show a dialog with the message;
@@ -75,15 +79,46 @@ angular
              * @returns {*}
              */
             items () {
-                vm.dependency.depend();
+                vm.dependency.depend();              
                 
-               
                 return vm.items;
+            },
+            challengesPerSkillArray () {
+                vm.dependency.depend();
+
+                
+                return vm.challengesPerSkillArray;
             },
             templates () {
                 vm.dependency.depend();
                 if (vm.selectedChallengesTypes)
                     return TemplatesCollection.find({type:vm.selectedChallengesTypes.type});
+            },
+            skills (){
+                vm.dependency.depend();
+      
+                (new Promise((resolve, reject) => {
+                  let skills;
+                  let conditions = {};
+                  conditions = {$and:[
+                      {"status": ENUM.SKILL_STATUS.ACTIVE}
+                      ]};
+      
+                  Meteor.call('skills.getSkills', conditions, (err, res) => {
+                      if (err) {
+                          reject();
+                      } else {
+                          resolve(res);
+                      }
+                  });
+              })).then(function(results){
+                  vm.skillsRef = results;                  
+                  vm.dependency.changed();
+              }).catch(function() {
+                  vm.skillsRef = [];
+              });
+                                    
+                return vm.skillsRef;
             },
 
             /**
@@ -110,6 +145,7 @@ angular
          vm.doSubscription  = function () {
             
                         vm.subscribe('allAuditions', () => []);
+                        vm.subscribe('skills', () => [])
                         if (Meteor.user() && Meteor.user().profile) {
                             // vm.subscribe('itemsByAuthorId',() => [Meteor.user()._id]);
                             vm.subscribe('itemsByAuthorId',() => [Meteor.user().profile.talentId]);
@@ -120,6 +156,16 @@ angular
 
         vm.setCreateChallenge = function () {
             vm.createChallengeInd = true;
+        };
+
+        vm.setChallengesPerSkill = function () {
+            vm.challengesPerSkill = true;
+            vm.viewPerSkillInd = false;
+        };
+
+        vm.setAllChallenges = function () {
+            vm.challengesPerSkill = false;
+            vm.viewPerSkillInd = false;
         };
 
         vm.cancelNewChallenge = function () {
@@ -160,7 +206,7 @@ angular
                 vm.selectedChallengesTypes = vm.challengesTypes[keysArray[0]];
                 vm.selectedChallengesTypes.selected = true;
 
-                vm.saveEditItem();
+                //vm.saveEditItem();
 
                 vm.dependency.changed();
             }
@@ -194,8 +240,11 @@ angular
                 localStorage.removeItem('selectedStatus');
             }
 
+           
+
             (new Promise((resolve, reject) => {
                 let items;
+                let challengesPerSkillArray;
                 let conditions = {};
 
                 if (vm.selectedStatus) {
@@ -209,8 +258,7 @@ angular
                         {authorId: Meteor.user().profile.talentId},
                         {status: {$ne: ENUM.ITEM_STATUS.NEW}}
                     ]};
-                }
-                // conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
+                };
     
                 Meteor.call('items.getItemsSummary', conditions, (err, res) => {
                     if (err) {
@@ -221,13 +269,106 @@ angular
                 });
             })).then(function(results){
                 vm.items = results;
-                
+
+                vm.tempSkills = [];
+                vm.challengesPerSkillArray1 = [];
+                vm.challengesPerSkillArray = [];
+                              
+                 if (vm.items.length) {
+
+                     for  (let z = 0 ; z < vm.items.length ; z++) {
+                        if (vm.tempSkills.length) {
+                            vm.skillFound = false;
+                            
+                            for  (let x = 0 ; x < vm.tempSkills.length ; x++) {
+                                if (vm.tempSkills[x].skill === vm.items[z].skill) {
+                                    vm.tempSkills[x].count = vm.tempSkills[x].count + 1;
+                                     if (vm.items[z].status === ENUM.ITEM_STATUS.IN_WORK) {
+                                         vm.tempSkills[x].countInWork = vm.tempSkills[x].countInWork + 1;
+                                     };
+                        
+                                     if (vm.items[z].status === ENUM.ITEM_STATUS.AVAILABLE) {
+                                         vm.tempSkills[x].countAvailable = vm.tempSkills[x].countAvailable + 1;
+                                     };
+                                
+                                     if (vm.items[z].status === ENUM.ITEM_STATUS.IN_USE) {
+                                         vm.tempSkills[x].countInUse = vm.tempSkills[x].countInUse + 1;
+                                     };
+                                    vm.skillFound = true;
+                                };
+                            };
+                            if (!vm.skillFound) {
+                                //Find skill description
+                                vm.skillDesc = ''
+                                for (let y = 0;y<vm.skillsRef.length;y++){
+                                    if (vm.skillsRef[y].name === vm.items[z].skill){
+                                          vm.skillDesc = vm.skillsRef[y].description;
+                                    };
+                                };
+                                vm.tempSkills[vm.tempSkills.length] = {
+                                    skill : vm.items[z].skill,
+                                    description : vm.skillDesc,
+                                    count : 1,
+                                    countInWork : 0,
+                                    countAvailable : 0,
+                                    countInUse : 0
+                                };
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.IN_WORK) {
+                                     vm.tempSkills[vm.tempSkills.length - 1].countInWork = 1;
+                                 };
+                    
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.AVAILABLE) {
+                                     vm.tempSkills[vm.tempSkills.length - 1].countAvailable = 1;
+                                 };
+                            
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.IN_USE) {
+                                     vm.tempSkills[vm.tempSkills.length - 1].countInUse = 1;
+                                 };
+                            };
+                        } else {
+                            //Find skill description
+                            vm.skillDesc = '';
+                            
+                            for (let y = 0;y<vm.skillsRef.length;y++) {
+                                    
+                                    if (vm.skillsRef[y].name === vm.items[z].skill){
+                                        
+                                        vm.skillDesc = vm.skillsRef[y].description;
+                                        };
+                            };
+                            vm.tempSkills[0] = {
+                                skill : vm.items[z].skill,
+                                description : vm.skillDesc,
+                                count : 1,
+                                countInWork : 0,
+                                countAvailable : 0,
+                                countInUse : 0
+                            };
+                            
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.IN_WORK) {
+                                     vm.tempSkills[0].countInWork = 1;
+                                 };
+                    
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.AVAILABLE) {
+                                     vm.tempSkills[0].countAvailable = 1;
+                                 };
+                            
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.IN_USE) {
+                                     vm.tempSkills[0].countInUse = 1;
+                                 };
+
+                        }
+                     };
+                   
+                 };
+                vm.challengesPerSkillArray = vm.tempSkills;
                 vm.dependency.changed();
             }).catch(function() {
                 vm.items = [];
+                
             });
 
-            
+           
         };
 
         /**
@@ -355,7 +496,7 @@ angular
 
             if (vm.editItem.status == ENUM.ITEM_STATUS.NEW) {
                 vm.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
-                vm.saveEditItem();
+               // vm.saveEditItem();
             }
             vm.editItem = null;
             if (vm.modalInstance) {
@@ -365,12 +506,29 @@ angular
             };
         };
 
+        vm.viewPerSkill = function (skillArg) {
 
+            vm.viewPerSkillInd = true;
+            vm.challengesPerSkill = false;
+            vm.skillInd = 0;
+            vm.skillsFilter = [];
+
+            for (let skillIndex = 0;skillIndex < vm.items.length;skillIndex++) {
+                                    
+                if (vm.items[skillIndex].skill === skillArg){
+                    
+                    vm.skillsFilter[vm.skillInd] = vm.items[skillIndex];
+                    vm.skillInd = vm.skillInd + 1;
+                    };
+        };
+
+
+        };
         /**
          * @desc Add a new item to the audition;
          * @param templateIdArg 
          */
-        vm.createNewItem = function () {
+        vm.createNewItem = function (skillArg) {
             var defaultTemplateId = '57f7a8406f903fc2b6aae39a'; /*This is the default template to be displayed*/
             vm.editTemplate = TemplatesCollection.findOne({_id:defaultTemplateId});
             vm.createChallengeInd = false;
@@ -398,6 +556,9 @@ angular
                     "updatedBy" : Meteor.user()._id,
                     "updateDate" : new Date()
                 }
+            };
+            if (skillArg) {
+                editItem.skill = skillArg;
             };
             
             editItem._id = Items.insert(angular.copy(editItem));
@@ -633,32 +794,33 @@ angular
          * @desc Save the current edit item, calculate it's maxScore
          * and the audition total time and update the audition.
          */
-        vm.saveEditItem = () => {
-            //** Initialize the audition's summary table
-            vm.summery = {
-                skills:{},
-                score:0,
-                total:0,
-                time: vm.timeOffset
-            };
-            vm.skills.every(function (skill) {
-                vm.summery.skills[skill.type.toLowerCase()] = {
-                    time: 0,
-                };
-                vm.complexityArray.every(function (complexity) {
-                    vm.summery.skills[skill.type.toLowerCase()][complexity] = 0;
-                    vm.summery[complexity] = 0;
-                    vm.summery.skills[skill.type.toLowerCase()].score = 0;
-                    vm.summery.skills[skill.type.toLowerCase()].total = 0;
-                    vm.summery.skills[skill.type.toLowerCase()].time = vm.timeOffset;
-                    return true;
-                });
-                return true;
-            });
-            if (vm.editItem){ 
-                vm.saveItem(vm.editItem);
-            };
-        };
+        // vm.saveEditItem = () => {
+        //     //** Initialize the audition's summary table
+        //     vm.summery = {
+        //         skills:{},
+        //         score:0,
+        //         total:0,
+        //         time: vm.timeOffset
+        //     };
+        //     vm.skills.every(function (skill) {
+        //         vm.summery.skills[skill.type.toLowerCase()] = {
+        //             time: 0,
+        //         };
+        //         vm.complexityArray.every(function (complexity) {
+        //             vm.summery.skills[skill.type.toLowerCase()][complexity] = 0;
+        //             vm.summery[complexity] = 0;
+        //             vm.summery.skills[skill.type.toLowerCase()].score = 0;
+        //             vm.summery.skills[skill.type.toLowerCase()].total = 0;
+        //             vm.summery.skills[skill.type.toLowerCase()].time = vm.timeOffset;
+        //             return true;
+        //         });
+        //         return true;
+        //     });
+        //     if (vm.editItem){ 
+        //         vm.saveItem(vm.editItem);
+        //     };
+        // };
+
 
         /**
          * @desc Save an item;
