@@ -21,7 +21,6 @@ angular
         vm.newTalentRegister.profile.discreetIndView = 'false';
         vm.newTalentRegister.profile.discreetInd = false;
         vm.talent = {};
-        vm.userNameInd = false;
         vm.profileTypeTalent = false;
         vm.profileTypeDomainExpert = false;
         vm.currentDate = new Date();
@@ -134,142 +133,138 @@ angular
         vm.helpers({
         
             skills () {
-              vm.dependency.depend();
-              doSubscription ();
-    
-              (new Promise((resolve, reject) => {
-                let skills;
-                let conditions = {};
-                conditions = {$and:[
-                    {"status": ENUM.SKILL_STATUS.ACTIVE},
-                    {"verificationStatus": "Approved"}
+                vm.dependency.depend();
+                doSubscription ();
+        
+                (new Promise((resolve, reject) => {
+                    let skills;
+                    let conditions = {};
+                    conditions = {$and:[
+                        {"status": ENUM.SKILL_STATUS.ACTIVE},
+                        {"verificationStatus": "Approved"}
+                        ]};
+        
+                    Meteor.call('skills.getSkills', conditions, (err, res) => {
+                        if (err) {
+                            reject();
+                        } else {
+                            resolve(res);
+                        }
+                    });
+                })).then(function(results){
+                    vm.temp = results;
+                    vm.skills = [];
+                    for  (let z = 0 ; z < vm.temp.length ; z++) {
+                            if (vm.temp[z].name){
+                                vm.skills[z] = vm.temp[z].name;
+                            }
+                        };
+                    
+                    vm.dependency.changed();
+                    }).catch(function() {
+                        vm.skills = [];
+                    });
+                                    
+                return vm.skills;
+            },
+            professions ()  {
+                vm.dependency.depend();
+
+                (new Promise((resolve, reject) => {
+                    let conditions = {};
+                    conditions = {$and:[
+                        {"status": ENUM.SKILL_STATUS.ACTIVE},
+                        {"verificationStatus": "Approved"}
                     ]};
-    
-                Meteor.call('skills.getSkills', conditions, (err, res) => {
-                    if (err) {
-                        reject();
-                    } else {
-                        resolve(res);
-                    }
+        
+                    Meteor.call('professions.getProfessions', conditions, (err, res) => {
+                        if (err) {
+                            reject();
+                        } else {
+                            resolve(res);
+                        }
+                    });
+                })).then(function(results){
+                    vm.temp = results;
+                    vm.professions = [];
+                    for  (let z = 0 ; z < vm.temp.length ; z++) {
+                            if (vm.temp[z].name){
+                                vm.professions[z] = vm.temp[z].name;
+                            }
+                    };                    
+                    vm.dependency.changed();
+                }).catch(function() {
+                    vm.professions = [];
                 });
-            })).then(function(results){
-                vm.temp = results;
-                vm.skills = [];
-                for  (let z = 0 ; z < vm.temp.length ; z++) {
-                         if (vm.temp[z].name){
-                             vm.skills[z] = vm.temp[z].name;
-                         }
-                     };
+                                    
+                return vm.professions;
+            },
+            expertise () {
+                vm.dependency.depend();
+                   
+                (new Promise((resolve, reject) => {
+                    let conditions = {};
+                    conditions = {$and:[
+                        {"status": ENUM.SKILL_STATUS.ACTIVE},
+                        {"verificationStatus": "Approved"}
+                    ]};
+        
+                    Meteor.call('expertise.getExpertise', conditions, (err, res) => {
+                        if (err) {
+                            reject();
+                        } else {
+                            resolve(res);
+                        }
+                    });
+                })).then(function(results){
+                    vm.temp = results;
+                    vm.expertise = [];
+                    for  (let z = 0 ; z < vm.temp.length ; z++) {
+                            if (vm.temp[z].name){
+                                vm.expertise[z] = vm.temp[z].name;
+                            }
+                    };
+                    
+                    vm.dependency.changed();
+                }).catch(function() {
+                    vm.expertise = [];
+                });
+                                    
+                return vm.expertise;
+            },
+            subExpertise () {
+                vm.dependency.depend();
                 
-                vm.dependency.changed();
-            }).catch(function() {
-                vm.skills = [];
-            });
-                                  
-              return vm.skills;
-          },
-          professions () {
-            vm.dependency.depend();
-            
-  
-            (new Promise((resolve, reject) => {
-              let conditions = {};
-              conditions = {$and:[
-                  {"status": ENUM.SKILL_STATUS.ACTIVE},
-                  {"verificationStatus": "Approved"}
-                  ]};
-  
-              Meteor.call('professions.getProfessions', conditions, (err, res) => {
-                  if (err) {
-                      reject();
-                  } else {
-                      resolve(res);
-                  }
-              });
-          })).then(function(results){
-              vm.temp = results;
-              vm.professions = [];
-              for  (let z = 0 ; z < vm.temp.length ; z++) {
-                       if (vm.temp[z].name){
-                           vm.professions[z] = vm.temp[z].name;
-                       }
-                   };
-              
-              vm.dependency.changed();
-          }).catch(function() {
-              vm.professions = [];
-          });
-                                
-            return vm.professions;
-        },
-        expertise () {
-            vm.dependency.depend();
-            
-  
-            (new Promise((resolve, reject) => {
-              let conditions = {};
-              conditions = {$and:[
-                  {"status": ENUM.SKILL_STATUS.ACTIVE},
-                  {"verificationStatus": "Approved"}
-                  ]};
-  
-              Meteor.call('expertise.getExpertise', conditions, (err, res) => {
-                  if (err) {
-                      reject();
-                  } else {
-                      resolve(res);
-                  }
-              });
-          })).then(function(results){
-              vm.temp = results;
-              vm.expertise = [];
-              for  (let z = 0 ; z < vm.temp.length ; z++) {
-                       if (vm.temp[z].name){
-                           vm.expertise[z] = vm.temp[z].name;
-                       }
-                   };
-              
-              vm.dependency.changed();
-          }).catch(function() {
-              vm.expertise = [];
-          });
-                                
-            return vm.expertise;
-        },
-        subExpertise () {
-            vm.dependency.depend();
-            
-  
-            (new Promise((resolve, reject) => {
-              let conditions = {};
-              conditions = {$and:[
-                  {"status": ENUM.SKILL_STATUS.ACTIVE},
-                  {"verificationStatus": "Approved"}
-                  ]};
-  
-              Meteor.call('subExpertise.getSubExpertise', conditions, (err, res) => {
-                  if (err) {
-                      reject();
-                  } else {
-                      resolve(res);
-                  }
-              });
-          })).then(function(results){
-              vm.temp = results;
-              vm.subExpertise = [];
-              for  (let z = 0 ; z < vm.temp.length ; z++) {
-                       if (vm.temp[z].name){
-                           vm.subExpertise[z] = vm.temp[z].name;
-                       }
-                   };
-              
-              vm.dependency.changed();
-          }).catch(function() {
-              vm.subExpertise = [];
-          });
-                                
-            return vm.subExpertise;
-        }
+                (new Promise((resolve, reject) => {
+                    let conditions = {};
+                    conditions = {$and:[
+                        {"status": ENUM.SKILL_STATUS.ACTIVE},
+                        {"verificationStatus": "Approved"}
+                    ]};
+        
+                    Meteor.call('subExpertise.getSubExpertise', conditions, (err, res) => {
+                        if (err) {
+                            reject();
+                        } else {
+                            resolve(res);
+                        }
+                    });
+                })).then(function(results){
+                    vm.temp = results;
+                    vm.subExpertise = [];
+                    for  (let z = 0 ; z < vm.temp.length ; z++) {
+                            if (vm.temp[z].name){
+                                vm.subExpertise[z] = vm.temp[z].name;
+                            }
+                    };
+                    
+                    vm.dependency.changed();
+                }).catch(function() {
+                    vm.subExpertise = [];
+                });
+                                    
+                return vm.subExpertise;
+            }
         });
 
 
@@ -325,9 +320,6 @@ angular
                   ) {
                     showErrorMessage('Please complete all required information')
                     } else {
-                            if (vm.userNameInd){
-                              showErrorMessage('Username already exist!');
-                            } else {
                                     Accounts.createUser({
                                             username: vm.newTalentRegister.name,
                                             email: vm.newTalentRegister.email,
@@ -351,25 +343,26 @@ angular
                                             }
                                         })
                                     );
-          }}}
+          }}
         };
 
         vm.checkUserName = function (userName) {
 
 
-            Meteor.call('checkIfUserExists', userName, function (err, result) {
-                    if (err) {
-                        alert('There is an error while checking username');
-                    } else {
-                        if (result === false) {
-                            vm.userNameInd = false;
+            if (userName) {
+                Meteor.call('checkIfUserExists', userName, function (err, result) {
+                        if (err) {
+                            alert('There is an error while checking username');
                         } else {
-                            showErrorMessage('Username already exist!');
-                            vm.userNameInd = true;
+                            if (result === false) {                                
+                            } else {
+                                showErrorMessage('Username already exist!');
+                                vm.newTalentRegister.name = "";
+                            }
+                            
                         }
-                        
-                    }
-            });
+                });
+            };
 
         };
 
