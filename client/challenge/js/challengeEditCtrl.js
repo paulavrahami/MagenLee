@@ -205,48 +205,45 @@ angular
                     console.log(error);
                 });
             },
-             skills () {
-      
-                 (new Promise((resolve, reject) => {
-                   let skills;
-                   let conditions = {};
-                   conditions = {$or: [
-                     {$and:[
-                     {"status": ENUM.SKILL_STATUS.ACTIVE},
-                     {"verificationStatus": "Approved"}
-                     ]},
-                     {$and: [
-                     {"verificationStatus": "Pending"},
-                     {"originId": Accounts.user().profile.talentId}
-                     ]}
-                 ]}
-                
-      
-                   Meteor.call('skills.getSkills', conditions, (err, res) => {
-                       if (err) {
-                           reject();
-                       } else {
-                           resolve(res);
-                       }
-                   });
-               })).then(function(results){
-                   challengeEdit.temp = results;
-                   console.log(challengeEdit.temp);
-                   challengeEdit.skills = [];
-                   for  (let z = 0 ; z < challengeEdit.temp.length ; z++) {
-                            if (challengeEdit.temp[z].name){
-                             challengeEdit.skills[z] = challengeEdit.temp[z].name;
+            
+            skillsList () {
+                if (challengeEdit.challangeCreateMode === ENUM.CHALLENGE_CREATE_MODE.POOL) {
+                    (new Promise((resolve, reject) => {
+                        let skills;
+                        let conditions = {};
+                        conditions = {$or: [
+                                {$and: [
+                                    {"status": ENUM.SKILL_STATUS.ACTIVE},
+                                    {"verificationStatus": "Approved"}
+                                ]},
+                                {$and: [
+                                    {"verificationStatus": "Pending"},
+                                    {"originId": Accounts.user().profile.talentId}
+                                ]}
+                        ]};
+                        Meteor.call('skills.getSkills', conditions, (err, res) => {
+                            if (err) {
+                                reject();
+                            } else {
+                                resolve(res);
+                            }
+                        });
+                    })).then(function(results) {
+                        var skillsList = results;
+                        console.log(skillsList);
+                        challengeEdit.skills = [];
+                        for (let z = 0 ; z < skillsList.length ; z++) {
+                            if (skillsList[z].name) {
+                                challengeEdit.skills[z] = skillsList[z].name;
                             }
                         };
-                        
-                        
-               }).catch(function() {
-                 challengeEdit.skills = [];
-               });
-                                    
-                 return challengeEdit.skills;
-             }
-
+                        return challengeEdit.skills;
+                             
+                    }).catch(function() {
+                      challengeEdit.skills = [];
+                    });
+                };
+            }
         });
 
         function showInfoMessage(msgArg, callbackArg) {
