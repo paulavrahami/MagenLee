@@ -82,7 +82,7 @@
                                                     class="form-control " 
                                                     placeholder="Login Username" 
                                                     required>
-                                            <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.company.$error.required">User Name is required</span>
+                                            <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.userName.$error.required">User Name is required</span>
                                     </div>
                                     <!-- Email -->
                                     <div class="form-group">
@@ -134,7 +134,7 @@
                                                         class="form-control " 
                                                         placeholder="" 
                                                         required>
-                                                <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.fName.$error.required">First name is required</span>
+                                                <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.firstName.$error.required">First name is required</span>
                                         </div>
                                                 
                                         <!-- Last Name -->
@@ -142,11 +142,11 @@
                                                 <label for="inputTalentLasttName" class="required">Last Name</label>
                                                 <input type="text" 
                                                         ng-model="vm.newTalentRegister.profile.lastName" 
-                                                        name="firstName"
+                                                        name="lastName"
                                                         class="form-control " 
                                                         placeholder="" 
                                                         required>
-                                                <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.lName.$error.required">Last name is required</span>
+                                                <span class="error-msg" ng-show="talentSignUp.$submitted && talentSignUp.lastName.$error.required">Last name is required</span>
                                         </div>
                                                                         
                                     </div>
