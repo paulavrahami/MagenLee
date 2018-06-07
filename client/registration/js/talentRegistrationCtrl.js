@@ -193,7 +193,7 @@ angular
         vm.helpers({
         
             skills () {
-              vm.dependency.depend();
+              
               doSubscription ();
     
               (new Promise((resolve, reject) => {
@@ -227,7 +227,7 @@ angular
                          }
                      };
                 
-                vm.dependency.changed();
+               // vm.dependency.changed();
             }).catch(function() {
                 vm.skills = [];
             });
@@ -235,7 +235,7 @@ angular
               return vm.skills;
           },
           professions () {
-            vm.dependency.depend();
+            //vm.dependency.depend();
   
             (new Promise((resolve, reject) => {
               let conditions = {};
@@ -266,7 +266,7 @@ angular
                        }
                    };
               
-              vm.dependency.changed();
+              //vm.dependency.changed();
           }).catch(function() {
               vm.professions = [];
           });
@@ -274,7 +274,7 @@ angular
             return vm.professions;
         },
         expertise () {
-            vm.dependency.depend();
+            //vm.dependency.depend();
   
             (new Promise((resolve, reject) => {
               let conditions = {};
@@ -305,7 +305,7 @@ angular
                        }
                    };
               
-              vm.dependency.changed();
+              //vm.dependency.changed();
           }).catch(function() {
               vm.expertise = [];
           });
@@ -313,7 +313,7 @@ angular
             return vm.expertise;
         },
         subExpertise () {
-            vm.dependency.depend();
+            //vm.dependency.depend();
   
             (new Promise((resolve, reject) => {
               let conditions = {};
@@ -344,7 +344,7 @@ angular
                        }
                    };
               
-              vm.dependency.changed();
+              //vm.dependency.changed();
           }).catch(function() {
               vm.subExpertise = [];
           });
