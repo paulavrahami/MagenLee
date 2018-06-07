@@ -76,7 +76,7 @@ angular
          */
         function showErrorMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true, callbackArg);
-        };
+        }
 
         /**
          * @desc show a dialog with the message;
@@ -122,53 +122,58 @@ angular
                     });
                 };
 
+        // set the Contact Email to the Login Email as default
+        $scope.onEmailUpdate = function(){
+            vm.newTalentRegister.profile.contactEmail = vm.newTalentRegister.email;
+        };
+
         function doSubscription () {
-                reactiveContext.subscribe('skills');
-                reactiveContext.subscribe('professions');
-                reactiveContext.subscribe('expertise');
-                reactiveContext.subscribe('subExpertise');
+                 reactiveContext.subscribe('skills');
+                 reactiveContext.subscribe('professions');
+                 reactiveContext.subscribe('expertise');
+                 reactiveContext.subscribe('subExpertise');
         }
 
         
-        vm.helpers({
+         vm.helpers({
         
-            skills () {
-                vm.dependency.depend();
-                doSubscription ();
+             skillsList () {
+                 
+                 doSubscription ();
         
-                (new Promise((resolve, reject) => {
-                    let skills;
-                    let conditions = {};
-                    conditions = {$and:[
-                        {"status": ENUM.SKILL_STATUS.ACTIVE},
-                        {"verificationStatus": "Approved"}
-                        ]};
+                 (new Promise((resolve, reject) => {
+                     let skills;
+                     let conditions = {};
+                     conditions = {$and:[
+                         {"status": ENUM.SKILL_STATUS.ACTIVE},
+                         {"verificationStatus": "Approved"}
+                         ]};
         
-                    Meteor.call('skills.getSkills', conditions, (err, res) => {
-                        if (err) {
-                            reject();
-                        } else {
-                            resolve(res);
-                        }
-                    });
-                })).then(function(results){
-                    vm.temp = results;
-                    vm.skills = [];
-                    for  (let z = 0 ; z < vm.temp.length ; z++) {
-                            if (vm.temp[z].name){
-                                vm.skills[z] = vm.temp[z].name;
-                            }
-                        };
+                     Meteor.call('skills.getSkills', conditions, (err, res) => {
+                         if (err) {
+                             reject();
+                         } else {
+                             resolve(res);
+                         }
+                     });
+                 })).then(function(results){
+                     vm.temp = results;
+                     vm.skills = [];
+                     for  (let z = 0 ; z < vm.temp.length ; z++) {
+                             if (vm.temp[z].name){
+                                 vm.skills[z] = vm.temp[z].name;
+                             }
+                         };
                     
-                    vm.dependency.changed();
-                    }).catch(function() {
-                        vm.skills = [];
-                    });
+                     
+                     }).catch(function() {
+                         vm.skills = [];
+                     });
                                     
-                return vm.skills;
-            },
-            professions ()  {
-                vm.dependency.depend();
+                 return vm.skills;
+             },
+            professionsList ()  {
+                
 
                 (new Promise((resolve, reject) => {
                     let conditions = {};
@@ -192,15 +197,15 @@ angular
                                 vm.professions[z] = vm.temp[z].name;
                             }
                     };                    
-                    vm.dependency.changed();
+                   
                 }).catch(function() {
                     vm.professions = [];
                 });
                                     
                 return vm.professions;
             },
-            expertise () {
-                vm.dependency.depend();
+            expertiseList () {
+               
                    
                 (new Promise((resolve, reject) => {
                     let conditions = {};
@@ -225,15 +230,14 @@ angular
                             }
                     };
                     
-                    vm.dependency.changed();
+                  
                 }).catch(function() {
                     vm.expertise = [];
                 });
                                     
                 return vm.expertise;
             },
-            subExpertise () {
-                vm.dependency.depend();
+            subExpertiseList () {
                 
                 (new Promise((resolve, reject) => {
                     let conditions = {};
@@ -258,21 +262,18 @@ angular
                             }
                     };
                     
-                    vm.dependency.changed();
+                    
                 }).catch(function() {
                     vm.subExpertise = [];
                 });
                                     
                 return vm.subExpertise;
             }
-        });
+         });
 
 
 
-        // set the Contact Email to the Login Email as default
-        $scope.onEmailUpdate = function(){
-              vm.newTalentRegister.profile.contactEmail = vm.newTalentRegister.email;
-        };
+        
 
 
         vm.register = () => {
@@ -347,22 +348,19 @@ angular
         };
 
         vm.checkUserName = function (userName) {
-
-
-            if (userName) {
-                Meteor.call('checkIfUserExists', userName, function (err, result) {
-                        if (err) {
-                            alert('There is an error while checking username');
+                
+            Meteor.call('checkIfUserExists', userName, function (err, result) {
+                     if (err) {
+                        alert('There is an error while checking username');
+                    } else {
+                          if (result === false) {                                
                         } else {
-                            if (result === false) {                                
-                            } else {
-                                showErrorMessage('Username already exist!');
-                                vm.newTalentRegister.name = "";
-                            }
-                            
+                            vm.newTalentRegister.name = "";
+                            showErrorMessage('A user with username "' + userName + '" already exists');
                         }
+                            
+                    }
                 });
-            };
 
         };
 
