@@ -315,10 +315,11 @@
 							<span class="field-error">&nbsp;</span>
 							<label class="checkbox-padding" for="firstQuestionCheck">Provide Salary Expectation</label>
 					  		<label class="currency-type-margin" ng-show="vm.campaign.goNoGo3.enabled" for="salaryExpactationsCurr">Currency</label>
-					  		<select ng-show="vm.campaign.goNoGo3.enabled" ng-model="vm.campaign.salaryExpCurrency" class="select-field-lenght" ng-disabled="vm.campaignPublished || vm.campaignClosed">
+					  		<select ng-show="vm.campaign.goNoGo3.enabled" ng-model="vm.campaign.salaryExpCurrency" ng-init="vm.campaign.salaryExpCurrency ? vm.campaign.salaryExpCurrency : vm.campaign.salaryExpCurrency='USD'" class="select-field-lenght" ng-disabled="vm.campaignPublished || vm.campaignClosed">
 					  			<option>NIS</option>
-					  			<option>USD</option>
-					  			<option>EUR</option>
+					  			<option value="USD" selected>USD</option>
+								<option>EUR</option>
+								<option>SGD</option>  
 					  		</select>
 					  	</div>
 					  	<!-- Salary range -->

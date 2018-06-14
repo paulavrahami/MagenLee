@@ -33,7 +33,6 @@ angular
         //----
         vm.uploadfile = 'test';
         vm.fileload = false;
-        vm.campaign.salaryExpCurrency = 'NIS';
 
         vm.targetCampaignManuallyURL = function () {
             campaignURL = vm.campaign.applicationURL;
@@ -185,6 +184,7 @@ angular
                     targetPoolTalents: false,
                     targetSocialNetworks: false,
                     targetJobBoards: false,
+                    salaryExpCurrency: '',
                     salaryExpactations: [
                         {from: 0,
                             to: 0}
