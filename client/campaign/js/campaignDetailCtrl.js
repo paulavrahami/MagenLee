@@ -125,6 +125,7 @@ angular
                         topApplicant : 10,
                         revealedApplicants: 0,
                         emailList : [],
+                        salaryExpCurrency : '',
                         salaryExpactations: [
                           {from: 0,
                            to: 0}
