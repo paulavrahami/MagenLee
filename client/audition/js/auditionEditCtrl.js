@@ -186,8 +186,8 @@ angular
                 false,
                 function(){
                     auditionEdit.audition.items = [];
-                    auditionEdit.saveAudition();
                     calculateAuditionSummary();
+                    auditionEdit.saveAudition();
             });
         };
 
@@ -527,8 +527,8 @@ angular
             if (auditionEdit.audition.status === auditionEdit.ENUM.AUDITION_STATUS.IN_WORK) {
                 removeItemFromAudition(itemIdArg);
                 calculateItemsMaxScore();
-                auditionEdit.saveAudition();
                 calculateAuditionSummary();
+                auditionEdit.saveAudition();
             };
         };
 
@@ -624,8 +624,8 @@ angular
                 switch (results) {
                     case ENUM.MODAL_RESULT.SAVE: {
                         calculateItemsMaxScore();
-                        auditionEdit.saveAudition();
                         calculateAuditionSummary();
+                        auditionEdit.saveAudition();
                         break;
                     };
                     case ENUM.MODAL_RESULT.CANCEL: {
@@ -724,7 +724,6 @@ angular
         };
 
         function generateAudition() {
-            auditionEdit.dependency.depend();
             // Remove the current items defined for the audition
             auditionEdit.audition.items = [];
             // The following code will be executed for each skill:
@@ -840,18 +839,15 @@ angular
                         }
                     };
                     // Calculate the items max-score and update the items summary panel accordingly
-                    // auditionEdit.dependency.changed();
                     calculateItemsMaxScore();
-                    auditionEdit.saveAudition();
                     calculateAuditionSummary();
+                    auditionEdit.saveAudition();
                     auditionEdit.currentItem = {};
                 }).catch(function(error) {
                     itemsPerSkill = [];
                 });
                 return true;
-                auditionEdit.dependency.changed();
             });
-            
         };
 
         auditionEdit.generateAudition = function () {
@@ -1044,8 +1040,8 @@ angular
                 return true;
             });
             calculateItemsMaxScore();
-            auditionEdit.saveAudition();
             calculateAuditionSummary();
+            auditionEdit.saveAudition();
 
             if (auditionEdit.addItems.length === 1) {
                 showInfoMessage(auditionEdit.addItems.length + ' challenge has been added to the audition');
