@@ -203,6 +203,13 @@ angular
             var files = event.target.files;
             file = files[0];
 
+            // Only word files are supported by the Dropbox view function
+            var ext = file.name.split('.').pop();
+            if (ext !=="docx" && ext !== "doc") {
+                showErrorMessage("Please load only a word file format ('docx' or 'doc' extension)");
+                return;
+            };
+
             if (file.name) {
                 document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
             };
