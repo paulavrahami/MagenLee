@@ -9,7 +9,7 @@ angular
       vm.displayActivityLog = false;
       vm.dependency = new Deps.Dependency();
       vm.campaign = $scope.campaign;
-      vm.campaign.published = vm.campaign.status == ENUM.CAMPAIGN_STATUS.DISPATCHED;
+      vm.campaign.published = vm.campaign.status == ENUM.CAMPAIGN_STATUS.PUBLISHED;
       //** Set the default selection criteria from the Campaign's related fields
       vm.selectProfession = vm.campaign.positionName;
       var length = vm.campaign.skills.length;
@@ -145,7 +145,7 @@ angular
 
 
       vm.dispatch = function () {
-        if (vm.campaign.status !== ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+        if (vm.campaign.status !== ENUM.CAMPAIGN_STATUS.PUBLISHED) {
           showErrorMessage('Invitations can be dispatched only during the campaign period');
           return;
         };

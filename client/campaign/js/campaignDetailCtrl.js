@@ -64,7 +64,7 @@ angular
         }
 
         /**
-         * @desc Update the status of the items associated with the campaign's audition to "Assigned";
+         * @desc Update the status of the items associated with the campaign's audition to "In Use";
          */
         function updateCampaignAuditionItems (auditionIdArg) {
             //** Get the audition associated with the campaign
@@ -81,10 +81,11 @@ angular
                     alert(`Cannot get Item. id: ${singleItem.itemId}`);
                     return false;
                 };
-                //** Update the status and the status date
+                //** Update the status and the status date - for the first time in use
                 if ((auditionItem.status === ENUM.ITEM_STATUS.IN_WORK) || (auditionItem.status === ENUM.ITEM_STATUS.AVAILABLE)) {
-                    auditionItem.status = ENUM.ITEM_STATUS.ASSIGNED;
+                    auditionItem.status = ENUM.ITEM_STATUS.IN_USE;
                     auditionItem.statusDate = (new Date());
+                    auditionItem.firstDateInUse = (new Date());
                     Items.update({_id: auditionItem._id}, {$set: angular.copy(auditionItem)}, function (errorArg, tempIdArg) {
                         if (errorArg) {
                             showErrorMessage(errorArg.message);
@@ -124,6 +125,7 @@ angular
                         topApplicant : 10,
                         revealedApplicants: 0,
                         emailList : [],
+                        salaryExpCurrency : '',
                         salaryExpactations: [
                           {from: 0,
                            to: 0}
@@ -188,10 +190,10 @@ angular
               return 'An audition has to be defined'
             }
 
-            //chek if the audition assigned to the campaign is available
+            //check if the campaign's audition has been verified
             vm.audition = Auditions.findOne({_id: vm.currentCampaign.auditionId});
-            if (vm.audition.status !== ENUM.AUDITION_STATUS.AVAILABLE) {
-              return 'The audition has to be finalized'
+            if (vm.audition.status !== ENUM.AUDITION_STATUS.VERIFIED) {
+              return 'The audition has to be verified'
             }
 
             /** Each skill must have type / experience / weight / auditionId / auditionName and value over 0 */
@@ -370,7 +372,7 @@ angular
                 /** Copy the campaign to prevent angular's hashing; */
                 let campaign = angular.copy(vm.currentCampaign);
 
-                if (campaign.status !== ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+                if (campaign.status !== ENUM.CAMPAIGN_STATUS.PUBLISHED) {
                     campaign.status = vm.currentCampaign.status = ENUM.CAMPAIGN_STATUS.VERIFIED;
                     campaign.statusDate = vm.currentCampaign.statusDate = (new Date());
                 }
@@ -397,7 +399,7 @@ angular
          */
         vm.dispatchCampaign = function () {
 
-          if  (vm.currentCampaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+          if  (vm.currentCampaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED) {
               showErrorMessage('Campaign is already On Air');
           }
           else {
@@ -414,7 +416,7 @@ angular
                       /** Copy the campaign to prevent angular's hashing; */
                       let campaign = angular.copy(vm.currentCampaign);
 
-                      campaign.status = vm.currentCampaign.status = ENUM.CAMPAIGN_STATUS.DISPATCHED;
+                      campaign.status = vm.currentCampaign.status = ENUM.CAMPAIGN_STATUS.PUBLISHED;
                       campaign.statusDate = (new Date());
                       campaign.startDate = vm.currentCampaign.startDate = vm.currentDate;
 
@@ -435,7 +437,13 @@ angular
                           if (errorArg) {
                               showErrorMessage(errorArg.message);
                           } else {
-                              //** Update the items (challenges) status to "Assigned"
+                              // Update the audition status to "Published"                     
+                              let auditionRec = Auditions.findOne({_id:campaign.auditionId});
+                              auditionRec.status = ENUM.AUDITION_STATUS.PUBLISHED;
+                              auditionRec.statusDate = new Date();
+                              Auditions.update({_id: auditionRec._id}, {$set: angular.copy(auditionRec)});
+
+                              // Update the items (challenges) status to "In Use"
                               updateCampaignAuditionItems(campaign.auditionId);
 
                               dbhService.insertActivityLog('Campaign', vm.currentCampaign._id, 'Published', 'Campaign [' + vm.currentCampaign.num + '] was published successfully');
@@ -465,7 +473,7 @@ angular
          */
         vm.closeCampaign = function () {
 
-            if  (vm.currentCampaign.status !== ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+            if  (vm.currentCampaign.status !== ENUM.CAMPAIGN_STATUS.PUBLISHED) {
                 showErrorMessage('The campaign was not published yet');
                 return;
             };
@@ -514,7 +522,7 @@ angular
         };
 
         vm.afterCloseDate = function () {
-            if  (vm.currentCampaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+            if  (vm.currentCampaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED) {
                 if (vm.currentDate > vm.currentCampaign.endDate) {
                     return (true);
                 } else {
@@ -523,7 +531,7 @@ angular
             };
         };
 
-        if  (vm.currentCampaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+        if  (vm.currentCampaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED) {
             if (vm.currentDate > vm.currentCampaign.endDate) {
                 showInfoMessage("The campaign's end date has already over. Please close the campaign")
             };

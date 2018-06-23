@@ -7,7 +7,7 @@ angular
       vm.displayActivityLog = false;
       vm.dependency = new Deps.Dependency();
       vm.campaign = $scope.campaign;
-      vm.campaign.published = vm.campaign.status == ENUM.CAMPAIGN_STATUS.DISPATCHED;
+      vm.campaign.published = vm.campaign.status == ENUM.CAMPAIGN_STATUS.PUBLISHED;
       vm.fileName = "";
       vm.dispatchEmail = true; /*Default dispatch channel*/
       vm.dispatchSMS = false;
@@ -173,7 +173,7 @@ angular
 
 
       vm.dispatch = function() {
-        if (vm.campaign.status !== ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+        if (vm.campaign.status !== ENUM.CAMPAIGN_STATUS.PUBLISHED) {
           showErrorMessage('Invitations can be dispatched only during the campaign period');
           vm.displayCheckMsg = false;
           return;

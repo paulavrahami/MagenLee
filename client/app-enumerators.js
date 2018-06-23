@@ -13,8 +13,8 @@ angular
         },
         AUDITION_STATUS : {
             IN_WORK:    'In Work',
-            AVAILABLE:  'Assigned',
-            // ASSIGNED:   'Assigned',
+            VERIFIED:   'Verified',
+            PUBLISHED:  'Published',
             DELETED:    'Deleted'
         },
         AUDITION_DURATION : {
@@ -30,20 +30,24 @@ angular
             AUTOMATIC:  'Automatic'
         },
         AUDITION_VIEW_MODE : {
-            PREVIEW:     'Preview',
-            RESULTS:     'Results'
+            PREVIEW:   'Preview',
+            RESULTS:   'Results',
+            CHALLENGE: 'Challenge'
         },
         ITEM_STATUS : {
             NEW:        'New',
             IN_WORK:    'In Work',
             AVAILABLE:  'Available',
-            ASSIGNED:   'Assigned',
-            TERMINATED: 'Canceled'
+            IN_USE:     'In Use'
         },
         ITEM_AUTHOR_TYPE : {
             RECRUITER:    'Recruiter',
             DOMAIN_EXPERT:'Domain Expert',
             TALENT:       'Talent'
+        },
+        CHALLENGE_CREATE_MODE : {
+            AUDITION: 'Audition',
+            POOL: 'Pool'
         },
         ALERT : {
             SUCCESS:    'success',
@@ -52,11 +56,11 @@ angular
             DANGER:     'danger'
         },
         CAMPAIGN_STATUS : {
-            DELETE:     'Delete',
-            DISPATCHED: 'Dispatched',
-            IN_WORK:    'In work',
+            IN_WORK:    'In Work',
+            VERIFIED:   'Verified',
+            PUBLISHED:  'Published',
             CLOSED:     'Closed',
-            VERIFIED:   'Verified'
+            DELETED:    'Deleted'
         },
         APPLICATION_FILTER : {
             MIN_SCORE:  'Min Grade',
@@ -90,6 +94,10 @@ angular
             NORMAL: 'Normal',
             HIGH:   'High',
             MUST:   'Must have'
+        },
+        SKILL_STATUS : {
+            ACTIVE: 'Active',
+            CANCELED:   'Canceled'
         },
 
         USER : {
@@ -132,6 +140,14 @@ angular
             DISPATCH_POOL_EMAIL : 'Dispatch Pool/Email',
             DISPATCH_EXTERNAL_FILE : 'Dispatch External',
             DISPATCH_SOCIAL_LINKEDIN : 'Dispatch LinkedIn' 
+        },
+        MODAL_RESULT : {
+            SAVE : 'Save',
+            CANCEL : 'Cancel',
+            CLOSE : 'Close'
+        },
+        DROPBOX_API : {
+            TOKEN : 'jNRAKI6EZHAAAAAAAAAB_IropCuolUgvwDlmIEBdaddvwmhULqUAdxfuNnU3fwwn'
         }
     });
 
@@ -139,18 +155,17 @@ angular
     .module('skillera')
     .constant('MAP', {
         CAMPAIGN_STATUS : {
-            DELETE:     'glyphicon glyphicon-trash',
-            DISPATCHED: 'glyphicon glyphicon-send',
+            DELETED:     'glyphicon glyphicon-trash',
+            PUBLISHED:  'glyphicon glyphicon-send',
             IN_WORK:    'glyphicon glyphicon-cutlery',
             CLOSED:     'glyphicon glyphicon-stop',
             VERIFIED:   'glyphicon glyphicon-thumbs-up'
         },
         ITEM_STATUS : {
-            TERMINATED: 'glyphicon glyphicon-trash',
             NEW:        'glyphicon glyphicon-ok',
             IN_WORK:    'glyphicon glyphicon-cutlery',
             AVAILABLE:  'glyphicon glyphicon-play',
-            ASSIGNED:   'glyphicon glyphicon-ok-circle'
+            IN_USE:     'glyphicon glyphicon-ok-circle'
         },
         TALENT_STATUS : {
             CANCELED:  'glyphicon glyphicon-trash',

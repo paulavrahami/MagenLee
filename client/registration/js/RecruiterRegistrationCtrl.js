@@ -14,101 +14,98 @@ angular
         vm.userPasswordNew = '******';
         vm.userPasswordConf = '';
 
-        //** Zvika - Temp untile we'll fix the issue with dropbox upload
-        // Meteor.subscribe('logo.files', {
-        //     onReady: function () { vm.loadLogo (); vm.dependency.changed();},
-        //     onError: function () { console.log("onError", arguments); }
-        // });
-
-        //noinspection JSCheckFunctionSignatures
-        vm.currentUpload = new ReactiveVar(false);
-        /**
-         * @desc Show a dialog with the error;
-         * @param msgArg
-         * @param callbackArg
-         */
+     
         function showErrorMessage(msgArg, callbackArg) {
             $UserAlerts.open(msgArg, ENUM.ALERT.DANGER, true, callbackArg);
         };
 
-        //noinspection JSUnresolvedFunction
+
+        // get the recruiter information (i.e., company, admin, users, etc.)
         let currentUser = Accounts.user();
         let companyName = currentUser.profile.companyName;
-
-        //Get user company information
         Meteor.call('getCompanyByName', companyName, function (err, result) {
-                if (err) {
-                    alert('There is an error while fetching company information');
-                } else {
-                  currentCompany = result;
-                  vm.companyPassword = currentCompany.password;
-                  vm.companyKey = currentCompany._id;
-
-                  vm.recruiterRegistration = {
-                      username: currentUser.username,
-                      email: currentUser.emails[0].address,
-                      profile: {
-                          type: ENUM.USER.RECRUITER,
-                          firstName: currentUser.profile.firstName ? currentUser.profile.firstName : null,
-                          lastName: currentUser.profile.lastName ? currentUser.profile.lastName : null,
-                          role: currentUser.profile.role ? currentUser.profile.role : null,
-                          companyName: currentUser.profile.companyName ? currentUser.profile.companyName : null,
-                          companyUserType: currentUser.profile.companyUserType ? currentUser.profile.companyUserType : null,
-                          logo: currentCompany.logo  ? currentCompany.logo  : null,
-                          address: currentCompany.address ? currentCompany.address : null,
-                          phoneNumber: currentUser.profile.phoneNumber ? currentUser.profile.phoneNumber : null,
-                          country: currentCompany.country ? currentCompany.country : null,
-                          compURL: currentCompany.url ? currentCompany.url : null,
-                          linkedInId: currentCompany.linkedInId ? currentCompany.linkedInId : null,
-                          category: currentCompany.category ? currentCompany.category : null,
-                          subCategory: currentCompany.subCategory ? currentCompany.subCategory : null,
-                          size: currentCompany.size ? currentCompany.size : null,
-                          contactEmail: currentUser.profile.contactEmail ? currentUser.profile.contactEmail : currentUser.emails[0].address,
-                          tcAcknowledge: currentUser.profile.tcAcknowledge ? currentUser.profile.tcAcknowledge : null,
-                          companyLogoId: currentCompany.companyLogoId ? currentCompany.companyLogoId : null
-                      }
-                  };
-                  vm.dependency.changed();
-                }
+            if (err) {
+                alert('There is an error while fetching company information');
+            } else {
+              currentCompany = result;
+              vm.companyPassword = currentCompany.password;
+              vm.companyKey = currentCompany._id;
+              vm.recruiterRegistration = {
+                  username: currentUser.username,
+                  email: currentUser.emails[0].address,
+                  profile: {
+                      type: ENUM.USER.RECRUITER,
+                      firstName: currentUser.profile.firstName ? currentUser.profile.firstName : null,
+                      lastName: currentUser.profile.lastName ? currentUser.profile.lastName : null,
+                      role: currentUser.profile.role ? currentUser.profile.role : null,
+                      companyName: currentUser.profile.companyName ? currentUser.profile.companyName : null,
+                      companyUserType: currentUser.profile.companyUserType ? currentUser.profile.companyUserType : null,
+                      address: currentCompany.address ? currentCompany.address : null,
+                      phoneNumber: currentUser.profile.phoneNumber ? currentUser.profile.phoneNumber : null,
+                      country: currentCompany.country ? currentCompany.country : null,
+                      compURL: currentCompany.url ? currentCompany.url : null,
+                      linkedInId: currentCompany.linkedInId ? currentCompany.linkedInId : null,
+                      category: currentCompany.category ? currentCompany.category : null,
+                      subCategory: currentCompany.subCategory ? currentCompany.subCategory : null,
+                      size: currentCompany.size ? currentCompany.size : null,
+                      contactEmail: currentUser.profile.contactEmail ? currentUser.profile.contactEmail : currentUser.emails[0].address,
+                      tcAcknowledge: currentUser.profile.tcAcknowledge ? currentUser.profile.tcAcknowledge : null,
+                      companyLogoId: currentCompany.companyLogoId ? currentCompany.companyLogoId : null
+                  }
+              };
+              if (vm.recruiterRegistration.profile.companyLogoId) {
+                var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                dbx.filesGetThumbnail({
+                    path: '/img/logo/' + vm.recruiterRegistration.profile.companyLogoId,
+                    format: 'png',
+                    size: 'w64h64'
+                    })
+                    .then(function(response) {
+                        document.getElementById('viewLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                });
+              };
+              vm.dependency.changed();
+            };
         });
-        //** Zvika - Temp untile we'll fix the issue with dropbox upload
-        // $scope.onFileChange = (function (vm) {
-        //     return function (obj) {
-        //         let file = obj.files[0];
-        //         let progressInterval;
-        //         let fs = new FS.File(file);
-        //         progressInterval = setInterval(function () {
 
-        //             vm.dependency.changed();
-        //         }, 100);
-        //         vm.currentUpload.set(fs);
-        //         let uploadedFile = LogoFiles.insert(fs, function(err, success) {
 
-        //             clearInterval(progressInterval);
-        //             vm.currentUpload.set(false);
+        // Store the recruiter's logo 
+        loadLogo = function (event) {
+            var files = event.target.files;
+            file = files[0];
 
-        //             if (err) {
-        //                 setTimeout(function () {
-        //                     $UserAlerts.open("Please check the file size is less then 2Mb and the file is an image", ENUM.ALERT.DANGER, false);
-        //                 }, 0);
-        //             }
-        //             else {
-        //                 if (vm.recruiterRegistration.profile.companyLogoId && vm.logoFile) {
-        //                     LogoFiles.remove({_id:vm.recruiterRegistration.profile.companyLogoId});
-        //                 }
-        //                 vm.recruiterRegistration.profile.companyLogoId = uploadedFile._id;
+            if (file.name) {
+                document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
+            };
 
-        //                 let i = setInterval(function() {
-        //                     if (fs.url()) {
-        //                         clearInterval(i);
-        //                         setTimeout(vm.loadLogo, 100);
-        //                     }
-        //                 },100);
-        //             }
-        //         });
-        //     }
-        // })(vm);
-     
+            var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+            dbx.filesUpload({
+                path: '/img/logo/' + file.name,
+                contents: file
+                })
+                .then(function(response) {
+                    vm.recruiterRegistration.profile.companyLogoId = file.name;
+                    dbx.filesGetThumbnail({
+                        path: '/img/logo/' + file.name,
+                        format: 'png',
+                        size: 'w64h64'
+                        })
+                        .then(function(response) {
+                            document.getElementById('viewLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                            document.getElementById('uploadProgress').setAttribute("class", '');
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                    });
+                })
+                .catch(function(error) {
+                     console.log(error);
+            });
+        };
+      
 
         vm.cancelRecruiter = function () {
             $state.go("recruiter.campaigns");
@@ -181,7 +178,6 @@ angular
                               'category': vm.recruiterRegistration.profile.category,
                               'subCategory': vm.recruiterRegistration.profile.subCategory,
                               'size': vm.recruiterRegistration.profile.size,
-                              'logo': vm.recruiterRegistration.profile.logo,
                               'companyLogoId': vm.recruiterRegistration.profile.companyLogoId}},
                               function (errorArg, tempIdArg) {
                   if (errorArg) {
@@ -190,7 +186,7 @@ angular
                   else {
                   }
               });
-              vm.dependency.changed();
+              
         };
 
 
@@ -203,28 +199,13 @@ angular
               }
             });
         };
+              
 
-       
         vm.helpers({
-            logoFileLink() {
+            recruiterUpload () {
                 vm.dependency.depend();
-                return vm.logoFile ? vm.logoFile.url() : "";
-            },
-            loadProgress() {
-                vm.dependency.depend();
-                let currentUpload = vm.currentUpload.get();
-                return currentUpload.uploadProgress ? currentUpload.uploadProgress(): 0;
             }
         });
-
-
-        vm.loadLogo = function () {
-            if (vm.recruiterRegistration.profile.companyLogoId) {
-
-                vm.logoFile = LogoFiles.findOne(vm.recruiterRegistration.profile.companyLogoId);
-                vm.dependency.changed();
-            }
-        };
 
 
         vm.setUserPassword = function () {

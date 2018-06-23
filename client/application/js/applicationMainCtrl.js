@@ -9,7 +9,7 @@ angular
 
         vm.animationsEnabled = true;
         vm.isViewThumbnails  = true;
-        vm.selectedFilter    = 'MIN_SCORE';
+        vm.selectedFilter    = '';
         vm.orderBy           = 'grade';
         vm.ENUM = ENUM;
         vm.MAP = MAP;
@@ -45,7 +45,6 @@ angular
                 reactiveContext.subscribe('applicationsCampaign', () => [vm.campaignId]);
                 reactiveContext.subscribe('auditionsCampaign', () => [vm.campaignId]);
                 reactiveContext.subscribe('items');
-                reactiveContext.subscribe('cv.files');
             }
         }
 
@@ -80,10 +79,38 @@ angular
             localStorage.removeItem('selectedFilter');
         }
 
-        vm.getCVLink = function(fileId) {
-            let cvFile = CVFiles.findOne(fileId);
+        
+        vm.viewCV = function (applicationArg, indexArg) {
+            // Note: the indexArg is the application entry in the applications list on the respective HTML
 
-            return cvFile ? cvFile : {url(){},original:{name:""}};
+            // If no CV attached to the application
+            if (!applicationArg.cv) {
+                return;
+            };
+            // If the questionnaire tab already accesses and the 'View CV' button already generated - remove the button
+            // as it will be regenerated. This is to avoid buttons duplication
+            var viewCVElement = document.getElementById('viewCV'+indexArg);
+            if (viewCVElement.innerText.search('View CV') !== -1) {
+                document.getElementById('viewCV'+indexArg).removeChild(document.getElementById('viewCVButton'));
+            };
+
+            var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+            dbx.filesGetPreview({
+                path: '/txt/cv/' + applicationArg.cv,
+                })
+                .then(function(response) {
+                    // Create the 'View CV' button dynamically
+                    var viewCVAnchor = document.createElement('a');
+                    viewCVAnchor.setAttribute('href', window.URL.createObjectURL(response.fileBlob))
+                    viewCVAnchor.setAttribute('id', 'viewCVButton');
+                    viewCVAnchor.setAttribute('class', 'btn btn-sm btn-info');
+                    viewCVAnchor.setAttribute('target', '_blank');
+                    viewCVAnchor.innerHTML = 'View CV';
+                    document.getElementById('viewCV'+indexArg).appendChild(viewCVAnchor);
+                })
+                .catch(function(error) {
+                    console.log(error);
+            });
         };
 
         /**
@@ -91,17 +118,6 @@ angular
          * @returns {boolean}
          */
         vm.isRecruiter = function () {
-            // Calculate number of applicants passing minimum score
-            vm.applicantPassMinScore = 0;
-            vm.campaign = Campaigns.findOne({_id: vm.campaignId});
-            if (vm.campaign.applications.length) {
-                for  (let z = 0 ; z < vm.campaign.applications.length ; z++) {
-                    if (vm.applications[z].grade >= vm.campaign.minScore){
-                        vm.applicantPassMinScore ++;
-                    }
-                }
-            }
-
             if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type === 'Recruiter') {
                 vm.subscribe('campaignsRecruiter',() => [Meteor.user().profile.companyName]);
                 if (Meteor.user().profile.accessMode) {
@@ -178,6 +194,15 @@ angular
                 });
             })).then(function(results){
                 vm.applications = results;
+                // Calculate number of applicants passing minimum score
+                vm.applicantPassMinScore = 0;
+                if (results.length) {
+                    for  (let i = 0 ; i < results.length ; i++) {
+                        if (vm.applications[i].grade >= vm.campaign.minScore){
+                            vm.applicantPassMinScore ++;
+                        }
+                    }
+                }
                 vm.dependency.changed();
             }).catch(function() {
                 vm.applications = [];
@@ -349,7 +374,7 @@ angular
                         return vm;
                     }
                 },
-                size: 'executeAudition'
+                size: 'executeChallenge'
             });
         };
 
@@ -589,7 +614,7 @@ angular
                     if (applicationRec.states.itemsContent[contentIndex].state.validity === 100) {
                         totalsPerItem[index].totalCorrect++;
                     } else {
-                        if ((applicationRec.states.itemsContent[contentIndex].state.validity === 0) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
+                        if ((applicationRec.states.itemsContent[contentIndex].state.validity < 100) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
                         totalsPerItem[index].totalWrong++;
                         } else {
                             if (applicationRec.states.itemsContent[contentIndex].state.clicks === 0) {
@@ -822,11 +847,27 @@ angular
             };
         };
 
-        vm.afterCloseDate = function (applicationCreateDateArg) {
-            if (applicationCreateDateArg > vm.campaign.endDate) {
-                return (true);
+        vm.updateEmployedInfo = function (applicationArg) {
+            applicationArg.feedbackEmpolyedReason = "";
+            applicationArg.feedbackEmpolyedReasonDate = "";
+        };
+
+        vm.formatLinkedInUrl = function (linkedInUrlArg, indexArg) {
+            var wwwPosition = linkedInUrlArg.indexOf('www');
+            if (wwwPosition > -1) {
+                vm.formatedlinkedInURL = 'https://' + linkedInUrlArg.substring(wwwPosition);
+                var linkedInUrlPlacholder = document.getElementById('viewLinkedInUrl'+indexArg);
+                linkedInUrlPlacholder.setAttribute('href', vm.formatedlinkedInURL);
             } else {
-                return (false);
+                var linkedinPosition = linkedInUrlArg.toLowerCase().indexOf('linkedin');
+                if (linkedinPosition > -1) {
+                    vm.formatedlinkedInURL = 'https://www.' + linkedInUrlArg.substring(linkedinPosition);
+                    var linkedInUrlPlacholder = document.getElementById('viewLinkedInUrl'+indexArg);
+                    linkedInUrlPlacholder.setAttribute('href', vm.formatedlinkedInURL);
+                } else {
+                    showErrorMessage ('Wrong LinkedIn address has been defined by the talent');
+                    return;
+                };
             };
         };
 

@@ -35,7 +35,6 @@ angular
             if (vm.subscriptionCampaignOk &&
                 vm.subscriptionApplicationOk &&
                 vm.subscriptionAuditionOk &&
-                vm.subscriptionLogoOk &&
                 vm.subscriptionItemsOk &&
                 vm.subscriptionCompaniesOk &&
                 vm.subscriptionUsersOk) {
@@ -43,9 +42,6 @@ angular
                 vm.subscriptionOk = true;
 
                 vm.audition = Auditions.findOne({_id: vm.campaign.auditionId});
-
-                // vm.logoFile = LogoFiles.findOne(Meteor.users.findOne({}).profile.companyLogoId);
-                // vm.logoFile = LogoFiles.findOne(Companies.findOne({name: vm.audition.control.companyOwner}).companyLogoId);
 
                 vm.createApplication();
 
@@ -57,11 +53,20 @@ angular
                     }
                 });
 
-                // if (vm.application.states && vm.application.states.itemsContent) {
-                //     //alert('you already stated this application');
-                //     $UserAlerts.open("You already started this audition, you'll be redirect to the audition execution", ENUM.ALERT.INFO, false, vm.auditionExecute, vm.auditionExecute);
-                //     //vm.auditionExecute();
-                // }
+                var logoFile = Companies.findOne({name: vm.audition.control.companyOwner}).companyLogoId;
+                var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                dbx.filesGetThumbnail({
+                    path: '/img/logo/' + logoFile,
+                    format: 'png',
+                    size: 'w64h64'
+                    })
+                    .then(function(response) {
+                        document.getElementById('viewCompanyLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                });
+                
                 vm.dependency.changed();
             }
         };
@@ -69,16 +74,6 @@ angular
         vm.subscribe('items', () => [], {
             onReady: function () {
                 vm.subscriptionItemsOk = true;
-                vm.onSubscription();
-            },
-            onError: function () {
-                console.log("onError", arguments);
-            }
-        });
-
-        vm.subscribe('logo.files', () => [], {
-            onReady: function () {
-                vm.subscriptionLogoOk = true;
                 vm.onSubscription();
             },
             onError: function () {
@@ -146,8 +141,24 @@ angular
                     vm.applicationId = fromLocalStorage[vm.audition._id];
                 }
             }
+            // audition retry (continue from the point the talent has stopped)
             if (vm.applicationId) {
                 vm.application = Applications.findOne({_id:vm.applicationId});
+                // load an array with all items to be executed. Items will be removed from this array when executed/visited. By the end of the 
+                // audition's execution we'll know what items were not touched at all
+                vm.itemsNotDone = [];
+                for (let i = 0; i < vm.audition.items.length ; i++) {
+                    vm.itemsNotDone[i] = vm.audition.items[i].itemId;
+                };
+                // remove from the 'items not done' table the items which were already executed
+                for (let contentIndex in vm.application.states.itemsContent) {
+                    if (vm.application.states.itemsContent.hasOwnProperty(contentIndex)) {
+                        let indexOf = vm.itemsNotDone.indexOf(contentIndex);
+                        if (indexOf !== -1) {
+                            vm.itemsNotDone.splice(indexOf, 1);
+                        };
+                    }
+                }
             }
             if (!vm.application) {
                 vm.application = {};
@@ -178,8 +189,8 @@ angular
                     } else {
                         vm.applicationId = tempIdArg;
 
-                        // load an array of all items to be executed. Items will be removed from this array when executed/visited. By the end of the 
-                        // audition's execution we'll now what items where not touched at all
+                        // load an array with all items to be executed. Items will be removed from this array when executed/visited. By the end of the 
+                        // audition's execution we'll know what items were not touched at all
                         vm.itemsNotDone = [];
                         for (let i = 0; i < vm.audition.items.length ; i++) {
                             vm.itemsNotDone[i] = vm.audition.items[i].itemId;
@@ -198,10 +209,7 @@ angular
         };
 
         vm.helpers({
-            logoFileLink() {
-                vm.dependency.depend();
-                return vm.logoFile ? vm.logoFile.url() : "";
-            }
+
         });
 
         vm.applicationSave = function (itemsContentsArg, numberOfItemsArg) {
@@ -334,7 +342,7 @@ angular
                             return vm;
                         }
                     },
-                    size: 'executeAudition'
+                    size: 'executeChallenge'
                 });
             }
             //* do not allow an applicant to re-execute the audition in case it has been already

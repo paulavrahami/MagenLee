@@ -1,3 +1,5 @@
+<script src="js/Dropbox-sdk.js"></script>
+
 <form class="row" id="talentRegistration" name="talentRegistration" novalidate>
     <!-- The signUp information Header -->
     <div class="row">
@@ -34,7 +36,21 @@
             </div>
         </div>
         <div class="col-md-0-6"></div>
-    </div> 
+    </div>
+
+    <!-- <div class="row col-md-12">            
+                <div style="text-align:center">                       
+                                <label>User profile type :</label>
+                                        <input type="checkbox" id="talentType" ng-model="vm.talentRegistration.profileTypeTalent">
+                                        &nbsp;&nbsp;
+                                        <label for="talentType">Talent profile</label>
+                                        <input type="checkbox" id="domainExpertType" ng-model="vm.talentRegistration.profileTypeDomainExpert">
+                                        &nbsp;&nbsp;
+                                        <label for="domainExpertType">Domain Expert profile</label>
+                </div>               
+     </div> -->
+
+
     <!-- The tabs' content -->
     <div class="row">
         <div class="col-md-0-6"></div>
@@ -135,14 +151,14 @@
                                             ng-model="vm.talentRegistration.contactEmail" 
                                             name="contactEmail"
                                             class="form-control"  
-                                            required>
+                                            >
                             </div>
 
                             <!-- Contact Phone -->
                             <div class="form-group">
                                     <label for="talentPhone">Contact Phone</label>
                                     <input type="text"
-                                            ui-mask="(999) 999-9999"
+                                            ui-mask="(9?9?9?) 9?9?9?-9?9?9?-9?9?9?9?"
                                             ui-mask-placeholder
                                             ui-mask-placeholder-char="_"
                                             ng-model="vm.talentRegistration.contactPhone"
@@ -162,29 +178,28 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <!-- Address  -->
-                            <div class="form-group">
-                                    <label for="talentCity">City</label>
-                                    <textarea 
-                                            ng-model="vm.talentRegistration.address"
-                                            class="form-control " 
-                                            placeholder="">
-                                    </textarea>
-                            </div>
     
-                            <!-- Address Country -->
-                            <div class="form-group">
-                                    <label for="talentCountry">Country</label>
-                                    <input type="text" 
-                                            ng-model="vm.talentRegistration.country" 
-                                            name="country"
-                                            class="form-control " 
-                                            placeholder="" 
-                                            required>
-                            </div>
-                            
+                            <!-- Country -->
 
-                            
+                            <div class="form-group">
+                                <label for="talentCountry">Country</label>
+                                <select ng-model="vm.talentRegistration.country" 
+                                        name="country"
+                                        ng-change="vm.selectCities(vm.talentRegistration.country)"
+                                        class="form-control ">
+                                        <option ng-repeat="country in vm.countriesArray">{{country}}</option>
+                                </select>
+                            </div>
+
+                            <!-- City  -->
+                            <div class="form-group">
+                                <label for="talentCity">City</label>
+                                <select ng-model="vm.talentRegistration.city" 
+                                        name="city"
+                                        class="form-control ">
+                                        <option ng-repeat="city in vm.citiesArray">{{city}}</option>
+                                </select>
+                            </div>   
                         </div>
                         <div class="col-md-1"></div>
                         <div class="col-md-0-6"></div>
@@ -213,24 +228,23 @@
                             </div>
                             <!-- Language -->
                             <div class="form-group">
-                                    <label for="talentLanguage">Language</label>
-                                    <input type="text" 
-                                            ng-model="vm.talentRegistration.language" 
-                                            name="language"
-                                            class="form-control " 
-                                            placeholder="" 
-                                            required>
-                            </div>
-                            <!-- Picture URL -->
+                                <label for="talentLanguage">Language</label>
+                                <select ng-model="vm.talentRegistration.language" 
+                                        name="language"
+                                        class="form-control ">
+                                        <option ng-repeat="language in vm.languages">{{language}}</option>
+                                </select>
+                        </div>
+                            <!-- Picture -->
                             <div class="form-group">
-                                    <label for="talentPictureURL">Picture URL</label>
-                                    <input type="text" 
-                                            ng-model="vm.talentRegistration.pictureURL" 
-                                            name="pictureURL"
-                                            class="form-control " 
-                                            placeholder="" 
-                                            required>
+                                    <label for="talentPictureURL">Picture</label>
+                                    <input type="file"
+                                           class="form-control" 
+                                           onchange="loadPic(event)">
+                                    <span id="uploadProgress"></span>
+                                    <img id="viewPic" class="view-logo">       
                             </div>
+
                             
 
                         
@@ -247,37 +261,39 @@
                     </div>
                     <div class="row">
                             <div class="col-md-3">
-                                <!-- Proffesion -->
+                                <!-- Profession -->
                                 <div class="form-group">
-                                        <label for="talentProffesion">Proffesion</label>
+                                        <label for="talentProfession">Profession</label>
                                         <input type="text" 
-                                                ng-model="vm.talentRegistration.proffesion" 
-                                                name="proffesion"
+                                                ng-model="vm.talentRegistration.profession" 
+                                                name="profession"
+                                                uib-typeahead="profession for profession in vm.professions | filter:$viewValue"
                                                 class="form-control " 
-                                                placeholder="" 
-                                                required>
+                                                placeholder="Your profession (e.g. Programmer)" 
+                                                >
                                 </div>
 
                                 <!-- Expertise category -->
                                 <div class="form-group">
-                                    <label for="talentExpertizeCategory">Expertise Category</label>
+                                    <label for="talentExpertiseCategory">Expertise Category</label>
                                     <input type="text" 
-                                            ng-model="vm.talentRegistration.expertizeCategory" 
+                                            ng-model="vm.talentRegistration.expertiseCategory" 
                                             name="expertiseCategory"
+                                            uib-typeahead="expertise for expertise in vm.expertise | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="" 
-                                            required>
+                                            placeholder="Your expertise category (e.g. Telecom)" 
+                                            >
                                 </div>
 
-                                <!-- Expertize sub category -->
+                                <!-- Expertise sub category -->
                                 <div class="form-group">
-                                    <label for="talentExpertizeSubCategory">Expertise Sub Category</label>
+                                    <label for="talentExpertiseSubCategory">Expertise Sub Category</label>
                                     <input type="text" 
-                                            ng-model="vm.talentRegistration.expertizeSubCategory" 
-                                            name="expertiseSubCategory"
-                                            class="form-control " 
-                                            placeholder="" 
-                                            required>
+                                            ng-model="vm.talentRegistration.expertiseSubCategory"
+                                            uib-typeahead="subExpertise for subExpertise in vm.subExpertise | filter:$viewValue" 
+                                            class="form-control" 
+                                            placeholder="Your specific expertise (e.g. Mobile etc.)" 
+                                            >
                                 </div>
                                 <!-- Linkedin profile -->
                                 <div class="form-group">
@@ -287,22 +303,22 @@
                                                 name="linkedin"
                                                 class="form-control " 
                                                 placeholder="" 
-                                                required>
+                                                >
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
                             <div class="col-md-0-6"></div>
                             <div class="col-md-3">
-                                <!-- Skills -->
+                                <!-- Skills -->                              
                                 <div class="form-group">
                                     <label for="talentSkill1">Skill</label>
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.skill1" 
                                             name="skill1"
+                                            uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="" 
-                                            required>
-                                                    
+                                            placeholder="Your skill (e.g. Jave)" 
+                                            >                                                    
                                 </div>
 
                                 <div class="form-group">
@@ -310,9 +326,10 @@
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.skill2" 
                                             name="skill2"
+                                            uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="" 
-                                            required>
+                                            placeholder="Your skill (e.g. Automatic Testing)" 
+                                            >
                                                     
                                 </div>
 
@@ -321,9 +338,10 @@
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.skill3" 
                                             name="skill3"
+                                            uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="" 
-                                            required>
+                                            placeholder="Your skill (e.g. HTML)" 
+                                            >
                                                     
                                 </div>
                                 <div class="form-group">
@@ -331,9 +349,10 @@
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.skill4" 
                                             name="skill4"
+                                            uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="" 
-                                            required>
+                                            placeholder="Your skill (e.g. Accounting)" 
+                                            >
                                                         
                                 </div>
                                 <div class="form-group">
@@ -341,9 +360,10 @@
                                     <input type="text" 
                                             ng-model="vm.talentRegistration.skill5" 
                                             name="skill5"
+                                            uib-typeahead="skill for skill in vm.skills | filter:$viewValue"
                                             class="form-control " 
-                                            placeholder="" 
-                                            required>
+                                            placeholder="Your skill (e.g. Graphic Design)" 
+                                            >
                                                         
                                 </div>
                             </div>
@@ -360,48 +380,60 @@
                         </div>
 
                         <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-6">
 
                                         <!-- Receive Other Job Offering -->
-                                        <div class="form-group">
-                                                <label>Receive Job Offering</label>
-                                                <input type="radio"
-                                                        value = "Yes"
-                                                        ng-model="vm.talentRegistration.receiveJobOffer"
-                                                        checked>
-                                                Yes
-                                                <input type="radio"
-                                                        value = "No"
-                                                        ng-model="vm.talentRegistration.receiveJobOffer">
-                                                No
+                                        <div class="form-group row">
+                                                <div class="col-md-6">
+                                                        <label id="tooltip" data-toggle="tooltip" title="Do you want to receive Job offers from Skillera?">Receive Job Offering</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                        <input type="radio"
+                                                                value = "true"
+                                                                ng-model="vm.talentRegistration.receiveJobOfferView"
+                                                                checked>
+                                                        Yes
+                                                        <input type="radio"
+                                                                value = "false"
+                                                                ng-model="vm.talentRegistration.receiveJobOfferView">
+                                                        No
+                                                </div>
                                         </div>
 
                                         <!-- Share contact -->
-                                        <div class="form-group">
-                                                        <label>Share Contact</label>
+                                        <div class="form-group row">
+                                                <div class="col-md-6">
+                                                        <label id="tooltip" data-toggle="tooltip" title="Can Skillera share your information with other recruiters?">Share Contact</label>
+                                                </div>
+                                                <div class="col-md-6">
                                                         <input type="radio"
-                                                                value = "Yes"
-                                                                ng-model="vm.talentRegistration.shareContact"
+                                                                value = "true"
+                                                                ng-model="vm.talentRegistration.shareContactView"
                                                                 checked>
-                                                Yes
+                                                        Yes
                                                         <input type="radio"
-                                                                value = "No"
-                                                                ng-model="vm.talentRegistration.shareContact">
-                                                No
+                                                                        value = "false"
+                                                                        ng-model="vm.talentRegistration.shareContactView">
+                                                        No
+                                                </div>
                                         </div>
 
                                         <!-- Discrete Ind -->
-                                        <div class="form-group">
-                                                        <label>Discrete Indicator</label>
+                                        <div class="form-group row">
+                                                <div class="col-md-6">        
+                                                        <label id="tooltip" data-toggle="tooltip" title="Do you want to keep your information descrete when applying to jobs?">Discrete Indicator</label>
+                                                </div>
+                                                <div class="col-md-6">
                                                         <input type="radio"
-                                                                value = "Yes"
-                                                                ng-model="vm.talentRegistration.discreteInd"
+                                                                value = "true"
+                                                                ng-model="vm.talentRegistration.discreetIndView"
                                                                 checked>
-                                                Yes
+                                                        Yes
                                                         <input type="radio"
-                                                                value = "No"
-                                                                ng-model="vm.talentRegistration.discreteInd">
-                                                No
+                                                                        value = "false"
+                                                                        ng-model="vm.talentRegistration.discreetIndView">
+                                                        No
+                                                </div>
                                         </div>
                                 </div>
                         </div>
@@ -424,7 +456,7 @@
             <br>
             <div class="submit-footer">
                 <button type="submit" ng-click="vm.updateTalent()" class="btn btn-primary">Save</button>
-                <button type="submit" ng-click="vm.cancelTalent()" class="btn btn-primary">Cancel</button>
+                <button type="button" ng-click="vm.cancelTalent()" class="btn btn-primary">Cancel</button>
             </div>
         </div>
         <div class="col-md-0-6"></div>

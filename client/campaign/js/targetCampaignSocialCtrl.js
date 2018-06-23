@@ -6,9 +6,9 @@ angular
       vm.displayLinkedInActivityLog = false;
       vm.dependency = new Deps.Dependency();
       vm.campaign = $scope.campaign;
-      vm.campaign.published = vm.campaign.status == ENUM.CAMPAIGN_STATUS.DISPATCHED;
+      vm.campaign.published = vm.campaign.status == ENUM.CAMPAIGN_STATUS.PUBLISHED;
       // Default LinkedIn post data
-      var linkedInPostComment = "We are hiring!";
+      var linkedInPostComment = "e.g., We are hiring!";
       var linkedInPostTitle = vm.campaign.positionName;
       var linkedInPostDescription = vm.campaign.description;
       vm.linkedInPostComment = linkedInPostComment;
@@ -39,7 +39,7 @@ angular
       };
       
       vm.linkedInDispatch = function() {
-        if (vm.campaign.status !== ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+        if (vm.campaign.status !== ENUM.CAMPAIGN_STATUS.PUBLISHED) {
           showErrorMessage('LinkedIn posts can be shared only during the campaign period');
           vm.displayCheckMsg = false;
           return;
@@ -128,4 +128,50 @@ angular
         $uibModalInstance.dismiss('cancel');
       };
 
+      // Store the challenge image 
+      loadImage = function (event) {
+          var files = event.target.files;
+          file = files[0];
+
+          if (file.name) {
+              document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
+          };
+
+          var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+          dbx.filesUpload({
+              path: '/img/linkedIn/' + file.name,
+              contents: file
+              })
+              .then(function(response) {
+                  vm.linkedInPostSubmittedImage = file.name;
+                  // display the image
+                  dbx.filesGetThumbnail({
+                      path: '/img/linkedIn/' + file.name,
+                      format: 'png',
+                      size: 'w640h480'
+                      })
+                      .then(function(response) {
+                          document.getElementById('viewImage').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                          document.getElementById('uploadProgress').setAttribute("class", '');
+                          // get the uploaded image url
+                          dbx.sharingCreateSharedLinkWithSettings ({
+                              path: '/img/linkedIn/' + file.name
+                              })
+                              .then(function(response) {
+                                  vm.linkedInPostSubmittedImageUrl = response.url;
+                              })
+                              .catch(function(error) {
+                                  console.log(error);
+                          });
+                      })
+                      .catch(function(error) {
+                          console.log(error);
+                  });
+              })
+              .catch(function(error) {
+                   console.log(error);
+          });
+      };
+      
+      
     });

@@ -4,7 +4,7 @@
     <div class="col-md-0-6"></div>
     <div class="col-md-11">
             <div class="row" ng-show="vm.doSubscription()">
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                     <ul class="navbar-nav nav-header-menu">
                             <li class="nav-item marketplace-menu">
                                     <a class="nav-link marketplace-menu-item" ui-sref="mainChallenges"><mark>My Challenges</mark></a>
@@ -14,8 +14,7 @@
                                     <a class="nav-link marketplace-menu-item" ui-sref="#">My Account</a>
                             </li>
                     </ul>
-                </div>
-                      
+                </div> -->
                 <div class="col-md-12" ng-hide="vm.createChallengeInd">
                     <nav class="navbar navbar-default" role="navigation">
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -57,11 +56,22 @@
                                             Status
                                         </button>
                                     </div>
+                                    <div class="btn-group">
+                                            <button class="btn btn-sm btn-primary" type="button" ng-if="!vm.challengesPerSkill" ng-click="vm.setChallengesPerSkill()">
+                                                    <span ng-class=""></span>
+                                                    Challenges Per Skill
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" type="button" ng-if="vm.challengesPerSkill" ng-click="vm.setAllChallenges()">
+                                                    <span ng-class=""></span>
+                                                    All Challenges
+                                            </button>
+
+                                    </div>
                                 </div>
                             </form>
                             <form class="navbar-form navbar-right" role="search">
                                 <div class="form-group">
-                                    <button class="btn btn-sm btn-primary" type="button" ng-click ="vm.setCreateChallenge()">New Challenge</button>
+                                    <button class="btn btn-sm btn-primary" type="button" ng-click ="vm.createNewItem('')">New Challenge</button>
                                      <!-- <button class="btn btn-sm btn-primary" type="button" ui-sref = "talentCreateChallenge">New Challenge</button> -->
                                 </div>
                             </form>
@@ -69,44 +79,64 @@
                     </nav>
                 </div>
             </div>
+            <div class="row" ng-show="vm.isViewThumbnails && !vm.createChallengeInd && vm.challengesPerSkill && !vm.viewPerSkillInd">
+                    <div class="col-md-3" ng-repeat="skill in vm.challengesPerSkillArray | filter:vm.search | orderBy: vm.orderBy">
+                            <div class="thumbnail">
+                                <div class="row">
+                                    <div class="col-md-6 camaign-number" ng-if="skill.count > 1">
+                                        ({{skill.count}} challenges)
+                                    </div>
+                                    <div class="col-md-6 camaign-number" ng-if="skill.count === 1">
+                                            ({{skill.count}} challenge)
+                                        </div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="job-positionName">
+                                        {{skill.skill}}
+                                    </div>
+                                </div>
+                                <div class="row col-md-12">
+                                        <p class="job-description">{{skill.description}}&nbsp;</p>
+                                </div>
 
-            <div class = "row itemCreate cts ctsArea q-border" id="btn-ctsArea" ng-show="vm.createChallengeInd">
-            
-                    <div class = "col-md-2 cts-types-holder">
-                        <div>
-                                    <a class="btn-cts-close btn btn-primary fa fa-arrow-left fa-1x"
-                                     ng-click="vm.cancelNewChallenge()"></a>
-                        </div>
-                        <hr style="border-color:#FFF">
-                        <ul class = "itemCreateUl">
-                            <li class = "itemCreateLi"
-                                ng-click="vm.setSelected(challengesType)"
-                                ng-repeat="(key, challengesType) in vm.challengesTypes"
-                                ng-class="challengesType.selected ? 'selected':''">{{key}}</li>
-                        </ul>
-                    </div>
-                
-                    <div class="cts-frames-holder col-md-8">
-                            <div class="templateItem" ng-repeat="template in vm.templates">
-                                <h4>{{template.name}}</h4>
-                                <div class="wrapIfram templateIframeZoom" ng-bind-html="trust(vm.getAuditionHtml($index, template._id))"></div>
-                                <button class="btn btn-primary" ng-click="vm.createNewItem(template._id)">Add</button>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                        In Work: {{skill.countInWork}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        Available: {{skill.countAvailable}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        In Use: {{skill.countInUse}}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>
+                                            <a class="btn btn-primary btn-sm" ng-click ="vm.createNewItem(skill.skill)">Add</a>
+                                            <a class="btn btn-primary btn-sm" ng-click="vm.viewPerSkill(skill.skill)">View</a>
+                                        </p>
+                                    </div>
+                                </div> 
+                                
                             </div>
+                    </div>
+            </div>  
 
-                </div>
-                    
-            </div>
 
-            <div class="row" ng-show="vm.isViewThumbnails" ng-hide="vm.createChallengeInd">
-                <div class="col-md-3" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">
+
+            <!-- For all items per chosen skill of the talent-DE -->
+            <div class="row" ng-show="vm.isViewThumbnails && !vm.createChallengeInd && !vm.challengesPerSkill && vm.viewPerSkillInd">
+                <div class="col-md-3" ng-repeat="item in vm.skillsFilter | filter:vm.search | orderBy: vm.orderBy">
                     <div class="thumbnail">
-                        
                         <div class="row">
                             <div class="col-md-6 camaign-number">
                                 {{item.complexity}}
                             </div>
                             <div class="col-md-6 item-time">
-                                <span>{{item.itemDuration | date:"HH:mm:ss" : 'UTC'}}</span>
+                                <span ng-if="item.usage">({{item.usage}})</span>
+                                <!-- <span>{{item.itemDuration | date:"HH:mm:ss" : 'UTC'}}</span> -->
                             </div>
                         </div>
                         <div class="row col-md-12">
@@ -116,9 +146,9 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.CLOSED">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.CLOSED"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
+                                <!-- <h5 class="big-status">{{item.status}}&nbsp;&nbsp;<span></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5> -->
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.IN_WORK"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
-                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.ASSIGNED">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.ASSIGNED"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
+                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_USE">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.IN_USE"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.AVAILABLE">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.AVAILABLE"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                                 <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.NEW">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.NEW"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
                             </div>
@@ -130,16 +160,60 @@
                             <div class="col-md-12">
                                 <p>
                                     <a class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
-                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Allow</a>
-                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.deleteItem(item)">Delete</a>
+                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Publish</a>
+                                    <a ng-if="(item.status === vm.ENUM.ITEM_STATUS.IN_WORK)
+                                    || (item.status === vm.ENUM.ITEM_STATUS.AVAILABLE)" class="btn btn-primary btn-sm" ng-click="vm.deleteItem(item)">Delete</a>
                                 </p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-            <div class="row" ng-hide="vm.isViewThumbnails || vm.createChallengeInd">
+
+<!-- For all items of the talent-DE -->
+            <div class="row" ng-show="vm.isViewThumbnails && !vm.createChallengeInd && !vm.challengesPerSkill && !vm.viewPerSkillInd">
+                <div class="col-md-3" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">
+                    <div class="thumbnail">
+                        <div class="row">
+                            <div class="col-md-6 camaign-number">
+                                {{item.complexity}}
+                            </div>
+                            <div class="col-md-6 item-time">
+                                <span ng-if="item.usage">({{item.usage}})</span>
+                                <!-- <span>{{item.itemDuration | date:"HH:mm:ss" : 'UTC'}}</span> -->
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="job-positionName">
+                                {{item.skill}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- <h5 class="big-status">{{item.status}}&nbsp;&nbsp;<span></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5> -->
+                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.IN_WORK"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
+                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_USE">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.IN_USE"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
+                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.AVAILABLE">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.AVAILABLE"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
+                                <h5 class="big-status" ng-if="item.status === vm.ENUM.ITEM_STATUS.NEW">{{item.status}}&nbsp;&nbsp;<span ng-class="vm.MAP.ITEM_STATUS.NEW"></span>&nbsp;&nbsp;&nbsp;{{item.statusDate | date}}</h5>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <p class="job-description">{{item.description}}&nbsp;</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                    <a class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
+                                    <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Publish</a>
+                                    <a ng-if="(item.status === vm.ENUM.ITEM_STATUS.IN_WORK)
+                                    || (item.status === vm.ENUM.ITEM_STATUS.AVAILABLE)" class="btn btn-primary btn-sm" ng-click="vm.deleteItem(item)">Delete</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="!vm.isViewThumbnails && !vm.createChallengeInd && !vm.challengesPerSkill && !vm.viewPerSkillInd">
                 <div class="panel-group col-md-12">
                     <div class="panel panel-default" ng-repeat="item in vm.items | filter:vm.search | orderBy: vm.orderBy">
                         <div>
@@ -161,8 +235,8 @@
                                       <h5>{{item.statusDate | date}}</h5>
                                     </div>
                                     <div class="col-md-4">
-                                        <p><a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
-                                           <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Allow</a>
+                                        <p><a class="btn btn-primary btn-sm" ng-click="vm.openEditItem(item._id)">Detail</a>
+                                           <a ng-if="item.status === vm.ENUM.ITEM_STATUS.IN_WORK" class="btn btn-primary btn-sm" ng-click="vm.allowItem(item)">Publish</a>
                                            <a ng-if="(item.status === vm.ENUM.ITEM_STATUS.IN_WORK)
                                             || (item.status === vm.ENUM.ITEM_STATUS.AVAILABLE)" class="btn btn-primary btn-sm" ng-click="vm.deleteItem(item)">Delete</a>
                                         </p>
@@ -174,7 +248,9 @@
                         <div id="panel-element-{{$index}}" class="panel-collapse collapse" aria-expanded="false">
                             <div class="panel-body" >
                               <div class="col-md-12">
-                                  <p>{{campaign.description}}</p>
+                                  <p><b>The challenge : </b>{{item.content.question}}</p>
+                                  <p ng-if="item.content.statement"><b>Free text :</b> {{item.content.statement}}</p>
+                                  <p ng-if="item.content.hint"><b>Hint :</b> {{item.content.hint}}</p>
                               </div>
                             </div>
                         </div>

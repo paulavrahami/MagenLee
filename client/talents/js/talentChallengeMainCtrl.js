@@ -1,6 +1,6 @@
 angular
     .module('skillera')
-    .controller('ChallengeMainCtrl', function($state,$stateParams,$scope,$reactive,$window, dbhService, $uibModal, $UserAlerts, ENUM, MAP,$promiser, $http,$sce,moment) {
+    .controller('talentChallengeMainCtrl', function($state,$stateParams,$scope,$reactive,$window, dbhService, $uibModal, $UserAlerts, ENUM, MAP,$promiser, $http,$sce,moment) {
         $scope.trust = $sce.trustAsHtml;
 
         let vm = this;
@@ -13,19 +13,19 @@ angular
         vm.animationsEnabled = true;
         vm.isViewThumbnails  = true;
         vm.selectedStatus    = undefined;
-        vm.orderBy           = 'positionName';
+        vm.orderBy           = 'skill';
         vm.createChallengeInd = false;
+        vm.challengesPerSkill = true;
+        vm.viewPerSkillInd = false;
         vm.ENUM = ENUM;
         vm.MAP = MAP;
         vm.complexity = "";
         vm.complexityArray = [ENUM.EXPERIENCE.up1, ENUM.EXPERIENCE.up2, ENUM.EXPERIENCE.up3, ENUM.EXPERIENCE.up4];
-        vm.itemsOrderArray = [ENUM.AUDITION_ORDER.SEQUEL]; //ENUM.AUDITION_ORDER.RANDOM,
         vm.timeOffset = 0;
 
 
         vm.dependency = new Deps.Dependency();
 
-        vm.auditionGenerationOption = false;
         vm.addChallengeOption = false;
         vm.createChallengeOption = false;
 
@@ -34,6 +34,8 @@ angular
 
         vm.states = {};
         vm.skills = [];
+        vm.challengesPerSkillArray = [];
+        vm.challengesPerSkillArray1 = [];
 
         /**
          * @desc show a dialog with the message;
@@ -77,15 +79,46 @@ angular
              * @returns {*}
              */
             items () {
-                vm.dependency.depend();
+                vm.dependency.depend();              
                 
-               
                 return vm.items;
+            },
+            challengesPerSkillArray () {
+                vm.dependency.depend();
+
+                
+                return vm.challengesPerSkillArray;
             },
             templates () {
                 vm.dependency.depend();
                 if (vm.selectedChallengesTypes)
                     return TemplatesCollection.find({type:vm.selectedChallengesTypes.type});
+            },
+            skills (){
+                vm.dependency.depend();
+      
+                (new Promise((resolve, reject) => {
+                  let skills;
+                  let conditions = {};
+                  conditions = {$and:[
+                      {"status": ENUM.SKILL_STATUS.ACTIVE}
+                      ]};
+      
+                  Meteor.call('skills.getSkills', conditions, (err, res) => {
+                      if (err) {
+                          reject();
+                      } else {
+                          resolve(res);
+                      }
+                  });
+              })).then(function(results){
+                  vm.skillsRef = results;                  
+                  vm.dependency.changed();
+              }).catch(function() {
+                  vm.skillsRef = [];
+              });
+                                    
+                return vm.skillsRef;
             },
 
             /**
@@ -111,9 +144,11 @@ angular
 
          vm.doSubscription  = function () {
             
+                        vm.subscribe('allAuditions', () => []);
+                        vm.subscribe('skills', () => [])
                         if (Meteor.user() && Meteor.user().profile) {
-                            // reactiveContext.subscribe('itemsByAuthorId', () => [Meteor.user()._id]);
-                            vm.subscribe('itemsByAuthorId',() => [Meteor.user()._id]);
+                            // vm.subscribe('itemsByAuthorId',() => [Meteor.user()._id]);
+                            vm.subscribe('itemsByAuthorId',() => [Meteor.user().profile.talentId]);
                         }
                         return true;
 
@@ -121,6 +156,16 @@ angular
 
         vm.setCreateChallenge = function () {
             vm.createChallengeInd = true;
+        };
+
+        vm.setChallengesPerSkill = function () {
+            vm.challengesPerSkill = true;
+            vm.viewPerSkillInd = false;
+        };
+
+        vm.setAllChallenges = function () {
+            vm.challengesPerSkill = false;
+            vm.viewPerSkillInd = false;
         };
 
         vm.cancelNewChallenge = function () {
@@ -161,7 +206,7 @@ angular
                 vm.selectedChallengesTypes = vm.challengesTypes[keysArray[0]];
                 vm.selectedChallengesTypes.selected = true;
 
-                vm.saveEditItem();
+                //vm.saveEditItem();
 
                 vm.dependency.changed();
             }
@@ -195,23 +240,25 @@ angular
                 localStorage.removeItem('selectedStatus');
             }
 
+           
+
             (new Promise((resolve, reject) => {
                 let items;
+                let challengesPerSkillArray;
                 let conditions = {};
 
                 if (vm.selectedStatus) {
                     conditions = {$and: [
-                        {authorId: Meteor.user()._id},
+                        {authorId: Meteor.user().profile.talentId},
                         {status: vm.ENUM.ITEM_STATUS[vm.selectedStatus]}
                     ]};
                 }
                 else {
                     conditions = {$and: [
-                        {authorId: Meteor.user()._id},
-                        {$or:[{status: {$ne: ENUM.ITEM_STATUS.TERMINATED},status: {$ne: ENUM.ITEM_STATUS.NEW}}]}
+                        {authorId: Meteor.user().profile.talentId},
+                        {status: {$ne: ENUM.ITEM_STATUS.NEW}}
                     ]};
-                }
-                // conditions = {"authorId": Meteor.user()._id,"status": { '$ne': ENUM.ITEM_STATUS.NEW }};
+                };
     
                 Meteor.call('items.getItemsSummary', conditions, (err, res) => {
                     if (err) {
@@ -222,13 +269,106 @@ angular
                 });
             })).then(function(results){
                 vm.items = results;
-                
+
+                vm.tempSkills = [];
+                vm.challengesPerSkillArray1 = [];
+                vm.challengesPerSkillArray = [];
+                              
+                 if (vm.items.length) {
+
+                     for  (let z = 0 ; z < vm.items.length ; z++) {
+                        if (vm.tempSkills.length) {
+                            vm.skillFound = false;
+                            
+                            for  (let x = 0 ; x < vm.tempSkills.length ; x++) {
+                                if (vm.tempSkills[x].skill === vm.items[z].skill) {
+                                    vm.tempSkills[x].count = vm.tempSkills[x].count + 1;
+                                     if (vm.items[z].status === ENUM.ITEM_STATUS.IN_WORK) {
+                                         vm.tempSkills[x].countInWork = vm.tempSkills[x].countInWork + 1;
+                                     };
+                        
+                                     if (vm.items[z].status === ENUM.ITEM_STATUS.AVAILABLE) {
+                                         vm.tempSkills[x].countAvailable = vm.tempSkills[x].countAvailable + 1;
+                                     };
+                                
+                                     if (vm.items[z].status === ENUM.ITEM_STATUS.IN_USE) {
+                                         vm.tempSkills[x].countInUse = vm.tempSkills[x].countInUse + 1;
+                                     };
+                                    vm.skillFound = true;
+                                };
+                            };
+                            if (!vm.skillFound) {
+                                //Find skill description
+                                vm.skillDesc = ''
+                                for (let y = 0;y<vm.skillsRef.length;y++){
+                                    if (vm.skillsRef[y].name === vm.items[z].skill){
+                                          vm.skillDesc = vm.skillsRef[y].description;
+                                    };
+                                };
+                                vm.tempSkills[vm.tempSkills.length] = {
+                                    skill : vm.items[z].skill,
+                                    description : vm.skillDesc,
+                                    count : 1,
+                                    countInWork : 0,
+                                    countAvailable : 0,
+                                    countInUse : 0
+                                };
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.IN_WORK) {
+                                     vm.tempSkills[vm.tempSkills.length - 1].countInWork = 1;
+                                 };
+                    
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.AVAILABLE) {
+                                     vm.tempSkills[vm.tempSkills.length - 1].countAvailable = 1;
+                                 };
+                            
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.IN_USE) {
+                                     vm.tempSkills[vm.tempSkills.length - 1].countInUse = 1;
+                                 };
+                            };
+                        } else {
+                            //Find skill description
+                            vm.skillDesc = '';
+                            
+                            for (let y = 0;y<vm.skillsRef.length;y++) {
+                                    
+                                    if (vm.skillsRef[y].name === vm.items[z].skill){
+                                        
+                                        vm.skillDesc = vm.skillsRef[y].description;
+                                        };
+                            };
+                            vm.tempSkills[0] = {
+                                skill : vm.items[z].skill,
+                                description : vm.skillDesc,
+                                count : 1,
+                                countInWork : 0,
+                                countAvailable : 0,
+                                countInUse : 0
+                            };
+                            
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.IN_WORK) {
+                                     vm.tempSkills[0].countInWork = 1;
+                                 };
+                    
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.AVAILABLE) {
+                                     vm.tempSkills[0].countAvailable = 1;
+                                 };
+                            
+                                 if (vm.items[z].status === ENUM.ITEM_STATUS.IN_USE) {
+                                     vm.tempSkills[0].countInUse = 1;
+                                 };
+
+                        }
+                     };
+                   
+                 };
+                vm.challengesPerSkillArray = vm.tempSkills;
                 vm.dependency.changed();
             }).catch(function() {
                 vm.items = [];
+                
             });
 
-            
+           
         };
 
         /**
@@ -243,7 +383,7 @@ angular
          * @Set database status of Dispatch to On Air;
          */
         vm.statusFilter = function (statusArg) {
-            if (statusArg === 'Dispatched'){
+            if (statusArg === ENUM.CAMPAIGN_STATUS.PUBLISHED){
               return 'On Air'
             } else {
               return statusArg
@@ -265,13 +405,13 @@ angular
          * @param campaignArg
          * @returns {boolean}
          */
-        vm.search = function(campaignArg){
+        vm.search = function(itemArg){
             if (!vm.query) {
                 return true;
             }
             else {
                 let wordsString = '^(?=.*' + vm.query.toLowerCase().split(" ").join(')(?=.*') + ')';
-                let testString  = (campaignArg.num + ' ' + campaignArg.title + ' ' + campaignArg.positionName + ' ' + campaignArg.status).toLowerCase();
+                let testString  = (itemArg.complexity + ' ' + itemArg.skill + ' ' + itemArg.description + ' ' + itemArg.status).toLowerCase();
                 return (new RegExp(wordsString).test(testString));
             }
         };
@@ -340,22 +480,7 @@ angular
 
        };
 
-       /**
-         * Items dynamic edit area:
-         */
 
-        /**
-         * @desc Add an element to the content of an item build dynamically;
-         * @param keyArg
-         */
-        vm.addToContentArray = function(keyArg) {
-
-            if (!vm.editItem.content[keyArg]) {
-                vm.editItem.content[keyArg] = [];
-            }
-            vm.editItem.content[keyArg].push('');
-            vm.saveEditItem();
-        };
 
         vm.registerEditItem = function () {
 
@@ -368,87 +493,10 @@ angular
                 return
             };
             
-            // Challenge content's checks according to the different templates
-            switch (vm.editTemplate._id) {
-                case "57f7a8406f903fc2b6aae39a" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if ((!vm.editItem.content["1st Answer"] || vm.editItem.content["1st Answer"] && !vm.editItem.content["1st Answer"].answer) ||
-                        (!vm.editItem.content["2nd Answer"] || vm.editItem.content["2nd Answer"] && !vm.editItem.content["2nd Answer"].answer) ||
-                        (!vm.editItem.content["3rd Answer"] || vm.editItem.content["3rd Answer"] && !vm.editItem.content["3rd Answer"].answer) ||
-                        (!vm.editItem.content["4th Answer"] || vm.editItem.content["4th Answer"] && !vm.editItem.content["4th Answer"].answer)) {
-                        showErrorMessage("All answers should be defined");
-                        return
-                    };
-                    let i=0;
-                    vm.editItem.content["1st Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["2nd Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["3rd Answer"].correct ? i++ : i=i;
-                    vm.editItem.content["4th Answer"].correct ? i++ : i=i;
-                    if (i===0) {
-                        showErrorMessage("The Challenge's correct answer should be defined");
-                        return;
-                    };
-                    if (i>1) {
-                        showErrorMessage("Only one correct answer can be defined for the challenge");
-                        return;  
-                    };
-                    break;
-
-                case "57f7a8406f903fc2b6aae49a" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if (!vm.editItem.content.answers || !vm.editItem.content.results) {
-                        showErrorMessage("The challenge's answers and results should be defined");
-                        return;
-                    };
-                    if (
-                        vm.editItem.content.answers.length !== vm.editItem.content.results.length) {
-                        showErrorMessage("The challenge's number of answers and results should match");
-                        return;
-                    };
-                    for (i=0; i < vm.editItem.content.results.length; i++) {
-                        if (vm.editItem.content.results[i] > 100) {
-                            showErrorMessage("Answer's result can not be greater than 100");
-                            return;
-                        };
-                    };
-                    break;
-
-                case "5814b536e288e1a685c7a451" :
-                    if (!vm.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if ((!vm.editItem.content['1st Button Text']) ||
-                        (!vm.editItem.content['2nd Button Text']) ||
-                        (vm.editItem.content['1st Button Score'] === null) ||
-                        (vm.editItem.content['1st Button Score'] === undefined) ||
-                        (vm.editItem.content['2nd Button Score'] === null) ||
-                        (vm.editItem.content['2nd Button Score'] === undefined)) {
-                        showErrorMessage("All challenge's buttons should be defined");
-                        return;
-                    };
-                    if (((vm.editItem.content['1st Button Score']) && (vm.editItem.content['1st Button Score'] > 100)) ||
-                        ((vm.editItem.content['2nd Button Score']) && (vm.editItem.content['2nd Button Score'] > 100))) {
-                        showErrorMessage("Button's score can not be greater than 100");
-                        return;
-                    };
-                    if ((vm.editItem.content['1st Button Score'] !== 100) &&
-                        (vm.editItem.content['2nd Button Score'] !== 100)) {
-                        showErrorMessage("At leaset one button's score should be equal to 100");
-                        return;
-                    };
-                    break;
-            };
 
             if (vm.editItem.status == ENUM.ITEM_STATUS.NEW) {
                 vm.editItem.status = ENUM.ITEM_STATUS.IN_WORK;
-                vm.saveEditItem();
+               // vm.saveEditItem();
             }
             vm.editItem = null;
             if (vm.modalInstance) {
@@ -457,103 +505,50 @@ angular
                 $state.go('mainChallenges');
             };
         };
-        
-        vm.cancelEditItem = function () {
-        
-            // if (vm.editItem.status == ENUM.ITEM_STATUS.NEW) {
-            //     vm.removeItem(vm.editItem._id);
-            // }
-            // else {
-                 vm.editItem = vm.editItemForCancel;
-                 vm.saveEditItem();
-            //};
-        // vm.editItem = null;
-        if (vm.modalInstance) {
-            vm.modalInstance.close();
-            vm.changeSelectedStatus(vm.selectedStatus);
-            $state.go('mainChallenges');
-            };
-        };
 
-        /**
-         * @desc Remove the last element from the content of an item build dynamically;
-         * @param keyArg
-         */
-        vm.removeFromContentArray = function(keyArg) {
+        vm.viewPerSkill = function (skillArg) {
 
-            if (vm.editItem.content[keyArg]) {
-                vm.editItem.content[keyArg].splice(-1);
-                vm.saveEditItem();
-            }
-        };
+            vm.viewPerSkillInd = true;
+            vm.challengesPerSkill = false;
+            vm.skillInd = 0;
+            vm.skillsFilter = [];
 
-        vm.closeEditItem = function () {
-            if (vm.modalInstance) {
-                vm.modalInstance.close();
-                $state.go('mainChallenges');
-            };
-        };
-
-        /**
-         * @desc is array fn for UI;
-         * @param value
-         */
-        vm.isArray = function (value) {
-            return angular.isArray(value);
-        };
-        /**
-         * @desc is string fn for UI;
-         * @param value
-         */
-        vm.isString = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "string";
-        };
-        /**
-         * @desc is number fn for UI;
-         * @param value
-         */
-        vm.isNumber = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "number";
-        };
-        /**
-         * @desc is boolean fn for UI;
-         * @param value
-         */
-        vm.isBoolean = function (value) {
-            return typeof(value) !== "object" && String(value).toLowerCase() === "boolean";
-        };
-        /**
-         * @desc is object fn for UI;
-         * @param value
-         */
-        vm.isObject = function (value) {
-            return typeof(value) === "object" && String(value).toLowerCase() !== "string" && String(value).toLowerCase() !== "number" && String(value).toLowerCase() !== "boolean";
+            for (let skillIndex = 0;skillIndex < vm.items.length;skillIndex++) {
+                                    
+                if (vm.items[skillIndex].skill === skillArg){
+                    
+                    vm.skillsFilter[vm.skillInd] = vm.items[skillIndex];
+                    vm.skillInd = vm.skillInd + 1;
+                    };
         };
 
 
+        };
         /**
          * @desc Add a new item to the audition;
          * @param templateIdArg 
          */
-        vm.createNewItem = function (templateIdArg) {
+        vm.createNewItem = function (skillArg) {
+            var defaultTemplateId = '57f7a8406f903fc2b6aae39a'; /*This is the default template to be displayed*/
+            vm.editTemplate = TemplatesCollection.findOne({_id:defaultTemplateId});
             vm.createChallengeInd = false;
-            vm.editTemplate = TemplatesCollection.findOne({_id:templateIdArg});
 
             let editItem = {
                 "status" : ENUM.ITEM_STATUS.NEW,
                 "statusDate" : new Date(),
                 "skill" : "",
                 "complexity" : "",
+                "maxScore" : 0,
                 "itemDuration" : 30000,
                 "title": "",
                 "description": "",
                 "tags" : [],
-                "templateId" : templateIdArg,
+                "templateId" : defaultTemplateId, /*defualt template*/
                 "content" : {},
                 "usage" : 0,
                 "lastAssignedDate" : "",
                 "authorType" : ENUM.ITEM_AUTHOR_TYPE.TALENT,
-                "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID*/
+                "authorId" : Meteor.user().profile.talentId, /*Zvika - This should be changed in the future to be the Subscriber ID*/
                 "shareInd" : true, /*Zvika - Currently this is the default and cannot be changed. In the future it should be taken from the Recruiter profile*/
                 "control" : {
                     "createdBy" : Meteor.user()._id,
@@ -562,15 +557,16 @@ angular
                     "updateDate" : new Date()
                 }
             };
+            if (skillArg) {
+                editItem.skill = skillArg;
+            };
             
             editItem._id = Items.insert(angular.copy(editItem));
 
-             auditionItemArrayEntry = {itemId:editItem._id, maxScore:0};
-            // vm.audition.items.push(angular.copy(auditionItemArrayEntry));
-            // vm.saveAudition();
+            auditionItemArrayEntry = {itemId:editItem._id, maxScore:0};
+            
             vm.openEditItem(angular.copy(auditionItemArrayEntry));
-            //** close the cts area for the "create challenge" option
-            // auditionEdit.showCtsAreaCreateChallenge = false;
+            
         };
 
        /**
@@ -592,19 +588,20 @@ angular
 
 
         vm.openEditItem = function (itemIdArg) {
-                        console.log('in open edit item');
+                        
             
                         vm.selectEditItem(itemIdArg);
-            
-                        function loadModal () {
+                        // Invoke the item modal in create audition mode
+                        $scope.challengeCreateMode = ENUM.CHALLENGE_CREATE_MODE.POOL;
             
                             vm.modalInstance = $uibModal.open({
                                 animation: true,
-                                templateUrl: 'client/talents/view/editItem.html',
-                                controller: 'editItemCtrl',
-                                controllerAs: 'editItem',
+                                templateUrl: 'client/challenge/view/challengeEdit.html',
+                                controller: 'challengeEditCtrl',
+                                controllerAs: 'challengeEdit',
                                 keyboard: false,
                                 backdrop  : 'static',
+                                scope: $scope,
                                 resolve: {
                                     ChallengeMainCtrl : function () {
             
@@ -613,9 +610,31 @@ angular
                                 },
                                 size: 'xl'
                             });
-                        }
-                        loadModal();
-                        vm.dependency.changed();
+                                        // handle the modal promise
+                            vm.modalInstance.result.then(function (results) {
+                                vm.changeSelectedStatus(vm.selectedStatus);
+                                vm.dependency.changed();
+                                switch (results) {
+                                    case ENUM.MODAL_RESULT.SAVE: {
+                                        break;
+                                    };
+                                    case ENUM.MODAL_RESULT.CANCEL: {
+                                         if ((vm.editItem.status === ENUM.ITEM_STATUS.IN_WORK) || (vm.editItem.status === ENUM.ITEM_STATUS.AVAILABLE)) {
+                                            vm.editItem = null;
+                                        };
+                                        break;
+                                    };
+                                    case ENUM.MODAL_RESULT.CLOSE: {
+                                        
+                                        if ((vm.editItem.status === ENUM.ITEM_STATUS.IN_WORK) || (vm.editItem.status === ENUM.ITEM_STATUS.AVAILABLE)) {
+                                            vm.editItem = null;
+                                        };
+                                        break;
+                                    };
+                                    default:
+                                        break;
+                                };
+                            });
                     };
 
         /**
@@ -624,28 +643,46 @@ angular
          */
         vm.deleteItem = function (itemArg){
 
-            $UserAlerts.prompt(
-                'Are you sure?',
-                ENUM.ALERT.INFO,
-                true,
-                function () {
-                    let item = angular.copy(itemArg);
-                    let tempId   = item._id;
+            vm.readyToBeDeleted = false;
+            itemUsed = '';
+            //Check if the available item is already being used in a non published audition
+            if (itemArg.status === ENUM.ITEM_STATUS.AVAILABLE) {
+                itemUsed = Auditions.findOne({"items.itemId": itemArg._id});
+                if (itemUsed) {
+                    vm.readyToBeDeleted = false;    
+                } else {
+                    vm.readyToBeDeleted = true;
+                }
+            } else {
+                vm.readyToBeDeleted = true;
+            };
 
-                    item.status     = ENUM.ITEM_STATUS.TERMINATED;
+            if (vm.readyToBeDeleted){
+                        $UserAlerts.prompt(
+                            'Are you sure you want to delete the challenge?',
+                            ENUM.ALERT.INFO,
+                            true,
+                            function () {
+                                let item = angular.copy(itemArg);
+                                // let tempId   = item._id;
 
-                    delete item._id;
-                    Items.update({_id: tempId},{$set: item});
+                                // item.status     = ENUM.ITEM_STATUS.CANCELED;
 
+                                // delete item._id;
+                                // Items.update({_id: tempId},{$set: item});
+                                Items.remove({_id:item._id});
 
-                    vm.changeSelectedStatus(vm.selectedStatus);
-            });
+                                vm.changeSelectedStatus(vm.selectedStatus);
+                        });
+                    } else {
+                        showErrorMessage("The challenge is in use, therefore can not be deleted");
+                    }
         };
 
         vm.allowItem = function (itemArg){
 
             $UserAlerts.prompt(
-                'Are you sure?',
+                'Are you sure you want to publish the Challenge?',
                 ENUM.ALERT.INFO,
                 true,
                 function () {
@@ -662,30 +699,7 @@ angular
             });
         };
 
-        /**
-         * @desc undelete the campaign by changing its status;
-         * @param campaignArg
-         */
-        vm.undeleteCampaign = function (campaignArg) {
-            $UserAlerts.prompt(
-                'Are you sure?',
-                ENUM.ALERT.INFO,
-                true,
-                function () {
-                    let campaign = angular.copy(campaignArg);
-                    let tempId   = campaign._id;
 
-                    campaign.status     = ENUM.CAMPAIGN_STATUS.IN_WORK;
-                    campaign.skills     = angular.copy(campaign.skills);
-                    campaign.emailList  = angular.copy(campaign.emailList);
-
-                    delete campaign._id;
-                    Campaigns.update({_id: tempId},{$set: campaign});
-
-                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETE, 'Campaign [' + campaign.num + '] Deleted');
-                    vm.changeSelectedStatus(vm.selectedStatus);
-                });
-        };
 
                 /**
          * @desc The pseudo audition is used to display all current templates;
@@ -780,32 +794,33 @@ angular
          * @desc Save the current edit item, calculate it's maxScore
          * and the audition total time and update the audition.
          */
-        vm.saveEditItem = () => {
-            //** Initialize the audition's summary table
-            vm.summery = {
-                skills:{},
-                score:0,
-                total:0,
-                time: vm.timeOffset
-            };
-            vm.skills.every(function (skill) {
-                vm.summery.skills[skill.type.toLowerCase()] = {
-                    time: 0,
-                };
-                vm.complexityArray.every(function (complexity) {
-                    vm.summery.skills[skill.type.toLowerCase()][complexity] = 0;
-                    vm.summery[complexity] = 0;
-                    vm.summery.skills[skill.type.toLowerCase()].score = 0;
-                    vm.summery.skills[skill.type.toLowerCase()].total = 0;
-                    vm.summery.skills[skill.type.toLowerCase()].time = vm.timeOffset;
-                    return true;
-                });
-                return true;
-            });
-            if (vm.editItem){ 
-                vm.saveItem(vm.editItem);
-            };
-        };
+        // vm.saveEditItem = () => {
+        //     //** Initialize the audition's summary table
+        //     vm.summery = {
+        //         skills:{},
+        //         score:0,
+        //         total:0,
+        //         time: vm.timeOffset
+        //     };
+        //     vm.skills.every(function (skill) {
+        //         vm.summery.skills[skill.type.toLowerCase()] = {
+        //             time: 0,
+        //         };
+        //         vm.complexityArray.every(function (complexity) {
+        //             vm.summery.skills[skill.type.toLowerCase()][complexity] = 0;
+        //             vm.summery[complexity] = 0;
+        //             vm.summery.skills[skill.type.toLowerCase()].score = 0;
+        //             vm.summery.skills[skill.type.toLowerCase()].total = 0;
+        //             vm.summery.skills[skill.type.toLowerCase()].time = vm.timeOffset;
+        //             return true;
+        //         });
+        //         return true;
+        //     });
+        //     if (vm.editItem){ 
+        //         vm.saveItem(vm.editItem);
+        //     };
+        // };
+
 
         /**
          * @desc Save an item;

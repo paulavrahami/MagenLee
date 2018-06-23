@@ -120,7 +120,7 @@ angular
                 else {
                     conditions = {$and: [
                         {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
-                        {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETE}}
+                        {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETED}}
                     ]}
                 }
                 Meteor.call('campaigns.getCampaignsSummery', conditions, (err, res) => {
@@ -150,7 +150,7 @@ angular
          * @Set database status of Dispatch to On Air;
          */
         vm.statusFilter = function (statusArg) {
-            if (statusArg === 'Dispatched'){
+            if (statusArg === ENUM.CAMPAIGN_STATUS.PUBLISHED){
               return 'On Air'
             } else {
               return statusArg
@@ -241,14 +241,14 @@ angular
                     let campaign = angular.copy(campaignArg);
                     let tempId   = campaign._id;
 
-                    campaign.status     = ENUM.CAMPAIGN_STATUS.DELETE;
+                    campaign.status     = ENUM.CAMPAIGN_STATUS.DELETED;
                     campaign.skills     = angular.copy(campaign.skills);
                     campaign.emailList  = angular.copy(campaign.emailList);
 
                     delete campaign._id;
                     Campaigns.update({_id: tempId},{$set: campaign});
 
-                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETE, 'Campaign [' + campaign.num + '] Deleted');
+                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETED, 'Campaign [' + campaign.num + '] Deleted');
 
                     vm.changeSelectedStatus(vm.selectedStatus);
             });
@@ -274,7 +274,7 @@ angular
                     delete campaign._id;
                     Campaigns.update({_id: tempId},{$set: campaign});
 
-                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETE, 'Campaign [' + campaign.num + '] Deleted');
+                    dbhService.insertActivityLog('Campaign', tempId, ENUM.CAMPAIGN_STATUS.DELETED, 'Campaign [' + campaign.num + '] Deleted');
                     vm.changeSelectedStatus(vm.selectedStatus);
                 });
         };

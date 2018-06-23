@@ -18,8 +18,6 @@ angular
 
         let campTempSubscription = {ready: function() {return false}}
         let appSubscription = Meteor.subscribe('applications');
-        let logoSubscription = Meteor.subscribe('logo.files');
-        let cvSubscription = Meteor.subscribe('cv.files');
         let compSubscription = Meteor.subscribe('companies');
         let campSubscription = campTempSubscription;
         let userSubscription = campTempSubscription;
@@ -47,8 +45,6 @@ angular
             }
 
             if (appSubscription.ready() &&
-                cvSubscription.ready() &&
-                logoSubscription.ready() &&
                 userSubscription.ready() &&
                 compSubscription.ready() &&
                 campSubscription.ready()) {
@@ -58,10 +54,6 @@ angular
                 vm.subscriptionOk = true;
 
                 vm.application = Applications.findOne({_id:vm.applicationId});
-
-
-                // vm.logoFile = LogoFiles.findOne(Meteor.users.findOne({}).profile.companyLogoId);
-                vm.logoFile = LogoFiles.findOne(Companies.findOne({name: vm.application.control.companyOwner}).companyLogoId);
 
                 vm.dependency.changed();
                 delete vm.onSubscription;
@@ -197,45 +189,44 @@ angular
         };
 
         vm.helpers({
-            logoFileLink() {
-                vm.dependency.depend();
-                return vm.logoFile ? vm.logoFile.url() : "";
-            }
+
         });
+
         vm.auditiondetailexec = function(audition){
 
             $state.go("campaignAuditionExec",{id:audition.auditionId,cid:vm.campaignId,aid:vm.applicationRec._id});
         };
 
 
-        $scope.onFileChange = (function (vm) {
-            return function (obj) {
-                let file = obj.files[0];
-                let progressInterval;
-                let fs = new FS.File(file);
-                progressInterval = setInterval(function () {
+        // Store the talent's CV 
+        loadCV = function (event) {
+            var files = event.target.files;
+            file = files[0];
 
-                    vm.dependency.changed();
-                }, 100);
-                let uploadedFile = CVFiles.insert(fs, function(err, success) {
+            // Only word files are supported by the Dropbox view function
+            var ext = file.name.split('.').pop();
+            if (ext !=="docx" && ext !== "doc") {
+                showErrorMessage("Please load only a word file format ('docx' or 'doc' extension)");
+                return;
+            };
 
-                    clearInterval(progressInterval);
+            if (file.name) {
+                document.getElementById('uploadProgress').setAttribute("class", 'fa fa-refresh fa-spin uploadProgress');
+            };
 
-                    if (err) {
-                        setTimeout(function () {
-                            $UserAlerts.open("Please check the file size is less then 2Mb", ENUM.ALERT.DANGER, false);
-                        }, 0);
-                    }
-                    else {
-                        vm.application.fileId = uploadedFile._id;
-                        let i = setInterval(function() {
-                            if (fs.url()) {
-                                clearInterval(i);
-                                setTimeout(vm.loadLogo, 100);
-                            }
-                        },100);
-                    }
-                });
-            }
-        })(vm);
+            var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+            dbx.filesUpload({
+                path: '/txt/cv/' + file.name,
+                contents: file
+                })
+                .then(function(response) {
+                    vm.application.cv = file.name;
+                    document.getElementById('uploadProgress').setAttribute("class", '')
+                })
+                .catch(function(error) {
+                     console.log(error);
+            });
+        };
+
+        
     });

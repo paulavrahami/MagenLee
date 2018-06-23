@@ -33,10 +33,6 @@ angular
         //----
         vm.uploadfile = 'test';
         vm.fileload = false;
-        vm.campaign.salaryExpCurrency = 'NIS';
-        // temp fix; until the issue with CV upload will be fixed
-        vm.campaign.cv = false;
-
 
         vm.targetCampaignManuallyURL = function () {
             campaignURL = vm.campaign.applicationURL;
@@ -128,8 +124,8 @@ angular
              * If campaign details is null then it's a new campaign;
              */
             if (vm.campaign) {
-                vm.campaignPublished = vm.campaign.status === 'Dispatched';
-                vm.campaignClosed = vm.campaign.status === 'Closed';
+                vm.campaignPublished = vm.campaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED;
+                vm.campaignClosed = vm.campaign.status === ENUM.CAMPAIGN_STATUS.CLOSED;
                 vm.campaignActivityLog = vm.activity;
                 
                 vm.targetExternalTalents = vm.campaign.targetExternalTalents;
@@ -138,6 +134,7 @@ angular
                 vm.targetJobBoardsTalents = vm.campaign.targetJobBoards;
 
                 if ((vm.campaign.status == ENUM.CAMPAIGN_STATUS.IN_WORK) || 
+                    (vm.campaign.status == ENUM.CAMPAIGN_STATUS.VERIFIED) ||
                     (vm.campaign.status == ENUM.CAMPAIGN_STATUS.VERIFIED)) {
                     vm.targetManuallyURLDisabled = true;
                     vm.targetSpecificTalentDisabled = true;
@@ -154,7 +151,7 @@ angular
                     vm.targetSocialNetworksDisabled = true;
                     vm.targetJobBoardsDisabled = true;
                 };
-                if (vm.campaign.status == ENUM.CAMPAIGN_STATUS.DISPATCHED) {
+                if (vm.campaign.status == ENUM.CAMPAIGN_STATUS.PUBLISHED) {
                     vm.targetManuallyURLDisabled = false;
                     vm.targetSpecificTalentDisabled = false;
                     vm.targetExternalTalentsDisabled = false;
@@ -187,6 +184,7 @@ angular
                     targetPoolTalents: false,
                     targetSocialNetworks: false,
                     targetJobBoards: false,
+                    salaryExpCurrency: '',
                     salaryExpactations: [
                         {from: 0,
                             to: 0}
@@ -263,15 +261,15 @@ angular
 
             if (vm.audition) {
                 vm.campaign.skills.every(function (skill) {
-                    vm.summery.skills[skill.type] = {
+                    vm.summery.skills[skill.type.toLowerCase()] = {
                         time: 0,
                     };
                     vm.skillsExperience.every(function (complexity) {
-                        vm.summery.skills[skill.type][complexity] = 0;
+                        vm.summery.skills[skill.type.toLowerCase()][complexity] = 0;
                         vm.summery[complexity] = 0;
-                        vm.summery.skills[skill.type].score = 0;
-                        vm.summery.skills[skill.type].total = 0;
-                        vm.summery.skills[skill.type].time = vm.timeOffset;
+                        vm.summery.skills[skill.type.toLowerCase()].score = 0;
+                        vm.summery.skills[skill.type.toLowerCase()].total = 0;
+                        vm.summery.skills[skill.type.toLowerCase()].time = vm.timeOffset;
                         return true;
                     });
                     return true;
@@ -303,30 +301,30 @@ angular
                     let skillType = item.skill || 'Unclassified';
                     try {
                         if (item.complexity === ENUM.EXPERIENCE.up1) {
-                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up1]++;
+                            vm.summery.skills[skillType.toLowerCase()][ENUM.EXPERIENCE.up1]++;
                             vm.summery[ENUM.EXPERIENCE.up1]++;
                         }
                         if (item.complexity === ENUM.EXPERIENCE.up2) {
-                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up2]++;
+                            vm.summery.skills[skillType.toLowerCase()][ENUM.EXPERIENCE.up2]++;
                             vm.summery[ENUM.EXPERIENCE.up2]++;
                         }
                         if (item.complexity === ENUM.EXPERIENCE.up3) {
-                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up3]++;
+                            vm.summery.skills[skillType.toLowerCase()][ENUM.EXPERIENCE.up3]++;
                             vm.summery[ENUM.EXPERIENCE.up3]++;
                         }
                         if (item.complexity === ENUM.EXPERIENCE.up4) {
-                            vm.summery.skills[skillType][ENUM.EXPERIENCE.up4]++;
+                            vm.summery.skills[skillType.toLowerCase()][ENUM.EXPERIENCE.up4]++;
                             vm.summery[ENUM.EXPERIENCE.up4]++;
                         }
-                        vm.summery.skills[skillType].time += item.itemDuration.valueOf() - vm.timeOffset;
+                        vm.summery.skills[skillType.toLowerCase()].time += item.itemDuration.valueOf() - vm.timeOffset;
                         vm.summery.time += item.itemDuration.valueOf() - vm.timeOffset;
-                        vm.summery.skills[skillType].score += singleItem.maxScore;
-                        vm.summery.skills[skillType].total++;
+                        vm.summery.skills[skillType.toLowerCase()].score += singleItem.maxScore;
+                        vm.summery.skills[skillType.toLowerCase()].total++;
                         vm.summery.score += singleItem.maxScore;
                         vm.summery.total++;
 
-                        if ((vm.summery.skills[skillType].score + "").indexOf("999") > -1) {
-                            vm.summery.skills[skillType].score = Math.ceil(vm.summery.skills[skillType].score);
+                        if ((vm.summery.skills[skillType.toLowerCase()].score + "").indexOf("999") > -1) {
+                            vm.summery.skills[skillType.toLowerCase()].score = Math.ceil(vm.summery.skills[skillType].score);
                         }
                         if ((vm.summery.score + "").indexOf("999") > -1) {
                             vm.summery.score = Math.ceil(vm.summery.score);
@@ -566,7 +564,7 @@ angular
         vm.clearDuration = function (campaign){
             campaign.duration = 0;
             //todo: the check should be else where
-            if (campaign.status === ENUM.CAMPAIGN_STATUS.DISPATCHED){
+            if (campaign.status === ENUM.CAMPAIGN_STATUS.PUBLISHED){
                 if (campaign.endDate < vm.now){
                     //todo: change to Modal
                     alert('Campaign can not end before today');
@@ -662,8 +660,8 @@ angular
          */
         vm.addSkill = function () {
 
-            if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
-                showErrorMessage('Skill cannot be added as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+            if (vm.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
+                showErrorMessage('Skill cannot be added as the audition has already been verified. Please change its state to "In-Work" in order to proceed');
                 return;
             };
 
@@ -756,8 +754,8 @@ angular
                 if (item.skill === skillArg.type) {
                     // item has been found for the skill
                     foundItemForSkill = true;
-                    if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
-                        showErrorMessage('The skill cannot be removed as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+                    if (vm.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
+                        showErrorMessage('The skill cannot be removed as the audition has already been verified. Please change its state to "In-Work" in order to proceed');
                         return;
                     } else {
                         if (vm.audition.status === ENUM.AUDITION_STATUS.IN_WORK) {
@@ -799,8 +797,8 @@ angular
                 if (item.skill === skillArg.type) {
                     // item has been found for the skill
                     foundItemForSkill = true;
-                    if (vm.audition.status === ENUM.AUDITION_STATUS.AVAILABLE) {
-                        showErrorMessage('The skill cannot be modified as the audition has already been approved. Please change its state to "In-Work" in order to proceed');
+                    if (vm.audition.status !== ENUM.AUDITION_STATUS.IN_WORK) {
+                        showErrorMessage('The skill cannot be modified as the audition has already been verified. Please change its state to "In-Work" in order to proceed');
                         return;
                     } else {
                         if (vm.audition.status === ENUM.AUDITION_STATUS.IN_WORK) {

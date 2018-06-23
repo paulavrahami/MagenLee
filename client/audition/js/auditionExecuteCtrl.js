@@ -23,53 +23,48 @@ angular
             vm.dependency.changed();
         };
         vm.onContent = vm.pseudoFunction;
-        
-        if ($scope.$resolve && $scope.$resolve.auditionId) {
+
+        // set the applications state parameters before executing/preview an audition or preview a specific challenge
+        if (($scope.$resolve && $scope.$resolve.auditionId) || (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.CHALLENGE)) {
             vm.auditionId = $scope.$resolve.auditionId;
             vm.applicationCtrl = $scope.$resolve.applicationCtrl;
             vm.howItWorkLang = vm.applicationCtrl.howItWorkLang;
             // In preview/results view mode do not use previous navigation info and rest the states table
-            vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.PREVIEW ? vm.states = {} : vm.states = vm.applicationCtrl.application.states || {};
+            vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.PREVIEW ? vm.states = {} :
+                                                                      vm.states = vm.applicationCtrl.application.states || {};
             vm.applicationCtrl.application.states = vm.states;
-
             /**
              * Handle/Save all application process on the application object for
              * audition resume / audition replay etc...
              */
-
             let timeGap = 0;
-
             if (vm.states.startTime) {
                 timeGap = (new Date()).valueOf() - vm.states.startTime;
             }
-
             vm.states.itemsContent       = vm.states.itemsContent || {};
             vm.states.startTime          = vm.states.startTime + timeGap || (new Date()).valueOf();
-            // vm.states.timerIsOn          = vm.states.timerIsOn || false;
             vm.states.timerIsOn          = false;
             vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.states.currentItem = 0 : 
-                                                                      (vm.states.currentItem = vm.states.currentItem || 0);
+                                                                     (vm.states.currentItem = vm.states.currentItem || 0);
             vm.states.percentageComplete = vm.states.percentageComplete || 0;
             vm.countAnswer = vm.countAnswer || 0;
-            vm.states.isRequestBreak     = false; //vm.states.isRequestBreak ||
-            vm.states.isOnBreak          = false; //vm.states.isOnBreak ||
-            vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.states.isExecuteIntro = false : 
-                                                                      vm.states.isExecuteIntro = true;
+            vm.states.isRequestBreak     = false;
+            vm.states.isOnBreak          = false;
+            // decide if to display the audition intro page
+            if ((vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.CHALLENGE) || 
+                (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS)) {
+                vm.states.isExecuteIntro = false;
+            } else {
+                vm.states.isExecuteIntro = true;
+            };
             vm.states.isShowControls     = vm.states.isShowControls || false;
-            // vm.states.timeOut            = vm.states.timeOut || false;
             vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS ? vm.states.timeOut = false :
                                                                      (vm.states.timeOut = vm.states.timeOut || false);
             /** counters */
             vm.states.hintCount          = vm.states.hintCount || 2;
             vm.states.fiftyFiftyCount    = vm.states.fiftyFiftyCount || 2;
             vm.states.breakCount         = vm.states.breakCount || 2;
-            /**
-             * timeTarget and timeLeft will be calculated int loadAudition
-            vm.states.timeTarget         = vm.states.timeTarget || 0;
-            vm.states.timeLeft           = vm.states.timeLeft || vm.states.startTime;
-             */
         }
-
         /**
          * @desc Each second save the application states;
          * @type {number}
@@ -93,7 +88,6 @@ angular
                 //     clearInterval(vm.timerHandler);
                 //     vm.done();
                 // }
-
                 vm.dependency.changed();
             }
 
@@ -116,7 +110,25 @@ angular
                 vm.subscriptionOk = true;
 
                 vm.loadAudition ();
+
                 vm.dependency.changed();
+
+                // get the company's logo in case the audition intro page is displayed
+                if (vm.states.isExecuteIntro === true) {
+                    var logoFile = Companies.findOne({name: $window._audition.control.companyOwner}).companyLogoId;
+                    var dbx = new Dropbox.Dropbox({accessToken: ENUM.DROPBOX_API.TOKEN});
+                    dbx.filesGetThumbnail({
+                        path: '/img/logo/' + logoFile,
+                        format: 'png',
+                        size: 'w64h64'
+                        })
+                        .then(function(response) {
+                            document.getElementById('viewCompanyLogo').setAttribute("src", window.URL.createObjectURL(response.fileBlob));
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                    });
+                };
             }
         };
 
@@ -168,7 +180,16 @@ angular
          * @desc Prepare the audition for the auditionExecute.js
          */
         vm.loadAudition = function () {
-            $window._audition = Auditions.findOne({_id: vm.auditionId});
+            // get the audition for which the preview has been requested.
+            // Fake the audition in case of a specific challenge preview
+            if (vm.auditionViewMode !== ENUM.AUDITION_VIEW_MODE.CHALLENGE) {
+                $window._audition = Auditions.findOne({_id: vm.auditionId});
+            } else {
+                $window._audition = {};
+                $window._audition.items = [];
+                $window._audition.items.push({itemId: $scope.itemId , maxScore: 0});
+                $window._audition.auditionDuration = 0;
+            };
             vm.numberOfItems = $window._audition.items.length;
             vm.itemsKeys = $window._audition.items;
             vm.doneItemsKeys = Object.keys(vm.states.itemsContent);
@@ -176,24 +197,18 @@ angular
                 $window._audition.items.length - 1 :
                 vm.states.currentItem;
             vm.executeItem = $window._audition.items[vm.states.currentItem].itemId;
-
+ 
             //let time = new Date($window._audition.auditionDuration);
             let time = $window._audition.auditionDuration / 1000;
-
             let H = Math.floor(time / 3600),
                 M = Math.floor(((time % 3600) + 60) / 60 - 1),
                 S = time % 60;
-
-            // let H = time.getHours(),
-            //     M = time.getMinutes(),
-            //     S = time.getSeconds();
-            //
              if (!vm.states.timeLeft) {
                 vm.states.timeLeft = time * 1000;
-            }
+            };
             if (!vm.states.timeTarget) {
                 vm.states.timeTarget = vm.states.timeLeft - (H * 3600 + M * 60 + S * 1) * 1000;
-            }
+            };
 
             // build the item's totals table. This info will be presented while the audition is displayed in "Results" mode 
             if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS) {
@@ -220,34 +235,41 @@ angular
                         if (applicationRec.states.itemsContent[contentIndex].state.validity === 100) {
                             vm.totalsPerItem[index].totalCorrect++;
                         } else {
-                            if ((applicationRec.states.itemsContent[contentIndex].state.validity === 0) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
+                            if ((applicationRec.states.itemsContent[contentIndex].state.validity < 100) && (applicationRec.states.itemsContent[contentIndex].state.clicks !== 0)) {
                             vm.totalsPerItem[index].totalWrong++;
                             } else {
                                 if (applicationRec.states.itemsContent[contentIndex].state.clicks === 0) {
                                     vm.totalsPerItem[index].totalNotAnswered++;
-                                }
-                            }
-                        }
+                                };
+                            };
+                        };
                     };
                 return true
                 });
             };
+
             $window.loadAudition();
         };
 
         vm.displayItemTotalsCorrect = function (itemKey) {
-            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
-            return vm.totalsPerItem[index].totalCorrect;
+            if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS) {
+                index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+                return vm.totalsPerItem[index].totalCorrect;
+            };
         };
 
         vm.displayItemTotalsWrong = function (itemKey) {
-            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
-            return vm.totalsPerItem[index].totalWrong;
+            if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS) {
+                index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+                return vm.totalsPerItem[index].totalWrong;
+            };
         };
 
         vm.displayItemTotalsNotAnswered = function (itemKey) {
-            index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
-            return vm.totalsPerItem[index].totalNotAnswered;
+            if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.RESULTS) {
+                index = vm.totalsPerItem.findIndex(itemTotals => itemTotals.itemId === itemKey);
+                return vm.totalsPerItem[index].totalNotAnswered;
+            };
         };
         
         vm.correctAnswer = function (itemKey) {
@@ -255,7 +277,7 @@ angular
                 if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 100) {
                     return true;
                 } else {
-                    if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity === 0) {
+                    if (vm.applicationCtrl.application.states.itemsContent[itemKey].state.validity < 100) {
                         return false;
                     };
                 };
@@ -624,7 +646,10 @@ angular
              */
             audition () {
                 vm.dependency.depend();
-
+                // for the "challenge" preview mode no audition is involved
+                if (vm.auditionViewMode === ENUM.AUDITION_VIEW_MODE.CHALLENGE) {
+                    return true;
+                }
                 if (vm.subscriptionAuditionOk) {
                     $window._audition = Auditions.findOne({_id: vm.auditionId});
 
