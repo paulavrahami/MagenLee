@@ -472,6 +472,31 @@ angular
               vm.dependency.changed();
         };
 
+
+        //remove user from information from Skiller database
+        vm.removeTalent = function () {
+            $UserAlerts.prompt(
+                'Rmoving your user will delete all you personal information with no recovery, Are you sure?',
+                ENUM.ALERT.INFO,
+                true,
+                function () {
+                    vm.talentIdTemp = currentUser.profile.talentId;
+                    Meteor.call('removeUser', currentUser._id, function (err, result) {
+                        if (err) {
+                            alert('There is an error to delete your user information, please contact Skillera');
+                        } else {
+                            //Delete Talent record
+                            Meteor.call('removeTalentCollection',vm.talentIdTemp, function (err, result) {
+                            if (err) {
+                                alert('There is an error to delete your user information, please contact Skillera');
+                            } else {
+                                $state.go('app');
+                            };
+                            });
+                        }
+                    }
+                    )}
+            )};
         vm.checkSkills = function (skillsArray,talentId) {
 
             for  (let z = 0 ; z < skillsArray.length ; z++) {

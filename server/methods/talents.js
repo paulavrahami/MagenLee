@@ -44,5 +44,8 @@ Meteor.methods({
 
     'getTalentById': function (condition) {
           return Talents.findOne({talentId: condition});
+    },
+    'removeTalentCollection' (talentIdToRemove) {
+          return Talents.remove({talentId : talentIdToRemove});
     }
 });
