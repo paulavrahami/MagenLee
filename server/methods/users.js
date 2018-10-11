@@ -12,5 +12,8 @@ Meteor.methods({
 
     'setUserPassword': function (userId, newPassword) {
     	return Accounts.setPassword(userId, newPassword, {logout:false});
+    },
+    'removeUser' : function (userId) {
+        return (Meteor.users.remove({ _id: userId })) ? true : false;
     }
 });
