@@ -480,11 +480,8 @@ angular
                 ENUM.ALERT.INFO,
                 true,
                 function () {
-                    console.log("the user key :",currentUser._id);
                     vm.talentIdTemp = currentUser.profile.talentId;
-                    console.log("The talent key is ", vm.talentIdTemp);
                     Meteor.call('removeUser', currentUser._id, function (err, result) {
-                        console.log(err);
                         if (err) {
                             alert('There is an error to delete your user information, please contact Skillera');
                         } else {
