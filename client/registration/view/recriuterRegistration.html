@@ -313,12 +313,20 @@
                             <!-- User Name -->
                             <div class="form-group">
                                 <label for="applicantName">Username</label>
-                                <input type="text" 
-                                        ng-model="vm.recruiterRegistration.username"
-                                        name="name"
-                                        class="form-control"
-                                        readonly
-                                        required>
+                                <div class="row">
+                                <div class="col-md-10 no-left-extra-space">
+                                    <input type="text" 
+                                            ng-model="vm.recruiterRegistration.username"
+                                            name="name"
+                                            class="form-control"
+                                            readonly
+                                            required>
+                                </div>
+                                <div class="col-md-2">
+                                    <!-- Remove user from Skillera -->
+                                    <button type="submit" ng-click="vm.removeUser()" class="btn btn-primary">Remove</button>
+                                </div>
+                                </div>
                             </div>
                             <!-- Email -->
                             <div class="form-group">
@@ -355,6 +363,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="col-md-1"></div>
                         <div class="col-md-0-6"></div>

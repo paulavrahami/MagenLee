@@ -189,6 +189,27 @@ angular
               
         };
 
+        vm.removeUser = function () {
+
+            $UserAlerts.prompt(
+                'Rmoving your user will delete all you personal information with no recovery, Are you sure?',
+                ENUM.ALERT.INFO,
+                true,
+                function () {
+
+                    Meteor.call('removeUser', currentUser._id, function (err, result) {
+                        if (err) {
+                            alert('There is an error to delete your user information, please contact Skillera');
+                        } else {
+                            $state.go('app');
+                        }
+                    }
+                    )
+                }
+            );
+
+        };
+
 
         vm.updateUserPassword = function (userId, newPassword) {
             Meteor.call('setUserPassword', userId, newPassword, function (err, result) {
