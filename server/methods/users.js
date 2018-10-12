@@ -15,5 +15,8 @@ Meteor.methods({
     },
     'removeUser' : function (userId) {
         return (Meteor.users.remove({ _id: userId })) ? true : false;
+    },
+    'removeUsersPerCompany' : function (compName) {
+        return (Meteor.users.remove({ "profile.companyName": compName })) ? true : false;
     }
 });

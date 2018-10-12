@@ -192,7 +192,7 @@ angular
         vm.removeUser = function () {
 
             $UserAlerts.prompt(
-                'Rmoving your user will delete all you personal information with no recovery, Are you sure?',
+                'Removing your user will delete all you personal information with no recovery, Are you sure?',
                 ENUM.ALERT.INFO,
                 true,
                 function () {
@@ -205,6 +205,37 @@ angular
                         }
                     }
                     )
+                }
+            );
+
+        };
+
+        vm.removeAdmin = function () {
+
+            $UserAlerts.prompt(
+                'Removing your user will delete all of your personal information, your company information and other team members of your company information with no option to recovery, Are you sure?',
+                ENUM.ALERT.INFO,
+                true,
+                function () {
+
+                    vm.companyToRemove = currentUser.profile.companyName;
+                    // Delete admin user and all other users records belong to the Company from Users
+                    Meteor.call('removeUsersPerCompany', vm.companyToRemove, function (err, result) {
+                        if (err) {
+                            alert('There is an error to delete your user information, please contact Skillera');
+                        } else {
+                            //Delete company
+                            Meteor.call('removeCompany',vm.companyToRemove, function (err, result) {
+                            if (err) {
+                                alert('There is an error to delete your user information, please contact Skillera');
+                            } else { 
+                                $state.go('app');                                    
+                            };
+                            });
+                        }
+                    }
+                    )
+
                 }
             );
 
