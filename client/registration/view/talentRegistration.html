@@ -68,13 +68,21 @@
                             <!-- User Name -->
                             <div class="form-group">
                                 <label for="inputTalentUserName" class="required">User Name</label>
-                                <input type="text" 
-                                        ng-model="vm.talentRegistration.username"
-                                        name="userName"
-                                        class="form-control " 
-                                        placeholder=""
-                                        readonly 
-                                        required>
+                                <div class="row">
+                                        <div class="col-md-10 no-left-extra-space">
+                                                <input type="text" 
+                                                        ng-model="vm.talentRegistration.username"
+                                                        name="userName"
+                                                        class="form-control " 
+                                                        placeholder=""
+                                                        readonly 
+                                                        required>
+                                        </div>
+                                        <div class="col-md-2">
+                                                <!-- Remove user from Skillera -->
+                                                <button type="submit" ng-click="vm.removeTalent()" class="btn btn-primary">Remove</button>
+                                        </div>
+                                </div>
                             </div>
                             <!-- Email -->
                             <div class="form-group">
@@ -447,10 +455,9 @@
                                             <h4 class="sectionHeader"><strong><span class="fa fa-briefcase fa-1x"></span>&nbsp;Account</strong></h4>
                                         </div>
                                 </div>
-                                <!-- <div class="row">
+                                <div class="row">
                                                 <h4 class="recruiter-signUp-titel">Talent Account feature is comming soon...</h4>
-                                </div> -->
-                                <button type="submit" ng-click="vm.removeTalent()" class="btn btn-primary">Remove User</button>
+                                </div>
                 </div>
 
             </div>
