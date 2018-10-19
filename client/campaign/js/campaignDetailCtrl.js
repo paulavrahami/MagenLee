@@ -6,6 +6,7 @@ angular
         $reactive(vm).attach($scope);
 
         vm.campaignId = $stateParams.id;
+        vm.campaignType = $stateParams.type;
 
         vm.activityLogUpd = {};
         vm.dependency = new Deps.Dependency();
@@ -141,7 +142,7 @@ angular
                         positionType : ENUM.POSITION_TYPE.PERMANENT,
                         num : '',
                         status : ENUM.CAMPAIGN_STATUS.IN_WORK,
-                        type : "Recruitment",
+                        type : vm.campaignType,
                         targetExternalTalents : false,
                         targetPoolTalents : false,
                         targetSocialNetworks : false,

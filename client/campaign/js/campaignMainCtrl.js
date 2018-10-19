@@ -111,18 +111,33 @@ angular
                 let campaigns;
                 let conditions = {};
 
-                if (vm.selectedStatus) {
-                    conditions = {$and: [
-                        {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
-                        {status: vm.ENUM.CAMPAIGN_STATUS[vm.selectedStatus]}
-                    ]}
-                }
-                else {
-                    conditions = {$and: [
-                        {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
-                        {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETED}}
-                    ]}
-                }
+               if (vm.selectedStatus) {
+ 
+                    conditions = {$or: [
+                        {$and: [
+                            {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
+                            {status: vm.ENUM.CAMPAIGN_STATUS[vm.selectedStatus]}
+                        ]},
+                        {$and: [
+                            {type: ENUM.CAMPAIGN_TYPE.LEISURE},
+                            {status: vm.ENUM.CAMPAIGN_STATUS[vm.selectedStatus]}
+                        ]}
+                    ]};
+               }
+               else {
+                    
+                    conditions = {$or: [
+                        {$and: [
+                            {type: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
+                            {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETED}}
+                        ]},
+                        {$and: [
+                            {type: ENUM.CAMPAIGN_TYPE.LEISURE},
+                            {status: {$ne: ENUM.CAMPAIGN_STATUS.DELETED}}
+                        ]}
+                    ]};
+               };
+              console.log(conditions)
                 Meteor.call('campaigns.getCampaignsSummery', conditions, (err, res) => {
                     if (err) {
                         reject();
