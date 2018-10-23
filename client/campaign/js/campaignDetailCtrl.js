@@ -179,7 +179,7 @@ angular
             if (!vm.currentCampaign.location || vm.currentCampaign.location === '') {
                 return 'The position location must have value';
             }
-            if (!vm.currentCampaign.positionType || vm.currentCampaign.type === '') {
+            if (!vm.currentCampaign.positionType || vm.currentCampaign.positiontype === '') {
                 return 'The position type must have value';
             }
             if (vm.currentCampaign.topApplicant <= 0) {

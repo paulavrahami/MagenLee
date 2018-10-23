@@ -27,12 +27,20 @@
     <div class="col-md-0-6"></div>
     <div class="col-md-11">
         <div class="process">
+            <!-- {{tabsHeader.campaign.type}} -->
             <div class="process-row nav nav-tabs">
-                <!-- Position Tab -->
-                <div class="process-step">
+                <!-- Position Tab for Recruitment campaigns-->
+                
+                <div class="process-step" ng-hide="tabsHeader.campaign.type =='Leisure'">
                     <button type="button" class="btn-info btn-circle-tab" data-toggle="tab" href="#menu1"><i class="fa fa-briefcase fa-3x"></i></button>
                     <p>Position</p>
                 </div>
+                <!-- General Tab for Leisure campaigns-->
+                <div class="process-step" ng-show="tabsHeader.campaign.type =='Leisure'">
+                    <button type="button" class="btn-info btn-circle-tab" data-toggle="tab" href="#menu1"><i class="fa fa-info-circle fa-3x"></i></button>
+                    <p>General</p>
+                    </div>
+                
                 <!-- Skills Tab -->
                 <div class="process-step">
                     <button type="button" class="btn-default btn-circle-tab" data-toggle="tab" href="#menu2"><i class="fa fa-wrench fa-3x"></i></button>

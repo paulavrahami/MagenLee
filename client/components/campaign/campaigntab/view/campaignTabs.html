@@ -8,9 +8,12 @@
 			<!-- Position Tab -->
 			<div id="menu1" class="tab-pane fade active in">
 				  <div class="row">
-					  <div class="col-md-12">
+					  <div class="col-md-12" ng-show="vm.campaign.type == 'Recruitment'">
 						  <h4 class="sectionHeader"><strong><span class="fa fa-briefcase fa-2x"></span>&nbsp;Position</strong></h4>
 					  </div>
+					  <div class="col-md-12" ng-show="vm.campaign.type == 'Leisure'">
+							<h4 class="sectionHeader"><strong><span class="fa fa-info-circle fa-2x"></span>&nbsp;General</strong></h4>
+						</div>
 				  </div>
 				  <div class="row">
 					  <div class="col-md-5">
@@ -28,7 +31,7 @@
 							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.positionName.$error.required && newDemand.positionName.$dirty">Position name is required.</span>
 						  </div>
 						  <div class="form-group">
-							  <label class="required" for="campaignDescription">Description & Responsibilities</label>
+							  <label class="required" for="campaignDescription">Description</label>
 							  <textarea class=" form-control"
 										id="campaignDescription"
 										name="campaignDescription"
@@ -42,21 +45,21 @@
 					  </div>
 					  <div class="col-md-1"></div>
 					  <div class="col-md-5">
-						  <div class="form-group">
+						  <div class="form-group" ng-show="vm.campaign.type == 'Recruitment'">
 							  <label class="required" for="countrySelect">Location</label>
 							  <div class="dropdown">
 								  <chosen-select id="countrySelect" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="vm.campaign.location" data="vm.countries"></chosen-select>
 							  </div>
 							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.countrySelect.$error.required && newDemand.countrySelect.$dirty">Country is required</span>
 						  </div>
-						  <div class="form-group">
+						  <div class="form-group" ng-show="vm.campaign.type == 'Recruitment'">
 							  <label class="required" for="positionType">Employment Type</label>
 							  <div class="dropdown">
 								  <chosen-select id="positionType" ng-disabled="vm.campaignPublished || vm.campaignClosed" ng-model="vm.campaign.positionType" data="vm.positionTypes"></chosen-select>
 							  </div>
 							  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.positionType.$error.required && newDemand.positionType.$dirty">Position type is required</span>
 						   </div>
-						   <div class="form-group">
+						   <div class="form-group" ng-show="vm.campaign.type == 'Recruitment'">
 						  	  <label for="positionName">Department</label>
 						  	  <input class=" form-control"
 						  			 type="text"
@@ -68,7 +71,7 @@
 						  			 >
 						  	  <span class="field-error">&nbsp;</span><span class="field-error" ng-show="newDemand.departmentName.$error.required && newDemand.departmentName.$dirty">Department name is required</span>
 						   </div>
-						   <div class="form-group">
+						   <div class="form-group" ng-show="vm.campaign.type == 'Recruitment'">
 						  	  <label for="reportTo">Reporting To</label>
 						  	  <input class=" form-control"
 						  			 type="text"
@@ -244,7 +247,7 @@
 				<div class="row">
 					<div class="col-md-5">
 						<!-- Are you willing to work at -->
-						<div class="form-group">
+						<div class="form-group" ng-show="vm.campaign.type == 'Recruitment'">
 							<label for="willingToWorkPlace">Are you willing to work in</label>
 							<input class=" form-control"
 									type="text"
@@ -283,7 +286,7 @@
 					<div class="col-md-1"></div>
 					<div class="col-md-5">
 						<!-- Resume -->
-					  	<div class="form-group">
+					  	<div class="form-group" ng-show="vm.campaign.type == 'Recruitment'">
 					  		<input class="form-control"
 					  			   	type="checkbox"
 					  			   	id="resume"
@@ -294,7 +297,7 @@
 					  		<label class="checkbox-padding" for="resume">Supply Resume</label>
 					  	</div>
 					  	<!-- LinkedIn Profile -->
-					  	<div class="form-group">
+					  	<div class="form-group" ng-show="vm.campaign.type == 'Recruitment'">
 					  		<input class="form-control"
 					  			  	type="checkbox"
 					  			   	id="linkedInProfile"
@@ -305,7 +308,7 @@
 					  		<label class="checkbox-padding" for="linkedInProfile">Provide LinkedIn Profile</label>
 					  	</div>
 					  	<!-- Salary Expectation -->
-					  	<div class="form-group">
+					  	<div class="form-group" ng-show="vm.campaign.type == 'Recruitment'">
 							<input class="form-control"
 									type="checkbox"
 									id="thirdQuestionCheck"
