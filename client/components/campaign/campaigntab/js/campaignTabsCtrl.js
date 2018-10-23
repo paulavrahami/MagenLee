@@ -223,7 +223,7 @@ angular
                             "name": vm.campaign.positionName,
                             "description": "",
                             "instructions": "",
-                            "type": ENUM.AUDITION_TYPE.RECRUITMENT,
+                            "type": vm.campaign.type,
                             "status": ENUM.AUDITION_STATUS.IN_WORK,
                             "statusDate": new Date(),
                             "durationMethod": ENUM.AUDITION_DURATION.AUDITION,

@@ -69,7 +69,8 @@ angular
         },
         CAMPAIGN_TYPE : {
             RECRUITMENT:        'Recruitment',
-            HUMAN_RESOURCES:    'HR'
+            HUMAN_RESOURCES:    'HR',
+            LEISURE:            'Leisure'
         },
         POSITION_TYPE : {
             PART_TIME: 'Part-Time',

@@ -13,7 +13,7 @@ function routerConfig($stateProvider) {
     controllerAs: 'vm'
   })
   .state('recruiter.recruiterDemand', {
-    url:'/CampaignDetail/:id',
+    url:'/CampaignDetail/:type/:id',
     templateUrl: 'client/campaign/view/campaignDetail.html',
     controller: 'campaignDetail',
     controllerAs: 'vm'

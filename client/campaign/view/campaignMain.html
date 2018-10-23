@@ -48,12 +48,27 @@
                                         <span ng-class="vm.getSort('status')"></span>
                                         Status
                                     </button>
+                                    <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('type')">
+                                            <span ng-class="vm.getSort('type')"></span>
+                                            Type
+                                        </button>
                                 </div>
                             </div>
                         </form>
                         <form ng-hide="vm.isSystemAdmin()" ng-show="vm.accessMode !== 'Application'" class="navbar-form navbar-right" role="search">
                             <div class="form-group">
-                                <button class="btn btn-sm btn-primary" type="button" ui-sref="recruiter.recruiterDemand">New Campaign</button>
+                                <!-- <button class="btn btn-sm btn-primary" type="button" ui-sref="recruiter.recruiterDemand">New Campaign</button> -->
+                            
+                                <div class="dropdown">
+                                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        New Campaign
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                          <a class="dropdown-item active" ui-sref="recruiter.recruiterDemand({type:'Recruitment'})">Recruitment campaign</a>
+                                          <a class="dropdown-item active" ui-sref="recruiter.recruiterDemand({type:'Leisure'})">Leisure campaign</a>
+                                        </div>
+                                </div>
+                            
                             </div>
                         </form>
                     </div><!-- /.navbar-collapse -->
@@ -67,10 +82,13 @@
                         <span>{{campaign.control.companyOwner}}</span>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 camaign-number">
+                        <div class="col-md-4 camaign-number">
                             {{campaign.num}}
                         </div>
-                        <div class="col-md-6 applicants-count">
+                        <div class="col-md-4">
+                                ({{campaign.type}})
+                            </div>
+                        <div class="col-md-4 applicants-count">
                             <span ng-if="campaign.applicationsCount">({{campaign.applicationsCount}})</span>
                         </div>
                     </div>
@@ -97,7 +115,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <p>
-                                <a ng-if="campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETED" class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id})">Detail</a>
+                                <a ng-if="campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETED" class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id,type:campaign.type})">Detail</a>
                                 <a ng-if="campaign.status === vm.ENUM.CAMPAIGN_STATUS.DELETED" class="btn btn-primary btn-sm" disabled>Detail</a>
                                 <a ng-if="campaign.applicationsCount" class="btn btn-primary btn-sm" ui-sref="recruiter.application({id:campaign._id})">Applications</a>
                                 <a ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETED)
@@ -122,6 +140,9 @@
                                 <div class="col-md-1">
                                     <h5>[{{campaign.num}}]</h5>
                                 </div>
+                                <div class="col-md-1">
+                                        <h5>[{{campaign.type}}]</h5>
+                                    </div>
                                 <div class="col-md-2">
                                     <h5>{{campaign.positionName}}</h5>
                                 </div>
@@ -136,7 +157,7 @@
                                     <status-bar ng-model="campaign"></status-bar>
                                 </div>
                                 <div class="col-md-2">
-                                    <p><a class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id})">Edit</a>
+                                    <p><a class="btn btn-primary btn-sm" ng-show="vm.accessMode !== 'Application'" ui-sref="recruiter.recruiterDemand({id:campaign._id,type:campaign.type})">Edit</a>
                                       <a class="btn btn-primary btn-sm" ng-if="(campaign.status !== vm.ENUM.CAMPAIGN_STATUS.DELETED)
                                       && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.PUBLISHED)
                                       && (campaign.status !== vm.ENUM.CAMPAIGN_STATUS.CLOSED)" ng-click="vm.deleteCampaign(campaign)">Delete</a></p>
