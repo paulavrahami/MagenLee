@@ -131,6 +131,10 @@ angular
                             if (vm.campaign.goNoGo4) {
                                 vm.application.goNoGo4Place = vm.campaign.goNoGo4.place;
                             }
+                            //HG - For campaigns of type Leisure, update the application to be revealed from the start
+                            if (vm.campaign.type == "Leisure") {
+                                vm.application.revealed = true;
+                            }
 
                             delete vm.application._id;
                             Applications.update({_id: vm.applicationId}, {$set: vm.application});

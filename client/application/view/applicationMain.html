@@ -19,8 +19,8 @@
           <a ui-sref="recruiter.recruiterDemand({id:vm.campaignId})"><strong>{{vm.campaign.positionName}}]</strong></a>&nbsp;&nbsp;&nbsp;
           <span class="campaign-criteria"> Minimum Grade:{{vm.campaign.minScore}}&nbsp;&nbsp;
           Top Applicants:{{vm.campaign.topApplicant}}</span>&nbsp;&nbsp;
-          <span class="campaign-actual"> Pass:{{vm.applicantPassMinScore}}&nbsp;&nbsp;
-          Revealed:{{vm.campaign.revealedApplicants}}</span>
+          <span class="campaign-actual"> Pass:{{vm.applicantPassMinScore}}&nbsp;&nbsp;</span>
+          <span ng-show="vm.campaign.type == 'Recruitment'">Revealed:{{vm.campaign.revealedApplicants}}</span>
         </h5>
       </div>
     </div>
@@ -57,7 +57,7 @@
                 <div class="btn-group">
                   <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('grade')"><span ng-class="vm.getSort('grade')"></span>Grade</button>
                   <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('control.createDate')"><span ng-class="vm.getSort('control.createDate')"></span>Date</button>
-                  <button class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('resolutionStatus')"><span ng-class="vm.getSort('resolutionStatus')"></span>Resolution</button>
+                  <button ng-show="vm.campaign.type == 'Recruitment'" class="btn btn-xs btn-default" type="button" ng-click="vm.setSort('resolutionStatus')"><span ng-class="vm.getSort('resolutionStatus')"></span>Resolution</button>
                 </div>
               </div>
             </form>
@@ -261,7 +261,7 @@
                 <ul class="nav nav-tabs">
                   <li class="active"><a data-toggle="tab" href="#home{{$index}}">Audition</a></li>
                   <li><a data-toggle="tab" href="#menu1{{$index}}" ng-click="vm.viewCV(application, $index)">Questionnaire</a></li>
-                  <li><a data-toggle="tab" href="#menu2{{$index}}" ng-click="vm.feedbackTab(application)">Feedback</a></li>
+                  <li><a ng-show="vm.campaign.type == 'Recruitment'" data-toggle="tab" href="#menu2{{$index}}" ng-click="vm.feedbackTab(application)">Feedback</a></li>
                 </ul>
                 <p class="resolution-status-date" ng-hide="!application.resolutionStatusDate"> <strong>Resolution Status Date:</strong> {{application.resolutionStatusDate | date}}</p> 
                 <div class="tab-content">
@@ -324,7 +324,7 @@
                               </tbody>
                           </table>
                         <!-- Audition preview -->
-                          <div class="row">
+                          <div class="row" ng-show="vm.campaign.type == 'Recruitment'">
                               <a class="btn btn-sm btn-info" ng-click="vm.viewAuditionResults(application)">View Audition</a>
                               <a class="btn btn-sm btn-success button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.HIRED, $index)">Hired</a>
                               <a class="btn btn-sm btn-warning button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REVIEW, $index)">Review</a>
