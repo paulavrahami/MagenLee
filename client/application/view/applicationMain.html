@@ -31,7 +31,7 @@
 <div class="row">
   <div class="col-md-0-6"></div>
   <div class="col-md-11">
-    <div class="row" ng-show="vm.isRecruiter()">
+    <div class="row" ng-show="vm.isRecruiter() || vm.isTalent() ">
       <div class="col-md-12">
         <nav class="navbar navbar-default" role="navigation">
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -324,11 +324,11 @@
                               </tbody>
                           </table>
                         <!-- Audition preview -->
-                          <div class="row" ng-show="vm.campaign.type == 'Recruitment'">
+                          <div class="row">
                               <a class="btn btn-sm btn-info" ng-click="vm.viewAuditionResults(application)">View Audition</a>
-                              <a class="btn btn-sm btn-success button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.HIRED, $index)">Hired</a>
-                              <a class="btn btn-sm btn-warning button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REVIEW, $index)">Review</a>
-                              <a class="btn btn-sm btn-danger button-right" ng-hide="!application.revealed" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REJECT, $index)">Reject</a>
+                              <a class="btn btn-sm btn-success button-right" ng-hide="!application.revealed || (vm.campaign.type === 'Leisure')" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.HIRED, $index)">Hired</a>
+                              <a class="btn btn-sm btn-warning button-right" ng-hide="!application.revealed || (vm.campaign.type === 'Leisure')" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REVIEW, $index)">Review</a>
+                              <a class="btn btn-sm btn-danger button-right" ng-hide="!application.revealed || (vm.campaign.type === 'Leisure')" ng-click="vm.applicationResulotion(application, vm.ENUM.APPLICATION_RESOLUTION.REJECT, $index)">Reject</a>
                           </div>
                     </div>
                   </div>

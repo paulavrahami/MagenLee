@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-0-6"></div>
     <div class="col-md-11">
-        <div class="row" ng-show="vm.isRecruiter() || vm.isSystemAdmin()">
+        <div class="row" ng-show="vm.isRecruiter() || vm.isSystemAdmin() || vm.isTalent()">
             <div class="col-md-12">
                 <nav class="navbar navbar-default" role="navigation">
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -59,15 +59,23 @@
                             <div class="form-group">
                                 <!-- <button class="btn btn-sm btn-primary" type="button" ui-sref="recruiter.recruiterDemand">New Campaign</button> -->
                             
-                                <div class="dropdown">
+                                <!-- <div class="dropdown">
                                         <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         New Campaign
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                          <a class="dropdown-item active" ui-sref="recruiter.recruiterDemand({type:'Recruitment'})">Recruitment campaign</a>
+                                          <a class="dropdown-item active" ng-show="vm.isRecruiter()" ui-sref="recruiter.recruiterDemand({type:'Recruitment'})">Recruitment campaign</a>
                                           <a class="dropdown-item active" ui-sref="recruiter.recruiterDemand({type:'Leisure'})">Leisure campaign</a>
                                         </div>
-                                </div>
+                                </div> -->
+
+                                <div class="dropdown-campaign">
+                                    <button class="dropbtn btn btn-sm btn-primary">New Campaign</button>
+                                    <div class="dropdown-content">
+                                      <a ng-show="vm.isRecruiter()" ui-sref="recruiter.recruiterDemand({type:'Recruitment'})">Recruitment</a>
+                                      <a ui-sref="recruiter.recruiterDemand({type:'Leisure'})">Leisure</a>
+                                    </div>
+                                  </div>
                             
                             </div>
                         </form>

@@ -82,6 +82,16 @@ angular
         vm.isSystemAdmin = function () {
             if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type === 'SystemAdmin') {
                 vm.subscribe('allCampaigns',() => [Meteor.user().profile.companyName]);
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+
+        vm.isTalent = function () {
+            if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type === 'Talent') {
+                vm.subscribe('campaignsTalent',() => [Meteor.user()._id]);
 
                 return true;
             }
@@ -137,7 +147,7 @@ angular
                         ]}
                     ]};
                };
-              console.log(conditions)
+              
                 Meteor.call('campaigns.getCampaignsSummery', conditions, (err, res) => {
                     if (err) {
                         reject();

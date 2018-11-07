@@ -22,6 +22,13 @@ angular
         auditionEdit.showCtsAreaCreateChallenge = false;
 
         auditionEdit.states = {};
+
+        /* Set author type based on user profile type */
+        if (Meteor.user().profile.type =='Recruiter') {
+            auditionEdit.authorTypeChallenge = ENUM.ITEM_AUTHOR_TYPE.RECRUITER;
+        } else {
+            auditionEdit.authorTypeChallenge = ENUM.ITEM_AUTHOR_TYPE.TALENT;
+        }
         
         auditionEdit.setConfiguration = function (itemIdArg, configuratonArg) {
             /*Zvika ???*/
@@ -131,25 +138,47 @@ angular
         });
 
         function subscribeCampaign () {
-            if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.companyName) {
-                auditionEdit.subscribe('campaignsRecruiter', () => [Meteor.user().profile.companyName]);
-                function waitForSubscribeCampaign() {
-                    setTimeout(function () {
-                        try {
-                            auditionEdit.skills = Campaigns.findOne({}).skills;
-                            auditionEdit.campaignsReady = true;
-                            verifySubscribe();
+            if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type =='Recruiter') {
+                    if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.companyName) {
+                        auditionEdit.subscribe('campaignsRecruiter', () => [Meteor.user().profile.companyName]);
+                        function waitForSubscribeCampaign() {
+                            setTimeout(function () {
+                                try {
+                                    auditionEdit.skills = Campaigns.findOne({}).skills;
+                                    auditionEdit.campaignsReady = true;
+                                    verifySubscribe();
+                                }
+                                catch (e) {
+                                    setTimeout(waitForSubscribeCampaign, 100);
+                                }
+                            }, 250);
                         }
-                        catch (e) {
-                            setTimeout(waitForSubscribeCampaign, 100);
+                        waitForSubscribeCampaign();
+                    }
+                    else {
+                        setTimeout(subscribeCampaign, 100);
+                    }
+                } else {
+                    if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type == 'Talent') {
+                        auditionEdit.subscribe('campaignsTalent', () => [Meteor.user()._id]);
+                        function waitForSubscribeCampaign() {
+                            setTimeout(function () {
+                                try {
+                                    auditionEdit.skills = Campaigns.findOne({}).skills;
+                                    auditionEdit.campaignsReady = true;
+                                    verifySubscribe();
+                                }
+                                catch (e) {
+                                    setTimeout(waitForSubscribeCampaign, 100);
+                                }
+                            }, 250);
                         }
-                    }, 250);
+                        waitForSubscribeCampaign();
+                    }
+                    else {
+                        setTimeout(subscribeCampaign, 100);
+                    }
                 }
-                waitForSubscribeCampaign();
-            }
-            else {
-                setTimeout(subscribeCampaign, 100);
-            }
         };
         subscribeCampaign();
 
@@ -577,7 +606,7 @@ angular
                 "content" : {},
                 "usage" : 0,
                 "lastAssignedDate" : "",
-                "authorType" : ENUM.ITEM_AUTHOR_TYPE.RECRUITER,
+                "authorType" : auditionEdit.authorTypeChallenge,
                 "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID*/
                 "shareInd" : true, /*Zvika - Currently this is the default and cannot be changed. In the future it should be taken from the Recruiter profile*/
                 "control" : {
