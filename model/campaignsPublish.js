@@ -5,6 +5,9 @@ if (Meteor.isServer) {
   Meteor.publish('campaignsRecruiter', function(companyName) {
     return Campaigns.find({"control.companyOwner": companyName});
   });
+  Meteor.publish('campaignsTalent', function(talentId) {
+    return Campaigns.find({"control.owner": talentId});
+  });
   Meteor.publish('allCampaigns', function() {
     return Campaigns.find({});
   });

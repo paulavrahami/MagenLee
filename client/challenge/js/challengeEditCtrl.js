@@ -123,7 +123,7 @@ angular
                 if (challengeEdit.editItem.authorType === ENUM.ITEM_AUTHOR_TYPE.TALENT) {
                     challengeEdit.subscribe('talents', () => [], {
                         onReady: function () {
-                            var talentRec = Talents.findOne({talentId: challengeEdit.editItem.authorId}); /*authorId should be the talentId - Hadar to fix*/
+                            var talentRec = Talents.findOne({talentId: Meteor.user().profile.talentId}); /*authorId should be the talentId - Hadar to fix*/
                             if (talentRec) {
                                 challengeEdit.authorName = talentRec.firstName + ' ' + talentRec.lastName;
                             } else {

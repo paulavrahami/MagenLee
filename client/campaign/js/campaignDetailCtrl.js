@@ -13,6 +13,12 @@ angular
         vm.now = moment();
         vm.currentDate = new Date();
 
+        /**  Set CV requirements based on campaign type */
+        if (vm.campaignType === ENUM.CAMPAIGN_TYPE.RECRUITMENT ) {
+            vm.CVRequired = true;
+        } else {
+            vm.CVRequired = false;
+        };
 
         /**
          * @desc Show a dialog with the error;
@@ -120,7 +126,7 @@ angular
                  */
                 if (!vm.currentCampaign) {
                     vm.currentCampaign = {
-                        cv : true,
+                        cv : vm.CVRequired,
                         duration : 30,
                         minScore : 80,
                         topApplicant : 10,
@@ -170,16 +176,22 @@ angular
          */
         vm.silentCampaignVerification = function () {
 
-            if (!vm.currentCampaign.positionName || vm.currentCampaign.positionName === '') {
+            if ((!vm.currentCampaign.positionName || vm.currentCampaign.positionName === '') && (vm.currentCampaign.type === ENUM.CAMPAIGN_TYPE.RECRUITMENT)) {
                 return 'The position name must have value';
             }
-            if (!vm.currentCampaign.description || vm.currentCampaign.description === '') {
+            if ((!vm.currentCampaign.positionName || vm.currentCampaign.positionName === '') && (vm.currentCampaign.type === ENUM.CAMPAIGN_TYPE.LEISURE)) {
+                return 'The campaign name must have value';
+            }
+            if ((!vm.currentCampaign.description || vm.currentCampaign.description === '') && (vm.currentCampaign.type === ENUM.CAMPAIGN_TYPE.RECRUITMENT)) {
                 return 'The position description and responsibilities must have value';
             }
-            if (!vm.currentCampaign.location || vm.currentCampaign.location === '') {
+            if ((!vm.currentCampaign.description || vm.currentCampaign.description === '') && (vm.currentCampaign.type === ENUM.CAMPAIGN_TYPE.LEISURE)) {
+                return 'The description must have value';
+            }
+            if ((!vm.currentCampaign.location || vm.currentCampaign.location === '') && (vm.currentCampaign.type === ENUM.CAMPAIGN_TYPE.RECRUITMENT)) {
                 return 'The position location must have value';
             }
-            if (!vm.currentCampaign.positionType || vm.currentCampaign.positiontype === '') {
+            if ((!vm.currentCampaign.positionType || vm.currentCampaign.positiontype === '') && (vm.currentCampaign.type === ENUM.CAMPAIGN_TYPE.RECRUITMENT)) {
                 return 'The position type must have value';
             }
             if (vm.currentCampaign.topApplicant <= 0) {

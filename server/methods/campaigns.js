@@ -11,8 +11,12 @@ let CampaignsAPI = {
 
             conditions = conditions || {};
 
-            if (Meteor.user().profile.type != "SystemAdmin") {
+            if ((Meteor.user().profile.type != "SystemAdmin") ||
+            (Meteor.user().profile.type != "Talent"))  {
                 conditions["control.companyOwner"] = Meteor.user().profile.companyName;
+            }
+            if (Meteor.user().profile.type == "Talent")  {
+                conditions["control.owner"] = Meteor.user()._id;
             }
 
             try {

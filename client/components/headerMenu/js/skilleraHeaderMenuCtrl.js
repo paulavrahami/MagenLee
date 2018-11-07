@@ -48,6 +48,10 @@ angular
                           link: 'mainApplications'
                       });
                       menu.items.push({
+                        caption: 'My Campaigns',
+                        link: 'mainTalentCampaigns'
+                      });
+                      menu.items.push({
                           caption: 'Marketplace',
                           link: 'mainChallenges'
                       });

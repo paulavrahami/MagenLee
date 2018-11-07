@@ -133,6 +133,20 @@ angular
         };
 
         /**
+         * @desc Check if the user is a talent;
+         * @returns {boolean}
+         */
+        vm.isTalent = function () {
+            if (Meteor.user() && Meteor.user().profile && Meteor.user().profile.type === 'Talent') {
+                vm.subscribe('campaignsTalent',() => [Meteor.user()._id]);
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+
+        /**
          * @desc Change the selected filter  and announce change;
          * @param statusArg
          */
