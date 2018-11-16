@@ -10,13 +10,17 @@
                         <div
                             id="btn-create-challenge-menu"
                             class="btn-q-primary"
+                            ng-if="auditionEdit.audition.type === 'Recruitment'"
                             ng-click="auditionEdit.generateAudition()">Generate Audition 
                         </div>
-                        <br><br><br><br><br><br>
+                        <div ng-if="auditionEdit.audition.type === 'Recruitment'">
+                            <br><br><br><br><br><br>
+                        </div>
                         <!-- Add Challenge option -->
                         <div
                             id="btn-create-challenge-menu"
                             class="btn-q-primary"
+                            ng-if="auditionEdit.audition.type === 'Recruitment'"
                             ng-click="auditionEdit.addChallenge()">Add Challenge 
                         </div>
                         <div class="ctsArea q-border" ng-class="auditionEdit.showCtsAreaAddChallenge?'showAddChallenge':''">
@@ -101,7 +105,9 @@
                                 <!-- <a class="btn btn-primary" ng-click="auditionEdit.addChallengeReset()">Reset</a> -->
                             </div>
                         </div>
-                        <br><br><br><br><br><br>
+                        <div ng-if="auditionEdit.audition.type === 'Recruitment'">
+                            <br><br><br><br><br><br>
+                        </div>
                         <!-- Create Challenge option -->
                         <div
                             id="btn-create-challenge-menu"

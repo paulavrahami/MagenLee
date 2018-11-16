@@ -550,6 +550,7 @@ angular
                 "authorType" : ENUM.ITEM_AUTHOR_TYPE.TALENT,
                 "authorId" : Meteor.user().profile.talentId, /*Zvika - This should be changed in the future to be the Subscriber ID*/
                 "shareInd" : true, /*Zvika - Currently this is the default and cannot be changed. In the future it should be taken from the Recruiter profile*/
+                "usageClass"  : ENUM.CAMPAIGN_TYPE.RECRUITMENT,
                 "control" : {
                     "createdBy" : Meteor.user()._id,
                     "createDate" : new Date(),

@@ -609,6 +609,7 @@ angular
                 "authorType" : auditionEdit.authorTypeChallenge,
                 "authorId" : Meteor.user()._id, /*Zvika - This should be changed in the future to be the Subscriber ID*/
                 "shareInd" : true, /*Zvika - Currently this is the default and cannot be changed. In the future it should be taken from the Recruiter profile*/
+                "usageClass" : auditionEdit.audition.type,
                 "control" : {
                     "createdBy" : Meteor.user()._id,
                     "createDate" : new Date(),
@@ -763,6 +764,7 @@ angular
                 let conditions = {};
                 
                 conditions = {$and:[{$text: {$search: skill.type}},
+                                    {usageClass: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
                                     {$or:[{status: ENUM.ITEM_STATUS.IN_USE},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                     {shareInd: true}]};
 
@@ -987,6 +989,7 @@ angular
             };
 
             conditions = {$and:[{$and:[{authorId: authorTypeMyChallenges}, {$or:[{authorType: authorTypeOtherRecruiters}, {authorType: authorTypeTalent}]} ]},
+                                {usageClass: ENUM.CAMPAIGN_TYPE.RECRUITMENT},
                                 {$or:[{status: ENUM.ITEM_STATUS.IN_USE},{status: ENUM.ITEM_STATUS.AVAILABLE}]},
                                 {$text: {$search: auditionEdit.addChallengeSkills}},
                                 {complexity: complexityParam},
