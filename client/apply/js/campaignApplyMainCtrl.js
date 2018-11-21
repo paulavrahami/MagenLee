@@ -87,6 +87,12 @@ angular
 
                 /** Get the campaign and subscribe Users */
                 vm.campaign = Campaigns.findOne({_id: vm.campaignId});
+                //Get campaign type
+                if (vm.campaign.type === ENUM.CAMPAIGN_TYPE.RECRUITMENT){
+                    vm.recruitmentLayout = true;
+                } else {
+                    vm.recruitmentLayout = false;
+                };
                 vm.subscribe('specificUser', () => [vm.campaign.control.owner], {
                     onReady: function () {
                         vm.subscriptionUsersOk = true;
