@@ -298,6 +298,11 @@ angular
                 scope: $scope,
                 keyboard: false,
                 backdrop: 'static',
+                resolve: {
+                    campaignType: function () {
+                        return vm.campaign.type;
+                    }
+                },
                 size: 'lg'
             });
         };
