@@ -9,6 +9,14 @@ angular
 
         vm.campaignId = $scope.campaignId;
         vm.applicationId = $scope.applicationId;
+        vm.campaignType = $scope.$resolve.campaignType;
+
+        //Get campaign type
+        if (vm.campaignType === ENUM.CAMPAIGN_TYPE.RECRUITMENT){
+            vm.recruitmentLayout = true;
+        } else {
+            vm.recruitmentLayout = false;
+        };
 
         let currentDate = new Date();
         vm.campaignApply ={};
@@ -72,7 +80,7 @@ angular
                   if (vm.application.email === '' || vm.application.email === null || vm.application.email === undefined){
                       showErrorMessage('Contact Email must be defined');
                   } else {
-                    if (vm.application.phone === '' || vm.application.phone === null || vm.application.phone === undefined){
+                    if (vm.recruitmentLayout && (vm.application.phone === '' || vm.application.phone === null || vm.application.phone === undefined)){
                         showErrorMessage('Contact phone must be defined');
                       } else {
                         // Check if the applicant retry to do the audition one more time

@@ -29,16 +29,25 @@
     <header id="top" class="header">
         <div class="bg"></div>
         <div class="container text-vertical-center">
-            <div class="container">
+            <div ng-if="vm.recruitmentLayout" class="container">
                 <h1> Welcome to {{vm.campaign.control.companyOwner}} Audition Center</h1>
+            </div>
+            <div ng-if="!vm.recruitmentLayout" class="container">
+                <h1> Welcome to Skillera Audition Center</h1>
             </div>
             <div>
                 <img id="viewCompanyLogo" class="view-company-logo">
             </div>
             <br>
-            <div class="container">
+            <div ng-if="vm.recruitmentLayout" class="container">
                 <h3>No CV hassle, No subjective screening</h3>
                 <h3>Recieve equal opertunity in getting your next dream job</h3>
+                <br>
+                <h3><strong>Simply get on stage, where your skills count!</strong></h3>
+            </div>
+            <div ng-if="!vm.recruitmentLayout" class="container">
+                <h3>Want to check your abilities?</h3>
+                <h3>Evaluate your skills in a fun and easy way</h3>
                 <br>
                 <h3><strong>Simply get on stage, where your skills count!</strong></h3>
             </div>
