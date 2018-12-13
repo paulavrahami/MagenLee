@@ -25,16 +25,50 @@ let SendEmailAPI = {
             template    += `<div>&nbsp;</div>`;
             template    += `<div><strong>Dear ${emailArguments.firstName} ${emailArguments.lastName}</strong></div>`;
             template    += `<div><hr></div>`;
-            template    += `<div>Thank you for applying for the ${emailArguments.position} position with us</div>`;
-            template    += `<div>We wish you success!</div>`;
-            template    += `<div>${emailArguments.company} recruiting team</div>`;
-            template    += `<div>&nbsp;</div>`;
-            template    += `<div>(Your Skillera reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
-            template    += `<div><hr></div>`;
-            template    += `<div><strong>Powered by Skillera</strong></div>`;
-            // template    += `<div><strong>Powered by <a href="https://skillera.herokuapp.com/" target="_blank">skillera</a></strong> </div>`;
-            template    += `<div><br></div>`;
-            template    += `<div>Please do not reply to this email</div>`;
+
+            if (emailArguments.campaignType === 'Recruitment'){
+               
+               
+                template    += `<div>Thank you for applying for the ${emailArguments.position} position with us</div>`;
+                template    += `<div>We wish you success!</div>`;
+                template    += `<div>${emailArguments.company} recruiting team</div>`;
+                template    += `<div>&nbsp;</div>`;
+                template    += `<div>(Your Skillera reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
+                template    += `<div><hr></div>`;
+                template    += `<div><strong>Powered by Skillera</strong></div>`;
+                template    += `<div><strong>Powered by <a href="www.skillera.pro" target="_blank">skillera</a></strong> </div>`;
+                template    += `<div><br></div>`;
+                template    += `<div>Please do not reply to this email</div>`;
+
+            }  else {
+                               
+                template    += `<div>Thank you for answering the ${emailArguments.position} quiz</div>`;
+                template    += `<div>We wish you success!</div>`;
+                template    += `<div>&nbsp;</div>`;
+                template    += `<div>(Your Skillera reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
+                template    += `<div><hr></div>`;
+                template    += `<div><strong>Powered by Skillera</strong></div>`;
+                template    += `<div><strong>Powered by <a href="www.skillera.pro" target="_blank">skillera</a></strong> </div>`;
+                template    += `<div><br></div>`;
+                template    += `<div>Please do not reply to this email</div>`;
+            };
+
+            // let dateTime = (new Date()).toDateString();
+            // let template = '';
+            // template    += `<div>${dateTime}</div>`;
+            // template    += `<div>&nbsp;</div>`;
+            // template    += `<div><strong>Dear ${emailArguments.firstName} ${emailArguments.lastName}</strong></div>`;
+            // template    += `<div><hr></div>`;
+            // template    += `<div>Thank you for applying for the ${emailArguments.position} position with us</div>`;
+            // template    += `<div>We wish you success!</div>`;
+            // template    += `<div>${emailArguments.company} recruiting team</div>`;
+            // template    += `<div>&nbsp;</div>`;
+            // template    += `<div>(Your Skillera reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
+            // template    += `<div><hr></div>`;
+            // template    += `<div><strong>Powered by Skillera</strong></div>`;
+            // // template    += `<div><strong>Powered by <a href="https://skillera.herokuapp.com/" target="_blank">skillera</a></strong> </div>`;
+            // template    += `<div><br></div>`;
+            // template    += `<div>Please do not reply to this email</div>`;
 
             transporter.sendMail({
                 from: 'skillera.contact@gmail.com',
