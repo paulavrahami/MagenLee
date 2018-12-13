@@ -174,7 +174,8 @@ angular
                                   email:vm.application.email,
                                   applicationNumber:vm.application.number,
                                   position:vm.campaign.positionName,
-                                  company:vm.campaign.control.companyOwner
+                                  company:vm.campaign.control.companyOwner,
+                                  campaignType:vm.campaign.type
                                 }, (err, res) => {
                                   if (err) {
                                   } else {
