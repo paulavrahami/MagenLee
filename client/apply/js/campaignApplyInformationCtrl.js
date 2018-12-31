@@ -91,40 +91,74 @@ angular
                         // AND the application number is not the current application number
 
                             vm.originalApplication = {};
-                            if (vm.application.linkedInURL){
-                            vm.originalApplication = Applications.findOne({
-                              $and: [
-                              { $or: [
-                                {"email": vm.application.email},
-                                {"phone": vm.application.phone},
-                                {"linkedInURL": vm.application.linkedInURL}
-                                      ]},
-                             // HG - Comment the retrieve of the original application by application number
-                             // and status date
-                             //   {"number": {$ne:vm.application.number}},
-                                {"campaignId": vm.application.campaignId},
-                                {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
-                             //   {"control.statusDate": new Date()}
-                              ]});
-                            } else {
-                              vm.originalApplication = Applications.findOne({
-                                $and: [
-                                { $or: [
-                                  {"email": vm.application.email},
-                                  {"phone": vm.application.phone}
-                                        ]},
-                                // HG - Comment the retrieve of the original application by application number
-                                // and status date
-                               //   {"number": {$ne:vm.application.number}},
-                                  {"campaignId": vm.application.campaignId},
-                                  {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
-                               //   {"control.statusDate": new Date()}
-                                ]});
-                            }
+
+
+                            if (vm.campaign.type === ENUM.CAMPAIGN_TYPE.RECRUITMENT) {
+                                if (vm.application.linkedInURL){
+                                    vm.originalApplication = Applications.findOne({
+                                      $and: [
+                                      { $or: [
+                                        {"email": vm.application.email},
+                                        {"phone": vm.application.phone},
+                                        {"linkedInURL": vm.application.linkedInURL}
+                                              ]},
+                                     // HG - Comment the retrieve of the original application by application number
+                                     // and status date
+                                     //   {"number": {$ne:vm.application.number}},
+                                        {"campaignId": vm.application.campaignId},
+                                        {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                                     //   {"control.statusDate": new Date()}
+                                      ]});
+                                    } else {
+                                      vm.originalApplication = Applications.findOne({
+                                        $and: [
+                                        { $or: [
+                                          {"email": vm.application.email},
+                                          {"phone": vm.application.phone}
+                                                ]},
+                                        // HG - Comment the retrieve of the original application by application number
+                                        // and status date
+                                       //   {"number": {$ne:vm.application.number}},
+                                          {"campaignId": vm.application.campaignId},
+                                          {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                                       //   {"control.statusDate": new Date()}
+                                        ]});
+                                    }
+                            };
+                            // if (vm.application.linkedInURL){
+                            // vm.originalApplication = Applications.findOne({
+                            //   $and: [
+                            //   { $or: [
+                            //     {"email": vm.application.email},
+                            //     {"phone": vm.application.phone},
+                            //     {"linkedInURL": vm.application.linkedInURL}
+                            //           ]},
+                            //  // HG - Comment the retrieve of the original application by application number
+                            //  // and status date
+                            //  //   {"number": {$ne:vm.application.number}},
+                            //     {"campaignId": vm.application.campaignId},
+                            //     {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                            //  //   {"control.statusDate": new Date()}
+                            //   ]});
+                            // } else {
+                            //   vm.originalApplication = Applications.findOne({
+                            //     $and: [
+                            //     { $or: [
+                            //       {"email": vm.application.email},
+                            //       {"phone": vm.application.phone}
+                            //             ]},
+                            //     // HG - Comment the retrieve of the original application by application number
+                            //     // and status date
+                            //    //   {"number": {$ne:vm.application.number}},
+                            //       {"campaignId": vm.application.campaignId},
+                            //       {"control.status": ENUM.APPLICATION_STATUS.COMPLETED}
+                            //    //   {"control.statusDate": new Date()}
+                            //     ]});
+                            // }
 
                             //HG - Add the fraud type
                             vm.saved = true;
-                            if (!vm.originalApplication) {
+                            if ((vm.campaign.type === ENUM.CAMPAIGN_TYPE.RECRUITMENT && !vm.originalApplication) || (vm.campaign.type === ENUM.CAMPAIGN_TYPE.LEISURE && !vm.originalApplication._id))  {
                                 vm.campaignApply.date = currentDate;
                                 vm.campaignApply.campaignID = vm.campaignId;
                                 vm.application.control.status = ENUM.APPLICATION_STATUS.COMPLETED;
@@ -151,7 +185,7 @@ angular
                             if (!vm.campaign.applications) {
                                 vm.campaign.applications = [];
                             }
-                            if (!vm.originalApplication) {
+                            if ((vm.campaign.type === ENUM.CAMPAIGN_TYPE.RECRUITMENT && !vm.originalApplication) || (vm.campaign.type === ENUM.CAMPAIGN_TYPE.LEISURE && !vm.originalApplication._id)) {
                                 if (vm.campaign.applications.indexOf(vm.application._id) === -1) {
                                     vm.campaign.applications.push(vm.application._id);
                                   }
