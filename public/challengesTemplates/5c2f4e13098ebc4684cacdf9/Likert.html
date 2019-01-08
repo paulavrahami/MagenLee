@@ -1,0 +1,27 @@
+        <script src=".API/lib/react/react-15.0.0.js"></script>
+        <script src=".API/lib/react/react-dom-15.0.0.js"></script>
+        <script src=".API/lib/react/browser.min.js"></script>
+
+        <link rel="stylesheet" href="{{auditionItemUrl}}/css/Likert.css">
+        <script type="text/javascript" src="{{auditionItemUrl}}/js/LikertCtrl.js"></script>
+        <script type="text/javascript" src="{{auditionItemUrl}}/jsx/Likert.js"></script>
+
+        <script type="text/javascript">
+            //function auditionApiLoaded(AuditionItemApi) {
+
+
+                let audition = new Meteor.AuditionItemApi();
+                let likertCtrl = new Meteor.LikertCtrl();
+
+                audition.addEventListener('content', likertCtrl.onRequestContent);
+                audition.addEventListener('initialize', likertCtrl.onInit);
+                audition.addEventListener('results', likertCtrl.onRequestResults);
+                audition.addEventListener('command', likertCtrl.onRequestCommand);
+
+                audition.declareLoaded();
+            var height ='500px';// document.body.offsetHeight + 'px';
+            //alert(height);
+                //audition.sendToskillera('settings', {height:height, width:'100%'});
+            //}
+        </script>
+        <div id="audition">{{auditionItemUrl}}</div>

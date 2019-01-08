@@ -412,6 +412,11 @@ angular
                     };
                     break;
 
+                case "5c2f4e13098ebc4684cacdf9" :
+                    
+                    break;
+
+
                 case "5814b536e288e1a685c7a451" :
                     if (!challengeEdit.editItem.content.question) {
                         showErrorMessage("The challenge's question should be defined");
@@ -569,6 +574,30 @@ angular
                     break;
 
                 case "57f7a8406f903fc2b6aae49a" :
+                    if (!challengeEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if (!challengeEdit.editItem.content.answers || !challengeEdit.editItem.content.results) {
+                        showErrorMessage("The challenge's answers and scores should be defined");
+                        return;
+                    };
+
+                    break;
+
+                    case "5c2f4e13098ebc4684cacdf9" :
+                    if (!challengeEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if (!challengeEdit.editItem.content.answers || !challengeEdit.editItem.content.results) {
+                        showErrorMessage("The challenge's answers and scores should be defined");
+                        return;
+                    };
+
+                    break;
+
+                case "5c2f4e13098ebc4684cacdf9" :
                     if (!challengeEdit.editItem.content.question) {
                         showErrorMessage("The challenge's question should be defined");
                         return

@@ -604,6 +604,13 @@ angular
                     templateHtml += `</script>`;
                     templateHtml += `<div id="multipleChoice">{{auditionItemUrl}}</div>`;
                     break;
+                case "5c2f4e13098ebc4684cacdf9" :
+                    templateHtml += `<link rel="stylesheet" href="{{auditionItemUrl}}/css/Likert.css">`;
+                    templateHtml += `<script type="text/javascript">`;
+                    templateHtml += `let likertCtrl = new Meteor.LikertCtrl("${auditionItemId}");`;
+                    templateHtml += `</script>`;
+                    templateHtml += `<div id="likert">{{auditionItemUrl}}</div>`;
+                    break;
                 case "5814b536e288e1a685c7a451" :
                     templateHtml += `<link rel="stylesheet" href="{{auditionItemUrl}}/css/TrueFalse.css">`;
                     templateHtml += `<script type="text/javascript">`;
