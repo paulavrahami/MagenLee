@@ -238,6 +238,11 @@ angular
             if (!auditionEdit.audition.items[0].itemId){
                   showInfoMessage('At least one challenge have to be defined for the audition', function () {});
             } else {
+                  let auditionChallengeType = auditionEdit.checkChallangesType();
+                  if (auditionChallengeType) {
+                    showInfoMessage('Audition can not have both Likert and other types together', function () {});
+                    return;
+                  };
                   let msgArg = "The audition will be finalized. Please confirm";
                   $UserAlerts.prompt(
                       msgArg,
@@ -254,6 +259,27 @@ angular
                           $state.go("recruiter.recruiterDemand",{id:auditionEdit.audition.campaignId,'#':'panel-3'});
                       });
             };
+        };
+
+        auditionEdit.checkChallangesType = function () {
+            let LikertExist = false;
+            let otherChallengeTypeExist = false;
+
+            // check if Audition have a both Likert and other challenges type
+            for (let i = 0; (i < auditionEdit.audition.items.length); i++) {
+                if (auditionEdit.templateName(auditionEdit.audition.items[i].itemId) === 'Likert') {
+                    LikertExist = true;
+                } else {
+                    otherChallengeTypeExist = true;
+                };
+            };
+
+            if (LikertExist && otherChallengeTypeExist) {
+                return true;
+            } else {
+                return false;
+            };
+
         };
 
         auditionEdit.auditionRework = function () {

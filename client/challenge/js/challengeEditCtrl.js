@@ -412,7 +412,35 @@ angular
                     };
                     break;
 
+                // Likert template
                 case "5c2f4e13098ebc4684cacdf9" :
+
+                    if (!challengeEdit.editItem.content.question) {
+                        showErrorMessage("The challenge's question should be defined");
+                        return
+                    };
+                    if (!challengeEdit.editItem.content.answers || !challengeEdit.editItem.content.results) {
+                        showErrorMessage("The challenge's answers and scores should be defined");
+                        return;
+                    };
+                    if (challengeEdit.editItem.content.answers.length !== challengeEdit.editItem.content.results.length) {
+                        showErrorMessage("The challenge's number of answers and scores should match");
+                        return;
+                    };
+                    for (i=0; i < challengeEdit.editItem.content.results.length; i++) {
+                        if ((challengeEdit.editItem.content.answers[i] === "") && (challengeEdit.editItem.content.results[i] === "")) {
+                            showErrorMessage("The challenge can not have an empty answer");
+                            return;
+                        };
+                        if ((challengeEdit.editItem.content.answers[i] === "") && (challengeEdit.editItem.content.results[i] !== "")) {
+                            showErrorMessage("The challenge can not have an empty answer");
+                            return;
+                        };
+                        if ((challengeEdit.editItem.content.answers[i] !== "") && (challengeEdit.editItem.content.results[i] === "")) {
+                            showErrorMessage("All answers should be defined with score");
+                            return;
+                        };
+                    };
                     
                     break;
 
@@ -574,18 +602,6 @@ angular
                     break;
 
                 case "57f7a8406f903fc2b6aae49a" :
-                    if (!challengeEdit.editItem.content.question) {
-                        showErrorMessage("The challenge's question should be defined");
-                        return
-                    };
-                    if (!challengeEdit.editItem.content.answers || !challengeEdit.editItem.content.results) {
-                        showErrorMessage("The challenge's answers and scores should be defined");
-                        return;
-                    };
-
-                    break;
-
-                    case "5c2f4e13098ebc4684cacdf9" :
                     if (!challengeEdit.editItem.content.question) {
                         showErrorMessage("The challenge's question should be defined");
                         return

@@ -18,8 +18,8 @@ let LikertCtrl = function (auditionIdArg) {
         question: 'You are at the top of your career',
         hint: 'This is the hint for the Likert',
         hintTime: 5, //seconds
-        answers: ['Fully agree', 'Agree', 'Dont agree' , 'Completely dont agree'],
-        results: [1, 2, 3, 4]
+        answers: ['Strongly disagree','Disagree','Neither agree nor disagree','Agree' ,'Strongly agree'],
+        results: [1, 2, 3, 4,5]
     };
 
     this.audition.addEventListener('content', this.onRequestContent);

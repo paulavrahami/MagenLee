@@ -707,9 +707,10 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="form-group" ng-repeat="value in challengeEdit.editItem.content.answers track by $index">
                                     <div class="row">
-                                        <div class="col-md-10">
+                                        <div class="col-md-8">
                                             <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)" 
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content.answers[$index]"
@@ -717,16 +718,14 @@
                                             ng-class="challengeEdit.editItem.content.results[$index] === 100 ? 'check-correct-answer' : ''"
                                             placeholder="Answer {{$index+1}}"></textarea>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-4">
                                             <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
                                             type="number"
-                                            min="0"
-                                            max="100"
                                             class="form-control score-field"
                                             ng-model="challengeEdit.editItem.content.results[$index]"
                                             ng-change=" "
                                             ng-class="challengeEdit.editItem.content.results[$index] === 100 ? 'check-correct-answer' : ''"
-                                            placeholder="">
+                                            placeholder="Score {{$index+1}}">
                                         </div>
                                     </div>
                                 </div>                              
