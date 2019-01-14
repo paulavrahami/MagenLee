@@ -368,6 +368,14 @@ angular
             if (applicationArg) {
                 vm.application.states.currentItem = 1;
             };
+            vm.template = {};
+            rec = {};
+
+            // Get the challenge templte for special treatment of Likert template
+            vm.getTemplateRec(rec);
+            
+    
+            
             vm.auditionViewMode = ENUM.AUDITION_VIEW_MODE.RESULTS;
             $scope.auditionViewMode = vm.auditionViewMode;
             $scope.auditionViewModeResultsTalent = vm.auditionViewModeResultsTalent;
@@ -390,6 +398,37 @@ angular
                 },
                 size: 'executeChallenge'
             });
+        };
+
+        //By getting the template type of the first challenge in the audition, decide
+        // if the audition is all of Likert type challenges
+        // The assumption is that audition either have all Likert type
+        // challenges or not likert at all
+
+        vm.getTemplateRec = function (Rec) {
+
+            let itemsKeys = Object.keys(vm.application.states.itemsContent);
+            let itemRecForTemplate = Items.findOne({_id: itemsKeys[0]});
+            console.log(itemRecForTemplate.templateId); 
+
+              (new Promise((resolve, reject) => {
+                
+                Meteor.call('getTemplate', itemRecForTemplate.templateId, (err, res) => {
+                    if (err) {
+                        reject();
+                    } else {
+                        resolve(res);
+                    }
+                });
+            })).then(function(results){
+                vm.template = results;
+                rec = results;
+                return vm.template;
+                vm.dependency.changed();
+            }).catch(function() {
+                vm.template = [];
+            });
+
         };
 
 
