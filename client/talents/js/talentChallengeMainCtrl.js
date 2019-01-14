@@ -761,6 +761,20 @@ angular
                     templateHtml += `</script>`;
                     templateHtml += `<div id="multipleChoice">{{auditionItemUrl}}</div>`;
                     break;
+                case "5c2f4e13098ebc4684cacdf9" :
+                    templateHtml += `<link rel="stylesheet" href="{{auditionItemUrl}}/css/Likert.css">`;
+                    templateHtml += `<script type="text/javascript">`;
+                    templateHtml += `let audition4 = new Meteor.AuditionItemApi("${auditionItemId}");`;
+                    templateHtml += `let likertCtrl = new Meteor.LikertCtrl("${auditionItemId}");`;
+                    templateHtml += `audition4.addEventListener('content', likertCtrl.onRequestContent);`;
+                    templateHtml += `audition4.addEventListener('initialize', likertCtrl.onInit);`;
+                    templateHtml += `audition4.addEventListener('results', likertCtrl.onRequestResults);`;
+                    templateHtml += `audition4.addEventListener('command', likertCtrl.onRequestCommand);`;
+                    templateHtml += `audition4.addEventListener('configuration', likertCtrl.onRequestConfiguration);`;
+                    templateHtml += `audition4.declareLoaded();`;
+                    templateHtml += `</script>`;
+                    templateHtml += `<div id="likert">{{auditionItemUrl}}</div>`;
+                    break;
                 case "5814b536e288e1a685c7a451" :
                     templateHtml += `<link rel="stylesheet" href="{{auditionItemUrl}}/css/TrueFalse.css">`;
                     templateHtml += `<script type="text/javascript">`;

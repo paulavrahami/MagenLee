@@ -126,6 +126,55 @@ if (Meteor.isServer) {
                 }
             });
         }
+
+        if (TemplatesCollection.find({_id:'5c2f4e13098ebc4684cacdf9'}).count() === 0) {
+
+            TemplatesCollection.insert({
+                "_id": "5c2f4e13098ebc4684cacdf9",
+                "name": "Likert",
+                "description": "Likert type of challenge",
+                "type": "Likert",
+                "templateUrl": "Likert.html",
+                "dataStructure": {
+                    "interfaces": {},
+                    "structure": {
+                        "statement" : "string",
+                        "question": "string",
+                        "answers": [
+                            "string"
+                        ],
+                        "results": [
+                            "number"
+                        ]
+                    }
+                }
+            });
+        }
+        if (TemplatesCollection.find({_id:'5c2f4e13098ebc4684cacdf9'}).count() === 1) {
+
+            TemplatesCollection.update({_id:'5c2f4e13098ebc4684cacdf9'}, {
+                "_id": "5c2f4e13098ebc4684cacdf9",
+                "name": "Likert",
+                "description": "Likert type of challenge",
+                "type": "Likert",
+                "templateUrl": "Likert.html",
+                "dataStructure": {
+                    "interfaces": {},
+                    "structure": {
+                        "statement" : "string",
+                        "question": "string",
+                        "answers": [
+                            "string"
+                        ],
+                        "results": [
+                            "number"
+                        ]
+                    }
+                }
+            });
+        }
+
+
         if (TemplatesCollection.find({_id:'5814b536e288e1a685c7a451'}).count() === 0) {
             /* 2 */
             TemplatesCollection.insert({
