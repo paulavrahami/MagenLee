@@ -279,8 +279,30 @@ angular
                 challengeEdit.editItem.content[keyArg1] = [];
                 challengeEdit.editItem.content[keyArg2] = [];
             }
+            switch (challengeEdit.editTemplate._id) {
+                case "5c2f4e13098ebc4684cacdf9" :
+                    itemAnswerLength = challengeEdit.editItem.content[keyArg1].length;
+                    switch (itemAnswerLength) {
+                        case 0 :
+                            challengeEdit.editItem.content[keyArg2].push(0);
+                            break;
+                        default :
+                            let scorePortion = Math.round(100 / itemAnswerLength);
+                            let scoreTotal = scorePortion
+                            for (i=1; i < itemAnswerLength + 1; i++) {
+                                challengeEdit.editItem.content.results[i] = scoreTotal;
+                                scoreTotal = scoreTotal + scorePortion;
+                            };
+                            challengeEdit.editItem.content.results[itemAnswerLength] = 100;
+                    };
+                    break;
+                case "57f7a8406f903fc2b6aae49a" :
+                    challengeEdit.editItem.content[keyArg2].push('');
+                    break;
+                default :
+                    break;
+        };
             challengeEdit.editItem.content[keyArg1].push('');
-            challengeEdit.editItem.content[keyArg2].push('');
         };
 
         challengeEdit.removeFromContentArray = function(keyArg1, keyArg2) {

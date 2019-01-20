@@ -710,22 +710,25 @@
 
                                 <div class="form-group" ng-repeat="value in challengeEdit.editItem.content.answers track by $index">
                                     <div class="row">
+                                        <div class="col-md-2">
+                                        Likert {{$index + 1}} :
+                                        </div>
                                         <div class="col-md-8">
                                             <textarea rows="1" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)" 
                                             class="form-control"
                                             ng-model="challengeEdit.editItem.content.answers[$index]"
                                             ng-change=" "
                                             ng-class="challengeEdit.editItem.content.results[$index] === 100 ? 'check-correct-answer' : ''"
-                                            placeholder="Answer {{$index+1}}"></textarea>
+                                            placeholder="Answer {{$index + 1}}"></textarea>
                                         </div>
-                                        <div class="col-md-4">
-                                            <input ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)"
+                                        <div class="col-md-2">
+                                            <input ng-disabled="true"
                                             type="number"
                                             class="form-control score-field"
                                             ng-model="challengeEdit.editItem.content.results[$index]"
                                             ng-change=" "
                                             ng-class="challengeEdit.editItem.content.results[$index] === 100 ? 'check-correct-answer' : ''"
-                                            placeholder="Score {{$index+1}}">
+                                            placeholder="Score {{$index}}">
                                         </div>
                                     </div>
                                 </div>                              
