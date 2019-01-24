@@ -734,13 +734,13 @@
                                 </div>                              
                                 <div class="row add-remove-buttons">
                                     <div class="col-md-12">
-                                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addToContentArray('answers', 'results')" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Add</button>
+                                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addLikert5('answers', 'results')" ng-disabled="challengeEdit.likert5Chosen || challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Likert 5</button>
                                                     
-                                        <button class="btn btn-sm" ng-click="challengeEdit.removeFromContentArray('answers', 'results')" ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Remove</button>
+                                        <button class="btn btn-info btn-sm" ng-click="challengeEdit.addLikert7('answers', 'results')" ng-disabled="challengeEdit.likert7Chosen ||challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE)">Likert 7</button>
                                     </div>
                                 </div>
                                 <!-- Hint -->
-                                <div class="col-md-12">
+                                <!-- <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="inputRecruiterAddress">Hint</label>
                                         <textarea ng-disabled="challengeEdit.externalDisabledTriger || (challengeEdit.editItem.status === challengeEdit.ENUM.ITEM_STATUS.IN_USE || challengeEdit.tbdFeature)"
@@ -749,7 +749,7 @@
                                             ng-change=" "
                                             placeholder="Will be presented to the talent during the audition"></textarea>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col-md-1"></div>
                             <div class="col-md-5">
