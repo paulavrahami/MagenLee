@@ -12,6 +12,15 @@ angular
         challengeEdit.complexityArray = [ENUM.EXPERIENCE.up1, ENUM.EXPERIENCE.up2, ENUM.EXPERIENCE.up3, ENUM.EXPERIENCE.up4];
         challengeEdit.automaticGeneration = false;
         challengeEdit.tbdFeature = true;
+        challengeEdit.likert5Chosen = false;
+        challengeEdit.likert7Chosen = false;
+        //Likert 5 baseline answers
+        challengeEdit.likert5Answers = ['Strongly Disagree','Disagree','Neither Agree nor Disagree','Agree','Strongly Agree'];
+        challengeEdit.likert5Grade = [0,25,50,75,100];
+        //Likert 7 baseline answers
+        challengeEdit.likert7Answers = ['Disagree Strongly','Disagree','Slightly Disagree','Neither Agree nor Disagree','Slightly Agree','Agree','Agree Strongly'];
+        challengeEdit.likert7Grade = [0,17,34,51,68,85,100];
+
         challengeEdit.challangeCreateMode = '';
         challengeEdit.challengeActivity = '';
         challengeEdit.currentDate = new Date();
@@ -274,66 +283,41 @@ angular
             return typeof(value) === "object" && String(value).toLowerCase() !== "string" && String(value).toLowerCase() !== "number" && String(value).toLowerCase() !== "boolean";
         };
 
+        //add 5 Likert possible answers with their porpotion weight
+        challengeEdit.addLikert5 = function(keyArg1, keyArg2) {
+            challengeEdit.likert5Chosen = true;
+            challengeEdit.likert7Chosen = false;
+            challengeEdit.editItem.content[keyArg1] = challengeEdit.likert5Answers;
+            challengeEdit.editItem.content[keyArg2] = challengeEdit.likert5Grade;
+
+        };
+
+        //add 7 Likert possible answers with their porpotion weight
+        challengeEdit.addLikert7 = function(keyArg1, keyArg2) {
+            challengeEdit.likert5Chosen = false;
+            challengeEdit.likert7Chosen = true;
+            challengeEdit.editItem.content[keyArg1] = challengeEdit.likert7Answers;
+            challengeEdit.editItem.content[keyArg2] = challengeEdit.likert7Grade;
+
+        };
+
         challengeEdit.addToContentArray = function(keyArg1, keyArg2) {
             if (!challengeEdit.editItem.content[keyArg1]) {
                 challengeEdit.editItem.content[keyArg1] = [];
                 challengeEdit.editItem.content[keyArg2] = [];
             }
-            switch (challengeEdit.editTemplate._id) {
-                case "5c2f4e13098ebc4684cacdf9" :
-                    itemAnswerLength = challengeEdit.editItem.content[keyArg1].length;
-                    switch (itemAnswerLength) {
-                        case 0 :
-                            challengeEdit.editItem.content[keyArg2].push(0);
-                            break;
-                        default :
-                            let scorePortion = Math.round(100 / itemAnswerLength);
-                            let scoreTotal = scorePortion
-                            for (i=1; i < itemAnswerLength + 1; i++) {
-                                challengeEdit.editItem.content.results[i] = scoreTotal;
-                                scoreTotal = scoreTotal + scorePortion;
-                            };
-                            challengeEdit.editItem.content.results[itemAnswerLength] = 100;
-                    };
-                    break;
-                case "57f7a8406f903fc2b6aae49a" :
-                    challengeEdit.editItem.content[keyArg2].push('');
-                    break;
-                default :
-                    break;
-        };
+
             challengeEdit.editItem.content[keyArg1].push('');
+            challengeEdit.editItem.content[keyArg2].push('');
         };
 
         challengeEdit.removeFromContentArray = function(keyArg1, keyArg2) {
+            
             if (challengeEdit.editItem.content[keyArg1]) {
                 challengeEdit.editItem.content[keyArg1].splice(-1);
             }
             if (challengeEdit.editItem.content[keyArg2]) {
                 challengeEdit.editItem.content[keyArg2].splice(-1);
-                switch (challengeEdit.editTemplate._id) {
-                    case "5c2f4e13098ebc4684cacdf9" :
-                        itemAnswerLength = challengeEdit.editItem.content[keyArg2].length - 1;
-                        switch (itemAnswerLength) {
-                            case 0 :
-                                challengeEdit.editItem.content[keyArg2].push(0);
-                                break;
-                            default :
-                                let scorePortion = Math.round(100 / itemAnswerLength);
-                                let scoreTotal = scorePortion
-                                console.log(scoreTotal);
-                                for (i=1; i < itemAnswerLength + 1; i++) {
-                                    challengeEdit.editItem.content.results[i] = scoreTotal;
-                                    scoreTotal = scoreTotal + scorePortion;
-                                };
-                                challengeEdit.editItem.content.results[itemAnswerLength] = 100;
-                        };
-                        break;
-                    case "57f7a8406f903fc2b6aae49a" :
-                        break;
-                    default :
-                        break;
-                };
             }
         };
      
