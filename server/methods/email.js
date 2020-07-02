@@ -5,11 +5,14 @@ let smtpTransport = require('nodemailer-smtp-transport');
 //*** NOTE - Temp Solution: qualifitsocial@gmai.com is an old Gmail account we used. When the company name
 //*** has been changed from qualiFit to Skillera additional email address has been added to the qualifit
 //*** account in gmail for the "send mail as" option to show -> skillera.contact@gmail.com
+//*** MagenLeeQuestionnaire   hgi34HWVka89 */
 let transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
     auth: {
-        user: 'qualifitsocial@gmail.com',
-        pass: 'mnzgjodlsnkhdiwl'
+       //*** user: 'qualifitsocial@gmail.com',*/
+       //*** pass: 'mnzgjodlsnkhdiwl'*/
+        user: 'MagenLeeQuestionnaire@gmail.com',
+        pass: 'hgi34HWVka89'
     }
 
 }));
@@ -33,10 +36,10 @@ let SendEmailAPI = {
                 template    += `<div>We wish you success!</div>`;
                 template    += `<div>${emailArguments.company} recruiting team</div>`;
                 template    += `<div>&nbsp;</div>`;
-                template    += `<div>(Your Skillera reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
+                template    += `<div>(Your MagenLee reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
                 template    += `<div><hr></div>`;
-                template    += `<div><strong>Powered by Skillera</strong></div>`;
-                template    += `<div><strong>Powered by <a href="www.skillera.pro" target="_blank">skillera</a></strong> </div>`;
+                template    += `<div><strong>Powered by MagenLee</strong></div>`;
+                /** template    += `<div><strong>Powered by <a href="www.skillera.pro" target="_blank">skillera</a></strong> </div>`; */
                 template    += `<div><br></div>`;
                 template    += `<div>Please do not reply to this email</div>`;
 
@@ -45,10 +48,10 @@ let SendEmailAPI = {
                 template    += `<div>Thank you for answering the ${emailArguments.position} quiz</div>`;
                 template    += `<div>We wish you success!</div>`;
                 template    += `<div>&nbsp;</div>`;
-                template    += `<div>(Your Skillera reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
+                template    += `<div>(Your MagenLee reference number is <strong>${emailArguments.applicationNumber}</strong>)</div>`;
                 template    += `<div><hr></div>`;
-                template    += `<div><strong>Powered by Skillera</strong></div>`;
-                template    += `<div><strong>Powered by <a href="www.skillera.pro" target="_blank">skillera</a></strong> </div>`;
+                template    += `<div><strong>Powered by MagenLee</strong></div>`;
+                //*** template    += `<div><strong>Powered by <a href="www.skillera.pro" target="_blank">skillera</a></strong> </div>`;*/
                 template    += `<div><br></div>`;
                 template    += `<div>Please do not reply to this email</div>`;
             };
@@ -71,7 +74,8 @@ let SendEmailAPI = {
             // template    += `<div>Please do not reply to this email</div>`;
 
             transporter.sendMail({
-                from: 'skillera.contact@gmail.com',
+                // *** from: 'skillera.contact@gmail.com', */
+                from: 'MagenLeeQuestionnaire@gmail.com',
                 to: emailArguments.email,
                 subject: `Skillera Application ${emailArguments.applicationNumber}`,
                 html: template
@@ -103,13 +107,14 @@ let SendEmailAPI = {
             template    += `<div><strong>Please click to proceed: <a href="${emailArguments.applicationURL}" target="_blank">${emailArguments.position}</a></strong></div>`;
             template    += `<div>&nbsp;</div>`;
             template    += `<div><hr></div>`;
-            template    += `<div><strong>Powered by Skillera</strong></div>`;
+            template    += `<div><strong>Powered by MagenLee</strong></div>`;
             // template    += `<div><strong>Powered by <a href="https://skillera.herokuapp.com/" target="_blank">skillera</a></strong></div>`;
             template    += `<div><br></div>`;
             template    += `<div>Please do not reply to this email</div>`;
 
             transporter.sendMail({
-                from: 'skillera.contact@gmail.com',
+                // *** from: 'skillera.contact@gmail.com',*/
+                from: 'MagenLeeQuestionnaire@gmail.com',
                 to: emailArguments.email,
                 subject: `Job Opportunity - ${emailArguments.position}`,
                 html: template
